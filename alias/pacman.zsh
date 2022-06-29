@@ -1,0 +1,3 @@
+# pacman
+alias pm=pacman
+

@@ -1,6 +1,3 @@
-# pacman
-alias pm=pacman
-
 # sudo
 alias sudo='sudo '
 # clear

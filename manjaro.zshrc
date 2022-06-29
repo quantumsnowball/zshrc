@@ -12,5 +12,6 @@ source $BASE/plugins/zinit/init.zsh
 source $BASE/plugins/zinit/loader.zsh
 source $BASE/plugins/powerlevel10k/init.zsh
 
-source $BASE/alias/init.zsh
+source $BASE/alias/common.zsh
+source $BASE/alias/pacman.zsh
 
