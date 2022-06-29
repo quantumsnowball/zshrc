@@ -1,17 +1,16 @@
-BASE="$HOME/.config/zshrc"
+BASE=$HOME/.config/zshrc
 
-source ~/.config/zshrc/zsh/init.zsh
 
-source ~/.config/zshrc/plugins/zinit/init.zsh
-source ~/.config/zshrc/plugins/zinit/loader.zsh
+source $BASE/zsh/init.zsh
 
-source ~/.config/zshrc/plugins/powerlevel10k/init.zsh
+source $BASE/plugins/zinit/init.zsh
+source $BASE/plugins/zinit/loader.zsh
+source $BASE/plugins/powerlevel10k/init.zsh
 
-source ~/.config/zshrc/alias/init.zsh
+source $BASE/alias/init.zsh
 
-source ~/.config/zshrc/path/init.zsh
+source $BASE/path/init.zsh
 
-source ~/.config/zshrc/zsh/env.zsh
-
-source ~/.config/zshrc/zsh/commands.zsh
-source ~/.config/zshrc/zsh/utils.zsh
+source $BASE/zsh/env.zsh
+source $BASE/zsh/commands.zsh
+source $BASE/zsh/utils.zsh
