@@ -1,4 +1,3 @@
-# <my zinit plugins>
 zinit snippet OMZP::git
 zinit snippet OMZP::ssh-agent
 
@@ -20,4 +19,3 @@ zinit light romkatv/powerlevel10k
 # Modified command to work with zsh-vi-mode plugins
 zinit ice lucid wait
 zinit snippet OMZP::fzf
-# </my zinit plugins>

@@ -1,4 +1,3 @@
-# <my alias>
 # pacman
 alias pm=pacman
 
@@ -65,4 +64,3 @@ alias rc="rclone"
 alias rclsr="rclone listremotes"
 alias rcls="rclone ls"
 alias rclsd="rclone lsd"
-# </my alias>
