@@ -23,7 +23,7 @@ eval "$(zoxide init zsh)"
 
 ### Added by Zinit's installer
 if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
-    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})É%f"
+    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})¿%f"
     command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
     command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
         print -P "%F{33} %F{34}Installation successful.%f%b" || \
@@ -46,12 +46,8 @@ zinit light-mode for \
 
 
 # <my zinit plugins>
-#setopt promptsubst
-#zinit wait lucid for \
-#    OMZP::globalias
-#    OMZL::git.zsh \
-#  atload"unalias grv" \
-#    OMZP::git
+zinit snippet OMZP::git
+zinit snippet OMZP::ssh-agent
 
 zinit wait lucid for \
   atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
@@ -180,3 +176,8 @@ eval "$(pyenv init --path)"
 eval "$(pyenv virtualenv-init -)"
 
 # </my commands>
+
+# <my utils>
+# mkdir and then cd into it in one command
+mkcd () { mkdir -p -- "$1" && cd -P -- "$1" }
+# </my utils>
