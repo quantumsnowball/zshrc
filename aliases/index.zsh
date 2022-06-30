@@ -11,3 +11,5 @@ init_aliases()
 }
 
 init_aliases
+
+unset -f init_aliases

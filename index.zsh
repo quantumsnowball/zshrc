@@ -13,3 +13,5 @@ init_zshrc()
 }
 
 init_zshrc
+
+unset -f init_zshrc

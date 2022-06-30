@@ -10,3 +10,5 @@ shell_init()
 }
 
 shell_init
+
+unset -f shell_init

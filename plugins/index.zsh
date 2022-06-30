@@ -10,3 +10,5 @@ init_plugins()
 }
 
 init_plugins
+
+unset -f init_plugins

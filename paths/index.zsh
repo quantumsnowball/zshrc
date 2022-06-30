@@ -11,3 +11,5 @@ init_paths()
 }
 
 init_paths
+
+unset -f init_paths
