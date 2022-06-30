@@ -1,6 +1,6 @@
-alias_init() 
+init_aliases() 
 {
-    local base=$HOME/.config/zshrc/alias
+    local base=$HOME/.config/zshrc/aliases
     
 
     source $base/common.zsh
@@ -10,4 +10,4 @@ alias_init()
     fi
 }
 
-alias_init
+init_aliases

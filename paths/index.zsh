@@ -1,6 +1,6 @@
-path_init()
+init_paths()
 {
-    local base=$HOME/.config/zshrc/path
+    local base=$HOME/.config/zshrc/paths
 
 
     source $base/common.zsh
@@ -10,4 +10,4 @@ path_init()
     fi
 }
 
-path_init
+init_paths

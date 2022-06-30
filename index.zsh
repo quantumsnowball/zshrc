@@ -1,9 +1,9 @@
-zsh_init()
+init_zshrc()
 {
     local base=$HOME/.config/zshrc
 
 
-    source $base/path/index.zsh
+    source $base/paths/index.zsh
 
     source $base/shell/index.zsh
 
@@ -11,7 +11,7 @@ zsh_init()
     source $base/plugins/zinit/loader.zsh
     source $base/plugins/powerlevel10k/init.zsh
 
-    source $base/alias/index.zsh
+    source $base/aliases/index.zsh
 }
 
-zsh_init
+init_zshrc
