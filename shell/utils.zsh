@@ -16,5 +16,8 @@ cf ()
     tmux)
         cd ~/.config/tmux && nvim
         ;;
+    ala | alacritty)
+        cd ~/.config/alacritty && nvim alacritty.yml
+        ;;
     esac
 }
