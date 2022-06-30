@@ -7,9 +7,7 @@ init_zshrc()
 
     source $base/shell/index.zsh
 
-    source $base/plugins/zinit/init.zsh
-    source $base/plugins/zinit/loader.zsh
-    source $base/plugins/powerlevel10k/init.zsh
+    source $base/plugins/index.zsh
 
     source $base/aliases/index.zsh
 }
