@@ -61,3 +61,7 @@ alias rc="rclone"
 alias rclsr="rclone listremotes"
 alias rcls="rclone ls"
 alias rclsd="rclone lsd"
+
+# env vars
+alias lsenv='env | bat -l sh'
+alias lspath='printf "%s\n" $path | bat -l python'
