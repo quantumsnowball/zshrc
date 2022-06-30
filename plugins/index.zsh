@@ -6,7 +6,7 @@ init_plugins()
     source $base/zinit/init.zsh
     source $base/zinit/loader.zsh
 
-    source $base/powerlevel10k/init.zsh
+    source $base/p10k.zsh
 }
 
 init_plugins
