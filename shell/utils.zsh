@@ -4,20 +4,24 @@ mkcd ()
     mkdir -p -- "$1" && cd -P -- "$1" 
 }
 
+# nvim editor config repos directly
 cf ()
 {
-    case $1 in
-    vi | nvim | vim | neovim)
-        cd ~/.config/nvim && nvim
-        ;;
-    zshrc | shell | zsh)
-        cd ~/.config/zshrc && nvim
-        ;;
-    tmux)
-        cd ~/.config/tmux && nvim
-        ;;
-    ala | alacritty)
-        cd ~/.config/alacritty && nvim alacritty.yml
-        ;;
-    esac
+    # run in a subshell to retain current directory
+    (
+        case $1 in
+        vi | nvim | vim | neovim)
+            cd ~/.config/nvim && nvim
+            ;;
+        zshrc | shell | zsh)
+            cd ~/.config/zshrc && nvim
+            ;;
+        tmux)
+            cd ~/.config/tmux && nvim
+            ;;
+        ala | alacritty)
+            cd ~/.config/alacritty && nvim alacritty.yml
+            ;;
+        esac
+    )
 }
