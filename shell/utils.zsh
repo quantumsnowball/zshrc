@@ -25,6 +25,13 @@ cf ()
         ala | alacritty)
             cd ~/.config/alacritty && nvim alacritty.yml
             ;;
+        pull)
+            (echo "\npulling .repo ..." && cd ~/.config/.repo && git pull --rebase)
+            (echo "\npulling zshrc ..." && cd ~/.config/zshrc && git pull --rebase)
+            (echo "\npulling nvim ..." && cd ~/.config/nvim && git pull --rebase)
+            (echo "\npulling tmux ..." && cd ~/.config/tmux && git pull --rebase)
+            echo "\n"
+            ;;
         esac
     )
 }
