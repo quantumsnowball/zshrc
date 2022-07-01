@@ -10,6 +10,9 @@ cf ()
     # run in a subshell to retain current directory
     (
         case $1 in
+        repo | .repo | conf | config)
+            cd ~/.config/.repo/ && nvim
+            ;;
         vi | nvim | vim | neovim)
             cd ~/.config/nvim && nvim
             ;;
