@@ -4,6 +4,7 @@ init_aliases()
     
 
     source $base/common.zsh
+    source $base/env.zsh
 
     if [ -f "/etc/arch-release" ]; then 
         source $base/pacman.zsh
