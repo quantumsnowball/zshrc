@@ -28,3 +28,5 @@ alias jobs='jobs -l'
 alias vi='nvim'
 alias v='nvim'
 
+# youtube-dl
+alias ytdl='youtube-dl'
