@@ -25,6 +25,12 @@ cf ()
         ala | alacritty)
             cd ~/.config/alacritty && nvim alacritty.yml
             ;;
+        fetch | status)
+            (echo "\nfetching .repo ..." && cd ~/.config/.repo && git fetch --all && git status --short)
+            (echo "\nfetching zshrc ..." && cd ~/.config/zshrc && git fetch --all && git status --short)
+            (echo "\nfetching nvim ..." && cd ~/.config/nvim && git fetch --all && git status --short)
+            (echo "\nfetching tmux ..." && cd ~/.config/tmux && git fetch --all && git status --short)
+            ;;
         pull)
             (echo "\npulling .repo ..." && cd ~/.config/.repo && git pull --rebase)
             (echo "\npulling zshrc ..." && cd ~/.config/zshrc && git pull --rebase)
