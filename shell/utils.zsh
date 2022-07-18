@@ -26,10 +26,17 @@ cf ()
             cd ~/.config/alacritty && nvim alacritty.yml
             ;;
         fetch | status)
-            (echo "\nfetching .repo ..." && cd ~/.config/.repo && git fetch --all && git status --short)
-            (echo "\nfetching zshrc ..." && cd ~/.config/zshrc && git fetch --all && git status --short)
-            (echo "\nfetching nvim ..." && cd ~/.config/nvim && git fetch --all && git status --short)
-            (echo "\nfetching tmux ..." && cd ~/.config/tmux && git fetch --all && git status --short)
+            (echo "\n# .repo\n#\n" && cd ~/.config/.repo && git fetch --all && git status --short)
+            (echo "\n# zshrc\n#\n" && cd ~/.config/zshrc && git fetch --all && git status --short)
+            (echo "\n# nvim \n#\n" && cd ~/.config/nvim  && git fetch --all && git status --short)
+            (echo "\n# tmux \n#\n" && cd ~/.config/tmux  && git fetch --all && git status --short)
+            ;;
+        pull)
+            echo "$(echo "\n# .repo\n#\n" && cd ~/.config/.repo && git pull --rebase --autostash)" &
+            echo "$(echo "\n# zshrc\n#\n" && cd ~/.config/zshrc && git pull --rebase --autostash)" &
+            echo "$(echo "\n# nvim \n#\n" && cd ~/.config/nvim  && git pull --rebase --autostash)" &
+            echo "$(echo "\n# tmux \n#\n" && cd ~/.config/tmux  && git pull --rebase --autostash)" &
+            wait
             ;;
         pull-sync)
             (echo "\n# .repo\n#\n" && cd ~/.config/.repo && git pull --rebase --autostash)
