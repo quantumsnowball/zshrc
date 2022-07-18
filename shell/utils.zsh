@@ -9,6 +9,18 @@ cf ()
 {
     # run in a subshell to retain current directory
     (
+        cf fetch ()
+        {
+            echo "echo \"\n# $1\n#\n\" && cd ~/.config/$1 && \
+                git -c color.ui=always fetch --all && git -c color.ui=always status --short"
+        }
+
+        cf pull ()
+        {
+            echo "echo \"\n# $1\n#\n\" && cd ~/.config/$1 && \
+                git -c color.ui=always pull --rebase --autostash"
+        }
+
         case $1 in
         repo | .repo | conf | config)
             cd ~/.config/.repo/ && nvim
@@ -26,39 +38,31 @@ cf ()
             cd ~/.config/alacritty && nvim alacritty.yml
             ;;
         fetch | status)
-            echo "$(echo "\n# .repo\n#\n" && cd ~/.config/.repo && \
-                git -c color.ui=always fetch --all && git -c color.ui=always status --short)" &
-            echo "$(echo "\n# zshrc\n#\n" && cd ~/.config/zshrc && \
-                git -c color.ui=always fetch --all && git -c color.ui=always status --short)" &
-            echo "$(echo "\n# nvim \n#\n" && cd ~/.config/nvim  && \
-                git -c color.ui=always fetch --all && git -c color.ui=always status --short)" &
-            echo "$(echo "\n# tmux \n#\n" && cd ~/.config/tmux  && \
-                git -c color.ui=always fetch --all && git -c color.ui=always status --short)" &
+            echo "$(eval "$(fetch .repo)")" &
+            echo "$(eval "$(fetch zshrc)")" &
+            echo "$(eval "$(fetch nvim )")" &
+            echo "$(eval "$(fetch tmux )")" &
             wait
             ;;
         fetch-sync | status-sync)
-            (echo "\n# .repo\n#\n" && cd ~/.config/.repo && git fetch --all && git status --short)
-            (echo "\n# zshrc\n#\n" && cd ~/.config/zshrc && git fetch --all && git status --short)
-            (echo "\n# nvim \n#\n" && cd ~/.config/nvim  && git fetch --all && git status --short)
-            (echo "\n# tmux \n#\n" && cd ~/.config/tmux  && git fetch --all && git status --short)
+            (eval "$(fetch .repo)")
+            (eval "$(fetch zshrc)")
+            (eval "$(fetch nvim)")
+            (eval "$(fetch tmux)")
             echo "\n"
             ;;
         pull)
-            echo "$(echo "\n# .repo\n#\n" && cd ~/.config/.repo && \
-                git -c color.ui=always pull --rebase --autostash)" &
-            echo "$(echo "\n# zshrc\n#\n" && cd ~/.config/zshrc && \
-                git -c color.ui=always pull --rebase --autostash)" &
-            echo "$(echo "\n# nvim \n#\n" && cd ~/.config/nvim  && \
-                git -c color.ui=always pull --rebase --autostash)" &
-            echo "$(echo "\n# tmux \n#\n" && cd ~/.config/tmux  && \
-                git -c color.ui=always pull --rebase --autostash)" &
+            echo "$(eval "$(pull .repo)")" &
+            echo "$(eval "$(pull zshrc)")" &
+            echo "$(eval "$(pull nvim )")" &
+            echo "$(eval "$(pull tmux )")" &
             wait
             ;;
         pull-sync)
-            (echo "\n# .repo\n#\n" && cd ~/.config/.repo && git pull --rebase --autostash)
-            (echo "\n# zshrc\n#\n" && cd ~/.config/zshrc && git pull --rebase --autostash)
-            (echo "\n# nvim \n#\n" && cd ~/.config/nvim  && git pull --rebase --autostash)
-            (echo "\n# tmux \n#\n" && cd ~/.config/tmux  && git pull --rebase --autostash)
+            (eval "$(pull .repo)")
+            (eval "$(pull zshrc)")
+            (eval "$(pull nvim)")
+            (eval "$(pull tmux)")
             echo "\n"
             ;;
         esac
