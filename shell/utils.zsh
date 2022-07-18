@@ -31,11 +31,11 @@ cf ()
             (echo "\nfetching nvim ..." && cd ~/.config/nvim && git fetch --all && git status --short)
             (echo "\nfetching tmux ..." && cd ~/.config/tmux && git fetch --all && git status --short)
             ;;
-        pull)
-            (echo "\npulling .repo ..." && cd ~/.config/.repo && git pull --rebase)
-            (echo "\npulling zshrc ..." && cd ~/.config/zshrc && git pull --rebase)
-            (echo "\npulling nvim ..." && cd ~/.config/nvim && git pull --rebase)
-            (echo "\npulling tmux ..." && cd ~/.config/tmux && git pull --rebase)
+        pull-sync)
+            (echo "\n# .repo\n#\n" && cd ~/.config/.repo && git pull --rebase --autostash)
+            (echo "\n# zshrc\n#\n" && cd ~/.config/zshrc && git pull --rebase --autostash)
+            (echo "\n# nvim \n#\n" && cd ~/.config/nvim  && git pull --rebase --autostash)
+            (echo "\n# tmux \n#\n" && cd ~/.config/tmux  && git pull --rebase --autostash)
             echo "\n"
             ;;
         esac
