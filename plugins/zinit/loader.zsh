@@ -19,3 +19,7 @@ zinit light romkatv/powerlevel10k
 # Modified command to work with zsh-vi-mode plugins
 zinit ice lucid wait
 zinit snippet OMZP::fzf
+
+# plugin related configs
+# always starting with normal mode for each command line
+ZVM_LINE_INIT_MODE=$ZVM_MODE_NORMAL
