@@ -14,9 +14,20 @@ alias la='exa -aF --icons'
 alias lt='exa -aF -s time --reverse --icons'
 alias ll='exa -aF -l -h --icons --grid'
 alias lT='exa -aF -l -h --icons --tree --level=2'
-# directory and files
+# files
 #alias mv='mv -i'
 #alias rm='rm -i'
+# directory
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+alias ......='cd ../../../../..'
+alias .......='cd ../../../../../..'
+alias ........='cd ../../../../../../..'
+alias .........='cd ../../../../../../../..'
+alias ..........='cd ../../../../../../../../..'
+alias zz='z -'
 # process
 alias jobs='jobs -l'
 # neovim
