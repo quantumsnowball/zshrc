@@ -35,3 +35,5 @@ alias vi='nvim'
 alias v='nvim'
 # youtube-dl
 alias ytdl='youtube-dl'
+# lazygit
+alias lg='lazygit'
