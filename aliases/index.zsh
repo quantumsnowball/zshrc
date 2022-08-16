@@ -10,6 +10,7 @@ init_aliases()
     source $base/env.zsh
     source $base/git.zsh
     source $base/python.zsh
+    source $base/zoxide.zsh
 
     if [ -f "/etc/arch-release" ]; then 
         source $base/pacman.zsh

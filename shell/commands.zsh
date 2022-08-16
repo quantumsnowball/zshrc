@@ -3,7 +3,7 @@ eval "$(pyenv init --path)"
 eval "$(pyenv virtualenv-init -)"
 
 # zoxide
-eval "$(zoxide init zsh)"
+eval "$(zoxide init zsh --no-cmd)"
 
 # fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
