@@ -27,6 +27,12 @@ cf ()
                 git -c color.ui=always pull --rebase --autostash"
         }
 
+        cf push ()
+        {
+            echo "echo \"\n# $1\n#\n\" && cd ~/.config/$1 && \
+                git -c color.ui=always push"
+        }
+
         case $1 in
         repo | .repo | conf | config)
             cd ~/.config/.repo/ && nvim
@@ -77,6 +83,13 @@ cf ()
             (eval "$(pull nvim)")
             (eval "$(pull tmux)")
             echo "\n"
+            ;;
+        push)
+            echo "$(eval "$(push .repo)")" &
+            echo "$(eval "$(push zshrc)")" &
+            echo "$(eval "$(push nvim )")" &
+            echo "$(eval "$(push tmux )")" &
+            wait
             ;;
         esac
     )
