@@ -9,6 +9,12 @@ cf ()
 {
     # run in a subshell to retain current directory
     (
+        cf status ()
+        {
+            echo "echo \"\n# $1\n#\n\" && cd ~/.config/$1 && \
+                git -c color.ui=always status --short"
+        }
+
         cf fetch ()
         {
             echo "echo \"\n# $1\n#\n\" && cd ~/.config/$1 && \
@@ -37,7 +43,14 @@ cf ()
         ala | alacritty)
             cd ~/.config/alacritty && nvim alacritty.yml
             ;;
-        fetch | status)
+        status)
+            echo "$(eval "$(status .repo)")" &
+            echo "$(eval "$(status zshrc)")" &
+            echo "$(eval "$(status nvim )")" &
+            echo "$(eval "$(status tmux )")" &
+            wait
+            ;;
+        fetch)
             echo "$(eval "$(fetch .repo)")" &
             echo "$(eval "$(fetch zshrc)")" &
             echo "$(eval "$(fetch nvim )")" &
