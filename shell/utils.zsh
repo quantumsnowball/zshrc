@@ -33,6 +33,12 @@ cf ()
                 git -c color.ui=always push"
         }
 
+        cf sync ()
+        {
+            echo "echo \"\n# $1\n#\n\" && cd ~/.config/$1 && \
+                git pull --rebase --autostash --quiet && git push --quiet && git -c color.ui=always status --short --branch"
+        }
+
         case $1 in
         repo | .repo | conf | config)
             cd ~/.config/.repo/ && nvim
@@ -89,6 +95,13 @@ cf ()
             echo "$(eval "$(push zshrc)")" &
             echo "$(eval "$(push nvim )")" &
             echo "$(eval "$(push tmux )")" &
+            wait
+            ;;
+        sync)
+            echo "$(eval "$(sync .repo)")" &
+            echo "$(eval "$(sync zshrc)")" &
+            echo "$(eval "$(sync nvim )")" &
+            echo "$(eval "$(sync tmux )")" &
             wait
             ;;
         esac
