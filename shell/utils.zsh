@@ -12,13 +12,13 @@ cf ()
         cf status ()
         {
             echo "echo \"\n# $1\n#\n\" && cd ~/.config/$1 && \
-                git -c color.ui=always status --short"
+                git -c color.ui=always status --short --branch"
         }
 
         cf fetch ()
         {
             echo "echo \"\n# $1\n#\n\" && cd ~/.config/$1 && \
-                git -c color.ui=always fetch --all && git -c color.ui=always status --short"
+                git -c color.ui=always fetch --all && git -c color.ui=always status --short --branch"
         }
 
         cf pull ()
