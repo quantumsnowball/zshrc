@@ -11,6 +11,7 @@ init_aliases()
     source $base/git.zsh
     source $base/python.zsh
     source $base/zoxide.zsh
+    source $base/iproute2.zsh
 
     if [ -f "/etc/arch-release" ]; then 
         source $base/pacman.zsh
