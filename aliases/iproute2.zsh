@@ -7,9 +7,9 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     lsroute() { ip route; }
 else
     alias ip='ip -c'
-    lslink() { ip -br link; }
-    lsip() { ip -br addr; }
-    lsip4() { ip -br -4 addr;}
-    lsip6() { ip -br -6 addr;}
-    lsroute() { ip route; }
+    lslink() { ip -c -br link; }
+    lsip() { ip -c -br addr; }
+    lsip4() { ip -c -br -4 addr;}
+    lsip6() { ip -c -br -6 addr;}
+    lsroute() { ip -c route; }
 fi
