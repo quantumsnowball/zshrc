@@ -1,0 +1,1 @@
+cp ~/.config/zshrc/scripts/*.ps1 ~/winhome/scripts
