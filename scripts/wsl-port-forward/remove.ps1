@@ -1,4 +1,4 @@
-$wsl_ip=(get-hnsendpoint).ipaddress
+$wsl_ip=(get-hnsendpoint).ipaddress[-1]
 $from_port=$args[0]
 $to_port=$args[1]
 
