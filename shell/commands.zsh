@@ -1,6 +1,6 @@
 # pyenv
-eval "$(pyenv init --path)"
-eval "$(pyenv virtualenv-init -)"
+# eval "$(pyenv init --path)"
+# eval "$(pyenv virtualenv-init -)"
 
 # conda
 [[ -f $HOME/.conda-init ]] && source $HOME/.conda-init
