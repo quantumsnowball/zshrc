@@ -2,7 +2,7 @@ zinit snippet OMZP::git
 zinit snippet OMZP::ssh-agent
 
 zinit wait lucid for \
-  atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
+  atinit"ZINIT[COMPINIT_OPTS]=-C; zicdreplay" \
     zdharma-continuum/fast-syntax-highlighting \
   blockf \
     zsh-users/zsh-completions \
