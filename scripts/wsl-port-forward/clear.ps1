@@ -1,1 +1,0 @@
-netsh interface portproxy reset

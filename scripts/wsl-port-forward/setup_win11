@@ -1,2 +1,0 @@
-mkdir -p ~/winhome/scripts/wsl-port-forward/
-cp ~/.config/zshrc/scripts/wsl-port-forward/*.ps1 ~/winhome/scripts/wsl-port-forward/
