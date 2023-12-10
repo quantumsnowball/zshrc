@@ -3,6 +3,7 @@ source $HOME/.config/zshrc/aliases/dir.zsh
 source $HOME/.config/zshrc/aliases/eza.zsh
 source $HOME/.config/zshrc/aliases/nvim.zsh
 source $HOME/.config/zshrc/aliases/tmux.zsh
+source $HOME/.config/zshrc/aliases/conda.zsh
 source $HOME/.config/zshrc/aliases/docker.zsh
 source $HOME/.config/zshrc/aliases/rclone.zsh
 source $HOME/.config/zshrc/aliases/lazygit.zsh
