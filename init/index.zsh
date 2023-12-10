@@ -3,6 +3,7 @@ shell_init()
     local base=$HOME/.config/zshrc/init
 
 
+    source $base/history.zsh
     source $base/common.zsh
     source $base/env.zsh
     source $base/conda.zsh
