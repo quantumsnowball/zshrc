@@ -7,6 +7,7 @@ shell_init()
     source $base/config.zsh
     source $base/zoxide.zsh
     source $base/python.zsh
+    source $base/conda.zsh
 }
 
 shell_init
