@@ -3,6 +3,7 @@ init_aliases()
     local base=$HOME/.config/zshrc/aliases
     
 
+    source $base/dir.zsh
     source $base/common.zsh
     source $base/eza.zsh
     source $base/nvim.zsh
