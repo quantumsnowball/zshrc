@@ -31,18 +31,25 @@ def conda_list(env: str) -> set[str]:
 env1, env2 = args
 names1 = conda_list(env1)
 names2 = conda_list(env2)
-only_env1 = names1 - names2
-only_env2 = names2 - names1
-both_envs = names1 & names2
+only_env1 = sorted(names1 - names2)
+only_env2 = sorted(names2 - names1)
+both_envs = sorted(names1 & names2)
 
 
 # display result
-def display(title: str, names: set[str]) -> None:
-    print(f'\n{title}:\n')
+SEP = '-'*50
+BOUNDARY = '='*50
+
+
+def display(title: str, names: list[str]) -> None:
+    print(BOUNDARY)
+    print(f'\t{title}')
+    print(SEP)
     for name in names:
         print(name)
+    print('\n')
 
 
-display(f'Only in {env1}', only_env1)
-display(f'Only in {env2}', only_env2)
-display(f'Exists in both {env1} and {env2}', both_envs)
+display(f'Only in `{env1}`', only_env1)
+display(f'Only in `{env2}`', only_env2)
+display(f'Both in `{env1}` and `{env2}`', both_envs)
