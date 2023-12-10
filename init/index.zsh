@@ -11,6 +11,7 @@ shell_init()
     source $base/zoxide.zsh
     source $base/fzf.zsh
     source $base/gcloud.zsh
+    source $base/man.zsh
 }
 
 shell_init
