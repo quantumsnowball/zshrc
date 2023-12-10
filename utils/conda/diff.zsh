@@ -1,5 +1,5 @@
 conda-diff()
 {
-    python $HOME/.config/zshrc/utils/conda/diff.py "$@"
+    python $HOME/.config/zshrc/utils/conda/diff.py "$@" | bat
 }
 

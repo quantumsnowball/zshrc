@@ -37,9 +37,12 @@ both_envs = names1 & names2
 
 
 # display result
-print(f'\nOnly in {env1}:')
-print(only_env1)
-print(f'\nOnly in {env2}:')
-print(only_env2)
-print(f'\nExists in both {env1} and {env2}:')
-print(both_envs)
+def display(title: str, names: set[str]) -> None:
+    print(f'\n{title}:\n')
+    for name in names:
+        print(name)
+
+
+display(f'Only in {env1}', only_env1)
+display(f'Only in {env2}', only_env2)
+display(f'Exists in both {env1} and {env2}', both_envs)
