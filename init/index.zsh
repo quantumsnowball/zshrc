@@ -8,6 +8,7 @@ shell_init()
     source $base/conda.zsh
     source $base/zoxide.zsh
     source $base/fzf.zsh
+    source $base/gcloud.zsh
 }
 
 shell_init
