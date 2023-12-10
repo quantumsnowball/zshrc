@@ -4,6 +4,7 @@ init_aliases()
     
 
     source $base/common.zsh
+    source $base/eza.zsh
     source $base/tmux.zsh
     source $base/docker.zsh
     source $base/rclone.zsh

@@ -7,13 +7,6 @@ alias cl=clear
 alias rl='exec zsh'
 # exit
 alias x=exit
-# eza as ls
-alias ls='eza -F --icons'
-alias  l='eza -F --icons'
-alias la='eza -aF --icons'
-alias lt='eza -aF -s time --reverse --icons'
-alias ll='eza -aF -l -h --icons --grid'
-alias lT='eza -aF -l -h --icons --tree --level=2'
 # files
 #alias mv='mv -i'
 #alias rm='rm -i'
