@@ -1,6 +1,7 @@
 import sys
 import json
 import subprocess
+import shutil
 
 
 # help
@@ -37,8 +38,9 @@ both_envs = sorted(names1 & names2)
 
 
 # display result
-SEP = '-'*50
-BOUNDARY = '='*50
+WIDTH = shutil.get_terminal_size().columns - 8
+SEP = '-'*WIDTH
+BOUNDARY = '='*WIDTH
 
 
 def display(title: str, names: list[str]) -> None:
