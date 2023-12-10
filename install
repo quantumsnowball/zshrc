@@ -1,4 +1,4 @@
 #!/bin/sh
 
-ln -sf "$HOME/.config/zshrc/index.zsh" "$HOME/.zshrc"
+ln -sf "$HOME/.config/zshrc/__init__.zsh" "$HOME/.zshrc"
 ls -l "$HOME/.zshrc"
