@@ -4,6 +4,7 @@ init_paths()
 
 
     source $base/common.zsh
+    source $base/local.zsh
     source $base/yarn.zsh
 
     if [[ "$OSTYPE" == "darwin"* ]]; then 
