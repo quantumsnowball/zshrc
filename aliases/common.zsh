@@ -23,9 +23,6 @@ alias ..........='cd ../../../../../../../../..'
 alias zz='z -'
 # process
 alias jobs='jobs -l'
-# neovim
-alias vi='nvim'
-alias v='nvim'
 # youtube-dl
 alias ytdl='youtube-dl'
 # lazygit
