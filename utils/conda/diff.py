@@ -43,7 +43,7 @@ BOUNDARY = '='*50
 
 def display(title: str, names: list[str]) -> None:
     print(BOUNDARY)
-    print(f'\t{title}')
+    print(f'\t{title}\t({len(names)} packages)')
     print(SEP)
     for name in names:
         print(name)
