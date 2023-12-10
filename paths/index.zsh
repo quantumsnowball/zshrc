@@ -3,7 +3,6 @@ init_paths()
     local base=$HOME/.config/zshrc/paths
 
 
-    source $base/script.zsh
     source $base/local.zsh
     source $base/yarn.zsh
 

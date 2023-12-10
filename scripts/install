@@ -1,5 +1,0 @@
-#!/bin/bash
-
-chmod +x $HOME/.config/zshrc/scripts/src/*
-ln -sf $HOME/.config/zshrc/scripts/src $HOME/.scripts
-ls -l $HOME/.scripts

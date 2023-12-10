@@ -1,4 +1,0 @@
-#!/bin/bash
-
-free -h
-df -t tmpfs --total -h
