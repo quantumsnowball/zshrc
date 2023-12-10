@@ -1,17 +1,7 @@
-shell_init()
-{
-    local base=$HOME/.config/zshrc/utils
-
-
-    source $base/dir.zsh
-    source $base/config.zsh
-    source $base/zoxide.zsh
-    source $base/python.zsh
-    source $base/conda.zsh
-    source $base/memory.zsh
-    source $base/ffmpeg/index.zsh
-}
-
-shell_init
-
-unset -f shell_init
+source $HOME/.config/zshrc/utils/dir.zsh
+source $HOME/.config/zshrc/utils/config.zsh
+source $HOME/.config/zshrc/utils/zoxide.zsh
+source $HOME/.config/zshrc/utils/python.zsh
+source $HOME/.config/zshrc/utils/conda.zsh
+source $HOME/.config/zshrc/utils/memory.zsh
+source $HOME/.config/zshrc/utils/ffmpeg/index.zsh
