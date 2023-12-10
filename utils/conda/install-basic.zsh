@@ -8,3 +8,4 @@ conda-install-basic()
         click \
         autopep8 isort
 }
+
