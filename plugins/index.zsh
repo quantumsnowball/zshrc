@@ -1,14 +1,3 @@
-init_plugins()
-{
-    local base=$HOME/.config/zshrc/plugins
-
-
-    source $base/zinit/init.zsh
-    source $base/zinit/loader.zsh
-
-    source $base/p10k.zsh
-}
-
-init_plugins
-
-unset -f init_plugins
+source $HOME/.config/zshrc/plugins/zinit/init.zsh
+source $HOME/.config/zshrc/plugins/zinit/loader.zsh
+source $HOME/.config/zshrc/plugins/p10k.zsh
