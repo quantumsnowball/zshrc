@@ -30,3 +30,5 @@ pip-upgrade-all()
     echo "\nPackage upgrade canceled\n"
   fi
 }
+
+pip-update-all() { pip-upgrade-all }
