@@ -10,6 +10,7 @@ init_aliases()
     source $base/tmux.zsh
     source $base/docker.zsh
     source $base/rclone.zsh
+    source $base/lazygit.zsh
     source $base/env.zsh
     source $base/git.zsh
     source $base/python.zsh

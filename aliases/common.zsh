@@ -11,5 +11,3 @@ alias x=exit
 alias jobs='jobs -l'
 # youtube-dl
 alias ytdl='youtube-dl'
-# lazygit
-alias lg='lazygit'
