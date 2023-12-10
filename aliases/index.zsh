@@ -17,6 +17,7 @@ init_aliases()
     source $base/zoxide.zsh
     source $base/iproute2.zsh
     source $base/socket.zsh
+    source $base/youtube-dl.zsh
 
     if [ -f "/etc/arch-release" ]; then 
         source $base/pacman.zsh

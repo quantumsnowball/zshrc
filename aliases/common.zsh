@@ -9,5 +9,3 @@ alias rl='exec zsh'
 alias x=exit
 # process
 alias jobs='jobs -l'
-# youtube-dl
-alias ytdl='youtube-dl'
