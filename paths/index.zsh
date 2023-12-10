@@ -1,16 +1,5 @@
-init_paths()
-{
-    local base=$HOME/.config/zshrc/paths
-
-
-    source $base/local.zsh
-    source $base/yarn.zsh
-
-    if [[ "$OSTYPE" == "darwin"* ]]; then 
-        source $base/homebrew.zsh
-    fi
-}
-
-init_paths
-
-unset -f init_paths
+source $HOME/.config/zshrc/paths/local.zsh
+source $HOME/.config/zshrc/paths/yarn.zsh
+if [[ "$OSTYPE" == "darwin"* ]]; then 
+    source $HOME/.config/zshrc/paths/homebrew.zsh
+fi
