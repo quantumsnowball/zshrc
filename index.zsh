@@ -5,7 +5,9 @@ init_zshrc()
 
     source $base/paths/index.zsh
 
-    source $base/shell/index.zsh
+    source $base/init/index.zsh
+
+    source $base/utils/index.zsh
 
     source $base/plugins/index.zsh
 
