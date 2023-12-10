@@ -21,3 +21,5 @@ zinit light-mode for \
 
 ### End of Zinit's installer chunk
 
+# loader
+source $HOME/.config/zshrc/plugins/zinit/loader.zsh
