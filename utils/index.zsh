@@ -3,7 +3,8 @@ shell_init()
     local base=$HOME/.config/zshrc/utils
 
 
-    source $base/helpers.zsh
+    source $base/dir.zsh
+    source $base/config.zsh
 }
 
 shell_init
