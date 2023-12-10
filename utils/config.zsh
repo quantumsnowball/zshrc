@@ -34,8 +34,8 @@ cf ()
         }
 
         case $1 in
-        repo | .repo | conf | config)
-            cd ~/.config/.repo/ && nvim
+        set | setting | settings | conf | config)
+            cd ~/.config/settings/ && nvim
             ;;
         vi | nvim | vim | neovim)
             cd ~/.config/nvim && nvim
@@ -50,49 +50,49 @@ cf ()
             cd ~/.config/alacritty && nvim alacritty.yml
             ;;
         status)
-            echo "$(eval "$(status .repo)")" &
+            echo "$(eval "$(status settings)")" &
             echo "$(eval "$(status zshrc)")" &
             echo "$(eval "$(status nvim )")" &
             echo "$(eval "$(status tmux )")" &
             wait
             ;;
         fetch)
-            echo "$(eval "$(fetch .repo)")" &
+            echo "$(eval "$(fetch settings)")" &
             echo "$(eval "$(fetch zshrc)")" &
             echo "$(eval "$(fetch nvim )")" &
             echo "$(eval "$(fetch tmux )")" &
             wait
             ;;
         fetch-sync | status-sync)
-            (eval "$(fetch .repo)")
+            (eval "$(fetch settings)")
             (eval "$(fetch zshrc)")
             (eval "$(fetch nvim)")
             (eval "$(fetch tmux)")
             echo "\n"
             ;;
         pull)
-            echo "$(eval "$(pull .repo)")" &
+            echo "$(eval "$(pull settings)")" &
             echo "$(eval "$(pull zshrc)")" &
             echo "$(eval "$(pull nvim )")" &
             echo "$(eval "$(pull tmux )")" &
             wait
             ;;
         pull-sync)
-            (eval "$(pull .repo)")
+            (eval "$(pull settings)")
             (eval "$(pull zshrc)")
             (eval "$(pull nvim)")
             (eval "$(pull tmux)")
             echo "\n"
             ;;
         push)
-            echo "$(eval "$(push .repo)")" &
+            echo "$(eval "$(push settings)")" &
             echo "$(eval "$(push zshrc)")" &
             echo "$(eval "$(push nvim )")" &
             echo "$(eval "$(push tmux )")" &
             wait
             ;;
         sync)
-            echo "$(eval "$(sync .repo)")" &
+            echo "$(eval "$(sync settings)")" &
             echo "$(eval "$(sync zshrc)")" &
             echo "$(eval "$(sync nvim )")" &
             echo "$(eval "$(sync tmux )")" &
