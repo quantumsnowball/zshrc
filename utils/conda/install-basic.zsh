@@ -1,11 +1,12 @@
 conda-install-basic()
 {
-    conda install \
+    pip install \
         numpy pandas matplotlib scipy \
         ipython jupyter \
-        requests \
-        pytest \
+        requests aiohttp \
         click \
+        pytest \
+        mypy \
         autopep8 isort
 }
 
