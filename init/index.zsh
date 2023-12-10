@@ -1,19 +1,9 @@
-shell_init()
-{
-    local base=$HOME/.config/zshrc/init
-
-
-    source $base/history.zsh
-    source $base/autocomplete.zsh
-    source $base/shell.zsh
-    source $base/env.zsh
-    source $base/conda.zsh
-    source $base/zoxide.zsh
-    source $base/fzf.zsh
-    source $base/gcloud.zsh
-    source $base/man.zsh
-}
-
-shell_init
-
-unset -f shell_init
+source $HOME/.config/zshrc/init/history.zsh
+source $HOME/.config/zshrc/init/autocomplete.zsh
+source $HOME/.config/zshrc/init/shell.zsh
+source $HOME/.config/zshrc/init/env.zsh
+source $HOME/.config/zshrc/init/conda.zsh
+source $HOME/.config/zshrc/init/zoxide.zsh
+source $HOME/.config/zshrc/init/fzf.zsh
+source $HOME/.config/zshrc/init/gcloud.zsh
+source $HOME/.config/zshrc/init/man.zsh
