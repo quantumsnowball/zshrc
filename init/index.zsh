@@ -5,7 +5,7 @@ shell_init()
 
     source $base/history.zsh
     source $base/autocomplete.zsh
-    source $base/common.zsh
+    source $base/shell.zsh
     source $base/env.zsh
     source $base/conda.zsh
     source $base/zoxide.zsh
