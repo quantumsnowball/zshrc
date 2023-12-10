@@ -5,7 +5,9 @@ shell_init()
 
     source $base/common.zsh
     source $base/env.zsh
-    source $base/commands.zsh
+    source $base/conda.zsh
+    source $base/zoxide.zsh
+    source $base/fzf.zsh
 }
 
 shell_init
