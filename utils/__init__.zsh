@@ -12,3 +12,10 @@ source $HOME/.config/zshrc/utils/docker.zsh
 source $HOME/.config/zshrc/utils/eza.zsh
 source $HOME/.config/zshrc/utils/git.zsh
 source $HOME/.config/zshrc/utils/nvim.zsh
+source $HOME/.config/zshrc/utils/iproute2.zsh
+source $HOME/.config/zshrc/utils/tmux.zsh
+source $HOME/.config/zshrc/utils/lazygit.zsh
+source $HOME/.config/zshrc/utils/socket.zsh
+if [ -f "/etc/arch-release" ]; then 
+    source $HOME/.config/zshrc/utils/pacman.zsh
+fi
