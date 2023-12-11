@@ -7,6 +7,7 @@ source $HOME/.config/zshrc/utils/docker.zsh
 source $HOME/.config/zshrc/utils/env.zsh
 source $HOME/.config/zshrc/utils/eza.zsh
 source $HOME/.config/zshrc/utils/git.zsh
+source $HOME/.config/zshrc/utils/help.zsh
 source $HOME/.config/zshrc/utils/iproute2.zsh
 source $HOME/.config/zshrc/utils/lazygit.zsh
 source $HOME/.config/zshrc/utils/memory.zsh
