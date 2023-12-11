@@ -1,3 +1,5 @@
+alias pip-update-all=pip-upgrade-all
+
 pip-upgrade-all() 
 {
   # List outdated packages
@@ -31,4 +33,3 @@ pip-upgrade-all()
   fi
 }
 
-pip-update-all() { pip-upgrade-all }
