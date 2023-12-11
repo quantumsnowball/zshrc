@@ -1,5 +1,17 @@
 alias pip-update-all=pip-upgrade-all
 
+pip-install-basic()
+{
+  pip install \
+    numpy pandas matplotlib scipy \
+    ipython jupyter \
+    requests aiohttp \
+    click \
+    pytest \
+    mypy \
+    autopep8 isort
+}
+
 pip-upgrade-all() 
 {
   # List outdated packages
