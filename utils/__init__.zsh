@@ -6,3 +6,5 @@ source $HOME/.config/zshrc/utils/conda/__init__.zsh
 source $HOME/.config/zshrc/utils/pip.zsh
 source $HOME/.config/zshrc/utils/memory.zsh
 source $HOME/.config/zshrc/utils/ffmpeg/__init__.zsh
+source $HOME/.config/zshrc/utils/rclone.zsh
+source $HOME/.config/zshrc/utils/youtube-dl.zsh
