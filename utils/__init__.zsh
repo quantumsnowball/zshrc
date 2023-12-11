@@ -18,6 +18,4 @@ source $HOME/.config/zshrc/utils/lazygit.zsh
 source $HOME/.config/zshrc/utils/socket.zsh
 source $HOME/.config/zshrc/utils/shell.zsh
 source $HOME/.config/zshrc/utils/env.zsh
-if [ -f "/etc/arch-release" ]; then 
-    source $HOME/.config/zshrc/utils/pacman.zsh
-fi
+source $HOME/.config/zshrc/utils/pacman.zsh
