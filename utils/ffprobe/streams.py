@@ -137,6 +137,8 @@ def display(s: dict[str, Any]) -> None:
 
 # display
 print('')
+print_keyval('\t< ffprobe', f'total {len(streams)} streams >')
+print('')
 for stream in streams:
     display(stream)
     print('')
