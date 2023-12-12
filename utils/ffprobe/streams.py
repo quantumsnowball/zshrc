@@ -1,6 +1,7 @@
 import sys
 import subprocess
 import json
+from datetime import timedelta
 from typing import Any
 
 
@@ -38,11 +39,12 @@ def display(s: dict[str, Any]) -> None:
     name = s['codec_name']
     long_name = s['codec_long_name']
     kind = s['codec_type']
-    print(f'Stream {idx}: {kind}')
+    duration = str(timedelta(seconds=float(s['duration'])))[:-7]
+    print(f'Stream {idx}: {kind} [{duration}]')
     print(f'\tcodec: {name} ({long_name})')
     if kind == 'video':
-        print(f"\tresolution: {s['width']} x {s['height']} px")
         print(f"\tbitrate: {float(s['bit_rate'])/1e3} kb/s")
+        print(f"\tresolution: {s['width']} x {s['height']} px")
     elif kind == 'audio':
         print(f"\tbitrate: {float(s['bit_rate'])/1e3} kb/s (lang: {s['tags']['language']})")
         print(f"\tlang: {s['tags']['language']}")
