@@ -85,7 +85,15 @@ def audio_title(idx: str, kind: str, dursec: str) -> None:
        Txt(f'{kind} [{durhms(dursec)}]').magenta)
 
 
-def important(key: str, val: str, details: str) -> None:
+def resolution_px(width: str, height: str) -> str:
+    return f'{width} x {height} px'
+
+
+def bitrate_kb(bitrate: str) -> str:
+    return f'{float(bitrate)/1e3} kb/s'
+
+
+def important(key: str, val: str, *, details: str) -> None:
     kv('\t' + Txt(key).blue,
        f'{Txt(val).red} ({details})')
 
@@ -102,19 +110,22 @@ def display(s: dict[str, Any]) -> None:
     long_name = s['codec_long_name']
     kind = s['codec_type']
     dursec = s['duration']
+    bitrate = s['bit_rate']
     # display
     if kind == 'video':
+        width, height = s['width'], s['height']
         video_title(idx, kind, dursec)
-        important('codec', name, long_name)
-        content('resolution', f"{s['width']} x {s['height']} px")
-        content('bitrate', f"{float(s['bit_rate'])/1e3} kb/s")
+        important('codec', name, details=long_name)
+        content('resolution', resolution_px(width, height))
+        content('bitrate', bitrate_kb(bitrate))
     elif kind == 'audio':
+        lang = s['tags']['language']
         audio_title(idx, kind, dursec)
-        important('codec', name, long_name)
-        content('bitrate', f"{float(s['bit_rate'])/1e3} kb/s")
-        content('lang', f"{s['tags']['language']}")
+        important('codec', name, details=long_name)
+        content('lang', lang)
+        content('bitrate', bitrate_kb(bitrate))
     else:
-        content("", '')
+        content('key', 'value')
 
 
 # display
