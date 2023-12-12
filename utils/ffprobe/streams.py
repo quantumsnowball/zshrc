@@ -35,7 +35,7 @@ streams: list[dict[str, Any]] = data['streams']
 
 
 # display streams
-class Txt:
+class RichText:
     def __init__(self, text: str) -> None:
         self.text = text
 
@@ -67,40 +67,40 @@ class Txt:
         return f'{RED}{self.text}{RESET}'
 
 
-def kv(key: str, val: str) -> None:
+def print_keyval(key: str, val: str) -> None:
     print(f'{key}: {val}')
 
 
-def durhms(dursec: str) -> str:
+def dur_as_hms(dursec: str) -> str:
     return str(timedelta(seconds=float(dursec)))[:-7]
 
 
 def video_title(idx: str, kind: str, dursec: str) -> None:
-    kv(Txt(f'Stream {idx}').green,
-       Txt(f'{kind} [{durhms(dursec)}]').yellow)
+    print_keyval(RichText(f'Stream {idx}').green,
+                 RichText(f'{kind} [{dur_as_hms(dursec)}]').yellow)
 
 
 def audio_title(idx: str, kind: str, dursec: str) -> None:
-    kv(Txt(f'Stream {idx}').green,
-       Txt(f'{kind} [{durhms(dursec)}]').magenta)
+    print_keyval(RichText(f'Stream {idx}').green,
+                 RichText(f'{kind} [{dur_as_hms(dursec)}]').magenta)
 
 
-def resolution_px(width: str, height: str) -> str:
+def resolution_as_px(width: str, height: str) -> str:
     return f'{width} x {height} px'
 
 
-def bitrate_kb(bitrate: str) -> str:
+def bitrate_as_kbps(bitrate: str) -> str:
     return f'{float(bitrate)/1e3} kb/s'
 
 
 def important(key: str, val: str, *, details: str) -> None:
-    kv('\t' + Txt(key).blue,
-       f'{Txt(val).red} ({details})')
+    print_keyval('\t' + RichText(key).blue,
+                 f'{RichText(val).red} ({details})')
 
 
 def content(key: str, val: str) -> None:
-    kv('\t' + Txt(key).blue,
-       val)
+    print_keyval('\t' + RichText(key).blue,
+                 val)
 
 
 def display(s: dict[str, Any]) -> None:
@@ -116,20 +116,20 @@ def display(s: dict[str, Any]) -> None:
         width, height = s['width'], s['height']
         video_title(idx, kind, dursec)
         important('codec', name, details=long_name)
-        content('resolution', resolution_px(width, height))
-        content('bitrate', bitrate_kb(bitrate))
+        content('resolution', resolution_as_px(width, height))
+        content('bitrate', bitrate_as_kbps(bitrate))
     elif kind == 'audio':
         lang = s['tags']['language']
         audio_title(idx, kind, dursec)
         important('codec', name, details=long_name)
         content('lang', lang)
-        content('bitrate', bitrate_kb(bitrate))
+        content('bitrate', bitrate_as_kbps(bitrate))
     else:
         content('key', 'value')
 
 
 # display
 print('')
-for s in streams:
-    display(s)
+for stream in streams:
+    display(stream)
     print('')
