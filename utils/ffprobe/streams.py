@@ -102,7 +102,7 @@ def display(s: dict[str, Any]) -> None:
     elif kind == 'audio':
         audio_title(idx, kind, dursec)
         content('codec', f'{name} ({long_name})')
-        content('bitrate', f"{float(s['bit_rate'])/1e3} kb/s (lang: {s['tags']['language']})")
+        content('bitrate', f"{float(s['bit_rate'])/1e3} kb/s")
         content('lang', f"{s['tags']['language']}")
     else:
         content("", '')
