@@ -3,7 +3,7 @@ import subprocess
 import json
 from datetime import timedelta
 from typing import Any
-from ansi_colors import GREEN, BLUE, RESET
+from ansi_colors import *
 
 
 # help
@@ -43,40 +43,73 @@ class Txt:
         return self.text
 
     @property
+    def yellow(self) -> str:
+        return f'{YELLOW}{self.text}{RESET}'
+
+    @property
     def green(self) -> str:
         return f'{GREEN}{self.text}{RESET}'
+
+    @property
+    def cyan(self) -> str:
+        return f'{CYAN}{self.text}{RESET}'
 
     @property
     def blue(self) -> str:
         return f'{BLUE}{self.text}{RESET}'
 
+    @property
+    def magenta(self) -> str:
+        return f'{MAGENTA}{self.text}{RESET}'
 
-def kv(key: str, val: str) -> str:
-    return f'{key}: {val}'
+
+def kv(key: str, val: str) -> None:
+    print(f'{key}: {val}')
+
+
+def durhms(dursec: str) -> str:
+    return str(timedelta(seconds=float(dursec)))[:-7]
+
+
+def video_title(idx: str, kind: str, dursec: str) -> None:
+    kv(Txt(f'Stream {idx}').green,
+       Txt(f'{kind} [{durhms(dursec)}]').yellow)
+
+
+def audio_title(idx: str, kind: str, dursec: str) -> None:
+    kv(Txt(f'Stream {idx}').green,
+       Txt(f'{kind} [{durhms(dursec)}]').magenta)
+
+
+def content(key: str, val: str) -> None:
+    kv('\t' + Txt(key).blue,
+       val)
 
 
 def display(s: dict[str, Any]) -> None:
+    # data
     idx = s['index']
     name = s['codec_name']
     long_name = s['codec_long_name']
     kind = s['codec_type']
-    duration = str(timedelta(seconds=float(s['duration'])))[:-7]
-    print(kv(Txt(f'Stream {idx}').green, Txt(f'{kind} [{duration}]').blue))
-    print(f'\tcodec: {name} ({long_name})')
+    dursec = s['duration']
+    # display
     if kind == 'video':
-        print(f"\tbitrate: {float(s['bit_rate'])/1e3} kb/s")
-        print(f"\tresolution: {s['width']} x {s['height']} px")
+        video_title(idx, kind, dursec)
+        content('codec', f'{name} ({long_name})')
+        content('resolution', f"{s['width']} x {s['height']} px")
+        content('bitrate', f"{float(s['bit_rate'])/1e3} kb/s")
     elif kind == 'audio':
-        print(f"\tbitrate: {float(s['bit_rate'])/1e3} kb/s (lang: {s['tags']['language']})")
-        print(f"\tlang: {s['tags']['language']}")
+        audio_title(idx, kind, dursec)
+        content('codec', f'{name} ({long_name})')
+        content('bitrate', f"{float(s['bit_rate'])/1e3} kb/s (lang: {s['tags']['language']})")
+        content('lang', f"{s['tags']['language']}")
     else:
-        print(f"\t")
+        content("", '')
 
 
 # display
+print('')
 for s in streams:
     display(s)
-
-
-class C:
-    blue = 'abc'
+    print('')
