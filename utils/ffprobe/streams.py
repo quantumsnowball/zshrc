@@ -39,11 +39,13 @@ def display(s: dict[str, Any]) -> None:
     long_name = s['codec_long_name']
     kind = s['codec_type']
     print(f'Stream {idx}: {kind}')
-    print(f'\t{name} ({long_name})')
+    print(f'\tcodec: {name} ({long_name})')
     if kind == 'video':
-        print(f"\t{s['width']} x {s['height']} px")
+        print(f"\tresolution: {s['width']} x {s['height']} px")
+        print(f"\tbitrate: {float(s['bit_rate'])/1e3} kb/s")
     elif kind == 'audio':
-        print(f"\t{float(s['bit_rate'])/1e3} kb/s (lang: {s['tags']['language']})")
+        print(f"\tbitrate: {float(s['bit_rate'])/1e3} kb/s (lang: {s['tags']['language']})")
+        print(f"\tlang: {s['tags']['language']}")
     else:
         print(f"\t")
 
