@@ -28,8 +28,15 @@ cmd = ('ffprobe',
        '-hide_banner',
        file,)
 
+# use ffprobe
+try:
+    stdout = subprocess.check_output(cmd)
+except subprocess.CalledProcessError as e:
+    print(f'{RED}{e.__class__.__name__}: ffprobe does not show valid result for `{file}`{RESET}')
+    print(usage)
+    sys.exit(1)
+
 # parse output
-stdout = subprocess.check_output(cmd)
 data = json.loads(stdout.decode())
 streams: list[dict[str, Any]] = data['streams']
 
