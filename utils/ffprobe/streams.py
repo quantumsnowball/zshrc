@@ -62,6 +62,10 @@ class Txt:
     def magenta(self) -> str:
         return f'{MAGENTA}{self.text}{RESET}'
 
+    @property
+    def red(self) -> str:
+        return f'{RED}{self.text}{RESET}'
+
 
 def kv(key: str, val: str) -> None:
     print(f'{key}: {val}')
@@ -81,6 +85,11 @@ def audio_title(idx: str, kind: str, dursec: str) -> None:
        Txt(f'{kind} [{durhms(dursec)}]').magenta)
 
 
+def important(key: str, val: str, details: str) -> None:
+    kv('\t' + Txt(key).blue,
+       f'{Txt(val).red} ({details})')
+
+
 def content(key: str, val: str) -> None:
     kv('\t' + Txt(key).blue,
        val)
@@ -96,12 +105,12 @@ def display(s: dict[str, Any]) -> None:
     # display
     if kind == 'video':
         video_title(idx, kind, dursec)
-        content('codec', f'{name} ({long_name})')
+        important('codec', name, long_name)
         content('resolution', f"{s['width']} x {s['height']} px")
         content('bitrate', f"{float(s['bit_rate'])/1e3} kb/s")
     elif kind == 'audio':
         audio_title(idx, kind, dursec)
-        content('codec', f'{name} ({long_name})')
+        important('codec', name, long_name)
         content('bitrate', f"{float(s['bit_rate'])/1e3} kb/s")
         content('lang', f"{s['tags']['language']}")
     else:
