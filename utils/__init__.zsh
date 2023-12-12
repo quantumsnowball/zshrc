@@ -1,5 +1,6 @@
 source $HOME/.config/zshrc/utils/conda/__init__.zsh
 source $HOME/.config/zshrc/utils/ffmpeg/__init__.zsh
+source $HOME/.config/zshrc/utils/ffprobe/__init__.zsh
 
 source $HOME/.config/zshrc/utils/config.zsh
 source $HOME/.config/zshrc/utils/dir.zsh
