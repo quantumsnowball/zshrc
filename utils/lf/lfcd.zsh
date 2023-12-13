@@ -18,3 +18,10 @@ lfcd () {
     # `command` is needed in case `lfcd` is aliased to `lf`
     cd "$(command lf -print-last-dir "$@")"
 }
+
+lfz () {
+    # use z to replace cd
+    z "$(command lf -print-last-dir "$@")"
+}
+
+alias lf=lfz
