@@ -95,6 +95,13 @@ def get_codec_name(s: Json) -> str:
         return NA
 
 
+def get_codec_long_name(s: Json) -> str:
+    try:
+        return s['codec_long_name']
+    except KeyError:
+        return NA
+
+
 def print_keyval(key: str, val: str) -> None:
     print(f'{key}: {val}')
 
@@ -146,7 +153,7 @@ def display(i: int, s: dict[str, Any]) -> None:
     # data
     idx = get_index(s, i)
     name = get_codec_name(s)
-    long_name = s.get('codec_long_name', NA)
+    long_name = get_codec_long_name(s)
     kind = s.get('codec_type', NA)
     dursec = s.get('duration', NAN)
     bitrate = s.get('bit_rate', NAN)
