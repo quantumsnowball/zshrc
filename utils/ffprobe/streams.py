@@ -99,6 +99,11 @@ def audio_title(idx: str, kind: str, dursec: str) -> None:
                  RichText(f'{kind} [{dur_as_hms(dursec)}]').magenta)
 
 
+def other_title(idx: str, kind: str, dursec: str) -> None:
+    print_keyval(RichText(f'Stream {idx}').green,
+                 RichText(f'{kind} [{dur_as_hms(dursec)}]').cyan)
+
+
 def resolution_as_px(width: str, height: str) -> str:
     return f'{width} x {height} px'
 
@@ -142,6 +147,7 @@ def display(i: int, s: dict[str, Any]) -> None:
         content('lang', lang)
         content('bitrate', bitrate_as_kbps(bitrate))
     else:
+        other_title(idx, kind, dursec)
         content('key', 'value')
 
 
