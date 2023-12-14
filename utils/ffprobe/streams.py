@@ -88,6 +88,13 @@ def get_index(s: Json, i: int) -> str:
     return str(idx)
 
 
+def get_codec_name(s: Json) -> str:
+    try:
+        return s['codec_name']
+    except KeyError:
+        return NA
+
+
 def print_keyval(key: str, val: str) -> None:
     print(f'{key}: {val}')
 
@@ -138,7 +145,7 @@ def content(key: str, val: str) -> None:
 def display(i: int, s: dict[str, Any]) -> None:
     # data
     idx = get_index(s, i)
-    name = s.get('codec_name', NA)
+    name = get_codec_name(s)
     long_name = s.get('codec_long_name', NA)
     kind = s.get('codec_type', NA)
     dursec = s.get('duration', NAN)
