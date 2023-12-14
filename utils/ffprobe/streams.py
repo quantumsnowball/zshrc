@@ -95,6 +95,13 @@ def get_codec_name(s: Json) -> str:
         return NA
 
 
+def get_codec_long_name(s: Json) -> str:
+    try:
+        return s['codec_long_name']
+    except KeyError:
+        return NA
+
+
 def get_codec_type(s: Json) -> str:
     try:
         return s['codec_type']
@@ -134,13 +141,6 @@ def get_width_height(s: Json) -> tuple[str, str]:
 def get_lang(s: Json) -> str:
     try:
         return s['tags']['language']
-    except KeyError:
-        return NA
-
-
-def get_codec_long_name(s: Json) -> str:
-    try:
-        return s['codec_long_name']
     except KeyError:
         return NA
 
