@@ -131,6 +131,13 @@ def get_width_height(s: Json) -> tuple[str, str]:
     return width, height
 
 
+def get_lang(s: Json) -> str:
+    try:
+        return s['tags']['language']
+    except KeyError:
+        return NA
+
+
 def get_codec_long_name(s: Json) -> str:
     try:
         return s['codec_long_name']
@@ -201,7 +208,7 @@ def display(i: int, s: dict[str, Any]) -> None:
         content('resolution', resolution_as_px(width, height))
         content('bitrate', bitrate)
     elif kind == 'audio':
-        lang = s['tags']['language']
+        lang = get_lang(s)
         audio_title(idx, kind, duration)
         important('codec', name, details=long_name)
         content('lang', lang)
