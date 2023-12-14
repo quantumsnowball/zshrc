@@ -6,6 +6,10 @@ from typing import Any
 from ansi_colors import *
 
 
+# types
+Json = dict[str, Any]
+
+
 # constant
 NA = 'N/A'
 NAN = 'nan'
@@ -42,7 +46,7 @@ except subprocess.CalledProcessError as e:
 
 # parse output
 data = json.loads(stdout.decode())
-streams: list[dict[str, Any]] = data['streams']
+streams: list[Json] = data['streams']
 
 
 # display streams
@@ -76,6 +80,12 @@ class RichText:
     @property
     def red(self) -> str:
         return f'{RED}{self.text}{RESET}'
+
+
+def get_index(s: Json, i: int) -> str:
+    idx = s.get('index', str(i))
+    assert isinstance(idx, int)
+    return str(idx)
 
 
 def print_keyval(key: str, val: str) -> None:
@@ -127,7 +137,7 @@ def content(key: str, val: str) -> None:
 
 def display(i: int, s: dict[str, Any]) -> None:
     # data
-    idx = s.get('index', str(i))
+    idx = get_index(s, i)
     name = s.get('codec_name', NA)
     long_name = s.get('codec_long_name', NA)
     kind = s.get('codec_type', NA)
