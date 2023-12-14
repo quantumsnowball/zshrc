@@ -6,6 +6,10 @@ from typing import Any
 from ansi_colors import *
 
 
+# constant
+NA = 'N/A'
+NAN = 'nan'
+
 # help
 usage = 'Usage: ffprobe-streams FILE'
 
@@ -79,7 +83,10 @@ def print_keyval(key: str, val: str) -> None:
 
 
 def dur_as_hms(dursec: str) -> str:
-    return str(timedelta(seconds=float(dursec)))[:-7]
+    try:
+        return str(timedelta(seconds=float(dursec)))[:-7]
+    except ValueError:
+        return NAN
 
 
 def video_title(idx: str, kind: str, dursec: str) -> None:
@@ -97,7 +104,10 @@ def resolution_as_px(width: str, height: str) -> str:
 
 
 def bitrate_as_kbps(bitrate: str) -> str:
-    return f'{float(bitrate)/1e3} kb/s'
+    try:
+        return f'{float(bitrate)/1e3} kb/s'
+    except ValueError:
+        return NAN
 
 
 def important(key: str, val: str, *, details: str) -> None:
@@ -110,17 +120,17 @@ def content(key: str, val: str) -> None:
                  val)
 
 
-def display(s: dict[str, Any]) -> None:
+def display(i: int, s: dict[str, Any]) -> None:
     # data
-    idx = s['index']
-    name = s['codec_name']
-    long_name = s['codec_long_name']
-    kind = s['codec_type']
-    dursec = s['duration']
-    bitrate = s['bit_rate']
+    idx = s.get('index', str(i))
+    name = s.get('codec_name', NA)
+    long_name = s.get('codec_long_name', NA)
+    kind = s.get('codec_type', NA)
+    dursec = s.get('duration', NAN)
+    bitrate = s.get('bit_rate', NAN)
     # display
     if kind == 'video':
-        width, height = s['width'], s['height']
+        width, height = s.get('width', NAN), s.get('height', NAN)
         video_title(idx, kind, dursec)
         important('codec', name, details=long_name)
         content('resolution', resolution_as_px(width, height))
@@ -139,6 +149,6 @@ def display(s: dict[str, Any]) -> None:
 print('')
 print_keyval('\t< ffprobe', f'total {len(streams)} streams >')
 print('')
-for stream in streams:
-    display(stream)
+for i, stream in enumerate(streams):
+    display(i, stream)
     print('')
