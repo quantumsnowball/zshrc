@@ -1,7 +1,7 @@
 lf-gdrive () {
     # define vars
-    root=gdrive
-    target=$HOME/$root/$1
+    root=$HOME/gdrive
+    target=$root/$1
 
     # ensure dir
     mkdir -p $target
@@ -16,6 +16,9 @@ lf-gdrive () {
     # unmount when finished
     fusermount -u $target
     echo "Unmounted: $target"
+
+    # clean up empty dir
+    find $root -mindepth 1 -type d -empty -delete
 }
 
 alias lfg=lf-gdrive
