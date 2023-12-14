@@ -7,14 +7,15 @@ lf-gdrive () {
     mkdir -p $target
 
     # start mount
-    rclone mount --daemon $1 $target &
-    sleep 5
+    echo "Mounting $target ..."
+    rclone mount --daemon $1 $target
 
     # start browsing
     command lf $target
 
     # unmount when finished
     fusermount -u $target
+    echo "Unmounted: $target"
 }
 
 alias lfg=lf-gdrive
