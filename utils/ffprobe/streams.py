@@ -124,6 +124,13 @@ def get_duration(s: Json) -> str:
         return str(timedelta(seconds=float(dur)))[:-7]
 
 
+def get_display_aspect_ratio(s: Json) -> str | None:
+    try:
+        return s['display_aspect_ratio']
+    except KeyError:
+        return None
+
+
 def get_bit_rate(s: Json) -> str | None:
     try:
         bitrate = s['bit_rate']
@@ -196,6 +203,7 @@ def display(i: int, s: dict[str, Any]) -> None:
     long_name = get_codec_long_name(s)
     kind = get_codec_type(s)
     duration = get_duration(s)
+    aspect_ratio = get_display_aspect_ratio(s)
     bit_rate = get_bit_rate(s)
     sample_rate = get_sample_rate(s)
     resolution = get_resolution(s)
@@ -209,6 +217,7 @@ def display(i: int, s: dict[str, Any]) -> None:
         other_title(idx, kind, duration)
     important('codec', name, details=long_name)
     content('resolution', resolution)
+    content('aspect ratio', aspect_ratio)
     content('bitrate', bit_rate)
     content('sample rate', sample_rate)
     content('lang', lang)
