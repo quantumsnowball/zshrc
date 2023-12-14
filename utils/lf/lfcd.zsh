@@ -24,4 +24,11 @@ lfz () {
     z "$(command lf -print-last-dir "$@")"
 }
 
+lff () {
+    # start at home
+    z
+    # launch lfz and fzf jump at launch
+    lfz -command fzf_jump
+}
+
 alias lf=lfz
