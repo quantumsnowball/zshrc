@@ -6,6 +6,14 @@ from typing import Any
 from ansi_colors import *
 
 
+# types
+Json = dict[str, Any]
+
+
+# constant
+NA = 'N/A'
+NAN = 'nan'
+
 # help
 usage = 'Usage: ffprobe-streams FILE'
 
@@ -38,7 +46,7 @@ except subprocess.CalledProcessError as e:
 
 # parse output
 data = json.loads(stdout.decode())
-streams: list[dict[str, Any]] = data['streams']
+streams: list[Json] = data['streams']
 
 
 # display streams
@@ -74,30 +82,107 @@ class RichText:
         return f'{RED}{self.text}{RESET}'
 
 
+def get_index(s: Json, i: int) -> str:
+    idx = s.get('index', str(i))
+    assert isinstance(idx, int)
+    return str(idx)
+
+
+def get_codec_name(s: Json) -> str:
+    try:
+        return s['codec_name']
+    except KeyError:
+        return NA
+
+
+def get_codec_long_name(s: Json) -> str:
+    try:
+        return s['codec_long_name']
+    except KeyError:
+        return NA
+
+
+def get_codec_type(s: Json) -> str:
+    try:
+        return s['codec_type']
+    except KeyError:
+        return NA
+
+
+def get_duration(s: Json) -> str:
+    # try two ways to find duration info
+    dur = \
+        s.get('duration') or \
+        s.get('tags', {}).get('DURATION')
+    if dur is None:
+        return NAN
+    # parse
+    dur = str(dur)
+    if ':' in dur:
+        return dur.split('.')[0]
+    else:
+        return str(timedelta(seconds=float(dur)))[:-7]
+
+
+def get_display_aspect_ratio(s: Json) -> str | None:
+    try:
+        return s['display_aspect_ratio']
+    except KeyError:
+        return None
+
+
+def get_bit_rate(s: Json) -> str | None:
+    try:
+        bitrate = s['bit_rate']
+        return f'{float(bitrate)/1e3} kb/s'
+    except KeyError:
+        return None
+
+
+def get_sample_rate(s: Json) -> str | None:
+    try:
+        sample_rate = s['sample_rate']
+        return f'{sample_rate} hz'
+    except KeyError:
+        return None
+
+
+def get_resolution(s: Json) -> str | None:
+    try:
+        width, height = s['width'], s['height']
+        return f'{width} x {height} px'
+    except KeyError:
+        return None
+
+
+def get_lang(s: Json) -> str | None:
+    try:
+        return s['tags']['language']
+    except KeyError:
+        return None
+
+
 def print_keyval(key: str, val: str) -> None:
     print(f'{key}: {val}')
 
 
-def dur_as_hms(dursec: str) -> str:
-    return str(timedelta(seconds=float(dursec)))[:-7]
-
-
-def video_title(idx: str, kind: str, dursec: str) -> None:
+def video_title(idx: str, kind: str, duration: str) -> None:
     print_keyval(RichText(f'Stream {idx}').green,
-                 RichText(f'{kind} [{dur_as_hms(dursec)}]').yellow)
+                 RichText(f'{kind} [{duration}]').yellow)
 
 
-def audio_title(idx: str, kind: str, dursec: str) -> None:
+def audio_title(idx: str, kind: str, duration: str) -> None:
     print_keyval(RichText(f'Stream {idx}').green,
-                 RichText(f'{kind} [{dur_as_hms(dursec)}]').magenta)
+                 RichText(f'{kind} [{duration}]').magenta)
+
+
+def other_title(idx: str, kind: str, duration: str) -> None:
+    print_keyval(RichText(f'Stream {idx}').green,
+                 RichText(f'{kind} [{duration}]').cyan)
 
 
 def resolution_as_px(width: str, height: str) -> str:
     return f'{width} x {height} px'
-
-
-def bitrate_as_kbps(bitrate: str) -> str:
-    return f'{float(bitrate)/1e3} kb/s'
 
 
 def important(key: str, val: str, *, details: str) -> None:
@@ -105,40 +190,43 @@ def important(key: str, val: str, *, details: str) -> None:
                  f'{RichText(val).red} ({details})')
 
 
-def content(key: str, val: str) -> None:
-    print_keyval('\t' + RichText(key).blue,
-                 val)
+def content(key: str, val: str | None) -> None:
+    if val is not None:
+        print_keyval('\t' + RichText(key).blue,
+                     val)
 
 
-def display(s: dict[str, Any]) -> None:
+def display(i: int, s: dict[str, Any]) -> None:
     # data
-    idx = s['index']
-    name = s['codec_name']
-    long_name = s['codec_long_name']
-    kind = s['codec_type']
-    dursec = s['duration']
-    bitrate = s['bit_rate']
+    idx = get_index(s, i)
+    name = get_codec_name(s)
+    long_name = get_codec_long_name(s)
+    kind = get_codec_type(s)
+    duration = get_duration(s)
+    aspect_ratio = get_display_aspect_ratio(s)
+    bit_rate = get_bit_rate(s)
+    sample_rate = get_sample_rate(s)
+    resolution = get_resolution(s)
+    lang = get_lang(s)
     # display
     if kind == 'video':
-        width, height = s['width'], s['height']
-        video_title(idx, kind, dursec)
-        important('codec', name, details=long_name)
-        content('resolution', resolution_as_px(width, height))
-        content('bitrate', bitrate_as_kbps(bitrate))
+        video_title(idx, kind, duration)
     elif kind == 'audio':
-        lang = s['tags']['language']
-        audio_title(idx, kind, dursec)
-        important('codec', name, details=long_name)
-        content('lang', lang)
-        content('bitrate', bitrate_as_kbps(bitrate))
+        audio_title(idx, kind, duration)
     else:
-        content('key', 'value')
+        other_title(idx, kind, duration)
+    important('codec', name, details=long_name)
+    content('resolution', resolution)
+    content('aspect ratio', aspect_ratio)
+    content('bitrate', bit_rate)
+    content('sample rate', sample_rate)
+    content('lang', lang)
 
 
 # display
 print('')
 print_keyval('\t< ffprobe', f'total {len(streams)} streams >')
 print('')
-for stream in streams:
-    display(stream)
+for i, stream in enumerate(streams):
+    display(i, stream)
     print('')
