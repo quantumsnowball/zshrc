@@ -102,6 +102,21 @@ def get_codec_type(s: Json) -> str:
         return NA
 
 
+def get_duration(s: Json) -> str:
+    # try two ways to find duration info
+    dur = \
+        s.get('duration') or \
+        s.get('tags', {}).get('DURATION')
+    if dur is None:
+        return NAN
+    # parse
+    dur = str(dur)
+    if ':' in dur:
+        return dur.split('.')[0]
+    else:
+        return str(timedelta(seconds=float(dur)))[:-7]
+
+
 def get_codec_long_name(s: Json) -> str:
     try:
         return s['codec_long_name']
@@ -120,19 +135,19 @@ def dur_as_hms(dursec: str) -> str:
         return NAN
 
 
-def video_title(idx: str, kind: str, dursec: str) -> None:
+def video_title(idx: str, kind: str, duration: str) -> None:
     print_keyval(RichText(f'Stream {idx}').green,
-                 RichText(f'{kind} [{dur_as_hms(dursec)}]').yellow)
+                 RichText(f'{kind} [{duration}]').yellow)
 
 
-def audio_title(idx: str, kind: str, dursec: str) -> None:
+def audio_title(idx: str, kind: str, duration: str) -> None:
     print_keyval(RichText(f'Stream {idx}').green,
-                 RichText(f'{kind} [{dur_as_hms(dursec)}]').magenta)
+                 RichText(f'{kind} [{duration}]').magenta)
 
 
-def other_title(idx: str, kind: str, dursec: str) -> None:
+def other_title(idx: str, kind: str, duration: str) -> None:
     print_keyval(RichText(f'Stream {idx}').green,
-                 RichText(f'{kind} [{dur_as_hms(dursec)}]').cyan)
+                 RichText(f'{kind} [{duration}]').cyan)
 
 
 def resolution_as_px(width: str, height: str) -> str:
@@ -162,23 +177,23 @@ def display(i: int, s: dict[str, Any]) -> None:
     name = get_codec_name(s)
     long_name = get_codec_long_name(s)
     kind = get_codec_type(s)
-    dursec = s.get('duration', NAN)
+    duration = get_duration(s)
     bitrate = s.get('bit_rate', NAN)
     # display
     if kind == 'video':
         width, height = s.get('width', NAN), s.get('height', NAN)
-        video_title(idx, kind, dursec)
+        video_title(idx, kind, duration)
         important('codec', name, details=long_name)
         content('resolution', resolution_as_px(width, height))
         content('bitrate', bitrate_as_kbps(bitrate))
     elif kind == 'audio':
         lang = s['tags']['language']
-        audio_title(idx, kind, dursec)
+        audio_title(idx, kind, duration)
         important('codec', name, details=long_name)
         content('lang', lang)
         content('bitrate', bitrate_as_kbps(bitrate))
     else:
-        other_title(idx, kind, dursec)
+        other_title(idx, kind, duration)
         important('codec', name, details=long_name)
 
 
