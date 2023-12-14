@@ -117,6 +117,14 @@ def get_duration(s: Json) -> str:
         return str(timedelta(seconds=float(dur)))[:-7]
 
 
+def get_bit_rate(s: Json) -> str:
+    try:
+        bitrate = s['bit_rate']
+        return f'{float(bitrate)/1e3} kb/s'
+    except KeyError:
+        return NAN
+
+
 def get_codec_long_name(s: Json) -> str:
     try:
         return s['codec_long_name']
@@ -178,20 +186,20 @@ def display(i: int, s: dict[str, Any]) -> None:
     long_name = get_codec_long_name(s)
     kind = get_codec_type(s)
     duration = get_duration(s)
-    bitrate = s.get('bit_rate', NAN)
+    bitrate = get_bit_rate(s)
     # display
     if kind == 'video':
         width, height = s.get('width', NAN), s.get('height', NAN)
         video_title(idx, kind, duration)
         important('codec', name, details=long_name)
         content('resolution', resolution_as_px(width, height))
-        content('bitrate', bitrate_as_kbps(bitrate))
+        content('bitrate', bitrate)
     elif kind == 'audio':
         lang = s['tags']['language']
         audio_title(idx, kind, duration)
         important('codec', name, details=long_name)
         content('lang', lang)
-        content('bitrate', bitrate_as_kbps(bitrate))
+        content('bitrate', bitrate)
     else:
         other_title(idx, kind, duration)
         important('codec', name, details=long_name)
