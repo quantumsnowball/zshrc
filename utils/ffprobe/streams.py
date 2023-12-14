@@ -124,25 +124,27 @@ def get_duration(s: Json) -> str:
         return str(timedelta(seconds=float(dur)))[:-7]
 
 
-def get_bit_rate(s: Json) -> str:
+def get_bit_rate(s: Json) -> str | None:
     try:
         bitrate = s['bit_rate']
         return f'{float(bitrate)/1e3} kb/s'
     except KeyError:
-        return NAN
+        return None
 
 
-def get_width_height(s: Json) -> tuple[str, str]:
-    width = s.get('width', NAN)
-    height = s.get('height', NAN)
-    return width, height
+def get_resolution(s: Json) -> str | None:
+    try:
+        width, height = s['width'], s['height']
+        return f'{width} x {height} px'
+    except KeyError:
+        return None
 
 
-def get_lang(s: Json) -> str:
+def get_lang(s: Json) -> str | None:
     try:
         return s['tags']['language']
     except KeyError:
-        return NA
+        return None
 
 
 def print_keyval(key: str, val: str) -> None:
@@ -173,9 +175,10 @@ def important(key: str, val: str, *, details: str) -> None:
                  f'{RichText(val).red} ({details})')
 
 
-def content(key: str, val: str) -> None:
-    print_keyval('\t' + RichText(key).blue,
-                 val)
+def content(key: str, val: str | None) -> None:
+    if val is not None:
+        print_keyval('\t' + RichText(key).blue,
+                     val)
 
 
 def display(i: int, s: dict[str, Any]) -> None:
@@ -186,22 +189,19 @@ def display(i: int, s: dict[str, Any]) -> None:
     kind = get_codec_type(s)
     duration = get_duration(s)
     bitrate = get_bit_rate(s)
+    resolution = get_resolution(s)
+    lang = get_lang(s)
     # display
     if kind == 'video':
-        width, height = get_width_height(s)
         video_title(idx, kind, duration)
-        important('codec', name, details=long_name)
-        content('resolution', resolution_as_px(width, height))
-        content('bitrate', bitrate)
     elif kind == 'audio':
-        lang = get_lang(s)
         audio_title(idx, kind, duration)
-        important('codec', name, details=long_name)
-        content('lang', lang)
-        content('bitrate', bitrate)
     else:
         other_title(idx, kind, duration)
-        important('codec', name, details=long_name)
+    important('codec', name, details=long_name)
+    content('resolution', resolution)
+    content('bitrate', bitrate)
+    content('lang', lang)
 
 
 # display
