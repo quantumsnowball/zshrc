@@ -149,13 +149,6 @@ def print_keyval(key: str, val: str) -> None:
     print(f'{key}: {val}')
 
 
-def dur_as_hms(dursec: str) -> str:
-    try:
-        return str(timedelta(seconds=float(dursec)))[:-7]
-    except ValueError:
-        return NAN
-
-
 def video_title(idx: str, kind: str, duration: str) -> None:
     print_keyval(RichText(f'Stream {idx}').green,
                  RichText(f'{kind} [{duration}]').yellow)
@@ -173,13 +166,6 @@ def other_title(idx: str, kind: str, duration: str) -> None:
 
 def resolution_as_px(width: str, height: str) -> str:
     return f'{width} x {height} px'
-
-
-def bitrate_as_kbps(bitrate: str) -> str:
-    try:
-        return f'{float(bitrate)/1e3} kb/s'
-    except ValueError:
-        return NAN
 
 
 def important(key: str, val: str, *, details: str) -> None:
