@@ -132,6 +132,14 @@ def get_bit_rate(s: Json) -> str | None:
         return None
 
 
+def get_sample_rate(s: Json) -> str | None:
+    try:
+        sample_rate = s['sample_rate']
+        return f'{sample_rate} hz'
+    except KeyError:
+        return None
+
+
 def get_resolution(s: Json) -> str | None:
     try:
         width, height = s['width'], s['height']
@@ -188,7 +196,8 @@ def display(i: int, s: dict[str, Any]) -> None:
     long_name = get_codec_long_name(s)
     kind = get_codec_type(s)
     duration = get_duration(s)
-    bitrate = get_bit_rate(s)
+    bit_rate = get_bit_rate(s)
+    sample_rate = get_sample_rate(s)
     resolution = get_resolution(s)
     lang = get_lang(s)
     # display
@@ -200,7 +209,8 @@ def display(i: int, s: dict[str, Any]) -> None:
         other_title(idx, kind, duration)
     important('codec', name, details=long_name)
     content('resolution', resolution)
-    content('bitrate', bitrate)
+    content('bitrate', bit_rate)
+    content('sample rate', sample_rate)
     content('lang', lang)
 
 
