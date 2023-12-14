@@ -125,6 +125,12 @@ def get_bit_rate(s: Json) -> str:
         return NAN
 
 
+def get_width_height(s: Json) -> tuple[str, str]:
+    width = s.get('width', NAN)
+    height = s.get('height', NAN)
+    return width, height
+
+
 def get_codec_long_name(s: Json) -> str:
     try:
         return s['codec_long_name']
@@ -189,7 +195,7 @@ def display(i: int, s: dict[str, Any]) -> None:
     bitrate = get_bit_rate(s)
     # display
     if kind == 'video':
-        width, height = s.get('width', NAN), s.get('height', NAN)
+        width, height = get_width_height(s)
         video_title(idx, kind, duration)
         important('codec', name, details=long_name)
         content('resolution', resolution_as_px(width, height))
