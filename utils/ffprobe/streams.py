@@ -148,7 +148,7 @@ def display(i: int, s: dict[str, Any]) -> None:
         content('bitrate', bitrate_as_kbps(bitrate))
     else:
         other_title(idx, kind, dursec)
-        content('key', 'value')
+        important('codec', name, details=long_name)
 
 
 # display
