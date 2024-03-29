@@ -1,5 +1,6 @@
 # sudo
 alias sudo='sudo '
+alias root='/bin/sudo -E -s'
 # clear
 alias c=clear
 alias cl=clear
