@@ -4,4 +4,4 @@ if [ -f "/etc/arch-release" ]; then
 fi
 
 # helpers
-alias update='sudo pacman -Syu'
+alias system-update='sudo pacman -Syu'
