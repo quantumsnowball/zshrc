@@ -4,6 +4,7 @@ source $HOME/.config/zshrc/utils/ffprobe/__init__.zsh
 source $HOME/.config/zshrc/utils/lf/__init__.zsh
 
 source $HOME/.config/zshrc/utils/apt.zsh
+source $HOME/.config/zshrc/utils/batcat.zsh
 source $HOME/.config/zshrc/utils/config.zsh
 source $HOME/.config/zshrc/utils/dir.zsh
 source $HOME/.config/zshrc/utils/docker.zsh
