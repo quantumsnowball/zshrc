@@ -4,6 +4,7 @@ source $HOME/.config/zshrc/init/shell.zsh
 source $HOME/.config/zshrc/init/env.zsh
 source $HOME/.config/zshrc/init/conda.zsh
 source $HOME/.config/zshrc/init/zoxide.zsh
+source $HOME/.config/zshrc/init/ssh.zsh
 source $HOME/.config/zshrc/init/fzf.zsh
 source $HOME/.config/zshrc/init/gcloud.zsh
 source $HOME/.config/zshrc/init/man.zsh
