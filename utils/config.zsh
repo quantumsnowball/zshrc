@@ -43,6 +43,9 @@ cf ()
         zshrc | shell | zsh)
             cd ~/.config/zshrc && nvim
             ;;
+        poshrc | posh)
+            cd ~/winhome/Documents/WindowsPowerShell/poshrc && nvim
+            ;;
         tmux)
             cd ~/.config/tmux && nvim
             ;;
