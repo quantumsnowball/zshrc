@@ -18,6 +18,7 @@ source $HOME/.config/zshrc/utils/memory.zsh
 source $HOME/.config/zshrc/utils/nvim.zsh
 source $HOME/.config/zshrc/utils/pacman.zsh
 source $HOME/.config/zshrc/utils/pip.zsh
+source $HOME/.config/zshrc/utils/process.zsh
 source $HOME/.config/zshrc/utils/python.zsh
 source $HOME/.config/zshrc/utils/rclone.zsh
 source $HOME/.config/zshrc/utils/shell.zsh
