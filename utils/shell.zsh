@@ -1,5 +1,9 @@
 # sudo
-alias sudo='sudo '
+if [[ -v TERMUX_VERSION ]]; then
+    alias sudo=''
+else
+    alias sudo='sudo '
+fi
 alias root='/bin/sudo -E -s'
 # clear
 alias c=clear
