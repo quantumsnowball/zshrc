@@ -8,16 +8,17 @@ cf ()
         pull ()
         {
             echo "$(
-                echo "cf pull $1 started\n"
-                sleep 5                    
-                echo "cf pull $1 finished\n"
+                echo "\n# $1\n#\n" &&
+                cd ~/.config/$1 &&
+                git -c color.ui=always pull --rebase --autostash 2>&1
             )"
         }
         case $1 in
         pull)
-            pull arg1 & 
-            pull arg2 & 
-            pull arg3 & 
+            pull settings & 
+            pull zshrc & 
+            pull nvim & 
+            pull tmux & 
             wait
             ;;
         esac
