@@ -15,6 +15,10 @@ zinit light jeffreytse/zsh-vi-mode
 zinit ice depth=1
 zinit light romkatv/powerlevel10k
 
+# diff-so-fancy
+zinit ice lucid as"program" pick"bin/git-dsf"
+zinit load so-fancy/diff-so-fancy
+
 # fzf
 # Modified command to work with zsh-vi-mode plugins
 zinit ice lucid wait
