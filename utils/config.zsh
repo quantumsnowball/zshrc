@@ -8,15 +8,23 @@ cf ()
         status ()
         {
             echo "$(
-                echo "\n# $1\n#\n" &&
+                echo "\n#\n# < $1 >\n#" &&
                 cd ~/.config/$1 &&
                 git -c color.ui=always status --short --branch 2>&1
+            )"
+        }
+        cf fetch ()
+        {
+            echo "$(
+                echo "\n#\n# < $1 >\n#" &&
+                cd ~/.config/$1 &&
+                git -c color.ui=always fetch --all && git -c color.ui=always status --short --branch 2>&1
             )"
         }
         pull ()
         {
             echo "$(
-                echo "\n# $1\n#\n" &&
+                echo "\n#\n# < $1 >\n#" &&
                 cd ~/.config/$1 &&
                 git -c color.ui=always pull --rebase --autostash 2>&1
             )"
@@ -29,6 +37,13 @@ cf ()
             status zshrc & 
             status nvim & 
             status tmux & 
+            wait
+            ;;
+        fetch)
+            fetch settings & 
+            fetch zshrc & 
+            fetch nvim & 
+            fetch tmux & 
             wait
             ;;
         pull)
