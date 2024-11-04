@@ -5,3 +5,12 @@ export mygh=$gh/quantumsnowball
 alias gts='git status -uall'
 alias gtl='git log --oneline'
 
+#helpers
+clone-my-repo() {
+    if [ -z "$1" ]; then
+        echo "Usage: clone-my-repo <repo>"
+        return 1
+    fi
+    # git clone
+    git clone "$mygh/$1.git"
+}
