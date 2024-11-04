@@ -53,6 +53,24 @@ cf ()
             pull tmux & 
             wait
             ;;
+        set | setting | settings | conf | config)
+            cd ~/.config/settings/ && nvim
+            ;;
+        vi | nvim | vim | neovim)
+            cd ~/.config/nvim && nvim
+            ;;
+        zshrc | shell | zsh)
+            cd ~/.config/zshrc && nvim
+            ;;
+        poshrc | posh)
+            cd ~/winhome/Documents/WindowsPowerShell/poshrc && nvim
+            ;;
+        tmux)
+            cd ~/.config/tmux && nvim
+            ;;
+        ala | alacritty)
+            cd ~/.config/alacritty && nvim alacritty.yml
+            ;;
         esac
     )
 }
