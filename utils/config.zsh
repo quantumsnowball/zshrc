@@ -13,7 +13,7 @@ cf ()
                 git -c color.ui=always status --short --branch 2>&1
             )"
         }
-        cf fetch ()
+        fetch ()
         {
             echo "$(
                 echo "\n#\n# < $1 >\n#" &&
