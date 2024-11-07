@@ -7,18 +7,7 @@ if command -v pip &> /dev/null; then
   alias pipu='pip-upgrade-all'
   alias pipup=pipu
 
-  pip-install-basic()
-  {
-    pip install \
-      numpy pandas matplotlib scipy \
-      ipython jupyter \
-      requests aiohttp \
-      click \
-      pytest \
-      mypy \
-      autopep8 isort
-  }
-
+  # helpers
   pip-upgrade-all() 
   {
     # List outdated packages
@@ -50,5 +39,26 @@ if command -v pip &> /dev/null; then
     else
       echo "\nPackage upgrade canceled\n"
     fi
+  }
+
+  pip-install-basic()
+  {
+    # general
+    pip install --no-input click 
+    pip install --no-input ipython 
+    pip install --no-input jupyter 
+    pip install --no-input pytest
+    # numeric
+    pip install --no-input numpy
+    pip install --no-input scipy 
+    pip install --no-input pandas
+    # charting
+    pip install --no-input matplotlib
+    # networking
+    pip install --no-input requests 
+    pip install --no-input aiohttp
+    # linting
+    pip install --no-input mypy 
+    pip install --no-input isort
   }
 fi
