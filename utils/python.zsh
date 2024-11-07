@@ -1,6 +1,8 @@
 # python
-alias py=ptpython
-alias ipy=ptipython
+alias py=python
+alias ipy=ipython
+alias ptpy=ptpython
+alias ptipy=ptipython
 
 
 pyclean () {
