@@ -1,7 +1,7 @@
 if command -v conda &> /dev/null; then 
     alias condaa='conda activate'
     alias condai='conda install'
-    alias condas='conda search'
+    condas () { conda search $1 | bat }
     alias condals='conda list | bat'
     alias condagrep='conda list | rg'
     alias condarg=condagrep
