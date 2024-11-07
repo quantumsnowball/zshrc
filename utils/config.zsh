@@ -1,3 +1,6 @@
+# alias
+alias cfp='cf pull'
+
 # nvim editor config repos directly
 cf ()
 {
