@@ -25,7 +25,8 @@ lg () {
                 lazygit $@
                 ;;
             *)
-                lazygit
+                echo "Usage: lg {set|nvim|zsh|posh|tmux|.} [lazygit-args]"
+                return 1
                 ;;
         esac
     )
