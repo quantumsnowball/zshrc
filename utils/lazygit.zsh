@@ -21,6 +21,9 @@ lg () {
             tmux)
                 cd "$HOME/.config/tmux" && shift && lazygit $@
                 ;;
+            .)
+                lazygit $@
+                ;;
             *)
                 lazygit
                 ;;
