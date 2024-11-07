@@ -1,5 +1,11 @@
 if command -v pip &> /dev/null; then 
-  alias pip-update-all=pip-upgrade-all
+  alias pipi='pip install'
+  alias pipls='pip list | bat'
+  alias pipgrep='pip list | rg'
+  alias piprg=pipgrep
+  alias piprm='pip uninstall'
+  alias pipu='pip-upgrade-all'
+  alias pipup=pipu
 
   pip-install-basic()
   {
