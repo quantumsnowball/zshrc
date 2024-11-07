@@ -9,7 +9,6 @@ if command -v conda &> /dev/null; then
     alias condau='conda upgrade --all'
     alias condaup=condau
     alias condaenvls='conda env list'
+    condadiff() { python $HOME/.config/zshrc/utils/conda/diff.py "$@" | bat }
+
 fi
-
-
-source $HOME/.config/zshrc/utils/conda/diff.zsh
