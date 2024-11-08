@@ -21,12 +21,13 @@ lg () {
             tmux)
                 cd "$HOME/.config/tmux" && shift && lazygit $@
                 ;;
-            .)
-                lazygit $@
-                ;;
             *)
-                echo "Usage: lg {set|nvim|zsh|posh|tmux|.} [lazygit-args]"
-                return 1
+                if [[ -d $1 && $1 == */ ]]; then
+                    cd $1 && shift && lazygit $@
+                else
+                    echo "Usage: lg {set|nvim|zsh|posh|tmux|<path>/} [lazygit-args]"
+                    return 1
+                fi
                 ;;
         esac
     )
