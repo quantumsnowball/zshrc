@@ -16,7 +16,7 @@ lg () {
                 cd "$HOME/.config/zshrc" && shift && lazygit $@
                 ;;
             poshrc | posh)
-                cd "$HOME/.config/poshrc" && shift && lazygit $@
+                cd ~/winhome/Documents/WindowsPowerShell/poshrc && shift && lazygit $@
                 ;;
             tmux)
                 cd "$HOME/.config/tmux" && shift && lazygit $@
