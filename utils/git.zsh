@@ -54,9 +54,9 @@ search-my-repos() {
         --template '{{range .}}{{
             tablerow 
             (.name | autocolor "white") 
-            (truncate 10 .language | autocolor "yellow") 
+            (printf "%.7s" .language | autocolor "yellow") 
             (.visibility | autocolor "cyan") 
-            (timeago .updatedAt | autocolor "green")
+            (printf "%.9s" (timeago .updatedAt) | autocolor "green")
         }}{{end}}' \
         "$@"
 }
