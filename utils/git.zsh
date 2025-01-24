@@ -45,5 +45,16 @@ clone-my-repo() {
 
 search-my-repos() {
     # use gh cli helper, need a read-only api token
-    gh search repos --owner=quantumsnowball --sort=updated --order=desc "$@"
+    gh search repos \
+        --owner=quantumsnowball \
+        --sort=updated \
+        --order=desc \
+        --json name,visibility,updatedAt \
+        --template '{{range .}}{{
+            tablerow 
+            (.name | autocolor "white") 
+            (.visibility | autocolor "cyan") 
+            (timeago .updatedAt | autocolor "green")
+        }}{{end}}' \
+        "$@"
 }
