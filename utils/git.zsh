@@ -50,10 +50,11 @@ search-my-repos() {
         --sort=updated \
         --order=desc \
         --limit=20 \
-        --json name,visibility,updatedAt \
+        --json name,language,visibility,updatedAt \
         --template '{{range .}}{{
             tablerow 
             (.name | autocolor "white") 
+            (truncate 10 .language | autocolor "yellow") 
             (.visibility | autocolor "cyan") 
             (timeago .updatedAt | autocolor "green")
         }}{{end}}' \
