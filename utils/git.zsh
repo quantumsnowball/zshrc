@@ -42,3 +42,8 @@ clone-my-repo() {
         git clone "$mygh/$repo.git" "$@"
     fi
 }
+
+search-my-repos() {
+    # use gh cli helper, need a read-only api token
+    gh search repos --owner=quantumsnowball "$@"
+}
