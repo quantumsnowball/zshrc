@@ -49,6 +49,7 @@ search-my-repos() {
         --owner=quantumsnowball \
         --sort=updated \
         --order=desc \
+        --limit=20 \
         --json name,visibility,updatedAt \
         --template '{{range .}}{{
             tablerow 
