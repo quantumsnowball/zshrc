@@ -45,5 +45,5 @@ clone-my-repo() {
 
 search-my-repos() {
     # use gh cli helper, need a read-only api token
-    gh search repos --owner=quantumsnowball "$@"
+    gh search repos --owner=quantumsnowball --sort=updated --order=desc "$@"
 }
