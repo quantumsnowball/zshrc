@@ -1,4 +1,3 @@
-zinit snippet OMZP::git
 zinit snippet OMZP::ssh-agent
 
 zinit wait lucid for \
