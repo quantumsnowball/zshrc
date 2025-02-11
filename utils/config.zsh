@@ -56,6 +56,7 @@ cf ()
             pull nvim & 
             pull tmux & 
             wait
+            exec zsh # rl
             ;;
         set | setting | settings | conf | config)
             cd ~/.config/settings/ && nvim
