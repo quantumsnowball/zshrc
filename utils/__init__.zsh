@@ -17,6 +17,7 @@ source $HOME/.config/zshrc/utils/jupyter.zsh
 source $HOME/.config/zshrc/utils/lazygit.zsh
 source $HOME/.config/zshrc/utils/memory.zsh
 source $HOME/.config/zshrc/utils/ncat.zsh
+source $HOME/.config/zshrc/utils/nmap.zsh
 source $HOME/.config/zshrc/utils/nvim.zsh
 source $HOME/.config/zshrc/utils/pacman.zsh
 source $HOME/.config/zshrc/utils/pip.zsh
