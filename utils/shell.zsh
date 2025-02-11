@@ -9,7 +9,8 @@ alias root='/bin/sudo -E -s'
 alias c=clear
 alias cl=clear
 # reload shell
-alias rl='exec zsh'
+alias rr='exec zsh'
+alias rl=rr
 # exit
 alias x=exit
 # process
