@@ -1,3 +1,6 @@
+ensure git || return
+
+
 # constant
 export gh=https://github.com
 export myghname=quantumsnowball
