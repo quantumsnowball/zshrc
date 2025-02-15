@@ -41,6 +41,7 @@ cf ()
             status zshrc & 
             status nvim & 
             status tmux & 
+            status ssh & 
             wait
             ;;
         fetch)
@@ -48,6 +49,7 @@ cf ()
             fetch zshrc & 
             fetch nvim & 
             fetch tmux & 
+            fetch ssh & 
             wait
             ;;
         pull)
@@ -55,6 +57,7 @@ cf ()
             pull zshrc & 
             pull nvim & 
             pull tmux & 
+            pull ssh & 
             wait
             exec zsh # rl
             ;;
@@ -72,6 +75,9 @@ cf ()
             ;;
         tmux)
             cd ~/.config/tmux && nvim
+            ;;
+        ssh)
+            cd ~/.config/ssh && nvim
             ;;
         ala | alacritty)
             cd ~/.config/alacritty && nvim alacritty.yml
