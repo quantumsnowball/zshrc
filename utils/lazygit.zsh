@@ -1,3 +1,6 @@
+ensure lazygit || return
+
+
 # lazygit
 lg () {
     # run in a subshell
