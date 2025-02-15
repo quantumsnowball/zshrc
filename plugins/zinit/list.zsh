@@ -21,7 +21,7 @@ zinit load so-fancy/diff-so-fancy
 # fzf
 # Modified command to work with zsh-vi-mode plugins
 zinit ice lucid wait
-zinit snippet OMZP::fzf
+ensure fzf && zinit snippet OMZP::fzf
 
 # plugin related configs
 # always starting with normal mode for each command line
