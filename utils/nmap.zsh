@@ -1,3 +1,6 @@
+ensure nmap || return
+
+
 # show most known hosts in LAN
 nmap-ls() {
     printf "\033[33m%-15s %s\033[0m\n" 'IP Address' 'Name'

@@ -1,3 +1,6 @@
+ensure python || return
+
+
 # python
 alias py=python
 alias ipy=ipython

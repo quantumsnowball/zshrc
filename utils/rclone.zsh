@@ -1,3 +1,6 @@
+ensure rclone || return
+
+
 # rclone
 alias rc="rclone"
 alias rclsr="rclone listremotes"
