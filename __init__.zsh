@@ -1,3 +1,4 @@
+source $HOME/.config/zshrc/common.zsh
 source $HOME/.config/zshrc/paths/__init__.zsh
 source $HOME/.config/zshrc/init/__init__.zsh
 source $HOME/.config/zshrc/plugins/__init__.zsh
