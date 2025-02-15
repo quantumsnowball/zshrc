@@ -1,5 +1,3 @@
-alias wtfis=wtf
-
 wtf()
 {
     # Define color escape sequences
