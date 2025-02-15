@@ -1,3 +1,6 @@
+ensure tmux || return
+
+
 # tmux
 alias t="tmux"
 alias ta="t a -t"
