@@ -60,7 +60,7 @@ cf ()
             pull tmux & 
             pull ssh & 
             wait
-            exec zsh # rl
+            source ~/.zshrc
             ;;
         set | setting | settings | conf | config)
             cd ~/.config/settings/ && nvim
