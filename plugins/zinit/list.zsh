@@ -24,5 +24,6 @@ zinit ice lucid wait
 ensure fzf && zinit snippet OMZP::fzf
 
 # plugin related configs
-# always starting with normal mode for each command line
-ZVM_LINE_INIT_MODE=$ZVM_MODE_NORMAL
+# if termux android, starts in vim insert mode
+# else, start in vim normal mode 
+[ -v TERMUX_VERSION ] || ZVM_LINE_INIT_MODE=$ZVM_MODE_NORMAL
