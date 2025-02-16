@@ -21,6 +21,6 @@ ensure () {
 
 # suggest user what to install next
 wtf-to-install () {
-    echo $NOT_YET_INSTALL | xargs
+    echo $NOT_YET_INSTALL | xargs -n1 | sort -u
 }
 
