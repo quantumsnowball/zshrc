@@ -1,7 +1,7 @@
 # pager
 #export PAGER="most"
-export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+ensure bat && export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export MANROFFOPT="-c"
-export GIT_PAGER="bat"
+ensure bat && export GIT_PAGER="bat"
 # editor
-export EDITOR="nvim"
+ensure nvim && export EDITOR="nvim"
