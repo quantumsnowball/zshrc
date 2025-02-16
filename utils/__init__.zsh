@@ -25,6 +25,7 @@ source $HOME/.config/zshrc/utils/process.zsh
 source $HOME/.config/zshrc/utils/python.zsh
 source $HOME/.config/zshrc/utils/rclone.zsh
 source $HOME/.config/zshrc/utils/shell.zsh
+source $HOME/.config/zshrc/utils/snap.zsh
 source $HOME/.config/zshrc/utils/socket.zsh
 source $HOME/.config/zshrc/utils/tmux.zsh
 source $HOME/.config/zshrc/utils/youtube-dl.zsh
