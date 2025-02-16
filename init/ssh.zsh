@@ -1,3 +1,6 @@
+ensure ssh || return
+
+
 # omz ssh-agent plugin should already started a ssh-agent process
 # it should ask for password the first time
 
@@ -13,3 +16,7 @@ if [[ "$OSTYPE" = darwin* ]]; then
 else
   SHORT_HOST="${HOST/.*/}"
 fi
+
+
+# sshd
+[ -v TERMUX_VERSION ] && sshd
