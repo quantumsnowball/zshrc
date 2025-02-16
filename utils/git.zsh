@@ -1,17 +1,20 @@
-ensure git || return
-
-
 # constant
 export gh=https://github.com
 export myghname=quantumsnowball
 export mygh=$gh/$myghname
 export myghssh=git@github.com:$myghname
+
+
+ensure git || return
+
+
 # git
 alias gts='git status -uall'
 alias gtl='git log --oneline'
 
 #helpers
-clone-my-repo() {
+alias mygh.clone='myrepo.clone'
+myrepo.clone() {
     # default use https url
     local use_ssh=false
     local use_token=false
@@ -58,7 +61,12 @@ clone-my-repo() {
     fi
 }
 
-search-my-repos() {
+
+ensure gh || return
+
+
+alias mygh.search='myrepo.search'
+myrepo.search() {
     # use gh cli helper, need a read-only api token
     gh search repos \
         --owner=quantumsnowball \
