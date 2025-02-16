@@ -1,10 +1,7 @@
-source $HOME/.config/zshrc/init/history.zsh
-source $HOME/.config/zshrc/init/autocomplete.zsh
-source $HOME/.config/zshrc/init/shell.zsh
-source $HOME/.config/zshrc/init/env.zsh
-source $HOME/.config/zshrc/init/conda.zsh
-source $HOME/.config/zshrc/init/zoxide.zsh
-source $HOME/.config/zshrc/init/ssh.zsh
-source $HOME/.config/zshrc/init/fzf.zsh
-source $HOME/.config/zshrc/init/gcloud.zsh
-source $HOME/.config/zshrc/init/man.zsh
+# load all modules inside init/
+for item in $HOME/.config/zshrc/init/*; do 
+    # If it's a non-index .zsh file, source it
+    if [ -f $item ] && [[ $item == *.zsh ]] && [[ $item != *__init__.zsh ]]; then
+        source $item
+    fi
+done
