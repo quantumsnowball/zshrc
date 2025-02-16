@@ -1,4 +1,4 @@
-installed zoxide || return
+ensure zoxide || return
 
 
 # zoxide
