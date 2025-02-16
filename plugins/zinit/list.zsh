@@ -26,4 +26,4 @@ ensure fzf && zinit snippet OMZP::fzf
 # plugin related configs
 # if termux android, starts in vim insert mode
 # else, start in vim normal mode 
-[ -v TERMUX_VERSION ] || ZVM_LINE_INIT_MODE=$ZVM_MODE_NORMAL
+# [ -v TERMUX_VERSION ] || ZVM_LINE_INIT_MODE=$ZVM_MODE_NORMAL
