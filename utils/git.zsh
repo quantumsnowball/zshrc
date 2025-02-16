@@ -13,12 +13,11 @@ alias gts='git status -uall'
 alias gtl='git log --oneline'
 
 #helpers
-alias mygh.clone='myrepo.clone'
-myrepo.clone() {
+gh.clone-my-repo() {
     # default use https url
     local use_ssh=false
     local use_token=false
-    local help="Usage: clone-my-repo [-ssh|-rw|-token] <repo> [<git clone args>]"
+    local help="Usage: gh.clone-my-repo [-ssh|-rw|-token] <repo> [<git clone args>]"
 
     # if -rw or -ssh flag active, use ssh url
     # only machine with authorized private key installed can write to repo
@@ -65,8 +64,7 @@ myrepo.clone() {
 ensure gh || return
 
 
-alias mygh.search='myrepo.search'
-myrepo.search() {
+gh.search-my-repo() {
     # use gh cli helper, need a read-only api token
     gh search repos \
         --owner=quantumsnowball \
