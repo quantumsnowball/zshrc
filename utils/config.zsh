@@ -68,6 +68,9 @@ cf ()
         set | setting | settings | conf | config)
             cd ~/.config/settings/ && nvim
             ;;
+        shared )
+            cd ~/.config/settings-shared/ && nvim
+            ;;
         vi | nvim | vim | neovim)
             cd ~/.config/nvim && nvim
             ;;
