@@ -38,7 +38,7 @@ cf ()
 
         case $1 in
         status)
-            status settings & 
+            status settings & status settings-shared &
             status zshrc & 
             status nvim & 
             status tmux & 
@@ -46,7 +46,7 @@ cf ()
             wait
             ;;
         fetch)
-            fetch settings & 
+            fetch settings & fetch settings-shared &
             fetch zshrc & 
             fetch nvim & 
             fetch tmux & 
@@ -54,7 +54,7 @@ cf ()
             wait
             ;;
         pull)
-            pull settings & 
+            pull settings & pull settings-shared &
             pull zshrc & 
             pull nvim & 
             pull tmux & 
