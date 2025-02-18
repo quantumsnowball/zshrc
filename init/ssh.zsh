@@ -6,6 +6,10 @@ alias ssh.my-authorized-keys='cat ~/.ssh/authorized_keys'
 alias ssh.my-config='cat ~/.ssh/config'
 alias ssh.my-public-key='cat ~/.ssh/*.pub'
 alias ssh.reset-known-hosts='rm ~/.ssh/known_hosts'
+ssh.touch-remote () {
+    [ -f ~/.config/ssh/touch-remote ] || return 1
+    . ~/.config/ssh/touch-remote $1
+}
 
 
 # omz ssh-agent plugin should already started a ssh-agent process
