@@ -12,12 +12,20 @@ ssh.touch-remote () {
 }
 ssh.install-locally () {
     # must ensure downloaded the repo first
-    [ -f ~/.config/ssh/install ] || {
+    [ -f ~/.config/ssh/install ] || {(
         mkdir -p ~/.config && cd ~/.config
         gh.clone-my-repo -token ssh
-    }
+    )}
     # this create the necessary symlinks
     [ -f ~/.config/ssh/install ] && . ~/.config/ssh/install
+}
+ssh.uninstall-locally () {
+    # uninstall the symlinks and restore a real file
+    cp ~/.config/ssh/authorized_keys ~/.ssh/authorized_keys.real &&
+    mv ~/.ssh/authorized_keys.real ~/.ssh/authorized_keys
+
+    cp ~/.config/ssh/config ~/.ssh/config.real &&
+    mv ~/.ssh/config.real ~/.ssh/config
 }
 
 
