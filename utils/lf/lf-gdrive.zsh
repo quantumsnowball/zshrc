@@ -1,4 +1,4 @@
-lf-gdrive () {
+lf.gdrive () {
     # define vars
     root=$HOME/gdrive
     target=$root/$1
@@ -22,7 +22,7 @@ lf-gdrive () {
 }
 
 # Define lf-gdrive-cleanup function
-lf-gdrive-cleanup() {
+lf.gdrive-cleanup() {
     root=$HOME/gdrive
     # Unmount all mount points under ~/gdrive
     find $root -maxdepth 1 -mindepth 1 -type d -exec sh -c '
