@@ -58,13 +58,31 @@
 #              bucket := {syn-recv|time-wait}
 #                 big := {established|syn-sent|fin-wait-{1,2}|closed|close-wait|last-ack|listening|closing}
 
+ensure ss || return 
+
+
 # ports with LISTEN state
-alias lstcp='ss -nplt'
-alias lsudp='ss -nplu'
-alias lsport='ss -npltu'
-alias lssocket='ss -npl'
+alias ss.ls-tcp-ports.listening='ss -nplt'
+alias lstcp=ss.ls-tcp-ports.listening
+
+alias ss.ls-udp-ports.listening='ss -nplu'
+alias lsudp=ss.ls-udp-ports.listening
+
+alias ss.ls-ports.listening='ss -npltu'
+alias lsport=ss.ls-ports.listening
+
+alias ss.ls-sockets.listening='ss -npl'
+alias lssocket=ss.ls-sockets.listening
+
 # ports with all states
-alias lstcp-all='ss -npat'
-alias lsudp-all='ss -npau'
-alias lsport-all='ss -npatu'
-alias lssocket-all='ss -npa'
+alias ss.ls-tcp-ports.all-states='ss -npat'
+alias lstcp-all=ss.ls-tcp-ports.all-states
+
+alias ss.ls-udp-ports.all-states='ss -npau'
+alias lsudp-all=ss.ls-udp-ports.all-states
+
+alias ss.ls-ports.all-states='ss -npatu'
+alias lsport-all=ss.ls-ports.all-states
+
+alias ss.ls-sockets.all-states='ss -npa'
+alias lssocket-all=ss.ls-sockets.all-states
