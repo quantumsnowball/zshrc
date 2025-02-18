@@ -92,3 +92,5 @@ cf.pull-all () {
 
 # alias
 alias s='cf.pull-all'
+alias cfp='cf.pull-all'
+alias cff='cf.fetch-all'
