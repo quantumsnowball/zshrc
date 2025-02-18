@@ -1,4 +1,5 @@
 # nvim editor config repos directly
+# NOTE: run in a subshell can retain current directory
 cf () {
     (
         case $1 in
@@ -60,6 +61,7 @@ cf.pull () {
 
 
 # batch helpers
+# NOTE: run in a subshell can avoid printing the & [1] <PID> and + done debug message 
 cf.fetch-all () {
     (
         cf.fetch zshrc &
