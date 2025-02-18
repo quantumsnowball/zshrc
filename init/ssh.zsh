@@ -10,6 +10,15 @@ ssh.touch-remote () {
     [ -f ~/.config/ssh/touch-remote ] || return 1
     . ~/.config/ssh/touch-remote $1
 }
+ssh.install-locally () {
+    # must ensure downloaded the repo first
+    [ -f ~/.config/ssh/install ] || {
+        mkdir -p ~/.config && cd ~/.config
+        gh.clone-my-repo -token ssh
+    }
+    # this create the necessary symlinks
+    [ -f ~/.config/ssh/install ] && . ~/.config/ssh/install
+}
 
 
 # omz ssh-agent plugin should already started a ssh-agent process
