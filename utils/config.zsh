@@ -29,6 +29,9 @@ cf () {
         esac
     )
 }
+
+
+# utils helpers
 cf.status () {
     echo "$(
         [ -d ~/.config/$1 ] &&
@@ -53,6 +56,20 @@ cf.pull () {
         cd ~/.config/$1 2>&1 &&
         git -c color.ui=always pull --rebase --autostash 2>&1
     )"
+}
+
+
+# batch helpers
+cf.fetch-all () {
+    (
+        cf.fetch zshrc &
+        cf.fetch nvim &
+        cf.fetch tmux &
+        cf.fetch settings &
+        cf.fetch settings-shared &
+        cf.fetch ssh &
+        wait
+    )
 }
 cf.pull-all () {
     (
