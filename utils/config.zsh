@@ -29,3 +29,26 @@ cf () {
         esac
     )
 }
+
+cf.pull () {
+    echo "$(
+        [ -d ~/.config/$1 ] &&
+        echo "\n#\n# < $1 >\n#" &&
+        cd ~/.config/$1 2>&1 &&
+        git -c color.ui=always pull --rebase --autostash 2>&1
+    )"
+}
+cf.pull-all () {
+    (
+        cf.pull zshrc &
+        cf.pull nvim &
+        cf.pull tmux &
+        cf.pull settings &
+        cf.pull settings-shared &
+        cf.pull ssh &
+        wait
+    )
+    source ~/.zshrc &&
+    echo "\nINFO: ~/.zshrc reloaded\n"
+}
+
