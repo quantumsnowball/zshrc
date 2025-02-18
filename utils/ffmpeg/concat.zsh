@@ -1,4 +1,4 @@
-ffmpeg-concat()
+ffmpeg.concat()
 {
   # constants
   local usage="Usage: $(basename $0) [-o OUTPUT] [PARTS ...]" 

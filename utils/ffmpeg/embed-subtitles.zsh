@@ -1,4 +1,4 @@
-ffmpeg-embed-subtitles()
+ffmpeg.embed-subtitles()
 {
   local usage="Usage: ffmpeg-embed-subtitles -i/--input INPUT -s/--subtitles SUBTITLES OUTPUT"
 
