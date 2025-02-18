@@ -3,7 +3,13 @@ ensure rclone || return
 
 # rclone
 alias rc="rclone"
-alias rclsr="rclone listremotes"
-alias rcls="rclone ls"
-alias rclsd="rclone lsd"
+
+alias rc.list-remotes="rclone listremotes"
+alias rclist=rc.list-remotes
+
+alias rc.ls="rclone ls"
+alias rcls=rc.ls
+
+alias rc.lsd="rclone lsd"
+alias rclsd=rc.lsd
 
