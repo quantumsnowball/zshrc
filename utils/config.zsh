@@ -85,3 +85,5 @@ cf.pull-all () {
     echo "\nINFO: ~/.zshrc reloaded\n"
 }
 
+# alias
+alias s='cf.pull-all'
