@@ -1,16 +1,23 @@
 ensure pip || return
 
 
-alias pipi='pip install'
-alias pipls='pip list | bat'
-alias pipgrep='pip list | rg'
-alias piprg=pipgrep
-alias piprm='pip uninstall'
-alias pipu='pip-upgrade-all'
-alias pipup=pipu
+alias pip.install='pip install'
+alias pipi=pip.install
+
+alias pip.ls='pip list | bat'
+alias pipls=pip.ls
+
+alias pip.ls-grep='pip list | rg'
+alias piprg=pip.ls-grep
+
+alias pip.remove='pip uninstall'
+alias piprm=pip.remove
+
+alias pip.update='pip list --outdated'
+alias pipu=pip.update
 
 # helpers
-pip-upgrade-all() 
+pip.upgrade-all() 
 {
 # List outdated packages
 outdated_packages=$(pip list --outdated)
@@ -42,8 +49,10 @@ else
   echo "\nPackage upgrade canceled\n"
 fi
 }
+alias pip.upgrade=pip.upgrade-all
+alias pipup=pip.upgrade
 
-pip-install-basic()
+pip.install-basic()
 {
 # general
 pip install --no-input click 
