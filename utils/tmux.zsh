@@ -1,9 +1,16 @@
 ensure tmux || return
 
 
-# tmux
+# tmux utils
+alias tmux.create-new-session='tmux new -t'
+alias tmux.list-sessions='tmux ls'
+alias tmux.attach-to='tmux attach -t'
+# short hand
 alias t="tmux"
-alias ta="t a -t"
-alias tls="t ls"
-alias tn="t new -t"
-
+alias t.create-new-session=tmux.create-new-session
+alias t.list-sessions=tmux.list-sessions
+alias t.attach-to=tmux.attach-to
+# even shorter
+alias tn=tmux.create-new-session
+alias tls=tmux.list-sessions
+alias ta=tmux.attach-to
