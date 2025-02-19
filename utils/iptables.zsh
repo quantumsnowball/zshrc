@@ -40,19 +40,21 @@ iptables.security = () {
 
 # ADD
 __input_filter_accept_ports () {
-    sudo iptables -I INPUT 1 -p $1 --dport $2 -j ACCEPT &&
+    sudo iptables -I INPUT 1 -p $1 --dport $2 -m comment --comment $3 -j ACCEPT &&
         echo "\nResult: ${GREEN}SUCCESS${RESET}\n" || 
         echo "\nResult: ${RED}FAILED${RESET}\n"
 }
 iptables.filter.input.open-tcp-ports () {
     __print_input_filter
-    echo -n "${CYAN}TCP port or range of ports to allow: ${RESET}" ; read dport ; echo ""
-    __input_filter_accept_ports tcp $dport
+    echo -n "${CYAN}TCP port or range of ports to allow: ${RESET}" ; read dport
+    echo -n "${CYAN}Enter comment or remarks: ${RESET}" ; read comment ; echo
+    __input_filter_accept_ports tcp $dport $comment
 }
 iptables.filter.input.open-udp-ports () {
     __print_input_filter
-    echo -n "${CYAN}UDP port or range of ports to allow: ${RESET}" ; read dport ; echo ""
-    __input_filter_accept_ports udp $dport
+    echo -n "${CYAN}UDP port or range of ports to allow: ${RESET}" ; read dport
+    echo -n "${CYAN}Enter comment or remarks: ${RESET}" ; read comment ; echo
+    __input_filter_accept_ports udp $dport $comment
 }
 
 
@@ -60,14 +62,14 @@ iptables.filter.input.open-udp-ports () {
 iptables.filter.delete-filter () {
     __print_filter
     echo -n "${CYAN}Select a table [INPUT/FORWARD/OUTPUT]: ${RESET}" ; read name
-    echo -n "${CYAN}Line number to be deleted: ${RESET}" ; read line ; echo ""
+    echo -n "${CYAN}Line number to be deleted: ${RESET}" ; read line ; echo
     sudo iptables -D $name $line && 
         echo "\nResult: ${GREEN}SUCCESS${RESET}\n" || 
         echo "\nResult: ${RED}FAILED${RESET}\n"
 }
 iptables.filter.input.delete-filter () {
     __print_input_filter
-    echo -n "${CYAN}Line number to be deleted: ${RESET}" ; read line ; echo ""
+    echo -n "${CYAN}Line number to be deleted: ${RESET}" ; read line ; echo
     sudo iptables -D INPUT $line && 
         echo "\nResult: ${GREEN}SUCCESS${RESET}\n" || 
         echo "\nResult: ${RED}FAILED${RESET}\n"
