@@ -3,16 +3,16 @@ ensure iptables || return
 
 # READ
 iptables.filter = () {
-    sudo iptables -vL --line-numbers | less -c -S -F
+    sudo iptables -v -L --line-numbers | less -c -S
 }
 iptables.filter.input = () {
-    sudo iptables -vL INPUT --line-numbers | less -c -S -F
+    sudo iptables -v -L INPUT --line-numbers | less -c -S
 }
 iptables.filter.forward = () {
-    sudo iptables -vL FORWARD --line-numbers | less -c -S -F
+    sudo iptables -v -L FORWARD --line-numbers | less -c -S
 }
 iptables.filter.output = () {
-    sudo iptables -vL OUTPUT --line-numbers | less -c -S -F
+    sudo iptables -v -L OUTPUT --line-numbers | less -c -S
 }
 __print_filter () {
     echo "${YELLOW}Current filter rules:${RESET}"
@@ -23,6 +23,18 @@ __print_filter () {
 __print_input_filter () {
     echo "${YELLOW}Current filter rules:${RESET}"
     sudo iptables -L INPUT --line-numbers ; echo
+}
+iptables.nat = () { 
+    sudo iptables -t nat -v -L --line-numbers | less -c -S
+}
+iptables.mangle = () { 
+    sudo iptables -t mangle -v -L --line-numbers | less -c -S
+}
+iptables.raw = () { 
+    sudo iptables -t raw -v -L --line-numbers | less -c -S
+}
+iptables.security = () { 
+    sudo iptables -t security -v -L --line-numbers | less -c -S
 }
 
 
