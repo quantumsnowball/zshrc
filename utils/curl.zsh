@@ -18,6 +18,10 @@ ip.public.ls-addr () {
 }
 alias lsip.pub=ip.public.ls-addr
 
-
-
+ip.public.where-am-i () {
+    installed jq && 
+        curl -s ipinfo.io | jq ||
+        curl -s ipinfo.io
+}
+alias whereami=ip.public.where-am-i
 
