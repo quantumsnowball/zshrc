@@ -21,5 +21,5 @@ alias apt.update='sudo apt update'
 alias aptu=apt.update
 
 alias apt.upgrade='sudo apt update && sudo apt upgrade'
-alias apt.up=apt.upgrade
+alias aptup=apt.upgrade
 
