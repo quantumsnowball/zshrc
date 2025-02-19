@@ -2,16 +2,16 @@ ensure iptables || return
 
 
 # READ
-ip.tables = () {
+iptables.filter = () {
     sudo iptables -vL --line-numbers | less -c -S -F
 }
-ip.tables.input = () {
+iptables.filter.input = () {
     sudo iptables -vL INPUT --line-numbers | less -c -S -F
 }
-ip.tables.forward = () {
+iptables.filter.forward = () {
     sudo iptables -vL FORWARD --line-numbers | less -c -S -F
 }
-ip.tables.output = () {
+iptables.filter.output = () {
     sudo iptables -vL OUTPUT --line-numbers | less -c -S -F
 }
 __ip_tables_current () {
@@ -32,12 +32,12 @@ __ip_tables_input_open_ports () {
         echo "\nResult: ${GREEN}SUCCESS${RESET}\n" || 
         echo "\nResult: ${RED}FAILED${RESET}\n"
 }
-ip.tables.input.open-tcp-ports () {
+iptables.filter.input.open-tcp-ports () {
     __ip_tables_input_current
     echo -n "${CYAN}TCP port or range of ports to allow: ${RESET}" ; read dport ; echo ""
     __ip_tables_input_open_ports tcp $dport
 }
-ip.tables.input.open-udp-ports () {
+iptables.filter.input.open-udp-ports () {
     __ip_tables_input_current
     echo -n "${CYAN}UDP port or range of ports to allow: ${RESET}" ; read dport ; echo ""
     __ip_tables_input_open_ports udp $dport
@@ -45,7 +45,7 @@ ip.tables.input.open-udp-ports () {
 
 
 # DELETE
-ip.tables.delete-filter () {
+iptables.filter.delete-filter () {
     __ip_tables_current
     echo -n "${CYAN}Select a table [INPUT/FORWARD/OUTPUT]: ${RESET}" ; read name
     echo -n "${CYAN}Line number to be deleted: ${RESET}" ; read line ; echo ""
@@ -53,7 +53,7 @@ ip.tables.delete-filter () {
         echo "\nResult: ${GREEN}SUCCESS${RESET}\n" || 
         echo "\nResult: ${RED}FAILED${RESET}\n"
 }
-ip.tables.input.delete-filter () {
+iptables.filter.input.delete-filter () {
     __ip_tables_input_current
     echo -n "${CYAN}Line number to be deleted: ${RESET}" ; read line ; echo ""
     sudo iptables -D INPUT $line && 
