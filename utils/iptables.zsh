@@ -15,9 +15,18 @@ ip.tables = () {
 ip.tables.input = () {
     sudo iptables -vL INPUT --line-numbers
 }
+ip.tables.input.delete-line () {
+    ip.tables.input
+    echo -n "\nLine number to be deleted: " ; read line ; echo ""
+    sudo iptables -D INPUT $line && 
+        echo "\nResult: ${GREEN}SUCCESS${RESET}\n" || 
+        echo "\nResult: ${RED}FAILED${RESET}\n"
+}
+
 ip.tables.forward = () {
     sudo iptables -vL FORWARD --line-numbers
 }
+
 ip.tables.output = () {
     sudo iptables -vL OUTPUT --line-numbers
 }
