@@ -62,27 +62,27 @@ ensure ss || return
 
 
 # ports with LISTEN state
-alias ss.ls-tcp-ports.listening='ss -nplt'
-alias lstcp=ss.ls-tcp-ports.listening
+alias ss.tcp-ports.listening='ss -nplt'
+alias lstcp=ss.tcp-ports.listening
 
-alias ss.ls-udp-ports.listening='ss -nplu'
-alias lsudp=ss.ls-udp-ports.listening
+alias ss.udp-ports.listening='ss -nplu'
+alias lsudp=ss.udp-ports.listening
 
-alias ss.ls-ports.listening='ss -npltu'
-alias lsport=ss.ls-ports.listening
+alias ss.ports.listening='ss -npltu'
+alias lsport=ss.ports.listening
 
-alias ss.ls-sockets.listening='ss -npl'
-alias lssocket=ss.ls-sockets.listening
+alias ss.sockets.listening='ss -npl'
+alias lssocket=ss.sockets.listening
 
 # ports with all states
-alias ss.ls-tcp-ports.all-states='ss -npat'
-alias lstcp-all=ss.ls-tcp-ports.all-states
+alias ss.tcp-ports.all-states='ss -npat'
+alias lstcp-all=ss.tcp-ports.all-states
 
-alias ss.ls-udp-ports.all-states='ss -npau'
-alias lsudp-all=ss.ls-udp-ports.all-states
+alias ss.udp-ports.all-states='ss -npau'
+alias lsudp-all=ss.udp-ports.all-states
 
-alias ss.ls-ports.all-states='ss -npatu'
-alias lsport-all=ss.ls-ports.all-states
+alias ss.ports.all-states='ss -npatu'
+alias lsport-all=ss.ports.all-states
 
-alias ss.ls-sockets.all-states='ss -npa'
-alias lssocket-all=ss.ls-sockets.all-states
+alias ss.sockets.all-states='ss -npa'
+alias lssocket-all=ss.sockets.all-states
