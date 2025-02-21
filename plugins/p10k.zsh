@@ -42,7 +42,6 @@ vcs                     # git status
 anaconda                # conda environment (https://conda.io/)
 status                  # exit code of the last command
 command_execution_time  # duration of the last command
-time                    # current time
 context                 # user@hostname
 # =========================[ Line #2 ]=========================
 newline                 # \n
