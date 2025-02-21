@@ -10,3 +10,18 @@ tm.theme () {
         termux-style ||
         echo "Please installed termux-style at:\nhttps://github.com/adi1090x/termux-style"
 }
+
+
+# nerd fonts
+tm.nerd-fonts.hack () {
+    wget 'https://docs.google.com/uc?export=download&id=1OnxTvByrp24-qfW-4-lJDLZ2tvVOhfZT' -O ~/.termux/font.ttf
+}
+tm.nerd-fonts.hack-mono () {
+    wget 'https://docs.google.com/uc?export=download&id=1cvetA3bgOCiXWoEhoAQevgkvvvbxBsiy' -O ~/.termux/font.ttf
+}
+tm.nerd-fonts.meslo () {
+    wget 'https://docs.google.com/uc?export=download&id=1DUikjuAWKLS2zbt_ZysNLKwyv9SgywAZ' -O ~/.termux/font.ttf
+}
+tm.nerd-fonts.meslo-mono () {
+    wget 'https://docs.google.com/uc?export=download&id=1SQaqY3mRqrF897D2_RIur43hADURilNw' -O ~/.termux/font.ttf
+}
