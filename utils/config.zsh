@@ -86,8 +86,8 @@ cf.pull-all () {
         cf.pull ssh &
         wait
     )
-    source ~/.zshrc &&
-    echo "\nINFO: ~/.zshrc reloaded\n"
+    # reload shell after pull
+    zsh.reload-shell
 }
 
 # alias
