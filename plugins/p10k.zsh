@@ -15,9 +15,11 @@ source ~/.p10k.zsh
 # Overriding p10k.zsh here
 #
 # custom color
+# 1=red 2=green 3=yellow 4=blue 5=pink 6=cyan 7=white 8=grey
 typeset -g POWERLEVEL9K_CONTEXT_ROOT_BACKGROUND=8
 typeset -g POWERLEVEL9K_CONTEXT_{REMOTE,REMOTE_SUDO}_BACKGROUND=8  # 8=grey, 9=pink 
 typeset -g POWERLEVEL9K_CONTEXT_BACKGROUND=8
+typeset -g POWERLEVEL9K_ANACONDA_BACKGROUND=7
 #
 # FIXME: Horrific mess when resizing terminal window
 # - ref: https://github.com/romkatv/powerlevel10k/blob/dce00cdb5daaa8a519df234a7012ba3257b644d4/README.md#horrific-mess-when-resizing-terminal-window
