@@ -20,26 +20,26 @@ alias ssh-agent.add-keys='ssh-add'
 alias ssha=ssh-agent.add-keys
 
 function ssh-agent.start() {
-  # ensure setup-env script exists, then try to restore it
-  if [ -f ~/.ssh/.env ] && . ~/.ssh/.env > /dev/null; then
-    # if env is restored, test the socket
-    zmodload zsh/net/socket
-    if [ -S "$SSH_AUTH_SOCK" ] && zsocket "$SSH_AUTH_SOCK" 2>/dev/null; then
-      # socket is valid, ssh-agent is ready
-      return 0
+    # ensure setup-env script exists, then try to restore it
+    if [ -f ~/.ssh/.env ] && . ~/.ssh/.env > /dev/null; then
+        # if env is restored, test the socket
+        zmodload zsh/net/socket
+        if [ -S "$SSH_AUTH_SOCK" ] && zsocket "$SSH_AUTH_SOCK" 2>/dev/null; then
+            # socket is valid, ssh-agent is ready
+            return 0
+        fi
     fi
-  fi
 
-  #
-  # if we're here, ssh-agent is not ready yet, need to recreate it
-  #
+    #
+    # if we're here, ssh-agent is not ready yet, need to recreate it
+    #
 
-  # start new ssh-agent ps, but cache the setup env script first
-  ssh-agent -s | sed '/^echo/d' >! ~/.ssh/.env
-  # finally execute the script to create the new environment
-  chmod 600 ~/.ssh/.env
-  . ~/.ssh/.env > /dev/null
-  echo "ssh-agent running"
+    # start new ssh-agent ps, but cache the setup env script first
+    ssh-agent -s | sed '/^echo/d' >! ~/.ssh/.env
+    # finally execute the script to create the new environment
+    chmod 600 ~/.ssh/.env
+    . ~/.ssh/.env > /dev/null
+    echo "ssh-agent is running"
 }
 alias sshs=ssh-agent.start
 
