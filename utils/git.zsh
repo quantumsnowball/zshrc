@@ -10,8 +10,8 @@ ensure git || return
 
 # patched command to ensure discovery of ssh-agent
 git () {
-    # try to load ssh-agent setup-env script
-    [ -f ~/.ssh/.env ] && . ~/.ssh/.env &>/dev/null
+    # try to make current shell to discover ssh-agent socket
+    ssh-agent.reveal-socket &> /dev/null || true
     # execute the actual command
     command git "$@"
 }
