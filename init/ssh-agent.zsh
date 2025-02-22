@@ -45,10 +45,18 @@ function ssh-agent.add-keys() {
   # this will auto discover and add keys
   ssh-add
 }
+alias ssha=ssh-agent.add-keys
 
 # init
 ssh-agent.start
 
 # cleanup
 unset ssh_env_cache
+
+# helpers
+alias ssh-agent.ls-added-keys='ssh-add -l'
+alias sshls=ssh-agent.ls-added-keys
+
+alias ssh-agent.reset='killall ssh-agent'
+alias sshrm=ssh-agent.reset
 
