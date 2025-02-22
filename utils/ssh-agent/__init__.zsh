@@ -62,5 +62,12 @@ ssh-agent.add-keys () {
 }
 alias ssha=ssh-agent.add-keys
 
+# install patched version of which can auto discover ssh-agent
+ssh-agent.install-patched.git () {
+    chmod 755 ~/.config/zshrc/utils/ssh-agent/patched/git
+    ln -sf ~/.config/zshrc/utils/ssh-agent/patched/git ~/.local/bin/git &&
+    ls -l ~/.local/bin/git
+}
+
 # ensure started ssh-agent on shell launch
 ssh-agent.start

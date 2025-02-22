@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# try to make current shell to discover ssh-agent socket
+if [ -f ~/.ssh/.env ]; then
+    source ~/.ssh/.env
+fi
+
+# execute the actual command
+exec /usr/bin/git "$@"
+
