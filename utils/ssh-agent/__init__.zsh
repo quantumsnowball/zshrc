@@ -68,6 +68,11 @@ ssh-agent.install-patched.git () {
     ln -sf ~/.config/zshrc/utils/ssh-agent/patched/git ~/.local/bin/git &&
     ls -l ~/.local/bin/git
 }
+ssh-agent.install-patched.ssh () {
+    chmod 755 ~/.config/zshrc/utils/ssh-agent/patched/ssh
+    ln -sf ~/.config/zshrc/utils/ssh-agent/patched/ssh ~/.local/bin/ssh &&
+    ls -l ~/.local/bin/ssh
+}
 
 # ensure started ssh-agent on shell launch
 ssh-agent.start
