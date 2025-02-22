@@ -101,24 +101,8 @@ function ssh-agent.add-keys() {
   ssh-add "${args[@]}" ${^not_loaded}
 }
 
-# Add a nifty symlink for screen/tmux if agent forwarding is enabled
-if zstyle -t :omz:plugins:ssh-agent agent-forwarding \
-   && [[ -n "$SSH_AUTH_SOCK" ]]; then
-  if [[ ! -L "$SSH_AUTH_SOCK" ]]; then
-    if [[ -n "$TERMUX_VERSION" ]]; then
-      ln -sf "$SSH_AUTH_SOCK" "$PREFIX"/tmp/ssh-agent-$USERNAME-screen
-    else
-      ln -sf "$SSH_AUTH_SOCK" /tmp/ssh-agent-$USERNAME-screen
-    fi
-  fi
-else
-  ssh-agent.start
-fi
+# init
+ssh-agent.start
 
-# Don't add identities if lazy-loading is enabled
-if ! zstyle -t :omz:plugins:ssh-agent lazy; then
-  ssh-agent.add-keys
-fi
-
-unset agent_forwarding ssh_env_cache
+unset ssh_env_cache
 
