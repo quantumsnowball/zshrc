@@ -4,6 +4,23 @@
 #
 
 
+# helpers
+alias ssh-agent.ls-added-keys='ssh-add -l'
+alias sshls=ssh-agent.ls-added-keys
+
+alias ssh-agent.reset='killall ssh-agent'
+alias sshrm=ssh-agent.reset
+
+function ssh-agent.add-keys() {
+  [ -d "$HOME/.ssh" ] || {
+    echo "ssh-agent requires ~/.ssh directory"
+    return 1
+  }
+  # this will auto discover and add keys
+  ssh-add 
+}
+alias ssha=ssh-agent.add-keys
+
 function ssh-agent.start() {
   # ensure environment present
   if [[ -f ~/.ssh/.env ]]; then
@@ -33,27 +50,5 @@ function ssh-agent.start() {
   . ~/.ssh/.env > /dev/null
 }
 
-function ssh-agent.add-keys() {
-  # check for .ssh folder presence
-  if [[ ! -d "$HOME/.ssh" ]]; then
-    echo "ssh-agent requires ~/.ssh directory"
-    return 1
-  fi
-
-  # this will auto discover and add keys
-  ssh-add
-}
-alias ssha=ssh-agent.add-keys
-
 # init
 ssh-agent.start
-
-# cleanup
-
-# helpers
-alias ssh-agent.ls-added-keys='ssh-add -l'
-alias sshls=ssh-agent.ls-added-keys
-
-alias ssh-agent.reset='killall ssh-agent'
-alias sshrm=ssh-agent.reset
-
