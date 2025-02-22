@@ -8,6 +8,14 @@ export myghssh=git@github.com:$myghname
 ensure git || return
 
 
+# patched command to ensure discovery of ssh-agent
+git () {
+    # try to load ssh-agent setup-env script
+    [ -f ~/.ssh/.env ] && . ~/.ssh/.env
+    # execute the actual command
+    command git "$@"
+}
+
 # git
 alias gts='git status -uall'
 alias gtl='git log --oneline'
