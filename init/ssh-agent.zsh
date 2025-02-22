@@ -31,17 +31,20 @@ ssh-agent.test-socket () {
     [ -S "$SSH_AUTH_SOCK" ] && zsocket "$SSH_AUTH_SOCK" 2>/dev/null
 }
 
+# make ssh-agent socket discoverable
+ssh-agent.reveal-socket () {
+    # if ssh-agent has started before, this will update the env socket path
+    [ -f ~/.ssh/.env ] && . ~/.ssh/.env > /dev/null
+}
+
 # start agent
 function ssh-agent.start() {
     # ensure setup env script exists, then try to restore it
-    if [ -f ~/.ssh/.env ] && . ~/.ssh/.env > /dev/null; then
-        # if env is restored, test the socket, if ready exit nicely
-        ssh-agent.test-socket && return 0
-    fi
+    ssh-agent.reveal-socket
+    # if env is restored, test the socket, if ready exit nicely
+    ssh-agent.test-socket && return 0
 
-    #
     # if we're here, ssh-agent is not ready yet, need to recreate it
-    #
 
     # start new ssh-agent ps, but cache the setup env script first
     ssh-agent -s | sed '/^echo/d' >! ~/.ssh/.env
