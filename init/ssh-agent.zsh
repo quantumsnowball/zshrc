@@ -121,5 +121,4 @@ if ! zstyle -t :omz:plugins:ssh-agent lazy; then
 fi
 
 unset agent_forwarding ssh_env_cache
-unfunction ssh-agent.start ssh-agent.add-keys
 
