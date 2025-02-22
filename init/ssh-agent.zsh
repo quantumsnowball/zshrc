@@ -23,13 +23,9 @@ function ssh-agent.start() {
     return 1
   fi
 
-  # Set a maximum lifetime for identities added to ssh-agent
-  local lifetime
-  zstyle -s :omz:plugins:ssh-agent lifetime lifetime
-
   # start ssh-agent and setup environment
-  echo >&2 "Starting ssh-agent ..."
-  ssh-agent -s ${lifetime:+-t} ${lifetime} | sed '/^echo/d' >! "$ssh_env_cache"
+  echo "Starting ssh-agent ..."
+  ssh-agent -s | sed '/^echo/d' >! "$ssh_env_cache"
   chmod 600 "$ssh_env_cache"
   . "$ssh_env_cache" > /dev/null
 }
