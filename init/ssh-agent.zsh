@@ -20,10 +20,6 @@ alias ssh-agent.kill='killall -v ssh-agent'
 alias sshkill=ssh-agent.kill
 alias sshlock=ssh-agent.kill
 
-# add default keys
-alias ssh-agent.add-keys='ssh-add'
-alias ssha=ssh-agent.add-keys
-
 # ssh-agent ready test
 ssh-agent.test-socket () {
     # 1. must have a $SSH_AUTH_SOCK env vars
@@ -56,6 +52,15 @@ function ssh-agent.start() {
     ssh-agent.test-socket && echo "ssh-agent is running"
 }
 alias sshs=ssh-agent.start
+
+# add default keys
+ssh-agent.add-keys () {
+    # if ssh-agent socket is down, stat it first
+    ssh-agent.test-socket || ssh-agent.start
+    # ssh-add shoud then working normally, will scan ~/.ssh for default key names
+    ssh-add "$@"
+}
+alias ssha=ssh-agent.add-keys
 
 # ensure started ssh-agent on shell launch
 ssh-agent.start
