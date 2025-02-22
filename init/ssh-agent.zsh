@@ -3,13 +3,11 @@
 # src: https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/ssh-agent/ssh-agent.plugin.zsh
 #
 
-# Get the filename to store/lookup the environment from
-ssh_env_cache="$HOME/.ssh/environment-$SHORT_HOST"
 
 function ssh-agent.start() {
   # ensure environment present
-  if [[ -f "$ssh_env_cache" ]]; then
-    . "$ssh_env_cache" > /dev/null
+  if [[ -f ~/.ssh/.env ]]; then
+    . ~/.ssh/.env > /dev/null
 
     # if socket is also visible then ssh-agent is ready, nicely exit
     zmodload zsh/net/socket
@@ -28,11 +26,11 @@ function ssh-agent.start() {
 
   # start ssh-agent ps and cache the setup environment script
   echo "Starting ssh-agent ..."
-  ssh-agent -s | sed '/^echo/d' >! "$ssh_env_cache"
+  ssh-agent -s | sed '/^echo/d' >! ~/.ssh/.env
 
   # execute the script to create the environment
-  chmod 600 "$ssh_env_cache"
-  . "$ssh_env_cache" > /dev/null
+  chmod 600 ~/.ssh/.env
+  . ~/.ssh/.env > /dev/null
 }
 
 function ssh-agent.add-keys() {
@@ -51,7 +49,6 @@ alias ssha=ssh-agent.add-keys
 ssh-agent.start
 
 # cleanup
-unset ssh_env_cache
 
 # helpers
 alias ssh-agent.ls-added-keys='ssh-add -l'
