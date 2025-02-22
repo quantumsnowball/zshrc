@@ -8,8 +8,9 @@
 alias ssh-agent.ls-added-keys='ssh-add -l'
 alias sshls=ssh-agent.ls-added-keys
 
-alias ssh-agent.reset='killall ssh-agent'
-alias sshrm=ssh-agent.reset
+alias ssh-agent.kill='killall ssh-agent'
+alias sshkill=ssh-agent.kill
+alias sshlock=ssh-agent.kill
 
 function ssh-agent.add-keys() {
   [ -d "$HOME/.ssh" ] || {
@@ -50,5 +51,5 @@ function ssh-agent.start() {
   . ~/.ssh/.env > /dev/null
 }
 
-# init
+# ensure started ssh-agent on shell launch
 ssh-agent.start
