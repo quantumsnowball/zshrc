@@ -7,27 +7,36 @@
 [ -d "$HOME/.ssh" ] || return
 
 
-# helpers
+# imports
+zmodload zsh/net/socket
+
+
+# list added keys
 alias ssh-agent.ls-added-keys='ssh-add -l'
 alias sshls=ssh-agent.ls-added-keys
 
+# kill ssh-agent
 alias ssh-agent.kill='killall ssh-agent'
 alias sshkill=ssh-agent.kill
 alias sshlock=ssh-agent.kill
 
-# this will auto discover and add keys
+# add default keys
 alias ssh-agent.add-keys='ssh-add'
 alias ssha=ssh-agent.add-keys
 
+# ssh-agent ready test
+ssh-agent.test-socket () {
+    # 1. must have a $SSH_AUTH_SOCK env vars
+    # 2. the socket path must be reachable
+    [ -S "$SSH_AUTH_SOCK" ] && zsocket "$SSH_AUTH_SOCK" 2>/dev/null
+}
+
+# start agent
 function ssh-agent.start() {
-    # ensure setup-env script exists, then try to restore it
+    # ensure setup env script exists, then try to restore it
     if [ -f ~/.ssh/.env ] && . ~/.ssh/.env > /dev/null; then
-        # if env is restored, test the socket
-        zmodload zsh/net/socket
-        if [ -S "$SSH_AUTH_SOCK" ] && zsocket "$SSH_AUTH_SOCK" 2>/dev/null; then
-            # socket is valid, ssh-agent is ready
-            return 0
-        fi
+        # if env is restored, test the socket, if ready exit nicely
+        ssh-agent.test-socket && return 0
     fi
 
     #
@@ -39,7 +48,9 @@ function ssh-agent.start() {
     # finally execute the script to create the new environment
     chmod 600 ~/.ssh/.env
     . ~/.ssh/.env > /dev/null
-    echo "ssh-agent is running"
+
+    # confirm the socket is ready again
+    ssh-agent.test-socket && echo "ssh-agent is running"
 }
 alias sshs=ssh-agent.start
 
