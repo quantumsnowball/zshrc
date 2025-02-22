@@ -16,7 +16,7 @@ alias ssh-agent.ls-added-keys='ssh-add -l'
 alias sshls=ssh-agent.ls-added-keys
 
 # kill ssh-agent
-alias ssh-agent.kill='killall ssh-agent'
+alias ssh-agent.kill='killall -v ssh-agent'
 alias sshkill=ssh-agent.kill
 alias sshlock=ssh-agent.kill
 
