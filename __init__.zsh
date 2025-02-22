@@ -4,5 +4,5 @@ source $HOME/.config/zshrc/init/__init__.zsh
 source $HOME/.config/zshrc/plugins/__init__.zsh
 source $HOME/.config/zshrc/utils/__init__.zsh
 
-[[ $ZSH_RELOADING == true ]] && echo "INFO: zsh reloaded" && unset ZSH_RELOADING
-[[ $ZSH_RESOURCING == true ]] && echo "INFO: ~/.zshrc reloaded" && unset ZSH_RESOURCING
+[[ $ZSH_RELOADING == true ]] && echo "INFO: zsh reloaded" && unset ZSH_RELOADING || true
+[[ $ZSH_RESOURCING == true ]] && echo "INFO: ~/.zshrc reloaded" && unset ZSH_RESOURCING || true
