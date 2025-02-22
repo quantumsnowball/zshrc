@@ -3,6 +3,9 @@
 # src: https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/ssh-agent/ssh-agent.plugin.zsh
 #
 
+# don't load anything if missing ~/.ssh/ 
+ [ -d "$HOME/.ssh" ] || return
+
 
 # helpers
 alias ssh-agent.ls-added-keys='ssh-add -l'
@@ -12,14 +15,8 @@ alias ssh-agent.kill='killall ssh-agent'
 alias sshkill=ssh-agent.kill
 alias sshlock=ssh-agent.kill
 
-function ssh-agent.add-keys() {
-  [ -d "$HOME/.ssh" ] || {
-    echo "ssh-agent requires ~/.ssh directory"
-    return 1
-  }
-  # this will auto discover and add keys
-  ssh-add 
-}
+# this will auto discover and add keys
+alias ssh-agent.add-keys='ssh-add'
 alias ssha=ssh-agent.add-keys
 
 function ssh-agent.start() {
@@ -35,12 +32,6 @@ function ssh-agent.start() {
   fi
 
   # if ssh-agent not ready, proceed to recreate it
-
-  # first ensure ~/.ssh/ directory
-  if [[ ! -d "$HOME/.ssh" ]]; then
-    echo "ssh-agent requires ~/.ssh directory"
-    return 1
-  fi
 
   # start ssh-agent ps and cache the setup environment script
   echo "Starting ssh-agent ..."
