@@ -9,8 +9,14 @@ keychain.start () {
     eval $(keychain --eval $@)
 }
 alias kc.start=keychain.start
-alias kc='keychain.start --quiet'
 
+keychain.add () {
+    # normally boot up keychain
+    eval $(keychain --eval --quiet)
+    # then add default keys
+    ssh-add
+}
+alias kc=keychain.add
 
 # start kc by default
 # - start quietly ssh-agent quietly if not alreay running
