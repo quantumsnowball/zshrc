@@ -74,5 +74,3 @@ ssh-agent.install-patched.ssh () {
     ls -l ~/.local/bin/ssh
 }
 
-# ensure started ssh-agent on shell launch
-ssh-agent.start
