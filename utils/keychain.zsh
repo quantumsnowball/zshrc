@@ -11,3 +11,10 @@ keychain.start () {
 alias kc.start=keychain.start
 alias kc='keychain.start --quiet'
 
+
+# start kc by default
+# - start quietly ssh-agent quietly if not alreay running
+# - find any existing ssh-agent and use it quietly
+# - refresh the env so every shell should store updated env vars
+# - initially don't ask for password, user can add key only when necessary
+eval $(keychain --eval --quiet)
