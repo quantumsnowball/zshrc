@@ -21,5 +21,6 @@ zsh.resource-zshrc () {
 alias rrr=zsh.resource-zshrc
 # exit
 alias x=exit
+alias q=exit
 # process
 alias jobs='jobs -l'
