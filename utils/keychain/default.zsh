@@ -28,3 +28,4 @@ alias kc=kc.add
 # - refresh the env so every shell should store updated env vars
 # - initially don't ask for password, user can add key only when necessary
 eval $(keychain --eval --quiet)
+
