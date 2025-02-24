@@ -25,6 +25,11 @@ wtf.in() {
 }
 alias wtfin='wtf.in'
 
+# info
+ensure tldr || true
+alias info.disk.lsblk='lsblk'
+ensure neofetch && alias info.sys.neofetch='neofetch'
+
 # diagnostics
 alias wtf.is-wrong.dmesg='dmesg'
 alias wtf.is-wrong.journalctl='journalctl -xe'
