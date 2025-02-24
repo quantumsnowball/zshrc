@@ -24,3 +24,7 @@ wtf.in() {
     which $1
 }
 alias wtfin='wtf.in'
+
+# diagnostics
+alias wtf.is-wrong.dmesg='dmesg'
+alias wtf.is-wrong.journalctl='journalctl -xe'
