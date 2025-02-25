@@ -24,11 +24,14 @@ lg () {
             tmux)
                 cd "$HOME/.config/tmux" && shift && lazygit $@
                 ;;
+            ssh)
+                cd "$HOME/.config/ssh" && shift && lazygit $@
+                ;;
             *)
                 if [[ -d $1 && $1 == */ ]]; then
                     cd $1 && shift && lazygit $@
                 else
-                    echo "Usage: lg {set|nvim|zsh|posh|tmux|<path>/} [lazygit-args]"
+                    echo "Usage: lg {set|nvim|zsh|posh|tmux|ssh|<path>/} [lazygit-args]"
                     return 1
                 fi
                 ;;
