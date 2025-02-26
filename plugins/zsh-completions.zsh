@@ -1,4 +1,3 @@
-zinit wait lucid for \
-  blockf \
-    zsh-users/zsh-completions \
+zinit ice wait lucid blockf
+zinit light zsh-users/zsh-completions
 

@@ -1,4 +1,3 @@
-zinit wait lucid for \
-  atload"!_zsh_autosuggest_start" \
-    zsh-users/zsh-autosuggestions \
+zinit ice wait lucid atload"!_zsh_autosuggest_start" 
+zinit light zsh-users/zsh-autosuggestions
 
