@@ -23,4 +23,5 @@ zinit light-mode for \
 
 # plugin list
 source $HOME/.config/zshrc/plugins/list.zsh
+source $HOME/.config/zshrc/plugins/zsh-vi-mode.zsh
 source $HOME/.config/zshrc/plugins/p10k.zsh

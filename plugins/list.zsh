@@ -6,9 +6,6 @@ zinit wait lucid for \
   atload"!_zsh_autosuggest_start" \
     zsh-users/zsh-autosuggestions \
 
-zinit ice depth=1
-zinit light jeffreytse/zsh-vi-mode
-
 # diff-so-fancy
 zinit ice lucid as"program" pick"bin/git-dsf"
 zinit load so-fancy/diff-so-fancy
@@ -23,11 +20,3 @@ ensure fzf && zinit snippet OMZP::fzf
 # else, start in vim normal mode 
 # [ -v TERMUX_VERSION ] || ZVM_LINE_INIT_MODE=$ZVM_MODE_NORMAL
 
-# zsh-vi-mode
-# The plugin will auto execute this zvm_after_lazy_keybindings function
-zvm_after_lazy_keybindings() {
-  empty_widget () { }
-  zvm_define_widget empty_widget
-  zvm_bindkey vicmd '/' empty_widget
-  zvm_bindkey vicmd '?' empty_widget
-}
