@@ -6,10 +6,6 @@ zinit wait lucid for \
   atload"!_zsh_autosuggest_start" \
     zsh-users/zsh-autosuggestions \
 
-# diff-so-fancy
-zinit ice lucid as"program" pick"bin/git-dsf"
-zinit load so-fancy/diff-so-fancy
-
 # fzf
 # Modified command to work with zsh-vi-mode plugins
 zinit ice lucid wait
