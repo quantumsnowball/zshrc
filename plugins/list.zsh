@@ -6,11 +6,6 @@ zinit wait lucid for \
   atload"!_zsh_autosuggest_start" \
     zsh-users/zsh-autosuggestions \
 
-# fzf
-# Modified command to work with zsh-vi-mode plugins
-zinit ice lucid wait
-ensure fzf && zinit snippet OMZP::fzf
-
 # plugin related configs
 # if termux android, starts in vim insert mode
 # else, start in vim normal mode 
