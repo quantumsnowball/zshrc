@@ -26,3 +26,4 @@ alias q=exit
 alias jobs='jobs -l'
 # profiling
 alias zsh.time-startup='time zsh -i -c exit'
+alias zsh.profiling-startup='ZDOTDIR=~/.config/zshrc/profiling/ zsh -i -c exit | less -c -S'
