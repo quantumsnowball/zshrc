@@ -24,3 +24,5 @@ alias x=exit
 alias q=exit
 # process
 alias jobs='jobs -l'
+# profiling
+alias zsh.time-startup='time zsh -i -c exit'
