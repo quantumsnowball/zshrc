@@ -21,8 +21,11 @@ zinit light-mode for \
 
 ### End of Zinit's installer chunk
 
-# plugin list
-source $HOME/.config/zshrc/plugins/list.zsh
-source $HOME/.config/zshrc/plugins/zsh-vi-mode.zsh
-source $HOME/.config/zshrc/plugins/diff-so-fanzy.zsh
-source $HOME/.config/zshrc/plugins/p10k.zsh
+
+# load all modules inside plugins/
+for item in $HOME/.config/zshrc/plugins/*; do 
+    # If it's a non-index .zsh file, source it
+    if [ -f $item ] && [[ $item == *.zsh ]] && [[ $item != *__init__.zsh ]]; then
+        source $item
+    fi
+done
