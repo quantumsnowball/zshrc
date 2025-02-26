@@ -25,3 +25,12 @@ ensure fzf && zinit snippet OMZP::fzf
 # if termux android, starts in vim insert mode
 # else, start in vim normal mode 
 # [ -v TERMUX_VERSION ] || ZVM_LINE_INIT_MODE=$ZVM_MODE_NORMAL
+
+# zsh-vi-mode
+# The plugin will auto execute this zvm_after_lazy_keybindings function
+zvm_after_lazy_keybindings() {
+  empty_widget () { }
+  zvm_define_widget empty_widget
+  zvm_bindkey vicmd '/' empty_widget
+  zvm_bindkey vicmd '?' empty_widget
+}
