@@ -11,6 +11,8 @@ zstyle ':completion:*' list-colors ''
 
 # menu
 zstyle ':completion:*' menu select
+zstyle ':completion:*:*:*:*:descriptions' format '%F{yellow}-- %d --%f'
+zstyle ':completion:*' group-name ''
 
 # init
 autoload -Uz compinit
