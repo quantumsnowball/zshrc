@@ -14,6 +14,9 @@ zstyle ':completion:*' menu select
 zstyle ':completion:*:*:*:*:descriptions' format '%F{yellow}-- %d --%f'
 zstyle ':completion:*' group-name ''
 
+# details
+zstyle ':completion:*' complete-options true
+
 # init
 autoload -Uz compinit
 compinit
