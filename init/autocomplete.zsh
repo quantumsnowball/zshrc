@@ -7,7 +7,9 @@
 zstyle :compinstall filename "$HOME/.zshrc"
 
 # colors
+eval "$(dircolors)"
 zstyle ':completion:*' list-colors ''
+zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 
 # menu
 zstyle ':completion:*' menu select
