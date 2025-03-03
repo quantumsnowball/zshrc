@@ -28,6 +28,12 @@ bindkey -M menuselect 'q' send-break
 # details
 zstyle ':completion:*' complete-options true
 
+# 
+# matcher
+#
+# case insenstive match, substring match
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+
 # init
 autoload -Uz compinit
 compinit
