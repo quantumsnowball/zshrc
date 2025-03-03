@@ -12,7 +12,7 @@ zstyle ':completion:*' list-colors ''
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 
 # menu
-zstyle ':completion:*' menu select
+zstyle ':completion:*' menu yes select
 zstyle ':completion:*:*:*:*:descriptions' format '%F{yellow}-- %d --%f'
 zstyle ':completion:*' group-name ''
 zmodload zsh/complist
