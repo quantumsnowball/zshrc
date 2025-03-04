@@ -27,3 +27,13 @@ alias jobs='jobs -l'
 # profiling
 alias zsh.time-startup='time zsh -i -c exit'
 alias zsh.profiling-startup='ZDOTDIR=~/.config/zshrc/profiling/ zsh -i -c exit | less -c -S'
+# completion
+zsh.completion.toggle_dotfiles_visibility() {
+    if [[ $options[globdots] == on ]]; then
+        unsetopt globdots
+        echo "zsh globdots: ${RED}DISABLED${YELLOW} (dotfiles will be hidden)${RESET}"
+    else
+        setopt globdots
+        echo "zsh globdots: ${CYAN}ENABLED${YELLOW} (dotfiles will be shown)${RESET}"
+    fi
+}
