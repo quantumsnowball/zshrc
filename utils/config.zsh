@@ -30,6 +30,9 @@ cf () {
         ala | alacritty)
             cd ~/.config/alacritty && nvim alacritty.yml
             ;;
+        winterm)
+            cd ~/winhost/home/AppData/Local/Packages/Microsoft.WindowsTerminal_*/LocalState/ && nvim settings.json
+            ;;
         esac
     )
 }
