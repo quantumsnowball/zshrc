@@ -4,7 +4,7 @@
 #   :completion:<function>:<completer>:<command>:<argument>:<tag>    
 
 # completion to fpath
-fpath=(~/.config/zshrc/completions $fpath)
+fpath=(~/.config/zshrc/completions/functions/ $fpath)
 
 # rc
 zstyle :compinstall filename "$HOME/.zshrc"
@@ -40,4 +40,5 @@ zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 
 # init
 autoload -Uz compinit
 compinit
+
 
