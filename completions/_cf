@@ -1,0 +1,6 @@
+#compdef cf
+
+local -a completions
+completions=( settings shared nvim zsh posh tmux ssh alacritty winterm  )
+compadd "${completions[@]}"
+

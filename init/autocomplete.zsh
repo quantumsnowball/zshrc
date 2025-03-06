@@ -3,6 +3,9 @@
 # pattern: 
 #   :completion:<function>:<completer>:<command>:<argument>:<tag>    
 
+# completion to fpath
+fpath=(~/.config/zshrc/completions $fpath)
+
 # rc
 zstyle :compinstall filename "$HOME/.zshrc"
 

@@ -97,11 +97,3 @@ cf.pull-all () {
 alias s='cf.pull-all'
 alias cfp='cf.pull-all'
 alias cff='cf.fetch-all'
-
-# completion
-_cf () {
-    local -a completions
-    completions=( settings shared nvim zsh posh tmux ssh alacritty winterm  )
-    compadd "${completions[@]}"
-}
-compdef _cf cf
