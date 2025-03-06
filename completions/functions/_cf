@@ -1,6 +1,17 @@
 #compdef cf
 
-local -a completions
-completions=( settings shared nvim zsh posh tmux ssh alacritty winterm  )
-compadd "${completions[@]}"
 
+local -a repos
+repos=( 
+    settings
+    shared
+    nvim 
+    zsh 
+    posh 
+    tmux 
+    ssh 
+    alacritty 
+    winterm  
+)
+
+_describe 'repos' repos
