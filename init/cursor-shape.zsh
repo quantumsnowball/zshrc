@@ -1,3 +1,6 @@
+# use vi-mode in zsh
+bindkey -v
+
 # Change cursor shape for different vi modes.
 # Set cursor style (DECSCUSR), VT520.
 # 0  ⇒  blinking block.
@@ -19,11 +22,17 @@ zle-keymap-select() {
     fi
 }
 zle -N zle-keymap-select
+
+# initiate `vi insert` as keymap (can be removed if `bindkey -V` has been set elsewhere)
 zle-line-init() {
-    zle -K viins # initiate `vi insert` as keymap (can be removed if `bindkey -V` has been set elsewhere)
+    zle -K viins 
     echo -ne "\e[6 q"
 }
 zle -N zle-line-init
-echo -ne '\e[6 q' # Use beam shape cursor on startup.
-preexec() { echo -ne '\e[6 q' ;} # Use beam shape cursor for each new prompt.
+
+# Use beam shape cursor on startup.
+# echo -ne '\e[6 q' 
+
+# Use beam shape cursor for each new prompt.
+# preexec() { echo -ne '\e[6 q' ; }
 
