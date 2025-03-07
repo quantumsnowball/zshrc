@@ -23,7 +23,7 @@ alias lsip4=ip.local.addr4
 alias myip4=ip.local.addr4
 
 ip.local.addr6 () {
-    ip -c -br -6 addr || ifconfig.local.addr
+    ip -c -br -6 addr
 }
 alias lsip6=ip.local.addr6
 alias myip6=ip.local.addr6
