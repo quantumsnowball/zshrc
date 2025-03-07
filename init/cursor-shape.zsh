@@ -1,6 +1,9 @@
 # use vi-mode in zsh
 bindkey -v
 
+# less delay
+KEYTIMEOUT=1
+
 # Change cursor shape for different vi modes.
 # Set cursor style (DECSCUSR), VT520.
 # 0  ⇒  blinking block.
