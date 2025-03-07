@@ -11,19 +11,19 @@ alias lslink=ip.local.link
 alias lsnic=ip.local.link
 
 ip.local.addr () {
-    ip -c -br addr || ifconfig
+    ip -c -br addr || ifconfig.local.addr
 }
 alias lsip=ip.local.addr
 alias myip=ip.local.addr
 
 ip.local.addr4 () {
-    ip -c -br -4 addr || ifconfig
+    ip -c -br -4 addr || ifconfig.local.addr
 }
 alias lsip4=ip.local.addr4
 alias myip4=ip.local.addr4
 
 ip.local.addr6 () {
-    ip -c -br -6 addr || ifconfig
+    ip -c -br -6 addr || ifconfig.local.addr
 }
 alias lsip6=ip.local.addr6
 alias myip6=ip.local.addr6
