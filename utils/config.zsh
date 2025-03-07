@@ -61,7 +61,8 @@ cf.pull () {
     echo "$(
         echo "#\n# < $1 >\n#" &&
         cd ~/.config/$1 2>&1 &&
-        git -c color.ui=always pull --rebase --autostash 2>&1
+        git -c color.ui=always pull --rebase --autostash 2>&1 &&
+        git -c color.ui=always status --short --branch 2>&1
     )\n"
 }
 
