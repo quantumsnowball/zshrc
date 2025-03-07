@@ -2,7 +2,6 @@
 HISTFILE=~/.histfile
 HISTSIZE=1000000
 SAVEHIST=1000000
-bindkey -v
 # End of lines configured by zsh-newuser-install
 
 # share shell command history immediately between shells
