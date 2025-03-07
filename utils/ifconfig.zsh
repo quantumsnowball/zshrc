@@ -1,3 +1,6 @@
+ensure ifconfig || return
+
+
 ifconfig.local.addr () {
     ifconfig | awk -v cyan="$CYAN" -v green="$GREEN" -v red="$RED" -v reset="$RESET" '
     /^[a-zA-Z0-9]/ { iface=$1; sub(/:/, "", iface) }
