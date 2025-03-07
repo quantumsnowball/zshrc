@@ -1,0 +1,17 @@
+#compdef cf
+
+
+local -a repos
+repos=( 
+    settings
+    shared
+    nvim 
+    zsh 
+    posh 
+    tmux 
+    ssh 
+    alacritty 
+    winterm  
+)
+
+_describe 'repos' repos
