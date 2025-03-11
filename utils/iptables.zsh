@@ -18,19 +18,26 @@ _iptables-pretty-printer () {
         # remove trailing newline
         chains=("${chains[@]%$'\n'}")
 
-        # echo $#chains
         for chain in "${chains[@]}"; do
             # print the first line as title
             echo "$CYAN$(echo $chain | sed -n '1p')$RESET"
 
-            # print the second line as table headers
-            echo "$YELLOW$(echo $chain | sed -n '2p')$RESET"
-            # print the rest lines as content
-            echo $chain | sed -n '3,$p' |
-            # split into columns 
-            column -t |
-            # removes excessive spaces
-            sed '/^[0-9]/ s/[ \t]\{1,\}/ /10g'
+            # extract the second line and below as content
+            # - select second down to the last line
+            # - pipe into column
+            # - removes excessive spaces
+            content=$(
+                echo $chain | 
+                sed -n '2,$p' |
+                column -t |
+                sed '/^[0-9]/ s/[ \t]\{1,\}/ /10g'
+            )
+
+            # print the table headers
+            echo "$YELLOW$(echo $content | sed -n '1p')$RESET"
+
+            # print the table rows
+            echo $content | sed -n '2,$p'
 
             # new lines after each table
             echo ''
