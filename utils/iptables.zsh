@@ -1,9 +1,19 @@
 ensure iptables || return
 
 
+_iptables-pretty-printer () {
+    # make tabular (table) output
+    column -t |
+    sed 's/^Chain/\n&/g' |
+    sed '/^Chain/ s/[ \t]\{1,\}/ /g' |
+    sed '/^[0-9]/ s/[ \t]\{1,\}/ /10g' |
+    # pager
+    less -c -S
+}
+
 # READ
 iptables.filter = () {
-    sudo iptables -v -L --line-numbers | less -c -S
+    sudo iptables -v -L --line-numbers | _iptables-pretty-printer
 }
 iptables.filter.input = () {
     sudo iptables -v -L INPUT --line-numbers | less -c -S
