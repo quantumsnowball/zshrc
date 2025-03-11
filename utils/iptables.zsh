@@ -5,15 +5,22 @@ _iptables-pretty-printer () {
     # store iptables stdout into a var
     raw_input=$(cat)
 
-    #
+    # split each tables content by newlines
     (){
+        # IFS is Internal Filed Separator, shell uses it to split words
+        # set it as local within anomynous function to avoid pollution
         local IFS=$'\x1F'
         chains=($(echo -n "$raw_input" | sed 's/^$/\x1F/'))
     }
+    # remove leading newline
+    chains=("${chains[@]#$'\n'}")
+    # remove trailing newline
+    chains=("${chains[@]%$'\n'}")
+
     echo $#chains
     for chain in "${chains[@]}"; do
         echo '<table>':
-        echo -n $chain
+        echo $chain
     done
     # echo "$raw_input"
     # make tabular (table) output
