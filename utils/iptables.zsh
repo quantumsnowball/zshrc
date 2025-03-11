@@ -4,7 +4,18 @@ ensure iptables || return
 _iptables-pretty-printer () {
     # store iptables stdout into a var
     raw_input=$(cat)
-    echo "$raw_input"
+
+    #
+    (){
+        local IFS=$'\x1F'
+        chains=($(echo -n "$raw_input" | sed 's/^$/\x1F/'))
+    }
+    echo $#chains
+    for chain in "${chains[@]}"; do
+        echo '<table>':
+        echo -n $chain
+    done
+    # echo "$raw_input"
     # make tabular (table) output
     # column -t |
     # sed 's/^Chain/\n&/g' |
@@ -16,6 +27,7 @@ _iptables-pretty-printer () {
 
 # READ
 iptables.filter = () {
+    # sudo iptables -v -L --line-numbers
     sudo iptables -v -L --line-numbers | _iptables-pretty-printer
 }
 iptables.filter.input = () {
