@@ -1,56 +1,53 @@
 ensure iptables || return
 
 
-_iptables-pretty-printer () { 
-    (   
-        # store iptables stdout into a var
-        raw_input=$(cat)
+_iptables-pretty-print () { 
+    # store iptables stdout into a var
+    raw_input=$(cat)
 
-        # split each tables content by newlines
-        (){
-            # IFS is Internal Filed Separator, shell uses it to split words
-            # set it as local within anomynous function to avoid pollution
-            local IFS=$'\x1F'
-            chains=($(echo -n "$raw_input" | sed 's/^$/\x1F/'))
-        }
-        # remove leading newline
-        chains=("${chains[@]#$'\n'}")
-        # remove trailing newline
-        chains=("${chains[@]%$'\n'}")
+    # split each tables content by newlines
+    (){
+        # IFS is Internal Filed Separator, shell uses it to split words
+        # set it as local within anomynous function to avoid pollution
+        local IFS=$'\x1F'
+        chains=($(echo -n "$raw_input" | sed 's/^$/\x1F/'))
+    }
+    # remove leading newline
+    chains=("${chains[@]#$'\n'}")
+    # remove trailing newline
+    chains=("${chains[@]%$'\n'}")
 
-        for chain in "${chains[@]}"; do
-            # print the first line as title
-            echo "$CYAN$(echo $chain | sed -n '1p')$RESET"
+    for chain in "${chains[@]}"; do
+        # print the first line as title
+        echo "$CYAN$(echo $chain | sed -n '1p')$RESET"
 
-            # extract the second line and below as content
-            # - select second down to the last line
-            # - pipe into column
-            # - removes excessive spaces
-            content=$(
-                echo $chain | 
-                sed -n '2,$p' |
-                column -t |
-                sed '/^[0-9]/ s/[ \t]\{1,\}/ /11g'
-            )
+        # extract the second line and below as content
+        # - select second down to the last line
+        # - pipe into column
+        # - removes excessive spaces
+        content=$(
+            echo $chain | 
+            sed -n '2,$p' |
+            column -t |
+            sed '/^[0-9]/ s/[ \t]\{1,\}/ /11g'
+        )
 
-            # print the table headers
-            echo "$YELLOW$(echo $content | sed -n '1p')$RESET"
+        # print the table headers
+        echo "$YELLOW$(echo $content | sed -n '1p')$RESET"
 
-            # print the table rows
-            echo $content | sed -n '2,$p'
+        # print the table rows
+        echo $content | sed -n '2,$p'
 
-            # new lines after each table
-            echo ''
-        done 
-    ) |
+        # new lines after each table
+        echo ''
+    done 
     # display in pager less with color support
-    less -c -S -R
 }
 
 _iptables-pager () {
     [[ $1 == "-r" || $1 == "--raw" ]] && 
-        less -c -S || 
-        _iptables-pretty-printer
+        less -c -S -R ||
+        _iptables-pretty-print | less -c -S -R
 }
 
 # READ
