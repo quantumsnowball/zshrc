@@ -30,7 +30,7 @@ _iptables-pretty-printer () {
                 echo $chain | 
                 sed -n '2,$p' |
                 column -t |
-                sed '/^[0-9]/ s/[ \t]\{1,\}/ /10g'
+                sed '/^[0-9]/ s/[ \t]\{1,\}/ /11g'
             )
 
             # print the table headers
