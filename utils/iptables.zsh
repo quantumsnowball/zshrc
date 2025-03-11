@@ -31,19 +31,8 @@ _iptables-pretty-printer () {
 
         # new lines after each table
         echo ''
-        # echo "${chain[@]:1}" |
-        # column -t |
-        # sed 's/^Chain/\n&/g' |
-        # sed '/^Chain/ s/[ \t]\{1,\}/ /g' |
-        # sed '/^[0-9]/ s/[ \t]\{1,\}/ /10g'
     done
-    # echo "$raw_input"
-    # make tabular (table) output
-    # column -t |
-    # sed 's/^Chain/\n&/g' |
-    # sed '/^Chain/ s/[ \t]\{1,\}/ /g' |
-    # sed '/^[0-9]/ s/[ \t]\{1,\}/ /10g' |
-    # # pager
+    # pager
     # less -c -S
 }
 
