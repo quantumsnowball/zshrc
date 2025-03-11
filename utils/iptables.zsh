@@ -47,19 +47,24 @@ _iptables-pretty-printer () {
     less -c -S -R
 }
 
+_iptables-pager () {
+    [[ $1 == "-r" || $1 == "--raw" ]] && 
+        less -c -S || 
+        _iptables-pretty-printer
+}
+
 # READ
 iptables.filter = () {
-    # sudo iptables -v -L --line-numbers
-    sudo iptables -v -L --line-numbers | _iptables-pretty-printer
+    sudo iptables -v -L --line-numbers | _iptables-pager $1
 }
 iptables.filter.input = () {
-    sudo iptables -v -L INPUT --line-numbers | _iptables-pretty-printer
+    sudo iptables -v -L INPUT --line-numbers | _iptables-pager $1
 }
 iptables.filter.forward = () {
-    sudo iptables -v -L FORWARD --line-numbers | _iptables-pretty-printer
+    sudo iptables -v -L FORWARD --line-numbers | _iptables-pager $1
 }
 iptables.filter.output = () {
-    sudo iptables -v -L OUTPUT --line-numbers | _iptables-pretty-printer
+    sudo iptables -v -L OUTPUT --line-numbers | _iptables-pager $1
 }
 __print_filter () {
     echo "${YELLOW}Current filter rules:${RESET}"
@@ -72,16 +77,16 @@ __print_input_filter () {
     sudo iptables -L INPUT --line-numbers ; echo
 }
 iptables.nat = () { 
-    sudo iptables -t nat -v -L --line-numbers | _iptables-pretty-printer
+    sudo iptables -t nat -v -L --line-numbers | _iptables-pager $1
 }
 iptables.mangle = () { 
-    sudo iptables -t mangle -v -L --line-numbers | _iptables-pretty-printer
+    sudo iptables -t mangle -v -L --line-numbers | _iptables-pager $1
 }
 iptables.raw = () { 
-    sudo iptables -t raw -v -L --line-numbers | _iptables-pretty-printer
+    sudo iptables -t raw -v -L --line-numbers | _iptables-pager $1
 }
 iptables.security = () { 
-    sudo iptables -t security -v -L --line-numbers | _iptables-pretty-printer
+    sudo iptables -t security -v -L --line-numbers | _iptables-pager $1
 }
 
 
