@@ -2,13 +2,16 @@ ensure iptables || return
 
 
 _iptables-pretty-printer () {
+    # store iptables stdout into a var
+    raw_input=$(cat)
+    echo "$raw_input"
     # make tabular (table) output
-    column -t |
-    sed 's/^Chain/\n&/g' |
-    sed '/^Chain/ s/[ \t]\{1,\}/ /g' |
-    sed '/^[0-9]/ s/[ \t]\{1,\}/ /10g' |
-    # pager
-    less -c -S
+    # column -t |
+    # sed 's/^Chain/\n&/g' |
+    # sed '/^Chain/ s/[ \t]\{1,\}/ /g' |
+    # sed '/^[0-9]/ s/[ \t]\{1,\}/ /10g' |
+    # # pager
+    # less -c -S
 }
 
 # READ
