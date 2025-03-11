@@ -21,10 +21,12 @@ _iptables-pretty-printer () {
         # echo $#chains
         for chain in "${chains[@]}"; do
             # print the first line as title
-            echo $chain | sed -n '1p'
+            echo "$CYAN$(echo $chain | sed -n '1p')$RESET"
 
+            # print the second line as table headers
+            echo "$YELLOW$(echo $chain | sed -n '2p')$RESET"
             # print the rest lines as content
-            echo $chain | sed -n '2,$p' |
+            echo $chain | sed -n '3,$p' |
             # split into columns 
             column -t |
             # removes excessive spaces
@@ -34,8 +36,8 @@ _iptables-pretty-printer () {
             echo ''
         done 
     ) |
-    # display in pager
-    less -c -S
+    # display in pager less with color support
+    less -c -S -R
 }
 
 # READ
