@@ -23,7 +23,11 @@ _iptables-pretty-printer () {
         echo $chain | sed -n '1p'
 
         # print the rest lines as content
-        echo $chain | sed -n '2,$p'
+        echo $chain | sed -n '2,$p' |
+        # split into columns 
+        column -t |
+        # removes excessive spaces
+        sed '/^[0-9]/ s/[ \t]\{1,\}/ /10g'
 
         # new lines after each table
         echo ''
