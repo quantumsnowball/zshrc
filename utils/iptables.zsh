@@ -17,10 +17,21 @@ _iptables-pretty-printer () {
     # remove trailing newline
     chains=("${chains[@]%$'\n'}")
 
-    echo $#chains
+    # echo $#chains
     for chain in "${chains[@]}"; do
-        echo '<table>':
-        echo $chain
+        # print the first line as title
+        echo $chain | sed -n '1p'
+
+        # print the rest lines as content
+        echo $chain | sed -n '2,$p'
+
+        # new lines after each table
+        echo ''
+        # echo "${chain[@]:1}" |
+        # column -t |
+        # sed 's/^Chain/\n&/g' |
+        # sed '/^Chain/ s/[ \t]\{1,\}/ /g' |
+        # sed '/^[0-9]/ s/[ \t]\{1,\}/ /10g'
     done
     # echo "$raw_input"
     # make tabular (table) output
