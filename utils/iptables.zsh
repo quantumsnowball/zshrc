@@ -1,39 +1,41 @@
 ensure iptables || return
 
 
-_iptables-pretty-printer () {
-    # store iptables stdout into a var
-    raw_input=$(cat)
+_iptables-pretty-printer () { 
+    (   
+        # store iptables stdout into a var
+        raw_input=$(cat)
 
-    # split each tables content by newlines
-    (){
-        # IFS is Internal Filed Separator, shell uses it to split words
-        # set it as local within anomynous function to avoid pollution
-        local IFS=$'\x1F'
-        chains=($(echo -n "$raw_input" | sed 's/^$/\x1F/'))
-    }
-    # remove leading newline
-    chains=("${chains[@]#$'\n'}")
-    # remove trailing newline
-    chains=("${chains[@]%$'\n'}")
+        # split each tables content by newlines
+        (){
+            # IFS is Internal Filed Separator, shell uses it to split words
+            # set it as local within anomynous function to avoid pollution
+            local IFS=$'\x1F'
+            chains=($(echo -n "$raw_input" | sed 's/^$/\x1F/'))
+        }
+        # remove leading newline
+        chains=("${chains[@]#$'\n'}")
+        # remove trailing newline
+        chains=("${chains[@]%$'\n'}")
 
-    # echo $#chains
-    for chain in "${chains[@]}"; do
-        # print the first line as title
-        echo $chain | sed -n '1p'
+        # echo $#chains
+        for chain in "${chains[@]}"; do
+            # print the first line as title
+            echo $chain | sed -n '1p'
 
-        # print the rest lines as content
-        echo $chain | sed -n '2,$p' |
-        # split into columns 
-        column -t |
-        # removes excessive spaces
-        sed '/^[0-9]/ s/[ \t]\{1,\}/ /10g'
+            # print the rest lines as content
+            echo $chain | sed -n '2,$p' |
+            # split into columns 
+            column -t |
+            # removes excessive spaces
+            sed '/^[0-9]/ s/[ \t]\{1,\}/ /10g'
 
-        # new lines after each table
-        echo ''
-    done
-    # pager
-    # less -c -S
+            # new lines after each table
+            echo ''
+        done 
+    ) |
+    # display in pager
+    less -c -S
 }
 
 # READ
