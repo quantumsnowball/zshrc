@@ -1,18 +1,67 @@
 ensure iptables || return
 
 
+_iptables-pretty-print () { 
+    # store iptables stdout into a var
+    raw_input=$(cat)
+
+    # split each tables content by newlines
+    (){
+        # IFS is Internal Filed Separator, shell uses it to split words
+        # set it as local within anomynous function to avoid pollution
+        local IFS=$'\x1F'
+        chains=($(echo -n "$raw_input" | sed 's/^$/\x1F/'))
+    }
+    # remove leading newline
+    chains=("${chains[@]#$'\n'}")
+    # remove trailing newline
+    chains=("${chains[@]%$'\n'}")
+
+    for chain in "${chains[@]}"; do
+        # print the first line as title
+        echo "$CYAN$(echo $chain | sed -n '1p')$RESET"
+
+        # extract the second line and below as content
+        # - select second down to the last line
+        # - pipe into column
+        # - removes excessive spaces
+        content=$(
+            echo $chain | 
+            sed -n '2,$p' |
+            column -t |
+            sed '/^[0-9]/ s/[ \t]\{1,\}/ /11g'
+        )
+
+        # print the table headers
+        echo "$YELLOW$(echo $content | sed -n '1p')$RESET"
+
+        # print the table rows
+        echo $content | sed -n '2,$p'
+
+        # new lines after each table
+        echo ''
+    done 
+    # display in pager less with color support
+}
+
+_iptables-pager () {
+    [[ $1 == "-r" || $1 == "--raw" ]] && 
+        less -c -S -R ||
+        _iptables-pretty-print | less -c -S -R
+}
+
 # READ
 iptables.filter = () {
-    sudo iptables -v -L --line-numbers | less -c -S
+    sudo iptables -v -L --line-numbers | _iptables-pager $1
 }
 iptables.filter.input = () {
-    sudo iptables -v -L INPUT --line-numbers | less -c -S
+    sudo iptables -v -L INPUT --line-numbers | _iptables-pager $1
 }
 iptables.filter.forward = () {
-    sudo iptables -v -L FORWARD --line-numbers | less -c -S
+    sudo iptables -v -L FORWARD --line-numbers | _iptables-pager $1
 }
 iptables.filter.output = () {
-    sudo iptables -v -L OUTPUT --line-numbers | less -c -S
+    sudo iptables -v -L OUTPUT --line-numbers | _iptables-pager $1
 }
 __print_filter () {
     echo "${YELLOW}Current filter rules:${RESET}"
@@ -25,16 +74,16 @@ __print_input_filter () {
     sudo iptables -L INPUT --line-numbers ; echo
 }
 iptables.nat = () { 
-    sudo iptables -t nat -v -L --line-numbers | less -c -S
+    sudo iptables -t nat -v -L --line-numbers | _iptables-pager $1
 }
 iptables.mangle = () { 
-    sudo iptables -t mangle -v -L --line-numbers | less -c -S
+    sudo iptables -t mangle -v -L --line-numbers | _iptables-pager $1
 }
 iptables.raw = () { 
-    sudo iptables -t raw -v -L --line-numbers | less -c -S
+    sudo iptables -t raw -v -L --line-numbers | _iptables-pager $1
 }
 iptables.security = () { 
-    sudo iptables -t security -v -L --line-numbers | less -c -S
+    sudo iptables -t security -v -L --line-numbers | _iptables-pager $1
 }
 
 
