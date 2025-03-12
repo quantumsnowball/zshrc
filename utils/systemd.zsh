@@ -32,3 +32,8 @@ journalctl.log () {
     sudo journalctl -u $1
 }
 alias systemctl.log=journalctl.log
+journalctl.log.clear () {
+    sudo journalctl --rotate
+    sudo journalctl --vacuum-time=1s
+}
+alias systemctl.log.clear=journalctl.log.clear
