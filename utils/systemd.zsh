@@ -1,6 +1,7 @@
 installed systemctl || return
 
 
+# systemctl
 systemctl.restart-service () {
     sudo systemctl restart $1
 }
@@ -26,3 +27,8 @@ systemctl.ls-grep () {
     sudo systemctl list-unit-files | rg $1
 }
 
+# journalctl
+journalctl.log () {
+    sudo journalctl -u $1
+}
+alias systemctl.log=journalctl.log
