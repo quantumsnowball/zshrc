@@ -5,7 +5,9 @@ ensure man || return
 # Linux usually use mandb but Termux follow FreeBSD using mandoc
 
 # envs
-ensure bat && export MANPAGER="sh -c 'col -bx | bat -l man -p --wrap=never'"
+ensure bat &&
+    export MANPAGER="sh -c 'col -bx | bat -l man -p --wrap=never'" ||
+    export MANPAGER='less -c -S -R'
 export MANROFFOPT="-c"
 
 
