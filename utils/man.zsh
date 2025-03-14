@@ -10,7 +10,7 @@ export MANROFFOPT="-c"
 # ref: https://github.com/sharkdp/bat/issues/1517                                │
 if [[ -v TERMUX_VERSION ]]; then
     man() {
-        command man "$@" | eval ${MANPAGER}
+        command man -O "width=$COLUMNS" "$@" | eval ${MANPAGER}
     }
 fi
 
