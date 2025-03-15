@@ -3,9 +3,7 @@ ensure eza || return
 
 # eza as ls
 # alias ezaf='eza -F always'
-ezaf () {
-    eza -F=always $@
-}
+alias ezaf='eza -F=always'
 alias ls='ezaf --icons'
 alias  l='ezaf --icons'
 alias la='ezaf -a --icons'
