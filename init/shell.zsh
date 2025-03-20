@@ -8,3 +8,8 @@ setopt re_match_pcre
 
 # stop accident : to trigger 'execute-named-cmd'
 bindkey -a -r ':'
+
+# fix insert mode backspace key and delete key
+# (allow delete char not created by insert mode)
+bindkey "^?" backward-delete-char
+bindkey "\e[3~" delete-char
