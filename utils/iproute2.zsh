@@ -1,7 +1,6 @@
 ensure ip || return
 
 
-[[ "$OSTYPE" == "darwin"* ]] || alias ip='ip -c'
 
 
 ip.local.link () { 
