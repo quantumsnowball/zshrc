@@ -34,3 +34,13 @@ ip.routing-table () {
 alias lsroute=ip.routing-table
 alias ip.route=ip.routing-table
 
+ip.default-gateway.ipv4 () {
+    ip -4 route show default
+}
+ip.default-gateway.ipv6 () {
+    ip -6 route show default
+}
+ip.default-gateway () {
+    ip.default-gateway.ipv4
+    ip.default-gateway.ipv6
+}
