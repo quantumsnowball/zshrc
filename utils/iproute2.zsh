@@ -1,8 +1,6 @@
 ensure ip || return
 
 
-
-
 ip.local.link () { 
     ip -c -br link; 
 }
@@ -34,10 +32,10 @@ alias lsroute=ip.routing-table
 alias ip.route=ip.routing-table
 
 ip.default-gateway.ipv4 () {
-    ip -4 route show default
+    ip -c -4 route show default
 }
 ip.default-gateway.ipv6 () {
-    ip -6 route show default
+    ip -c -6 route show default
 }
 ip.default-gateway () {
     ip.default-gateway.ipv4
