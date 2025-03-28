@@ -1,6 +1,6 @@
 ffmpeg.cut()
 {
-  local usage="Usage: ffmpeg.cut -i/--input INPUT -ss/--start START -t/--end END OUTPUT"
+  local usage="Usage: ffmpeg.cut -ss/--start START -t/--end END -i/--input INPUT OUTPUT"
 
   # parse opts
   local input ss t output
