@@ -52,6 +52,7 @@ ffmpeg.cut()
     -i $input \
     -vcodec copy \
     -acodec copy \
-    $output
+    $output && \
+  ls -la $output
 }
 
