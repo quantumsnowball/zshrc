@@ -18,3 +18,7 @@ bindkey "\e[3~" delete-char
 # Home, End
 bindkey -M vicmd 'gh' vi-beginning-of-line
 bindkey -M vicmd 'gl' vi-end-of-line
+# navigate word using H, L
+bindkey -M vicmd 'L' vi-forward-blank-word-end
+bindkey -M vicmd 'H' vi-backward-blank-word
+
