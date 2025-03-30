@@ -13,3 +13,8 @@ bindkey -a -r ':'
 # (allow delete char not created by insert mode)
 bindkey "^?" backward-delete-char
 bindkey "\e[3~" delete-char
+
+# vi mode key bindings
+# Home, End
+bindkey -M vicmd 'gh' vi-beginning-of-line
+bindkey -M vicmd 'gl' vi-end-of-line
