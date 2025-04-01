@@ -95,14 +95,14 @@ __input_filter_accept_ports () {
 }
 ip6tables.filter.input.open-tcp-ports () {
     __print_input_filter
-    echo -n "${CYAN}TCP port or range of ports to allow: ${RESET}" ; read dport
-    echo -n "${CYAN}Enter comment or remarks: ${RESET}" ; read comment ; echo
+    [ -n "$1" ] && dport=$1   || { echo -n "${CYAN}TCP port or range of ports to allow: ${RESET}" ; read dport }
+    [ -n "$2" ] && comment=$2 || { echo -n "${CYAN}Enter comment or remarks: ${RESET}" ; read comment ; echo }
     __input_filter_accept_ports tcp $dport $comment
 }
 ip6tables.filter.input.open-udp-ports () {
     __print_input_filter
-    echo -n "${CYAN}UDP port or range of ports to allow: ${RESET}" ; read dport
-    echo -n "${CYAN}Enter comment or remarks: ${RESET}" ; read comment ; echo
+    [ -n "$1" ] && dport=$1   || { echo -n "${CYAN}UDP port or range of ports to allow: ${RESET}" ; read dport }
+    [ -n "$2" ] && comment=$2 || { echo -n "${CYAN}Enter comment or remarks: ${RESET}" ; read comment ; echo }
     __input_filter_accept_ports udp $dport $comment
 }
 
