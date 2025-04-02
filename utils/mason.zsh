@@ -1,0 +1,73 @@
+[ -v TERMUX_VERSION ] || return
+
+
+# Install other package for mason that are not natively supported
+# original source: 
+# https://github.com/Amirulmuuminin/setup-mason-for-termux/blob/main/install-in-mason
+# NOTE: useful when Mason failed to install package, e.g. lua_ls for arm64
+# NOTE: currently only support termux pkg manager
+mason-install() {
+  if [ -z "$1" ]; then
+    echo "Usage: setup_package_for_mason <package-name>"
+    return 1
+  fi
+
+  PACKAGE_NAME=$1
+
+  echo "Starting setup for $PACKAGE_NAME..."
+
+  # Step 1: Install the package using apk
+  echo "Installing $PACKAGE_NAME..."
+  if pkg in "$PACKAGE_NAME"; then
+    echo "$PACKAGE_NAME installed successfully."
+  else
+    echo "Failed to install $PACKAGE_NAME."
+    return 1
+  fi
+
+  # Step 2: Locate the package binary
+  echo "Looking for the binary path of $PACKAGE_NAME..."
+  PACKAGE_PATH=$(which "$PACKAGE_NAME")
+  if [ -z "$PACKAGE_PATH" ]; then
+    echo "Failed to locate $PACKAGE_NAME binary."
+    return 1
+  fi
+  echo "Binary found at: $PACKAGE_PATH"
+
+  # Step 3: Create directories for Mason
+  echo "Creating directories for Mason..."
+  MASON_PATH=~/.local/share/nvim/mason/packages/"$PACKAGE_NAME"/libexec
+  if mkdir -p "$MASON_PATH"; then
+    echo "Directories created at $MASON_PATH."
+  else
+    echo "Failed to create directories."
+    return 1
+  fi
+
+  # Step 4: Create symbolic link
+  echo "Creating symbolic link for $PACKAGE_NAME..."
+  if ln -sf "$PACKAGE_PATH" "$MASON_PATH"/"$PACKAGE_NAME"; then
+    echo "Symbolic link created successfully."
+  else
+    echo "Failed to create symbolic link."
+    return 1
+  fi
+
+  # Step 5: Create wrapper script
+  echo "Creating wrapper script..."
+  WRAPPER_SCRIPT=~/.local/share/nvim/mason/packages/"$PACKAGE_NAME"/"$PACKAGE_NAME"
+  cat << EOF > "$WRAPPER_SCRIPT"
+#!/bin/bash
+exec ~/.local/share/nvim/mason/packages/"$PACKAGE_NAME"/libexec/"$PACKAGE_NAME" "\$@"
+EOF
+
+  # Step 6: Make the wrapper script executable
+  if chmod +x "$WRAPPER_SCRIPT"; then
+    echo "Wrapper script created and made executable."
+  else
+    echo "Failed to create or make the wrapper script executable."
+    return 1
+  fi
+
+  echo "$PACKAGE_NAME setup for Mason completed successfully."
+}
