@@ -2,12 +2,11 @@ ensure eza || return
 
 
 # eza as ls
-# alias ezaf='eza -F always'
-alias ezaf='eza -F=always'
-alias ls='ezaf --icons'
-alias  l='ezaf --icons'
-alias la='ezaf -a --icons'
-alias lt='ezaf -a -s time --reverse --icons'
-alias ll='ezaf -a -l -h --icons'
-alias lll='ezaf -a -l -h --icons --grid'
-alias lT='ezaf -a -l -h --icons --tree --level=2'
+alias _eza_base='eza --classify=always --icons=always'
+alias ls=_eza_base
+alias  l=_eza_base
+alias la='_eza_base -a'
+alias lt='_eza_base -a -s time --reverse'
+alias ll='_eza_base -a -l -h'
+alias lll='_eza_base -a -l -h --grid'
+alias ltree='_eza_base --tree --level=2'
