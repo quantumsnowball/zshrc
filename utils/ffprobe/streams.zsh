@@ -6,6 +6,7 @@ ffprobe-streams-old()
 }
 
 ffprobe.streams.info.raw () {
+    # raw json output by ffprobe
     ffprobe \
         -v quiet \
         -output_format json \
@@ -14,6 +15,7 @@ ffprobe.streams.info.raw () {
         $1
 }
 ffprobe.streams.info () {
+    # select interesting info for further processing
     ffprobe.streams.info.raw $1 | jq '
     [
         .streams.[] | { 
@@ -34,6 +36,7 @@ ffprobe.streams.info () {
     ]'
 }
 ffprobe.streams () {
+    # based on the selected info, print a user readabile format
     ffprobe.streams.info $1 | jq -r '
     # define colors
     def c:
@@ -73,7 +76,7 @@ ffprobe.streams () {
     # subject line
     "\n\t< ffprobe: total \(. | length) stream(s) >\n",
 
-    # for each stream in streams[]
+    # for each stream in .[]
     (.[] |
         # print subject line, stream index, media type and duration
         subject("Stream \(.index)") + ": " + media(.codec_type; "\(.codec_type) [\(.duration) seconds]\n") 
