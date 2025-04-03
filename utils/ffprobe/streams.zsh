@@ -14,5 +14,9 @@ ffprobe.streams.info.raw () {
         $1
 }
 ffprobe.streams.info () {
-    ffprobe.streams.info.raw $1 | jq '.streams.[]'
+    ffprobe.streams.info.raw $1 | 
+        jq '.streams.[] | 
+        { 
+            codec_name 
+        }'
 }
