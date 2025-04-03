@@ -47,11 +47,13 @@ ffprobe.streams () {
     };
     def subject(t):
         "\(c.green)\(t)\(c.nc)";
+    def important(t):
+        "\(c.red)\(t)\(c.nc)";
     def field(t): 
         "\(c.blue)\(t)\(c.nc)";
 
     subject("Stream \(.index)") + ": \(.codec_type) [\(.duration) seconds]\n" +
-    field("\tcodec") + ": \(.codec_name) (\(.codec_long_name))\n" +
+    field("\tcodec") + ": " + important("\(.codec_name)") + " (\(.codec_long_name))\n" +
     field("\tresolution") + ": \(.width) x \(.height) px\n" +
     field("\taspect ratio") + ": \(.display_aspect_ratio)\n" +
     field("\tbitrate") + ": \(.bit_rate)\n" +
