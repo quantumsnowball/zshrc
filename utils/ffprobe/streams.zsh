@@ -69,20 +69,20 @@ ffprobe.streams () {
 
     
     # print subject line, stream index, media type and duration
-    subject("Stream \(.index)") + ": " + media(.codec_type; "\(.codec_type) [\(.duration) seconds]\n") +
-
+    subject("Stream \(.index)") + ": " + media(.codec_type; "\(.codec_type) [\(.duration) seconds]\n") 
+    
     # print fields and values
-    assert(.codec_name;
-        field("\tcodec") + ": " + codec("\(.codec_name)") + " (\(.codec_long_name))\n") +
-    assert(.width; assert(.height;
-        field("\tresolution") + ": \(.width) x \(.height) px\n")) +
-    assert(.display_aspect_ratio;
-        field("\taspect ratio") + ": \(.display_aspect_ratio)\n") +
-    assert(.bit_rate;
-        field("\tbitrate") + ": \(.bit_rate | tonumber / 1000) kb/s\n") +
-    assert(.sample_rate; 
-        field("\tsample rate") + ": \(.sample_rate) hz\n") +
-    assert(.language;
+    + assert(.codec_name;
+        field("\tcodec") + ": " + codec("\(.codec_name)") + " (\(.codec_long_name))\n") 
+    + assert(.width; assert(.height;
+        field("\tresolution") + ": \(.width) x \(.height) px\n"))
+    + assert(.display_aspect_ratio;
+        field("\taspect ratio") + ": \(.display_aspect_ratio)\n")
+    + assert(.bit_rate;
+        field("\tbitrate") + ": \(.bit_rate | tonumber / 1000) kb/s\n")
+    + assert(.sample_rate; 
+        field("\tsample rate") + ": \(.sample_rate) hz\n") 
+    + assert(.language;
         field("\tlanguage") + ": \(.language)\n")
 
     '
