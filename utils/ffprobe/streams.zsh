@@ -66,6 +66,12 @@ ffprobe.streams () {
         else
             "\(t)"
         end;
+    def to_hms:
+        tonumber as $sec | 
+        ($sec / 3600 | floor | tostring | "00\(.)"[-2:]) as $h |
+        ($sec % 3600 / 60 | floor | tostring | "00\(.)"[-2:]) as $m |
+        ($sec % 60 | tostring | "00\(.)"[-2:]) as $s |
+        "\($h):\($m):\($s)";
     def assert(v; t):
         if v != null then
             "\(t)"
@@ -79,7 +85,7 @@ ffprobe.streams () {
     # for each stream in .[]
     (.[] |
         # print subject line, stream index, media type and duration
-        subject("Stream \(.index)") + ": " + media(.codec_type; "\(.codec_type) [\(.duration) seconds]\n") 
+        subject("Stream \(.index)") + ": " + media(.codec_type; "\(.codec_type) [\(.duration | to_hms)]\n") 
         
         # print fields and values
         + assert(.codec_name;
