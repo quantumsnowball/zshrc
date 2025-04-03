@@ -33,6 +33,7 @@ ffprobe.streams.info () {
 }
 ffprobe.streams () {
     ffprobe.streams.info $1 | jq -r '
+    # define colors
     def c:
     {
         "black": "\u001b[30m",
@@ -45,6 +46,7 @@ ffprobe.streams () {
         "white": "\u001b[37m",
         "nc": "\u001b[0m",
     };
+    # helpers
     def subject(t):
         "\(c.green)\(t)\(c.nc)";
     def codec(t):
@@ -59,13 +61,19 @@ ffprobe.streams () {
         else
             "\(t)"
         end;
+
+    
+    # print subject line, stream index, media type and duration
     subject("Stream \(.index)") + ": " + media(.codec_type; "\(.codec_type) [\(.duration) seconds]\n") +
+
+    # print fields and values
     field("\tcodec") + ": " + codec("\(.codec_name)") + " (\(.codec_long_name))\n" +
     field("\tresolution") + ": \(.width) x \(.height) px\n" +
     field("\taspect ratio") + ": \(.display_aspect_ratio)\n" +
     field("\tbitrate") + ": \(.bit_rate)\n" +
     field("\tsample rate") + ": \(.sample_rate)\n" +
     field("\tlanguage") + ": \(.language)\n"
+
     '
 }
 
