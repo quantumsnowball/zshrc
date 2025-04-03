@@ -70,8 +70,8 @@ ffprobe.streams () {
     field("\tcodec") + ": " + codec("\(.codec_name)") + " (\(.codec_long_name))\n" +
     field("\tresolution") + ": \(.width) x \(.height) px\n" +
     field("\taspect ratio") + ": \(.display_aspect_ratio)\n" +
-    field("\tbitrate") + ": \(.bit_rate)\n" +
-    field("\tsample rate") + ": \(.sample_rate)\n" +
+    field("\tbitrate") + ": \(.bit_rate | tonumber / 1000) kb/s\n" +
+    field("\tsample rate") + ": \(.sample_rate) hz\n" +
     field("\tlanguage") + ": \(.language)\n"
 
     '
