@@ -31,3 +31,15 @@ ffprobe.streams.info () {
             sample_rate,
         }'
 }
+ffprobe.streams () {
+    ffprobe.streams.info $1 | jq -r '
+    "Stream \(.index): \(.codec_type) [\(.duration) seconds]\n" +
+    "\tcodec: \(.codec_name) (\(.codec_long_name))\n" +
+    "\tresolution: \(.width) x \(.height) px\n" +
+    "\taspect ratio: \(.display_aspect_ratio)\n" +
+    "\tbitrate: \(.bit_rate)\n" +
+    "\tsample rate: \(.sample_rate)\n" +
+    "\tlanguage: \(.language)\n"
+    '
+}
+
