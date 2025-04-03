@@ -14,9 +14,20 @@ ffprobe.streams.info.raw () {
         $1
 }
 ffprobe.streams.info () {
-    ffprobe.streams.info.raw $1 | 
-        jq '.streams.[] | 
+    ffprobe.streams.info.raw $1 | jq '.streams.[] | 
         { 
-            codec_name 
+            index,
+            codec_type,
+            codec_name,
+            codec_long_name,
+            bit_rate,
+            language: .tags.language,
+            duration,
+
+            width,
+            height,
+            display_aspect_ratio,
+
+            sample_rate,
         }'
 }
