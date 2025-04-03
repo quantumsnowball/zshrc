@@ -11,5 +11,5 @@ ffprobe-streams () {
         -output_format json \
         -show_streams \
         -hide_banner\
-        $1
+        $1 | jq
 }
