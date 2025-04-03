@@ -1,11 +1,11 @@
 alias ffp=ffprobe.streams
 
-ffprobe.streams()
+ffprobe-streams-old()
 {
     python $HOME/.config/zshrc/utils/ffprobe/streams.py "$@"
 }
 
-ffprobe-streams () {
+ffprobe.streams () {
     ffprobe \
         -v quiet \
         -output_format json \
