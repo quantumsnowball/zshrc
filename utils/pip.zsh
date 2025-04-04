@@ -56,6 +56,7 @@ pip.install-basic()
 {
 # general
 pip install --no-input click 
+pip install --no-input colorama 
 pip install --no-input ipython 
 pip install --no-input jupyter 
 pip install --no-input pytest
@@ -71,4 +72,8 @@ pip install --no-input aiohttp
 # linting
 pip install --no-input mypy 
 pip install --no-input isort
+pip install --no-input autopep8
+# debug
+pip install --no-input pudb
+pip install --no-input debugpy
 }
