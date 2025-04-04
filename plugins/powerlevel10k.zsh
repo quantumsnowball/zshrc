@@ -24,6 +24,8 @@ typeset -g POWERLEVEL9K_CONTEXT_ROOT_BACKGROUND=8
 typeset -g POWERLEVEL9K_CONTEXT_{REMOTE,REMOTE_SUDO}_BACKGROUND=8  # 8=grey, 9=pink 
 typeset -g POWERLEVEL9K_CONTEXT_BACKGROUND=8
 typeset -g POWERLEVEL9K_ANACONDA_BACKGROUND=7
+typeset -g POWERLEVEL9K_ANACONDA_BACKGROUND=7
+typeset -g POWERLEVEL9K_VIRTUALENV_BACKGROUND=7
 #
 # FIXME: Horrific mess when resizing terminal window
 # - ref: https://github.com/romkatv/powerlevel10k/blob/dce00cdb5daaa8a519df234a7012ba3257b644d4/README.md#horrific-mess-when-resizing-terminal-window
@@ -45,6 +47,7 @@ os_icon                 # os identifier
 dir                     # current directory
 vcs                     # git status
 # right prompt migrate here
+virtualenv              # python virtual environment (https://docs.python.org/3/library/venv.html)
 anaconda                # conda environment (https://conda.io/)
 status                  # exit code of the last command
 command_execution_time  # duration of the last command
