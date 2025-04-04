@@ -1,6 +1,6 @@
 # auto activate this env
-if [[ -n "$TERMUX_VERSION" && -d "$HOME/.venv/py-venv/bin" ]]; then
-    source "$HOME/.venv/py-venv/bin/activate"
+if [[ -f "$HOME/.python/virtualenv/python/bin/activate" ]]; then
+    source "$HOME/.python/virtualenv/python/bin/activate"
 fi
 
 # NOTE:
@@ -10,5 +10,5 @@ fi
 #
 # to create a new venv, run:
 # (make sure include --system-site-packages flag to include pkg/apt packages)
-#   python -m venv --system-site-packages ~/.venv/py-venv
+#   virtualenv --system-site-packages ~/.python/virtualenv/<env-name>
 
