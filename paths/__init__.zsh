@@ -5,3 +5,16 @@ for item in $HOME/.config/zshrc/paths/*; do
         source $item
     fi
 done
+
+
+# remove some problematic windows path
+export PATH=$(
+    # unpack
+    echo "$PATH" | tr ':' '\n' | 
+
+    # exclude these lines
+    grep -v 'Documents/PowerShell/poshrc/scripts$' | 
+    
+    # repack
+    tr '\n' ':' | sed 's/:$//'
+)
