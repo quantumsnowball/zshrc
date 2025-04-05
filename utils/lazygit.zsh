@@ -9,16 +9,16 @@ lg () {
         # Define the base directory mapping
         local dir
         case $1 in
-            set | setting | settings | conf | config)
+            setting | settings )
                 cd "$HOME/.config/settings" && shift && lazygit $@
                 ;;
-            vi | nvim | vim | neovim)
+            nvim | neovim)
                 cd "$HOME/.config/nvim" && shift && lazygit $@
                 ;;
-            zshrc | shell | zsh)
+            zsh | zshrc)
                 cd "$HOME/.config/zshrc" && shift && lazygit $@
                 ;;
-            poshrc | posh)
+            posh | poshrc)
                 cd ~/winhome/Documents/WindowsPowerShell/poshrc && shift && lazygit $@
                 ;;
             tmux)
