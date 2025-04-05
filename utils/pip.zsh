@@ -1,18 +1,34 @@
 ensure pip || return
 
 
+# install
 alias pip.install='pip install'
 alias pipi=pip.install
 
+# install editable
+alias pip.install.editable='pip install -e'
+alias pipi.e=pip.install.editable
+
+# install editable (strict mode)
+# NOTE: pyright or other LSP may not able to discover normal eitable repo, then try strict mode editable
+# - everytime you change a file, need to restart LSP to reflect
+# - everytime you added new file or rename file, need to reinstall editable strict, then restart LSP
+# PEP ref: https://setuptools.pypa.io/en/latest/userguide/development_mode.html
+pip.install.editable-strict () { pip install -e $1 --config-settings editable_mode=strict }
+alias pipi.e-strict=pip.install.editable-strict
+
+# list
 alias pip.ls='pip list | bat'
 alias pipls=pip.ls
 
 alias pip.ls-grep='pip list | rg'
 alias piprg=pip.ls-grep
 
+# remove
 alias pip.remove='pip uninstall'
 alias piprm=pip.remove
 
+# update
 alias pip.update='pip list --outdated'
 alias pipu=pip.update
 
