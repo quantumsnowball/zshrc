@@ -27,13 +27,12 @@ lg () {
             ssh)
                 cd "$HOME/.config/ssh" && shift && lazygit $@
                 ;;
+            -h | --help)
+                echo "lg\n  Usage:\n    lg {set|nvim|zsh|posh|tmux|ssh|-h} [lazygit-args]\n"
+                lazygit --help
+                ;;
             *)
-                if [[ -d $1 && $1 == */ ]]; then
-                    cd $1 && shift && lazygit $@
-                else
-                    echo "Usage: lg {set|nvim|zsh|posh|tmux|ssh|<path>/} [lazygit-args]"
-                    return 1
-                fi
+                lazygit $@
                 ;;
         esac
     )
