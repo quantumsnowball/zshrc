@@ -2,7 +2,7 @@ ensure lazygit || return
 
 
 # lazygit
-lg () {
+g () {
     # run in a subshell
     # - can retain current directory
     (
