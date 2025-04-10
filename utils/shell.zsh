@@ -6,7 +6,6 @@ else
 fi
 alias root='/bin/sudo -E -s'
 # clear
-alias c=clear
 alias cl=clear
 # reload shell
 zsh.reload-shell () {

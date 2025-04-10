@@ -3,7 +3,7 @@ ensure git || return
 
 # nvim editor config repos directly
 # NOTE: run in a subshell can retain current directory
-cf () {
+c () {
     (
         case $1 in
             setting | settings)
