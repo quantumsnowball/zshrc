@@ -80,7 +80,13 @@ ffprobe.streams () {
     "\n\t< ffprobe: total \(. | length) stream(s) >\n",
 
     # for each stream in .[]
-    (.[] |
+    (.[] as $stream | 
+
+        # apply filter by overwriting with new values
+        $stream + { 
+            r_frame_rate: (if $stream.r_frame_rate != "0/0" then $stream.r_frame_rate else null end)
+        } |
+
         # print subject line, stream index, media type and duration
         subject("Stream \(.index)") + ": " + media(.codec_type; "\(.codec_type) [\(.duration | to_hms)]\n") 
         
