@@ -19,6 +19,7 @@ ffprobe.streams.info () {
             codec_type,
             codec_name,
             codec_long_name,
+            r_frame_rate,
             bit_rate,
             language: .tags.language,
             duration,
@@ -100,4 +101,3 @@ ffprobe.streams () {
 
     '
 }
-
