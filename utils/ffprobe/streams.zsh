@@ -91,6 +91,8 @@ ffprobe.streams () {
             field("\tresolution") + ": \(.width) x \(.height) px\n"))
         + assert(.display_aspect_ratio;
             field("\taspect ratio") + ": \(.display_aspect_ratio)\n")
+        + assert(.r_frame_rate;
+            field("\tframe rate") + ": \(.r_frame_rate)\n")
         + assert(.bit_rate;
             field("\tbitrate") + ": \(.bit_rate | tonumber / 1000) kb/s\n")
         + assert(.sample_rate; 
