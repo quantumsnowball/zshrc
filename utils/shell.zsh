@@ -36,3 +36,6 @@ zsh.completion.toggle_dotfiles_visibility() {
         echo "zsh globdots: ${CYAN}ENABLED${YELLOW} (dotfiles will be shown)${RESET}"
     fi
 }
+# explorer.exe
+alias ex=explorer.exe
+alias ex.='explorer.exe .'
