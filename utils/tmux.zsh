@@ -14,3 +14,5 @@ alias t.attach-to=tmux.attach-to
 alias tn=tmux.create-new-session
 alias tls=tmux.list-sessions
 alias ta=tmux.attach-to
+# helpers
+alias ta0='tmux.attach-to 0'
