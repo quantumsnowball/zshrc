@@ -48,3 +48,4 @@ up() {
     # snap
     installed snap && echo '<<< snap update >>>' && snapup
 }
+alias ups='up; s'
