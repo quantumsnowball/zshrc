@@ -42,10 +42,10 @@ alias ex.='explorer.exe .'
 # update system
 up() {
     # ubuntu / termux
-    installed apt && echo '<<< apt update >>>' && aptup
+    installed apt && echo '<<< apt update >>>' && eval aptup
     # arch
-    installed pacman && echo '<<< pacman update >>>' && pmup
+    installed pacman && echo '<<< pacman update >>>' && eval pmup
     # snap
-    installed snap && echo '<<< snap update >>>' && snapup
+    installed snap && echo '<<< snap update >>>' && eval snapup
 }
 alias ups='up; s'
