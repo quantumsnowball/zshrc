@@ -39,3 +39,12 @@ zsh.completion.toggle_dotfiles_visibility() {
 # explorer.exe
 alias ex=explorer.exe
 alias ex.='explorer.exe .'
+# update system
+up() {
+    # ubuntu / termux
+    installed apt && echo '<<< apt update >>>' && aptup
+    # arch
+    installed pacman && echo '<<< pacman update >>>' && pmup
+    # snap
+    installed snap && echo '<<< snap update >>>' && snapup
+}
