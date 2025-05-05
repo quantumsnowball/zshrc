@@ -26,6 +26,7 @@ ffprobe.streams.info () {
 
             width,
             height,
+            sample_aspect_ratio,
             display_aspect_ratio,
 
             sample_rate,
