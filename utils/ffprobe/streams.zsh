@@ -96,8 +96,10 @@ ffprobe.streams () {
             field("\tcodec") + ": " + codec("\(.codec_name)") + " (\(.codec_long_name))\n") 
         + assert(.width; assert(.height;
             field("\tresolution") + ": \(.width) x \(.height) px\n"))
+        + assert(.sample_aspect_ratio;
+            field("\tsample aspect ratio") + ": \(.sample_aspect_ratio)\n")
         + assert(.display_aspect_ratio;
-            field("\taspect ratio") + ": \(.display_aspect_ratio)\n")
+            field("\tdisplay aspect ratio") + ": \(.display_aspect_ratio)\n")
         + assert(.r_frame_rate;
             field("\tframe rate") + ": \(.r_frame_rate)\n")
         + assert(.bit_rate;
