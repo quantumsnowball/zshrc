@@ -55,3 +55,4 @@ ups() {
     echo "\n\n${YELLOW}<<< sync configs >>>${RESET}\n"
     eval s
 }
+alias u=ups
