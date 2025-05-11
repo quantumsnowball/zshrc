@@ -46,7 +46,7 @@ up() {
     # arch
     installed pacman && echo "\n${YELLOW}<<< pacman update >>>${RESET}\n" && eval pmup
     # snap
-     snap && echo "\n${YELLOW}<<< snap update >>>${RESET}\n" && eval snapup
+    installed snap && echo "\n${YELLOW}<<< snap update >>>${RESET}\n" && eval snapup
 }
 ups() {
     # update all packages
