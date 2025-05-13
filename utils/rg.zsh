@@ -12,5 +12,7 @@ rg.less () {
         --chop-long-line \
         --RAW-CONTROL-CHARS \
         --LINE-NUMBERS \
-        --tilde
+        --tilde \
+        --use-color \
+        --color=Nk \
 }
