@@ -7,9 +7,10 @@ rg.less () {
         --heading \
         --colors='path:fg:yellow' \
         "$1" | 
-    # c - clear screen
-    # S - no wrap
-    # R - raw char with color
-    # N - print line number
-    less -cSRN
+    less \
+        --clear-screen \
+        --chop-long-line \
+        --RAW-CONTROL-CHARS \
+        --LINE-NUMBERS \
+        --tilde
 }
