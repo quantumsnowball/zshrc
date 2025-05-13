@@ -6,7 +6,7 @@ rg.less () {
         --color=always \
         --heading \
         --colors='path:fg:yellow' \
-        "$1" | 
+        "$@" | 
     less \
         --clear-screen \
         --chop-long-line \
