@@ -16,3 +16,4 @@ rg.less () {
         --use-color \
         --color=Nk \
 }
+alias rg.hidden.less='rg.less --hidden'
