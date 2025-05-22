@@ -23,6 +23,7 @@ ffprobe.streams.info () {
             bit_rate,
             language: .tags.language,
             duration,
+            nb_frames,
 
             width,
             height,
@@ -102,6 +103,8 @@ ffprobe.streams () {
             field("\tdisplay aspect ratio") + ": \(.display_aspect_ratio)\n")
         + assert(.r_frame_rate;
             field("\tframe rate") + ": \(.r_frame_rate)\n")
+        + assert(.nb_frames;
+            field("\tframe count") + ": \(.nb_frames)\n")
         + assert(.bit_rate;
             field("\tbitrate") + ": \(.bit_rate | tonumber / 1000) kb/s\n")
         + assert(.sample_rate; 
