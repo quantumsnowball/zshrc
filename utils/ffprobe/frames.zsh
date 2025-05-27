@@ -5,6 +5,12 @@ ffprobe.frames.distribution () {
     local K_char='K'
     local UN_char='?'
 
+    # Print marks
+    echo ''
+    echo "${BLUE}     predicted frames : '$P_char'${RESET}"
+    echo "${CYAN}bi-directional frames : '$B_char'${RESET}"
+    echo  "${RED}           key frames : '$K_char'${RESET}"
+
     # Print ruler
     local ruler=""
     local marks=""
@@ -16,6 +22,7 @@ ffprobe.frames.distribution () {
             ruler+=" "
         fi
     done
+    echo ''
     echo "${YELLOW}$marks${RESET}"
     echo "${YELLOW}$ruler${RESET}"
 
