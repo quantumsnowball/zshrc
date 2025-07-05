@@ -1,9 +1,9 @@
 ffmpeg.cut()
 {
-  local usage="Usage: ffmpeg.cut -ss/--start START -t/--end END -i/--input INPUT OUTPUT"
+  local usage="Usage: ffmpeg.cut -ss/--start START -to/--end END -i/--input INPUT OUTPUT"
 
   # parse opts
-  local input ss t output
+  local input ss to output
   while [[ $# -gt 0 ]]; do
     case $1 in
       -i|--input)
@@ -16,8 +16,8 @@ ffmpeg.cut()
         shift # past argument
         shift # past value
         ;;
-      -t|--end)
-        t="$2"
+      -to|--end)
+        to="$2"
         shift # past argument
         shift # past value
         ;;
@@ -39,16 +39,16 @@ ffmpeg.cut()
   done
 
   # ensure all options and arg exist
-  if [[ -z $input || -z $ss || -z $t || -z $output ]]; then
+  if [[ -z $input || -z $ss || -z $to || -z $output ]]; then
     echo $usage
     return 1
   fi
 
-  # insert subtitles by ffmpeg
+  # run ffmpeg to cut the video and ls output file
   ffmpeg \
     -v warning \
     -ss $ss \
-    -t $t \
+    -to $to \
     -i $input \
     -vcodec copy \
     -acodec copy \
