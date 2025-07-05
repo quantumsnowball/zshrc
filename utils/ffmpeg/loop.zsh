@@ -44,6 +44,15 @@ ffmpeg.loop()
     return 1
   fi
 
-  # 
-  echo ffmpeg.loop
+  # create tempdir
+  local tempdir=".ffmpeg.loop"
+  mkdir -p $tempdir
+
+  # extract source segment
+  # spec: vf[0|1].hf[0|1].[fwd|bwd].mp4 total 8 files
+  # original
+  ffmpeg -v warning -ss $ss -to $to -i $input -vcodec copy -acodec copy "$tempdir/vf0.hf0.fwd.mp4"
+
+  # delete tree tempdir
+  #
 }
