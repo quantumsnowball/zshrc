@@ -63,7 +63,7 @@ ffmpeg.loop()
   # spec: [fwd|rev].vf[0|1].hf[0|1].mp4 total 8 files
 
   # original
-  ffmpeg -v warning -ss $ss -to $to -i $input -vcodec copy -acodec copy "$tempdir/fwd.vf0.hf0.mp4"
+  ffmpeg -v warning -i $input -ss $ss -to $to -vcodec libx264 -acodec aac "$tempdir/fwd.vf0.hf0.mp4"
   echo 'part 1 done'
   # hflip
   ffmpeg -v warning -i "$tempdir/fwd.vf0.hf0.mp4" -vf hflip "$tempdir/fwd.vf0.hf1.mp4"
