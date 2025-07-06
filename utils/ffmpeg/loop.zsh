@@ -59,18 +59,26 @@ ffmpeg.loop()
 
   # original
   ffmpeg -v warning -ss $ss -to $to -i $input -vcodec copy -acodec copy "$tempdir/fwd.vf0.hf0.mp4"
+  echo '1'
   # hflip
   ffmpeg -v warning -i "$tempdir/fwd.vf0.hf0.mp4" -vf hflip "$tempdir/fwd.vf0.hf1.mp4"
+  echo '2'
   # vflip
   ffmpeg -v warning -i "$tempdir/fwd.vf0.hf0.mp4" -vf vflip "$tempdir/fwd.vf1.hf0.mp4"
+  echo '3'
   # vflip + hflip
   ffmpeg -v warning -i "$tempdir/fwd.vf0.hf0.mp4" -vf vflip,hflip "$tempdir/fwd.vf1.hf1.mp4"
+  echo '4'
 
   # reverse
   ffmpeg -v warning -i "$tempdir/fwd.vf0.hf0.mp4" -vf reverse -af areverse "$tempdir/rev.vf0.hf0.mp4"
+  echo '5'
   ffmpeg -v warning -i "$tempdir/fwd.vf0.hf1.mp4" -vf reverse -af areverse "$tempdir/rev.vf0.hf1.mp4"
+  echo '6'
   ffmpeg -v warning -i "$tempdir/fwd.vf1.hf0.mp4" -vf reverse -af areverse "$tempdir/rev.vf1.hf0.mp4"
+  echo '7'
   ffmpeg -v warning -i "$tempdir/fwd.vf1.hf1.mp4" -vf reverse -af areverse "$tempdir/rev.vf1.hf1.mp4"
+  echo '8'
 
   # concat all parts as output file
   for ((i=1; i<=rr; i++)); do
@@ -84,6 +92,7 @@ ffmpeg.loop()
     echo "file rev.vf1.hf1.mp4" >> "$tempdir/list.txt"
   done
   ffmpeg -v warning -f concat -safe 0 -i "$tempdir/list.txt" -c copy $output
+  echo 'done'
 
   # delete tree tempdir
   rm -rf $tempdir
