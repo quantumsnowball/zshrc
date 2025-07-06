@@ -78,5 +78,5 @@ ffmpeg.loop()
   ffmpeg -f concat -safe 0 -i "$tempdir/list.txt" -c copy $output
 
   # delete tree tempdir
-  #
+  rm -rf $tempdir
 }
