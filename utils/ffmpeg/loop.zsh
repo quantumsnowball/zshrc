@@ -59,6 +59,12 @@ ffmpeg.loop()
   # vflip + hflip
   ffmpeg -v warning -i "$tempdir/vf0.hf0.fwd.mp4" -vf vflip,hflip "$tempdir/vf1.hf1.fwd.mp4"
 
+  # reverse
+  ffmpeg -v warning -i "$tempdir/vf0.hf0.fwd.mp4" -vf reverse -af areverse "$tempdir/vf0.hf0.bwd.mp4"
+  ffmpeg -v warning -i "$tempdir/vf0.hf1.fwd.mp4" -vf reverse -af areverse "$tempdir/vf0.hf1.bwd.mp4"
+  ffmpeg -v warning -i "$tempdir/vf1.hf0.fwd.mp4" -vf reverse -af areverse "$tempdir/vf1.hf0.bwd.mp4"
+  ffmpeg -v warning -i "$tempdir/vf1.hf1.fwd.mp4" -vf reverse -af areverse "$tempdir/vf1.hf1.bwd.mp4"
+
   # delete tree tempdir
   #
 }
