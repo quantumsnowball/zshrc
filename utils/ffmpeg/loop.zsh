@@ -1,9 +1,10 @@
 ffmpeg.loop()
 {
-  local usage="Usage: ffmpeg.cut -ss/--start START -to/--end END -i/--input INPUT OUTPUT"
+  local usage="Usage: ffmpeg.cut -rr REPEAT -ss/--start START -to/--end END -i/--input INPUT OUTPUT"
 
   # parse opts
   local input ss to output
+  local rr=1
   while [[ $# -gt 0 ]]; do
     case $1 in
       -i|--input)
@@ -18,6 +19,11 @@ ffmpeg.loop()
         ;;
       -to|--end)
         to="$2"
+        shift # past argument
+        shift # past value
+        ;;
+      -rr|--repeat)
+        rr="$2"
         shift # past argument
         shift # past value
         ;;
@@ -67,14 +73,16 @@ ffmpeg.loop()
   ffmpeg -v warning -i "$tempdir/fwd.vf1.hf1.mp4" -vf reverse -af areverse "$tempdir/rev.vf1.hf1.mp4"
 
   # concat all parts as output file
-  echo "file fwd.vf0.hf0.mp4" >> "$tempdir/list.txt"
-  echo "file rev.vf0.hf0.mp4" >> "$tempdir/list.txt"
-  echo "file fwd.vf0.hf1.mp4" >> "$tempdir/list.txt"
-  echo "file rev.vf0.hf1.mp4" >> "$tempdir/list.txt"
-  echo "file fwd.vf1.hf0.mp4" >> "$tempdir/list.txt"
-  echo "file rev.vf1.hf0.mp4" >> "$tempdir/list.txt"
-  echo "file fwd.vf1.hf1.mp4" >> "$tempdir/list.txt"
-  echo "file rev.vf1.hf1.mp4" >> "$tempdir/list.txt"
+  for ((i=1; i<=rr; i++)); do
+    echo "file fwd.vf0.hf0.mp4" >> "$tempdir/list.txt"
+    echo "file rev.vf0.hf0.mp4" >> "$tempdir/list.txt"
+    echo "file fwd.vf0.hf1.mp4" >> "$tempdir/list.txt"
+    echo "file rev.vf0.hf1.mp4" >> "$tempdir/list.txt"
+    echo "file fwd.vf1.hf0.mp4" >> "$tempdir/list.txt"
+    echo "file rev.vf1.hf0.mp4" >> "$tempdir/list.txt"
+    echo "file fwd.vf1.hf1.mp4" >> "$tempdir/list.txt"
+    echo "file rev.vf1.hf1.mp4" >> "$tempdir/list.txt"
+  done
   ffmpeg -v warning -f concat -safe 0 -i "$tempdir/list.txt" -c copy $output
 
   # delete tree tempdir
