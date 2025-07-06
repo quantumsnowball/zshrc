@@ -1,10 +1,11 @@
 ffmpeg.loop()
 {
-  local usage="Usage: ffmpeg.cut -rr REPEAT -ss/--start START -to/--end END -i/--input INPUT OUTPUT"
+  local usage="Usage: ffmpeg.cut -rr REPEAT --reverse -ss/--start START -to/--end END -i/--input INPUT OUTPUT"
 
   # parse opts
   local input ss to output
   local rr=1
+  local reverse=0
   while [[ $# -gt 0 ]]; do
     case $1 in
       -i|--input)
@@ -26,6 +27,10 @@ ffmpeg.loop()
         rr="$2"
         shift # past argument
         shift # past value
+        ;;
+      --reverse)
+        reverse=1
+        shift # past argument
         ;;
       -*|--*)
         echo "Unknown option $1"
@@ -59,40 +64,42 @@ ffmpeg.loop()
 
   # original
   ffmpeg -v warning -ss $ss -to $to -i $input -vcodec copy -acodec copy "$tempdir/fwd.vf0.hf0.mp4"
-  echo '1'
+  echo 'part 1 done'
   # hflip
   ffmpeg -v warning -i "$tempdir/fwd.vf0.hf0.mp4" -vf hflip "$tempdir/fwd.vf0.hf1.mp4"
-  echo '2'
+  echo 'part 2 done'
   # vflip
   ffmpeg -v warning -i "$tempdir/fwd.vf0.hf0.mp4" -vf vflip "$tempdir/fwd.vf1.hf0.mp4"
-  echo '3'
+  echo 'part 3 done'
   # vflip + hflip
   ffmpeg -v warning -i "$tempdir/fwd.vf0.hf0.mp4" -vf vflip,hflip "$tempdir/fwd.vf1.hf1.mp4"
-  echo '4'
+  echo 'part 4 done'
 
   # reverse
-  ffmpeg -v warning -i "$tempdir/fwd.vf0.hf0.mp4" -vf reverse -af areverse "$tempdir/rev.vf0.hf0.mp4"
-  echo '5'
-  ffmpeg -v warning -i "$tempdir/fwd.vf0.hf1.mp4" -vf reverse -af areverse "$tempdir/rev.vf0.hf1.mp4"
-  echo '6'
-  ffmpeg -v warning -i "$tempdir/fwd.vf1.hf0.mp4" -vf reverse -af areverse "$tempdir/rev.vf1.hf0.mp4"
-  echo '7'
-  ffmpeg -v warning -i "$tempdir/fwd.vf1.hf1.mp4" -vf reverse -af areverse "$tempdir/rev.vf1.hf1.mp4"
-  echo '8'
+  if (( reverse == 1 )); then
+    ffmpeg -v warning -i "$tempdir/fwd.vf0.hf0.mp4" -vf reverse -af areverse "$tempdir/rev.vf0.hf0.mp4"
+    echo 'part 5 done'
+    ffmpeg -v warning -i "$tempdir/fwd.vf0.hf1.mp4" -vf reverse -af areverse "$tempdir/rev.vf0.hf1.mp4"
+    echo 'part 6 done'
+    ffmpeg -v warning -i "$tempdir/fwd.vf1.hf0.mp4" -vf reverse -af areverse "$tempdir/rev.vf1.hf0.mp4"
+    echo 'part 7 done'
+    ffmpeg -v warning -i "$tempdir/fwd.vf1.hf1.mp4" -vf reverse -af areverse "$tempdir/rev.vf1.hf1.mp4"
+    echo 'part 8 done'
+  fi
 
   # concat all parts as output file
   for ((i=1; i<=rr; i++)); do
     echo "file fwd.vf0.hf0.mp4" >> "$tempdir/list.txt"
-    echo "file rev.vf0.hf0.mp4" >> "$tempdir/list.txt"
+    [ $reverse -eq 1 ] && echo "file rev.vf0.hf0.mp4" >> "$tempdir/list.txt"
     echo "file fwd.vf0.hf1.mp4" >> "$tempdir/list.txt"
-    echo "file rev.vf0.hf1.mp4" >> "$tempdir/list.txt"
+    [ $reverse -eq 1 ] && echo "file rev.vf0.hf1.mp4" >> "$tempdir/list.txt"
     echo "file fwd.vf1.hf0.mp4" >> "$tempdir/list.txt"
-    echo "file rev.vf1.hf0.mp4" >> "$tempdir/list.txt"
+    [ $reverse -eq 1 ] && echo "file rev.vf1.hf0.mp4" >> "$tempdir/list.txt"
     echo "file fwd.vf1.hf1.mp4" >> "$tempdir/list.txt"
-    echo "file rev.vf1.hf1.mp4" >> "$tempdir/list.txt"
+    [ $reverse -eq 1 ] && echo "file rev.vf1.hf1.mp4" >> "$tempdir/list.txt"
   done
   ffmpeg -v warning -f concat -safe 0 -i "$tempdir/list.txt" -c copy $output
-  echo 'done'
+  echo 'final part done'
 
   # delete tree tempdir
   rm -rf $tempdir
