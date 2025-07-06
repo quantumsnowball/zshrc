@@ -66,6 +66,17 @@ ffmpeg.loop()
   ffmpeg -v warning -i "$tempdir/fwd.vf1.hf0.mp4" -vf reverse -af areverse "$tempdir/rev.vf1.hf0.mp4"
   ffmpeg -v warning -i "$tempdir/fwd.vf1.hf1.mp4" -vf reverse -af areverse "$tempdir/rev.vf1.hf1.mp4"
 
+  # concat all parts as output file
+  echo "file fwd.vf0.hf0.mp4" >> "$tempdir/list.txt"
+  echo "file rev.vf0.hf0.mp4" >> "$tempdir/list.txt"
+  echo "file fwd.vf0.hf1.mp4" >> "$tempdir/list.txt"
+  echo "file rev.vf0.hf1.mp4" >> "$tempdir/list.txt"
+  echo "file fwd.vf1.hf0.mp4" >> "$tempdir/list.txt"
+  echo "file rev.vf1.hf0.mp4" >> "$tempdir/list.txt"
+  echo "file fwd.vf1.hf1.mp4" >> "$tempdir/list.txt"
+  echo "file rev.vf1.hf1.mp4" >> "$tempdir/list.txt"
+  ffmpeg -f concat -safe 0 -i "$tempdir/list.txt" -c copy $output
+
   # delete tree tempdir
   #
 }
