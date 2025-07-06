@@ -75,7 +75,7 @@ ffmpeg.loop()
   echo "file rev.vf1.hf0.mp4" >> "$tempdir/list.txt"
   echo "file fwd.vf1.hf1.mp4" >> "$tempdir/list.txt"
   echo "file rev.vf1.hf1.mp4" >> "$tempdir/list.txt"
-  ffmpeg -f concat -safe 0 -i "$tempdir/list.txt" -c copy $output
+  ffmpeg -v warning -f concat -safe 0 -i "$tempdir/list.txt" -c copy $output
 
   # delete tree tempdir
   rm -rf $tempdir
