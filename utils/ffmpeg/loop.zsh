@@ -52,6 +52,12 @@ ffmpeg.loop()
   # spec: vf[0|1].hf[0|1].[fwd|bwd].mp4 total 8 files
   # original
   ffmpeg -v warning -ss $ss -to $to -i $input -vcodec copy -acodec copy "$tempdir/vf0.hf0.fwd.mp4"
+  # hflip
+  ffmpeg -v warning -i "$tempdir/vf0.hf0.fwd.mp4" -vf hflip "$tempdir/vf0.hf1.fwd.mp4"
+  # vflip
+  ffmpeg -v warning -i "$tempdir/vf0.hf0.fwd.mp4" -vf vflip "$tempdir/vf1.hf0.fwd.mp4"
+  # vflip + hflip
+  ffmpeg -v warning -i "$tempdir/vf0.hf0.fwd.mp4" -vf vflip,hflip "$tempdir/vf1.hf1.fwd.mp4"
 
   # delete tree tempdir
   #
