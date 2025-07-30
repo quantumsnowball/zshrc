@@ -36,7 +36,10 @@ ffmpeg.concat()
 
   # generate list file
   while test $# -gt 0; do
-      echo "file '$1'" >> $listfile
+      # escape single quote, replacing ' with '\''
+      escaped="${1//'/'\''}"
+      #
+      echo "file '$escaped'" >> $listfile
       shift
   done
 
