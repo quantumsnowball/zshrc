@@ -56,3 +56,5 @@ ups() {
     eval s
 }
 alias u=ups
+# fix enter key not working print ^M
+alias zsh.fix_enter_key='stty sane'
