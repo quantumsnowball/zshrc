@@ -20,6 +20,7 @@ ffprobe.streams.info () {
             codec_name,
             codec_long_name,
             r_frame_rate,
+            avg_frame_rate,
             bit_rate,
             language: .tags.language,
             duration,
@@ -86,7 +87,8 @@ ffprobe.streams () {
 
         # apply filter by overwriting with new values
         $stream + { 
-            r_frame_rate: (if $stream.r_frame_rate != "0/0" then $stream.r_frame_rate else null end)
+            r_frame_rate: (if $stream.r_frame_rate != "0/0" then $stream.r_frame_rate else null end),
+            avg_frame_rate: (if $stream.avg_frame_rate != "0/0" then $stream.avg_frame_rate else null end),
         } |
 
         # print subject line, stream index, media type and duration
@@ -103,6 +105,8 @@ ffprobe.streams () {
             field("\tdisplay aspect ratio") + ": \(.display_aspect_ratio)\n")
         + assert(.r_frame_rate;
             field("\tframe rate") + ": \(.r_frame_rate)\n")
+        + assert(.avg_frame_rate;
+            field("\taverage frame rate") + ": \(.avg_frame_rate | split("/") | (.[0]|tonumber) / (.[1]|tonumber) | .*100 | round / 100) (\(.avg_frame_rate))\n")
         + assert(.nb_frames;
             field("\tframe count") + ": \(.nb_frames)\n")
         + assert(.bit_rate;
