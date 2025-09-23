@@ -14,6 +14,12 @@ bindkey -a -r ':'
 bindkey "^?" backward-delete-char
 bindkey "\e[3~" delete-char
 
+# enable editor for long command
+autoload -U edit-command-line
+zle -N edit-command-line
+# in vi-mode ctrl-E to edit command using EDITOR
+bindkey -M vicmd '^E' edit-command-line
+
 # vi mode key bindings
 # Home, End
 bindkey -M vicmd 'gh' vi-beginning-of-line
