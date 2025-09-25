@@ -1,6 +1,6 @@
-ensure yarn || return
-
-
-# yarn
-export PATH=~/.yarn/bin:$PATH
-
+# ensure yarn || return
+#
+#
+# # yarn
+# export PATH=~/.yarn/bin:$PATH
+#
