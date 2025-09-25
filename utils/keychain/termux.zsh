@@ -23,8 +23,8 @@ kc.add () {
     # normally boot up keychain
     kc.start
 
-    # then add default keys
-    ssh-add
+    # then add default key or custom key
+    ssh-add $1
 }
 alias kc=kc.add
 
