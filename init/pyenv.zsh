@@ -1,4 +1,6 @@
 # pyenv
-# eval "$(pyenv init --path)"
-# eval "$(pyenv virtualenv-init -)"
+eval "$(pyenv init - zsh)"
+eval "$(pyenv virtualenv-init -)"
 
+# default shell env
+pyenv activate python-3.14.0
