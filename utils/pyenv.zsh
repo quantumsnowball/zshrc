@@ -13,7 +13,7 @@ alias pyenv.which='pyenv which'
 alias pyenv.venv.create='pyenv virtualenv'
 alias pyenvmk='pyenv.venv.create'
 
-alias pyenv.venv.ls='pyenv virtualenvs --bare --skip-aliases'
+alias pyenv.venv.ls="pyenv virtualenvs --bare --skip-aliases | awk -F'/' '{print \$1 \"/\" \$2 \"/\" \"$YELLOW\" \$3 \"$RESET\"}'"
 alias pyenvls='pyenv.venv.ls'
 
 alias pyenv.venv.rm='pyenv virtualenv-delete'
