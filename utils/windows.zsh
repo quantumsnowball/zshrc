@@ -1,3 +1,5 @@
+[[ -n "$WSL_DISTRO_NAME" ]] || return
+
 # Windows path appending slows down shell installed() check significantly
 #
 # 1. disable append path to wsl by:
