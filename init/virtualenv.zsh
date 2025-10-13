@@ -1,3 +1,6 @@
+# for PC use pyenv, virtualenv just for termux
+[ -v TERMUX_VERSION ] || return
+
 # auto activate this env
 if [[ -f "$HOME/.python/virtualenv/python/bin/activate" ]]; then
     source "$HOME/.python/virtualenv/python/bin/activate"
