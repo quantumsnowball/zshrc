@@ -10,3 +10,6 @@
 # explorer
 alias explorer='/mnt/c/Windows/explorer.exe'
 alias ex=explorer
+
+# vscode
+alias code='/winhost/home/AppData/Local/Programs/Microsoft\ VS\ Code/bin/code'
