@@ -1,3 +1,5 @@
+ensure pyenv || return
+
 # pyenv
 eval "$(pyenv init - zsh)"
 eval "$(pyenv virtualenv-init -)"
