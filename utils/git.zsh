@@ -20,8 +20,7 @@ git.log.diff.fzf() {
         fzf --height=-1 \
             --preview-window=right,60% \
             --preview 'git show --color=always {1} | bat --color=always --style=auto' \
-            --bind 'enter:execute(git show {1} | bat --color=always)' \
-            --bind 'ctrl-b:preview-up,ctrl-f:preview-down'
+            --bind 'enter:execute(git show {1} | bat --color=always)'
 }
 
 #helpers
