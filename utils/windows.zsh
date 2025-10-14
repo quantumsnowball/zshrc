@@ -19,7 +19,7 @@ alias explorer='/mnt/c/Windows/explorer.exe'
 alias ex=explorer
 
 # vscode
-alias code='/winhost/home/AppData/Local/Programs/Microsoft\ VS\ Code/bin/code'
+alias code="/mnt/c/Users/$(windows.whoami)/AppData/Local/Programs/Microsoft\ VS\ Code/bin/code"
 
 # windows terminal
-alias windows.terminal.config='nvim ~/winhost/home/AppData/Local/Packages/Microsoft.WindowsTerminal_*/LocalState/settings.json'
+alias windows.terminal.config='nvim /mnt/c/Users/$(windows.whoami)/AppData/Local/Packages/Microsoft.WindowsTerminal_*/LocalState/settings.json'
