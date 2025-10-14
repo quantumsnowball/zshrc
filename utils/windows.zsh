@@ -15,3 +15,6 @@ alias ex=explorer
 
 # vscode
 alias code='/winhost/home/AppData/Local/Programs/Microsoft\ VS\ Code/bin/code'
+
+# windows terminal
+alias windows.terminal.config='nvim ~/winhost/home/AppData/Local/Packages/Microsoft.WindowsTerminal_*/LocalState/settings.json'
