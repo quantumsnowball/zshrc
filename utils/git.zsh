@@ -11,8 +11,13 @@ ensure git || return
 export GIT_PAGER="less"
 
 # git
-alias gts='git status -uall'
-alias gtl='git log --oneline'
+alias git.log='git log --oneline --all'
+git.log.grep() {
+    git log --oneline --all -i --grep="$1"
+}
+git.log.diff.fzf() {
+    git log -S "$1" --oneline --all -i | fzf --height=-1 --preview 'git show {1} | bat --color=always --style=auto' --bind 'enter:execute(git show {1} | bat --color=always)+abort'
+}
 
 #helpers
 gh.clone-my-repo() {
