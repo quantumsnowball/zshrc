@@ -16,7 +16,12 @@ git.log.grep() {
     git log --oneline --all -i --grep="$1"
 }
 git.log.diff.fzf() {
-    git log -S "$1" --oneline --all -i | fzf --height=-1 --preview 'git show {1} | bat --color=always --style=auto' --bind 'enter:execute(git show {1} | bat --color=always)+abort'
+    git log -S "$1" --oneline --all -i |
+        fzf --height=-1 \
+            --preview-window=right,60% \
+            --preview 'git show --color=always {1} | bat --color=always --style=auto' \
+            --bind 'enter:execute(git show {1} | bat --color=always)+abort' \
+            --bind 'ctrl-b:preview-up,ctrl-f:preview-down'
 }
 
 #helpers
