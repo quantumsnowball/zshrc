@@ -7,6 +7,8 @@ export myghssh=git@github.com:$myghname
 
 ensure git || return
 
+# pager
+export GIT_PAGER="less"
 
 # git
 alias gts='git status -uall'
