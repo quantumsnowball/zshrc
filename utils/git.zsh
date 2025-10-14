@@ -22,6 +22,15 @@ git.log.diff.fzf() {
             --preview 'git show --color=always {1} | bat --color=always --style=auto' \
             --bind 'enter:execute(git show {1} | bat --color=always)'
 }
+git.blame.fzf() {
+    file=$(git ls-files | fzf)
+    [ -n "$file" ] && \
+        git blame "$file" |
+            fzf --height=-1 \
+                --preview-window=bottom,60% \
+                --preview 'git show {1} | bat --color=always --style=auto' \
+                --bind 'enter:execute(git show {1} | bat --color=always)' \
+}
 
 #helpers
 gh.clone-my-repo() {
