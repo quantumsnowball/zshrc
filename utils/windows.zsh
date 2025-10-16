@@ -9,11 +9,6 @@
 # 2. then set alias to call useful windows app here below:
 #
 
-# whoami
-windows.whoami() {
-    /mnt/c/Windows/System32/whoami.exe | awk -F'\\' '{print $2}' | tr -d '\r'
-}
-
 # explorer
 alias explorer='/mnt/c/Windows/explorer.exe'
 alias ex=explorer
