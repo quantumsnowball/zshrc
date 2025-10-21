@@ -5,7 +5,9 @@ installed yay || return
 alias yay.install='sudo yay -S'
 alias yayi=yay.install
 
-alias yay.search='yay -Ss'
+yay.search() {
+    yay -Ss "$1" | sed 's/\x1B\]8;;[^\\]*\\//g' | fzf
+}
 alias yays=yay.search
 
 alias yay.ls='yay -Q'
