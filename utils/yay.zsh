@@ -2,7 +2,7 @@ installed yay || return
 
 
 # pacman
-alias yay.install='sudo yay -S'
+alias yay.install='yay -S'
 alias yayi=yay.install
 
 yay.search() {
