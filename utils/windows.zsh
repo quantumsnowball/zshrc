@@ -11,7 +11,7 @@
 
 # explorer
 alias explorer="$WINDOWS_WINDOWS/explorer.exe"
-alias ex=explorer
+alias e=explorer
 
 # vscode
 alias code="$WINDOWS_APPDATA/Local/Programs/Microsoft\ VS\ Code/bin/code"
