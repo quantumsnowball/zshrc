@@ -1,3 +1,5 @@
+# The stty sane command is a preset that resets the terminal settings to a reasonable and stable state.
+stty sane
 # sudo
 if [[ -v TERMUX_VERSION ]]; then
     alias sudo=''
