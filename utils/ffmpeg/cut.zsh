@@ -45,11 +45,13 @@ ffmpeg.cut()
   fi
 
   # run ffmpeg to cut the video and ls output file
+  # -ss before -i will fast seek to nearest keyframe before, may miss the starting key frame
+  # -ss after -i will need to decode whole video up before seekign up to -ss, but guaratee start with keyframe
   ffmpeg \
     -v warning \
+    -i $input \
     -ss $ss \
     -to $to \
-    -i $input \
     -vcodec copy \
     -acodec copy \
     $output && \
