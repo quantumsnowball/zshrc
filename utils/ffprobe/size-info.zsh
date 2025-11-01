@@ -1,3 +1,6 @@
+alias ffpsize=ffprobe.size-info
+
+
 ffprobe.size-info () {
     # Print cyan header
     printf "${CYAN}%-10s %-10s %-18s %-18s %-30s${RESET}\n" \
