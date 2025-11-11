@@ -1,3 +1,5 @@
-def foo(*args):
-    print('hi from foo')
-    print(f'{args=}')
+from pathlib import Path
+
+
+def streams(path: Path):
+    print(f'{path=}')
