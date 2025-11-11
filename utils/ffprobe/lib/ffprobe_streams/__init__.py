@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from ffprobe_streams.presentation import present
+from ffprobe_streams.present import present
 from ffprobe_streams.query import ffprobe
 
 
