@@ -1,7 +1,10 @@
 from pathlib import Path
 
+from ffprobe_streams.query import ffprobe
+
 
 def main(path: Path):
+    # query ffprobe
+    r = ffprobe(path)
     # subject line
-    print("\n\t< ffprobe: total <len> stream(s) >\n",)
-    # print(f'{path=}')
+    print(f"\n\t< ffprobe: total {r.nb_streams} stream(s) >\n",)
