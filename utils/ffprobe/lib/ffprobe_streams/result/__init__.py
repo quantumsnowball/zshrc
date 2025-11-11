@@ -1,20 +1,6 @@
-from abc import ABC, abstractproperty
-from typing import Any
-
-type Data = dict[str, Any]
-
-
-class Stream(ABC):
-    def __init__(self, data: Data) -> None:
-        self._d = data
-
-
-class VideoStream(Stream):
-    pass
-
-
-class AudioStream(Stream):
-    pass
+from ffprobe_streams.result.lib.types import Data
+from ffprobe_streams.result.stream.audio import AudioStream
+from ffprobe_streams.result.stream.video import VideoStream
 
 
 class Result:
