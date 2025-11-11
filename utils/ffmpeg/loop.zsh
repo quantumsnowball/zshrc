@@ -1,6 +1,6 @@
 ffmpeg.loop()
 {
-  local usage="Usage: ffmpeg.cut -rr REPEAT --reverse -ss/--start START -to/--end END -i/--input INPUT OUTPUT"
+  local usage="Usage: ffmpeg.loop -rr REPEAT --reverse -ss/--start START -to/--end END -i/--input INPUT OUTPUT"
 
   # parse opts
   local input ss to output
@@ -50,7 +50,7 @@ ffmpeg.loop()
   done
 
   # ensure all options and arg exist
-  if [[ -z $input || -z $ss || -z $to || -z $output ]]; then
+  if [[ -z $input || -z $output ]]; then
     echo $usage
     return 1
   fi
@@ -63,7 +63,11 @@ ffmpeg.loop()
   # spec: [fwd|rev].vf[0|1].hf[0|1].mp4 total 8 files
 
   # original
-  ffmpeg -v warning -i $input -ss $ss -to $to -vcodec libx264 -acodec aac "$tempdir/fwd.vf0.hf0.mp4"
+  if [[ -n "$ss" && -n "$to" ]]; then
+    ffmpeg -v warning -i $input -ss $ss -to $to -vcodec libx264 -acodec aac "$tempdir/fwd.vf0.hf0.mp4"
+  else
+    ffmpeg -v warning -i $input -vcodec libx264 -acodec aac "$tempdir/fwd.vf0.hf0.mp4"
+  fi
   echo 'part 1 done'
   # hflip
   ffmpeg -v warning -i "$tempdir/fwd.vf0.hf0.mp4" -vf hflip "$tempdir/fwd.vf0.hf1.mp4"
