@@ -1,10 +1,10 @@
 import sys
 from pathlib import Path
 
-from . import streams
+from ffprobe_streams import main
 
 
-def main():
+def cli():
     # get args
     args = sys.argv
     # check args
@@ -13,8 +13,8 @@ def main():
         return
     # pass args
     path = Path(args[1])
-    streams(path)
+    main(path)
 
 
 if __name__ == "__main__":
-    main()
+    cli()

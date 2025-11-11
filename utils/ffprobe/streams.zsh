@@ -37,7 +37,7 @@ ffprobe.streams.info () {
 }
 ffprobe.streams () {
     PYTHONPATH="$HOME/.config/zshrc/utils/ffprobe/lib/:$PYTHONPATH" \
-        python -m "streams.main" "$@"
+        python -m "ffprobe_streams.cli" "$@"
 }
 ffprobe.streams2 () {
     # based on the selected info, print a user readabile format
