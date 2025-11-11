@@ -35,7 +35,7 @@ ffprobe.streams.info () {
         }
     ]'
 }
-ffprobe.streams () {
+ffprobe.streams2 () {
     # based on the selected info, print a user readabile format
     ffprobe.streams.info $1 | jq -r '
     # define colors
