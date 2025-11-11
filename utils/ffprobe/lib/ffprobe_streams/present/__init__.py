@@ -9,7 +9,8 @@ def present(r: Result) -> None:
     # subject line
     print(f"\n\t< ffprobe: total {r.nb_streams} stream(s) >\n",)
     # present streams
-    for s in r.streams:
+    for i, s in enumerate(r.streams):
+        print(f'Stream {i}: [{s.codec_type}]')
         if isinstance(s, VideoStream):
             present_video(s)
         elif isinstance(s, AudioStream):
