@@ -15,8 +15,10 @@ def present_subject(nb_streams: int | None) -> None:
 
 def present_format_title(f: Format) -> None:
     field = f'{GREEN}Format{RESET}'
-    size = f'{float(sz)/1e6:.2f} MB' if (sz := f.size) else None
-    value = f'{CYAN}{size} [{f.duration_hms}]{RESET}'
+    filename = f.filename
+    if filename is not None and len(filename) >= 60:
+        filename = f'{filename[:45]} ... {filename[-10:]}'
+    value = f'{CYAN}{filename} [{f.duration_hms}]{RESET}'
     print_field_value(field, value, tab=False)
 
 

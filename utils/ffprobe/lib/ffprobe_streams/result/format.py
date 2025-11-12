@@ -7,6 +7,10 @@ class Format:
         self._d = data
 
     @property
+    def filename(self) -> str | None:
+        return self._d['filename']
+
+    @property
     def nb_streams(self) -> int | None:
         return self._d['nb_streams']
 
