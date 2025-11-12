@@ -1,3 +1,3 @@
-from typing import Any
+from typing import Any, DefaultDict
 
-type Data = dict[str, Any]
+type Data = DefaultDict[str, Any]
