@@ -1,4 +1,5 @@
 from ffprobe_streams.result.lib.types import Data
+from ffprobe_streams.result.lib.utils import hms
 
 
 class Format:
@@ -32,12 +33,8 @@ class Format:
             total_seconds = float(dur)
         except ValueError:
             return None
-        hours = int(total_seconds // 3600)
-        remaining_seconds_after_hours = total_seconds % 3600
-        minutes = int(remaining_seconds_after_hours // 60)
-        seconds = int(remaining_seconds_after_hours % 60)
-        hms = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
-        return hms
+        #
+        return hms(total_seconds)
 
     @property
     def size(self) -> str | None:
