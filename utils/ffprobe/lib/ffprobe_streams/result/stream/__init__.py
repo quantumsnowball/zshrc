@@ -10,3 +10,12 @@ class Stream(ABC):
     @property
     def codec_type(self) -> str:
         return self._d['codec_type']
+
+    @property
+    def duration(self) -> str | None:
+        try:
+            # could be second or HMS format
+            return self._d.get('duration') or \
+                self._d['tags'].get('DURATION')
+        except KeyError:
+            return None

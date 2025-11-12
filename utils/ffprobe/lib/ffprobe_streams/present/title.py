@@ -9,5 +9,5 @@ def present_subject(nb_streams: int) -> None:
 def present_stream_title(i: int, s: Stream) -> None:
     field = f'{GREEN}Stream {i}{RESET}'
     color = YELLOW if s.codec_type == 'video' else MAGENTA
-    content = f'{color}{s.codec_type} []{RESET}'
+    content = f'{color}{s.codec_type} [{s.duration}]{RESET}'
     print(f'{field}: {content}')
