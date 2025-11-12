@@ -32,4 +32,4 @@ class VideoStream(Stream):
 
     @property
     def nb_frames(self) -> str | None:
-        return self._d.get('nb_frames')
+        return self._d['nb_frames']

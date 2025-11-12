@@ -21,12 +21,14 @@ class Stream(ABC):
 
     @property
     def duration(self) -> str | None:
-        try:
-            # could be second or HMS format
-            return self._d.get('duration') or \
-                self._d['tags'].get('DURATION')
-        except KeyError:
-            return None
+        # seconds format
+        if (result := self._d['duration']):
+            return result
+        # HMS format
+        if (tags := self._d['tags']) and (result := tags['DURATION']):
+            return result
+        # else
+        return None
 
     @property
     def duration_hms(self) -> str | None:
@@ -51,11 +53,11 @@ class Stream(ABC):
 
     @property
     def bit_rate(self) -> str | None:
-        return self._d.get('bit_rate')
+        return self._d['bit_rate']
 
     @property
     def language(self) -> str | None:
-        try:
-            return self._d['tags'].get('language')
-        except KeyError:
-            return None
+        if (tags := self._d['tags']) and (result := tags['language']):
+            return result
+        # else
+        return None
