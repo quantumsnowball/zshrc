@@ -21,3 +21,11 @@ class VideoStream(Stream):
     @property
     def display_aspect_ratio(self) -> str:
         return self._d['display_aspect_ratio']
+
+    @property
+    def r_frame_rate(self) -> str:
+        return self._d['r_frame_rate']
+
+    @property
+    def avg_frame_rate(self) -> str:
+        return self._d['r_frame_rate']
