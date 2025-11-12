@@ -1,4 +1,5 @@
-from ffprobe_streams.present.common import *
+from ffprobe_streams.present.lib.share import *
+from ffprobe_streams.present.stream.lib.share import *
 from ffprobe_streams.result.stream.audio import AudioStream
 
 

@@ -1,6 +1,5 @@
 from ffprobe_streams.lib.ansi_colors import *
-from ffprobe_streams.present.common import (present_format_title,
-                                            print_field_value)
+from ffprobe_streams.present.lib.share import *
 from ffprobe_streams.result.format import Format
 
 

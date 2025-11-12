@@ -1,7 +1,7 @@
-from ffprobe_streams.present.audio import present as present_audio
-from ffprobe_streams.present.common import present_subject
 from ffprobe_streams.present.format import present as present_format
-from ffprobe_streams.present.video import present as present_video
+from ffprobe_streams.present.lib.share import present_subject
+from ffprobe_streams.present.stream.audio import present as present_audio
+from ffprobe_streams.present.stream.video import present as present_video
 from ffprobe_streams.result import Result
 from ffprobe_streams.result.stream.audio import AudioStream
 from ffprobe_streams.result.stream.video import VideoStream
