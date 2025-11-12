@@ -16,7 +16,7 @@ def ffprobe(path: Path) -> Result:
         "-print_format", "json",
         "-show_streams",
         "-show_format",
-        path,
+        str(path),
     ]
     # run ffprobe as process
     result = subprocess.run(cmd, capture_output=True, text=True, check=True)

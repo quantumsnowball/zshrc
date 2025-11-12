@@ -29,13 +29,13 @@ def present_r_frame_rate(s: VideoStream) -> None:
 
 def present_avg_frame_rate(s: VideoStream) -> None:
     field = f'{BLUE}average frame rate{RESET}'
-    value = f'{WHITE}{eval(s.avg_frame_rate):.2f} ({s.avg_frame_rate}){RESET}'
+    value = f'{WHITE}{eval(afr):.2f} ({afr}){RESET}' if (afr := s.avg_frame_rate) else None
     print_field_value(field, value)
 
 
 def present_nb_frames(s: VideoStream) -> None:
     field = f'{BLUE}frame count{RESET}'
-    value = f'{WHITE}{s.nb_frames}{RESET}' if s.nb_frames else 'n.a.'
+    value = f'{WHITE}{s.nb_frames}{RESET}' if s.nb_frames else None
     print_field_value(field, value)
 
 
