@@ -4,7 +4,7 @@ from ffprobe_streams.result.stream.video import VideoStream
 
 
 def present_resolution(s: VideoStream) -> None:
-    field = f'{BLUE}codec{RESET}'
+    field = f'{BLUE}resolution{RESET}'
     value = f'{WHITE}{s.resolution}{RESET}'
     print_field_value(field, value)
 
