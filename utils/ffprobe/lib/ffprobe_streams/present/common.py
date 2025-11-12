@@ -2,7 +2,7 @@ from ffprobe_streams.lib.ansi_colors import *
 from ffprobe_streams.result.stream import Stream
 
 
-def print_field_value(field: str, value: str, *, tab: bool = True) -> None:
+def print_field_value(field: str, value: str | None, *, tab: bool = True) -> None:
     print(f'{'\t' if tab else ''}{field}: {value}')
 
 
