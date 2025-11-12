@@ -8,15 +8,15 @@ class Stream(ABC):
         self._d = data
 
     @property
-    def codec_type(self) -> str:
+    def codec_type(self) -> str | None:
         return self._d['codec_type']
 
     @property
-    def codec_name(self) -> str:
+    def codec_name(self) -> str | None:
         return self._d['codec_name']
 
     @property
-    def codec_long_name(self) -> str:
+    def codec_long_name(self) -> str | None:
         return self._d['codec_long_name']
 
     @property
