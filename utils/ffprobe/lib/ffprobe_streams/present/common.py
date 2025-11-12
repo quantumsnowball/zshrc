@@ -15,7 +15,8 @@ def present_subject(nb_streams: int | None) -> None:
 
 def present_format_title(f: Format) -> None:
     field = f'{GREEN}Format{RESET}'
-    value = f'{CYAN}[{f.duration_hms}]{RESET}'
+    size = f'{float(sz)/1e6:.2f} MB' if (sz := f.size) else None
+    value = f'{CYAN}{size} [{f.duration_hms}]{RESET}'
     print_field_value(field, value, tab=False)
 
 

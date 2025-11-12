@@ -40,5 +40,9 @@ class Format:
         return hms
 
     @property
+    def size(self) -> str | None:
+        return self._d['size']
+
+    @property
     def bit_rate(self) -> str | None:
         return self._d['bit_rate']
