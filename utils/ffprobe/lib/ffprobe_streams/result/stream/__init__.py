@@ -52,3 +52,10 @@ class Stream(ABC):
     @property
     def bit_rate(self) -> str | None:
         return self._d.get('bit_rate')
+
+    @property
+    def language(self) -> str | None:
+        try:
+            return self._d['tags'].get('language')
+        except KeyError:
+            return None

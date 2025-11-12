@@ -6,3 +6,4 @@ def present(i: int, s: AudioStream) -> None:
     present_stream_title(i, s)
     present_codec(s)
     present_bit_rate(s)
+    present_language(s)

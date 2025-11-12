@@ -49,3 +49,4 @@ def present(i: int, s: VideoStream) -> None:
     present_avg_frame_rate(s)
     present_nb_frames(s)
     present_bit_rate(s)
+    present_language(s)
