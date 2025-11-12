@@ -12,6 +12,12 @@ def present_subject(nb_streams: int | None) -> None:
     print(f"\n\t< ffprobe: total {nb_streams} stream(s) >\n",)
 
 
+def present_format_title() -> None:
+    field = f'{GREEN}Format{RESET}'
+    value = ''
+    print_field_value(field, value, tab=False)
+
+
 def present_stream_title(i: int, s: Stream) -> None:
     field = f'{GREEN}Stream {i}{RESET}'
     color = YELLOW if s.codec_type == 'video' else MAGENTA
