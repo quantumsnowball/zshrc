@@ -48,3 +48,7 @@ class Stream(ABC):
         seconds = int(remaining_seconds_after_hours % 60)
         hms = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
         return hms
+
+    @property
+    def bit_rate(self) -> str | None:
+        return self._d.get('bit_rate')

@@ -22,3 +22,10 @@ def present_codec(s: Stream) -> None:
     value = f'{RED}{s.codec_name}{RESET}'
     detail = f'{WHITE}{s.codec_long_name}{RESET}'
     print_field_value(field, f'{value} ({detail})')
+
+
+def present_bit_rate(s: Stream) -> None:
+    field = f'{BLUE}bitrate{RESET}'
+    v = f'{float(br)/1000:.3f} kb/s' if (br := s.bit_rate) else 'n.a.'
+    value = f'{WHITE}{v}{RESET}'
+    print_field_value(field, value)
