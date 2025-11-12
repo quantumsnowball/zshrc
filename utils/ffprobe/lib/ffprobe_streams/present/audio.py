@@ -1,5 +1,7 @@
+from ffprobe_streams.present.common import *
 from ffprobe_streams.result.stream.audio import AudioStream
 
 
-def present_audio(s: AudioStream) -> None:
+def present(i: int, s: AudioStream) -> None:
+    present_stream_title(i, s)
     print(s)

@@ -12,6 +12,14 @@ class Stream(ABC):
         return self._d['codec_type']
 
     @property
+    def codec_name(self) -> str:
+        return self._d['codec_name']
+
+    @property
+    def codec_long_name(self) -> str:
+        return self._d['codec_long_name']
+
+    @property
     def duration(self) -> str | None:
         try:
             # could be second or HMS format

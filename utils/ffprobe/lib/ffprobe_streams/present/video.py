@@ -1,5 +1,7 @@
+from ffprobe_streams.present.common import *
 from ffprobe_streams.result.stream.video import VideoStream
 
 
-def present_video(s: VideoStream) -> None:
+def present(i: int, s: VideoStream) -> None:
+    present_stream_title(i, s)
     print(s)
