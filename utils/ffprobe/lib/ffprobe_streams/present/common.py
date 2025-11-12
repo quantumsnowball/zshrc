@@ -6,7 +6,9 @@ def print_field_value(field: str, value: str | None, *, tab: bool = True) -> Non
     print(f'{'\t' if tab else ''}{field}: {value}')
 
 
-def present_subject(nb_streams: int) -> None:
+def present_subject(nb_streams: int | None) -> None:
+    if nb_streams is None or nb_streams <= 0:
+        print(f"\n\t< ffprobe: no stream found >\n",)
     print(f"\n\t< ffprobe: total {nb_streams} stream(s) >\n",)
 
 

@@ -8,7 +8,7 @@ from ffprobe_streams.result.stream.video import VideoStream
 
 def present(r: Result) -> None:
     # subject line
-    present_subject(r.nb_streams)
+    present_subject(r.format.nb_streams)
     # present streams
     for i, s in enumerate(r.streams):
         if isinstance(s, VideoStream):
