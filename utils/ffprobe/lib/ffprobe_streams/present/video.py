@@ -33,6 +33,12 @@ def present_avg_frame_rate(s: VideoStream) -> None:
     print_field_value(field, value)
 
 
+def present_nb_frames(s: VideoStream) -> None:
+    field = f'{BLUE}frame count{RESET}'
+    value = f'{WHITE}{s.nb_frames}{RESET}' if s.nb_frames else 'n.a.'
+    print_field_value(field, value)
+
+
 def present(i: int, s: VideoStream) -> None:
     present_stream_title(i, s)
     present_codec(s)
@@ -41,3 +47,4 @@ def present(i: int, s: VideoStream) -> None:
     present_display_aspect_ratio(s)
     present_r_frame_rate(s)
     present_avg_frame_rate(s)
+    present_nb_frames(s)

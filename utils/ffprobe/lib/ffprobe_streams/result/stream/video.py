@@ -29,3 +29,7 @@ class VideoStream(Stream):
     @property
     def avg_frame_rate(self) -> str:
         return self._d['r_frame_rate']
+
+    @property
+    def nb_frames(self) -> str | None:
+        return self._d.get('nb_frames')
