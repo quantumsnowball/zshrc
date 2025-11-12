@@ -26,12 +26,12 @@ def present_codec(s: Stream) -> None:
 
 def present_bit_rate(s: Stream) -> None:
     field = f'{BLUE}bitrate{RESET}'
-    v = f'{float(br)/1000:.3f} kb/s' if (br := s.bit_rate) else 'n.a.'
+    v = f'{float(br)/1000:.3f} kb/s' if (br := s.bit_rate) else None
     value = f'{WHITE}{v}{RESET}'
     print_field_value(field, value)
 
 
 def present_language(s: Stream) -> None:
     field = f'{BLUE}language{RESET}'
-    value = f'{WHITE}{v}{RESET}' if (v := s.language) else 'n.a.'
+    value = f'{WHITE}{v}{RESET}' if (v := s.language) else None
     print_field_value(field, value)
