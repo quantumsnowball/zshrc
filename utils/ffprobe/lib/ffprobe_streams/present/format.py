@@ -19,6 +19,6 @@ def present_bit_rate(f: Format) -> None:
 
 
 def present(f: Format) -> None:
-    present_format_title()
+    present_format_title(f)
     present_name(f)
     present_bit_rate(f)

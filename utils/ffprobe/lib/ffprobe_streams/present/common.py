@@ -1,4 +1,5 @@
 from ffprobe_streams.lib.ansi_colors import *
+from ffprobe_streams.result.format import Format
 from ffprobe_streams.result.stream import Stream
 
 
@@ -12,9 +13,9 @@ def present_subject(nb_streams: int | None) -> None:
     print(f"\n\t< ffprobe: total {nb_streams} stream(s) >\n",)
 
 
-def present_format_title() -> None:
+def present_format_title(f: Format) -> None:
     field = f'{GREEN}Format{RESET}'
-    value = ''
+    value = f'{CYAN}[{f.duration_hms}]{RESET}'
     print_field_value(field, value, tab=False)
 
 
