@@ -36,6 +36,10 @@ ffprobe.streams.info () {
     ]'
 }
 ffprobe.streams () {
+    PYTHONPATH="$HOME/.config/zshrc/utils/ffprobe/lib/:$PYTHONPATH" \
+        python -m "ffprobe_streams.cli" "$@"
+}
+ffprobe.streams2 () {
     # based on the selected info, print a user readabile format
     ffprobe.streams.info $1 | jq -r '
     # define colors
