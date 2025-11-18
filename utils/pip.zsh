@@ -72,6 +72,7 @@ pip.install-basic()
 {
 # general
 pip install --no-input click 
+pip install --no-input rich 
 pip install --no-input colorama 
 pip install --no-input ipython 
 pip install --no-input jupyter 
