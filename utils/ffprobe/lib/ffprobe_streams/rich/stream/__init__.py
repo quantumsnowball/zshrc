@@ -12,3 +12,11 @@ class Stream(ABC):
         color = 'yellow' if self._s.codec_type == 'video' else 'magenta'
         value = f'[{color}]{self._s.codec_type} [{self._s.duration_hms}][/{color}]'
         return Entry(field, value)
+
+    @property
+    def codec(self) -> Entry:
+        field = f'[blue]codec[/blue]'
+        codec_name = f'[red]{self._s.codec_name}[/red]'
+        codec_long_name = f'[white]{self._s.codec_long_name}[/white]'
+        value = f'{codec_name} ({codec_long_name})'
+        return Entry(field, value)
