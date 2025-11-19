@@ -20,3 +20,10 @@ class Stream(ABC):
         codec_long_name = f'[white]{self._s.codec_long_name}[/white]'
         value = f'{codec_name} ({codec_long_name})'
         return Entry(field, value)
+
+    @property
+    def bit_rate(self) -> Entry:
+        field = f'[blue]bitrate[/blue]'
+        v = f'{float(br)/1000:.3f} kb/s' if (br := self._s.bit_rate) else None
+        value = f'[white]{v}[/white]'
+        return Entry(field, value)
