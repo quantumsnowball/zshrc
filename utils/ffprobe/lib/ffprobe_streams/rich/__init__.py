@@ -29,8 +29,8 @@ class RichTable:
         self._table.title = self.info.general.title
 
         # format
-        self.add_column(self.info.format.title_field)
-        self.add_column(self.info.format.title_value)
+        self.add_column(self.info.format.title.field)
+        self.add_column(self.info.format.title.value)
         self._table.add_row('dummy', 'dummy')
 
         # video stream
