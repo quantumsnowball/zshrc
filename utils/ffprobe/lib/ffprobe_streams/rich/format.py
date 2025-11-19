@@ -34,3 +34,10 @@ class Format:
         format_long_name = f'[white]{self._f.format_long_name}[/white]'
         value = f'{format_name} ({format_long_name})'
         return Entry(field, value)
+
+    @property
+    def bit_rate(self) -> Entry:
+        field = f'[blue]bitrate[/blue]'
+        v = f'{float(br)/1e6:.3f} Mb/s' if (br := self._f.bit_rate) else None
+        value = f'[white]{v}[/white]'
+        return Entry(field, value)

@@ -32,6 +32,7 @@ class RichTable:
         self.add_column(self.info.format.title.value)
         self.add_row(*self.info.format.size.tuple)
         self.add_row(*self.info.format.name.tuple)
+        self.add_row(*self.info.format.bit_rate.tuple)
 
         # video stream
         self._table.add_section()
