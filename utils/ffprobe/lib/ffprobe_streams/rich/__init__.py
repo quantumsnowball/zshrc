@@ -48,6 +48,12 @@ class RichTable:
                 self.add_row(*v.title(i).tuple)
                 self.add_section()
                 self.add_row(*v.codec.tuple)
+                self.add_row(*v.resolution.tuple)
+                self.add_row(*v.sample_aspect_ratio.tuple)
+                self.add_row(*v.display_aspect_ratio.tuple)
+                self.add_row(*v.r_frame_rate.tuple)
+                self.add_row(*v.avg_frame_rate.tuple)
+                self.add_row(*v.nb_frames.tuple)
                 self.add_row(*v.bit_rate.tuple)
                 self.add_row(*v.language.tuple)
             # audio stream
