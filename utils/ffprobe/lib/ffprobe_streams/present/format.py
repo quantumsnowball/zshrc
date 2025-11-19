@@ -1,36 +1,43 @@
-from ffprobe_streams.lib.ansi_colors import *
-from ffprobe_streams.present.lib.share import *
-from ffprobe_streams.result.format import Format
+from ffprobe_streams.result import Result
+from ffprobe_streams.present.lib.field import Entry
 
 
-def present_size(f: Format) -> None:
-    field = f'{BLUE}size{RESET}'
-    value = ''
-    if f.size:
-        size = float(f.size)
-        value += f'{size/1e6:.2f} MB'
-        if f.duration:
-            size_per_min = size / float(f.duration) * 60
-            value += f' ({size_per_min/1e6:.2f} MB/min)'
-    print_field_value(field, value)
+class Format:
+    def __init__(self, r: Result) -> None:
+        self._f = r.format
 
+    @property
+    def title(self) -> Entry:
+        field = '[green]Format[/green]'
+        filename = self._f.filename
+        if filename is not None and len(filename) >= 60:
+            filename = f'{filename[:45]} ... {filename[-10:]}'
+        value = f'[cyan]{filename} [{self._f.duration_hms}][/cyan]'
+        return Entry(field, value)
 
-def present_name(f: Format) -> None:
-    field = f'{BLUE}name{RESET}'
-    value = f'{RED}{f.format_name}{RESET}'
-    detail = f'{WHITE}{f.format_long_name}{RESET}'
-    print_field_value(field, f'{value} ({detail})')
+    @property
+    def size(self) -> Entry:
+        field = f'[blue]size[/blue]'
+        value = ''
+        if self._f.size:
+            size = float(self._f.size)
+            value += f'{size/1e6:.2f} MB'
+            if self._f.duration:
+                size_per_min = size / float(self._f.duration) * 60
+                value += f' ({size_per_min/1e6:.2f} MB/min)'
+        return Entry(field, value)
 
+    @property
+    def name(self) -> Entry:
+        field = f'[blue]name[/blue]'
+        format_name = f'[red]{self._f.format_name}[/red]'
+        format_long_name = f'[white]{self._f.format_long_name}[/white]'
+        value = f'{format_name} ({format_long_name})'
+        return Entry(field, value)
 
-def present_bit_rate(f: Format) -> None:
-    field = f'{BLUE}bitrate{RESET}'
-    v = f'{float(br)/1e6:.3f} Mb/s' if (br := f.bit_rate) else None
-    value = f'{WHITE}{v}{RESET}'
-    print_field_value(field, value)
-
-
-def present(f: Format) -> None:
-    present_format_title(f)
-    present_size(f)
-    present_name(f)
-    present_bit_rate(f)
+    @property
+    def bit_rate(self) -> Entry:
+        field = f'[blue]bitrate[/blue]'
+        v = f'{float(br)/1e6:.3f} Mb/s' if (br := self._f.bit_rate) else None
+        value = f'[white]{v}[/white]'
+        return Entry(field, value)

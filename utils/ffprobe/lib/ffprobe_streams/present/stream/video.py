@@ -1,53 +1,41 @@
-from ffprobe_streams.lib.ansi_colors import *
-from ffprobe_streams.present.lib.share import *
-from ffprobe_streams.present.stream.lib.share import *
 from ffprobe_streams.result.stream.video import VideoStream
+from ffprobe_streams.present.lib.field import Entry
+from ffprobe_streams.present.stream import Stream
 
 
-def present_resolution(s: VideoStream) -> None:
-    field = f'{BLUE}resolution{RESET}'
-    value = f'{WHITE}{s.resolution}{RESET}'
-    print_field_value(field, value)
+class Video(Stream[VideoStream]):
+    @property
+    def resolution(self) -> Entry:
+        field = f'[blue]resolution[/blue]'
+        value = f'[white]{self._s.resolution}[/white]'
+        return Entry(field, value)
 
+    @property
+    def sample_aspect_ratio(self) -> Entry:
+        field = f'[blue]sample aspect ratio[/blue]'
+        value = f'[white]{self._s.sample_aspect_ratio}[/white]'
+        return Entry(field, value)
 
-def present_sample_aspect_ratio(s: VideoStream) -> None:
-    field = f'{BLUE}sample aspect ratio{RESET}'
-    value = f'{WHITE}{s.sample_aspect_ratio}{RESET}'
-    print_field_value(field, value)
+    @property
+    def display_aspect_ratio(self) -> Entry:
+        field = f'[blue]display aspect ratio[/blue]'
+        value = f'[white]{self._s.display_aspect_ratio}[/white]'
+        return Entry(field, value)
 
+    @property
+    def r_frame_rate(self) -> Entry:
+        field = f'[blue]frame rate[/blue]'
+        value = f'[white]{self._s.r_frame_rate}[/white]'
+        return Entry(field, value)
 
-def present_display_aspect_ratio(s: VideoStream) -> None:
-    field = f'{BLUE}display aspect ratio{RESET}'
-    value = f'{WHITE}{s.display_aspect_ratio}{RESET}'
-    print_field_value(field, value)
+    @property
+    def avg_frame_rate(self) -> Entry:
+        field = f'[blue]average frame rate[/blue]'
+        value = f'[white]{eval(afr):.2f} ({afr})[/white]' if (afr := self._s.avg_frame_rate) else None
+        return Entry(field, value)
 
-
-def present_r_frame_rate(s: VideoStream) -> None:
-    field = f'{BLUE}frame rate{RESET}'
-    value = f'{WHITE}{s.r_frame_rate}{RESET}'
-    print_field_value(field, value)
-
-
-def present_avg_frame_rate(s: VideoStream) -> None:
-    field = f'{BLUE}average frame rate{RESET}'
-    value = f'{WHITE}{eval(afr):.2f} ({afr}){RESET}' if (afr := s.avg_frame_rate) else None
-    print_field_value(field, value)
-
-
-def present_nb_frames(s: VideoStream) -> None:
-    field = f'{BLUE}frame count{RESET}'
-    value = f'{WHITE}{s.nb_frames}{RESET}' if s.nb_frames else None
-    print_field_value(field, value)
-
-
-def present(i: int, s: VideoStream) -> None:
-    present_stream_title(i, s)
-    present_codec(s)
-    present_resolution(s)
-    present_sample_aspect_ratio(s)
-    present_display_aspect_ratio(s)
-    present_r_frame_rate(s)
-    present_avg_frame_rate(s)
-    present_nb_frames(s)
-    present_bit_rate(s)
-    present_language(s)
+    @property
+    def nb_frames(self) -> Entry:
+        field = f'[blue]frame count[/blue]'
+        value = f'[white]{self._s.nb_frames}[/white]' if self._s.nb_frames else None
+        return Entry(field, value)
