@@ -49,6 +49,7 @@ class RichTable:
                 self.add_section()
                 self.add_row(*v.codec.tuple)
                 self.add_row(*v.bit_rate.tuple)
+                self.add_row(*v.language.tuple)
             # audio stream
             elif isinstance(s, AudioStream):
                 a = Audio(s)
@@ -57,6 +58,7 @@ class RichTable:
                 self.add_section()
                 self.add_row(*a.codec.tuple)
                 self.add_row(*a.bit_rate.tuple)
+                self.add_row(*a.language.tuple)
 
         # print
         console = Console()

@@ -27,3 +27,9 @@ class Stream(ABC):
         v = f'{float(br)/1000:.3f} kb/s' if (br := self._s.bit_rate) else None
         value = f'[white]{v}[/white]'
         return Entry(field, value)
+
+    @property
+    def language(self) -> Entry:
+        field = f'[blue]language[/blue]'
+        value = f'[white]{v}[/white]' if (v := self._s.language) else None
+        return Entry(field, value)

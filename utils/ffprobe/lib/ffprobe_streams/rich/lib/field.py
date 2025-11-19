@@ -4,8 +4,8 @@ from dataclasses import dataclass
 @dataclass
 class Entry:
     field: str
-    value: str
+    value: str | None
 
     @property
     def tuple(self) -> tuple[str, str]:
-        return self.field, self.value
+        return self.field, str(self.value)
