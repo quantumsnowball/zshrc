@@ -1,10 +1,11 @@
-from ffprobe_streams.result import Result
-from ffprobe_streams.result.stream.audio import AudioStream
-from ffprobe_streams.result.stream.video import VideoStream
 from ffprobe_streams.present.format import Format
 from ffprobe_streams.present.general import General
 from ffprobe_streams.present.stream.audio import Audio
 from ffprobe_streams.present.stream.video import Video
+from ffprobe_streams.result import Result
+from ffprobe_streams.result.stream.audio import AudioStream
+from ffprobe_streams.result.stream.video import VideoStream
+from rich import box
 from rich.console import Console
 from rich.table import Table
 
@@ -12,7 +13,7 @@ from rich.table import Table
 class RichTable:
     def __init__(self, r: Result) -> None:
         self._r = r
-        self._t = Table()
+        self._t = Table(box=box.HORIZONTALS)
 
     def present(self) -> None:
         # caption
