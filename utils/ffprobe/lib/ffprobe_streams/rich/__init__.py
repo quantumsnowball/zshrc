@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 
 from ffprobe_streams.result import Result
+from ffprobe_streams.result.stream.audio import AudioStream
+from ffprobe_streams.result.stream.video import VideoStream
 from ffprobe_streams.rich.format import Format
 from ffprobe_streams.rich.general import General
 from rich.console import Console
@@ -34,13 +36,16 @@ class RichTable:
         self.add_row(*self.info.format.name.tuple)
         self.add_row(*self.info.format.bit_rate.tuple)
 
-        # video stream
-        self._table.add_section()
-        self._table.add_row('dummy', 'dummy')
-
-        # audio stream
-        self._table.add_section()
-        self._table.add_row('dummy', 'dummy')
+        # present streams
+        for i, s in enumerate(self._r.streams):
+            # video stream
+            if isinstance(s, VideoStream):
+                self._table.add_section()
+                self._table.add_row('dummy', 'dummy')
+            # audio stream
+            elif isinstance(s, AudioStream):
+                self._table.add_section()
+                self._table.add_row('dummy', 'dummy')
 
         # print
         console = Console()
