@@ -2,7 +2,7 @@ from abc import ABC
 from typing import Generic, TypeVar
 
 import ffprobe_streams.result.stream
-from ffprobe_streams.rich.lib.field import Entry
+from ffprobe_streams.present.lib.field import Entry
 
 T = TypeVar('T', bound=ffprobe_streams.result.stream.Stream)
 

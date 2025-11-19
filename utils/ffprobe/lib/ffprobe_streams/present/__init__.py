@@ -1,10 +1,10 @@
 from ffprobe_streams.result import Result
 from ffprobe_streams.result.stream.audio import AudioStream
 from ffprobe_streams.result.stream.video import VideoStream
-from ffprobe_streams.rich.format import Format
-from ffprobe_streams.rich.general import General
-from ffprobe_streams.rich.stream.audio import Audio
-from ffprobe_streams.rich.stream.video import Video
+from ffprobe_streams.present.format import Format
+from ffprobe_streams.present.general import General
+from ffprobe_streams.present.stream.audio import Audio
+from ffprobe_streams.present.stream.video import Video
 from rich.console import Console
 from rich.table import Table
 

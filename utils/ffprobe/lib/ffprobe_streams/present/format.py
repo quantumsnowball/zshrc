@@ -1,5 +1,5 @@
 from ffprobe_streams.result import Result
-from ffprobe_streams.rich.lib.field import Entry
+from ffprobe_streams.present.lib.field import Entry
 
 
 class Format:

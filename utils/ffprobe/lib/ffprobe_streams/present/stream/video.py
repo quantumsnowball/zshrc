@@ -1,6 +1,6 @@
 from ffprobe_streams.result.stream.video import VideoStream
-from ffprobe_streams.rich.lib.field import Entry
-from ffprobe_streams.rich.stream import Stream
+from ffprobe_streams.present.lib.field import Entry
+from ffprobe_streams.present.stream import Stream
 
 
 class Video(Stream[VideoStream]):
