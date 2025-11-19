@@ -1,11 +1,17 @@
 from abc import ABC
+from typing import Generic, TypeVar
 
 import ffprobe_streams.result.stream
 from ffprobe_streams.rich.lib.field import Entry
 
+T = TypeVar('T', bound=ffprobe_streams.result.stream.Stream)
 
-class Stream(ABC):
-    _s: ffprobe_streams.result.stream.Stream
+
+class Stream(ABC, Generic[T]):
+    _s: T
+
+    def __init__(self, s: T) -> None:
+        self._s = s
 
     def title(self, i: int) -> Entry:
         field = f'[green]Stream {i}[/green]'
