@@ -1,5 +1,3 @@
-from dataclasses import dataclass
-
 from ffprobe_streams.result import Result
 from ffprobe_streams.result.stream.audio import AudioStream
 from ffprobe_streams.result.stream.video import VideoStream
@@ -16,13 +14,6 @@ class RichTable:
         self._r = r
         self._table = Table()
 
-        # info
-        @dataclass
-        class Info:
-            general: General
-            format: Format
-        self.info = Info(General(r), Format(r))
-
         # helper
         self.add_column = self._table.add_column
         self.add_row = self._table.add_row
@@ -30,14 +21,16 @@ class RichTable:
 
     def present(self) -> None:
         # caption
-        self._table.title = self.info.general.title
+        g = General(self._r)
+        self._table.title = g.title
 
         # format
-        self.add_column(self.info.format.title.field)
-        self.add_column(self.info.format.title.value)
-        self.add_row(*self.info.format.size.tuple)
-        self.add_row(*self.info.format.name.tuple)
-        self.add_row(*self.info.format.bit_rate.tuple)
+        f = Format(self._r)
+        self.add_column(f.title.field)
+        self.add_column(f.title.value)
+        self.add_row(*f.size.tuple)
+        self.add_row(*f.name.tuple)
+        self.add_row(*f.bit_rate.tuple)
 
         # present streams
         for i, s in enumerate(self._r.streams):
