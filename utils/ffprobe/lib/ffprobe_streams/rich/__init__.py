@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from types import SimpleNamespace
 
 from ffprobe_streams.result import Result
 from ffprobe_streams.rich.format import Format
@@ -31,7 +30,7 @@ class RichTable:
         # format
         self.add_column(self.info.format.title.field)
         self.add_column(self.info.format.title.value)
-        self._table.add_row('dummy', 'dummy')
+        self.add_row(*self.info.format.size.tuple)
 
         # video stream
         self._table.add_section()
