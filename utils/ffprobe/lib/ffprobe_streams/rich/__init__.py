@@ -5,6 +5,8 @@ from ffprobe_streams.result.stream.audio import AudioStream
 from ffprobe_streams.result.stream.video import VideoStream
 from ffprobe_streams.rich.format import Format
 from ffprobe_streams.rich.general import General
+from ffprobe_streams.rich.stream.audio import Audio
+from ffprobe_streams.rich.stream.video import Video
 from rich.console import Console
 from rich.table import Table
 
@@ -24,6 +26,7 @@ class RichTable:
         # helper
         self.add_column = self._table.add_column
         self.add_row = self._table.add_row
+        self.add_section = self._table.add_section
 
     def present(self) -> None:
         # caption
@@ -40,12 +43,15 @@ class RichTable:
         for i, s in enumerate(self._r.streams):
             # video stream
             if isinstance(s, VideoStream):
-                self._table.add_section()
-                self._table.add_row('dummy', 'dummy')
+                v = Video(s)
+                self.add_section()
+                self.add_row(*v.title(i).tuple)
+                self.add_section()
             # audio stream
             elif isinstance(s, AudioStream):
-                self._table.add_section()
-                self._table.add_row('dummy', 'dummy')
+                a = Audio(s)
+                self.add_section()
+                self.add_row(*a.title(i).tuple)
 
         # print
         console = Console()
