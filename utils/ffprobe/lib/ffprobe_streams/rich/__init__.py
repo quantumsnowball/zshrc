@@ -1,6 +1,8 @@
+from dataclasses import dataclass
 from types import SimpleNamespace
 
 from ffprobe_streams.result import Result
+from ffprobe_streams.rich.general import General
 from rich.console import Console
 from rich.table import Table
 
@@ -10,15 +12,13 @@ class RichTable:
         self._r = r
         self._table = Table()
 
-    @property
-    def title(self) -> str:
-        nb_streams = self._r.format.nb_streams
-        if nb_streams is None or nb_streams <= 0:
-            return 'ffprobe: no stream found'
-        return f'ffprobe: total {nb_streams} stream(s)'
+        @dataclass
+        class Info:
+            general: General
+        self.info = Info(General(r))
 
     def present(self) -> None:
-        self._table.title = self.title
+        self._table.title = self.info.general.title
 
         self._table.add_column("Released", justify="right", style="cyan", no_wrap=True)
         self._table.add_column("Title", style="magenta")
