@@ -21,25 +21,26 @@ class RichTable:
         self.info = Info(General(r), Format(r))
 
         # helper
+        self.add_column = self._table.add_column
         self.add_row = self._table.add_row
 
     def present(self) -> None:
+        # caption
         self._table.title = self.info.general.title
 
-        # self._table.add_column("Released", justify="right", style="cyan", no_wrap=True)
-        # self._table.add_column("Title", style="magenta")
-        self.add_row(*self.info.format.title)
+        # format
+        self.add_column(self.info.format.title_field)
+        self.add_column(self.info.format.title_value)
+        self._table.add_row('dummy', 'dummy')
 
-        # self._table.add_row("Dec 20, 2019", "Star Wars: The Rise of Skywalker", "$952,110,690")
-        # self._table.add_row("May 25, 2018", "Solo: A Star Wars Story", "$393,151,347")
-        # self._table.add_row("Dec 15, 2017", "Star Wars Ep. V111: The Last Jedi", "$1,332,539,889")
-        # self._table.add_row("Dec 16, 2016", "Rogue One: A Star Wars Story", "$1,332,439,889")
+        # video stream
         self._table.add_section()
-        self._table.add_row()
-        # self._table.add_row("Dec 20, 2019", "Star Wars: The Rise of Skywalker", "$952,110,690")
-        # self._table.add_row("May 25, 2018", "Solo: A Star Wars Story", "$393,151,347")
-        # self._table.add_row("Dec 15, 2017", "Star Wars Ep. V111: The Last Jedi", "$1,332,539,889")
-        # self._table.add_row("Dec 16, 2016", "Rogue One: A Star Wars Story", "$1,332,439,889")
+        self._table.add_row('dummy', 'dummy')
 
+        # audio stream
+        self._table.add_section()
+        self._table.add_row('dummy', 'dummy')
+
+        # print
         console = Console()
         console.print(self._table)

@@ -6,10 +6,13 @@ class Format:
         self._f = r.format
 
     @property
-    def title(self) -> tuple[str, str]:
-        field = '[green]Format[/green]'
+    def title_field(self) -> str:
+        return '[green]Format[/green]'
+
+    @property
+    def title_value(self) -> str:
         filename = self._f.filename
         if filename is not None and len(filename) >= 60:
             filename = f'{filename[:45]} ... {filename[-10:]}'
         value = f'[cyan]{filename} [{self._f.duration_hms}][/cyan]'
-        return field, value
+        return value
