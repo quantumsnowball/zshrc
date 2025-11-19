@@ -26,3 +26,11 @@ class Format:
                 size_per_min = size / float(self._f.duration) * 60
                 value += f' ({size_per_min/1e6:.2f} MB/min)'
         return Entry(field, value)
+
+    @property
+    def name(self) -> Entry:
+        field = f'[blue]name[/blue]'
+        format_name = f'[red]{self._f.format_name}[/red]'
+        format_long_name = f'[white]{self._f.format_long_name}[/white]'
+        value = f'{format_name} ({format_long_name})'
+        return Entry(field, value)
