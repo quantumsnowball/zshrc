@@ -58,6 +58,7 @@ class RichTable:
                 self.add_section()
                 self.add_row(*a.codec.tuple)
                 self.add_row(*a.bit_rate.tuple)
+                self.add_row(*a.sample_rate.tuple)
                 self.add_row(*a.language.tuple)
 
         # print
