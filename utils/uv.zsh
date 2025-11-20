@@ -8,3 +8,12 @@ alias uvpyls=uv.python.list
 # list global tools
 alias uv.tool.list='uv tool list --show-version-specifiers --show-with --show-extras --show-python'
 alias uvtoolls=uv.tool.list
+
+# venv
+uv.venv.activate-local () {
+    if [[ -f ./.venv/bin/activate ]]; then
+        . ./.venv/bin/activate
+    else
+        echo "Error: ./.venv/bin/activate not found. No virtual environment activated."
+    fi
+}
