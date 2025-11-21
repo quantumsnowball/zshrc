@@ -21,7 +21,7 @@ uv.venv.activate-local () {
 # cache management
 alias uv.cache.prune='uv cache prune'
 uv.disk-usage () {
-    uv run $HOME/.config/zshrc/utils/_lib/uv.disk-usage.py
+    uv run $HOME/.config/zshrc/utils/uv/lib/uv.disk-usage.py
 }
 uv.trace-hardlink() {
     (( $# == 1 )) || { echo "Usage: uv.trace-hardlink <path-to-file-in-uv-cache>" && return 1 }
