@@ -20,6 +20,9 @@ uv.venv.activate-local () {
 
 # disk usage
 uv.disk-usage () {
+    uv run $HOME/.config/zshrc/utils/_lib/uv.disk-usage.py
+}
+uv.disk-usage2 () {
     echo "=== Real uv disk usage ==="
     
     # Cache
