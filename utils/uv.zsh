@@ -22,22 +22,3 @@ uv.venv.activate-local () {
 uv.disk-usage () {
     uv run $HOME/.config/zshrc/utils/_lib/uv.disk-usage.py
 }
-uv.disk-usage2 () {
-    echo "=== Real uv disk usage ==="
-    
-    # Cache
-    echo "Cache (real wheels + extracted files):"
-    du -sh ~/.cache/uv || echo "cache is empty"
-    
-    # tools
-    echo -e "\nHard-linked tools environments:"
-    fd -u -t d -d 1 . ~/.local/share/uv/tools -X du -sh --apparent-size | sort -h
-
-    # user envs
-    echo -e "\nHard-linked user environments:"
-    fd -u -t d -d 1 . ~/.uv/venv -X du -sh --apparent-size | sort -h
-    
-    # project envs under repos
-    echo -e "\nProject .venv directories:"
-    fd -u -t d '^\.venv$' ~/repos -X du -sh --apparent-size | sort -h
-}
