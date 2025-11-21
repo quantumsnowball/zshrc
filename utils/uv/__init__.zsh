@@ -56,7 +56,7 @@ uv.cache.list-entries() {
         printf '%-40s %-40s %s\n' "$pkg" "$tag" "${dir:t}"
     done | 
         sort -f -k1 |  # sort by pkg name
-        less
+        less -c -S -R
 }
 
 # uv pip install basic
