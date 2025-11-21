@@ -6,10 +6,20 @@
 import subprocess
 from pathlib import Path
 
+from rich import box
+from rich.console import Console
+from rich.table import Table
+
+WIDTH_COL0 = 15
+WIDTH_COL1 = 65
+TABLE_WIDTH = WIDTH_COL0 + WIDTH_COL1
+
 
 class Item:
-    def __init__(self, path: Path) -> None:
+    def __init__(self, path: Path, *, title: str) -> None:
         self.path = path
+        self._t = Table(box=box.HORIZONTALS, width=TABLE_WIDTH)
+        self._t.title = title
 
     @property
     def size(self) -> int:
@@ -24,15 +34,21 @@ class Item:
         except Exception:
             return 0
 
-    def __str__(self) -> str:
-        return f'{self.size/1e9:,.3f} GB\t{self.path}\n'
+    def present(self) -> None:
+        self._t.add_column(f'{self.size/1e9:,.3f} GB', width=WIDTH_COL0)
+        self._t.add_column(str(self.path), width=WIDTH_COL1)
+        # print
+        console = Console()
+        console.print(self._t)
 
 
 class Items:
-    def __init__(self, query: str, path: Path, *, max_depth=1) -> None:
+    def __init__(self, query: str, path: Path, *, title: str, max_depth=1) -> None:
         self.query = query
         self.path = path
         self.max_depth = max_depth
+        self._t = Table(box=box.HORIZONTALS, width=TABLE_WIDTH)
+        self._t.title = title
 
     def cal_sizes(self) -> list[tuple[Path, int]]:
         try:
@@ -52,13 +68,16 @@ class Items:
         except Exception:
             return []
 
-    def __str__(self) -> str:
+    def present(self) -> None:
         sizes = self.cal_sizes()
         total_size = sum(s[1] for s in sizes)
-        txt = f'{total_size/1e6:,.3f} GB\t{self.path}\n'
+        self._t.add_column(f'{total_size/1e6:,.3f} GB', width=WIDTH_COL0)
+        self._t.add_column(str(self.path), width=WIDTH_COL1)
         for path, size in sizes:
-            txt += f'{size/1e6:,.3f} GB\t{path}\n'
-        return txt
+            self._t.add_row(f'{size/1e6:,.3f} GB', str(path))
+        # print
+        console = Console()
+        console.print(self._t)
 
 
 def main() -> None:
@@ -67,24 +86,29 @@ def main() -> None:
     print("=== Real uv disk usage ===", end='\n\n')
 
     # Cache
-    print("Cache (real data):")
-    cache = Item(home/'.cache/uv')
-    print(cache)
+    Item(
+        home/'.cache/uv',
+        title='Cache'
+    ).present()
 
     # tools
-    print("Hard-linked tools environments:")
-    tools = Items('.', home/'.local/share/uv/tools')
-    print(tools)
+    Items(
+        '.', home/'.local/share/uv/tools',
+        title="Hard-linked tools environments",
+    ).present()
 
     # user envs
-    print("Hard-linked user environments:")
-    user_envs = Items('.', home/'.uv/venv')
-    print(user_envs)
+    Items(
+        '.', home/'.uv/venv',
+        title="Hard-linked user environments:",
+    ).present()
 
     # project envs under repos
-    print("Hard-linked project .venv environments:")
-    project_envs = Items(r'^\.venv$', home/'repos', max_depth=10)
-    print(project_envs)
+    Items(
+        r'^\.venv$', home/'repos',
+        title="Hard-linked project .venv environments:",
+        max_depth=10,
+    ).present()
 
 
 if __name__ == "__main__":
