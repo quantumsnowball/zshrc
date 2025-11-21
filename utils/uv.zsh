@@ -18,7 +18,8 @@ uv.venv.activate-local () {
     fi
 }
 
-# disk usage
+# cache management
+alias uv.cache.prune='uv cache prune'
 uv.disk-usage () {
     uv run $HOME/.config/zshrc/utils/_lib/uv.disk-usage.py
 }
