@@ -22,3 +22,28 @@ uv.venv.activate-local () {
 uv.disk-usage () {
     uv run $HOME/.config/zshrc/utils/_lib/uv.disk-usage.py
 }
+
+# uv pip install basic
+uv.pip.install-basic()
+{
+# general
+uv pip install \
+    click typer \
+    rich colorama \
+    ipython jupyter pytest
+# numeric
+uv pip install \
+    numpy scipy pandas
+# charting
+uv pip install \
+    matplotlib
+# networking
+uv pip install \
+    requests aiohttp
+# linting
+uv pip install \
+    mypy isort autopep8
+# debug
+uv pip install \
+    pudb debugpy
+}
