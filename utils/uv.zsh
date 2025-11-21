@@ -22,6 +22,22 @@ uv.venv.activate-local () {
 uv.disk-usage () {
     uv run $HOME/.config/zshrc/utils/_lib/uv.disk-usage.py
 }
+uv.trace-hardlink() {
+    (( $# == 1 )) || { echo "Usage: uv.trace-hardlink <path-to-file-in-uv-cache>" && return 1 }
+    # args
+    local file="$1"
+    [[ -f "$file" ]] || { echo "File not found: $file" && return 1 }
+    # check inode
+    local inode=$(stat -c %i -- "$file")
+    echo "inode: $inode"
+    # locate the same inode
+    find \
+        $HOME/.cache/uv \
+        $HOME/.local/share/uv/tools \
+        $HOME/.uv/venv \
+        $HOME/repos \
+        -type f -links +1 -inum $inode
+}
 
 # uv pip install basic
 uv.pip.install-basic()
