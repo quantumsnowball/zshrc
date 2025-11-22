@@ -75,24 +75,24 @@ alias uv.pip.remove='uv pip uninstall'
 alias uv.piprm=uv.pip.remove
 uv.pip.install-basic()
 {
-# general
-uv pip install \
-    click typer \
-    rich colorama \
-    ipython jupyter pytest
-# numeric
-uv pip install \
-    numpy scipy pandas
-# charting
-uv pip install \
-    matplotlib
-# networking
-uv pip install \
-    requests aiohttp
-# linting
-uv pip install \
-    mypy isort autopep8
-# debug
-uv pip install \
-    pudb debugpy
+    # general
+    uv pip install \
+        click typer \
+        rich colorama \
+        ipython jupyter pytest
+    # numeric
+    uv pip install \
+        numpy scipy pandas
+    # charting
+    uv pip install \
+        matplotlib
+    # networking
+    uv pip install \
+        requests aiohttp
+    # linting
+    uv pip install \
+        mypy isort autopep8
+    # debug
+    uv pip install \
+        pudb debugpy
 }
