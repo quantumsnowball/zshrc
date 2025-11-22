@@ -6,7 +6,6 @@
 import subprocess
 from pathlib import Path
 
-from rich import box
 from rich.console import Console
 from rich.table import Table
 
@@ -22,8 +21,10 @@ def to_tilda(path: Path)->str:
 class Item:
     def __init__(self, path: Path, *, title: str) -> None:
         self.path = path
-        self._t = Table(box=box.HORIZONTALS, width=TABLE_WIDTH)
+        self._t = Table(box=None, width=TABLE_WIDTH)
         self._t.title = title
+        self._t.title_style = 'white'
+        self._t.title_justify = 'left'
 
     @property
     def size(self) -> int:
@@ -45,6 +46,7 @@ class Item:
         # print
         console = Console()
         console.print(self._t)
+        console.print('')
 
 
 class Items:
@@ -52,8 +54,10 @@ class Items:
         self.query = query
         self.path = path
         self.max_depth = max_depth
-        self._t = Table(box=box.HORIZONTALS, width=TABLE_WIDTH)
+        self._t = Table(box=None, width=TABLE_WIDTH)
         self._t.title = title
+        self._t.title_style = 'white'
+        self._t.title_justify = 'left'
 
     def cal_sizes(self) -> list[tuple[Path, int]]:
         try:
@@ -98,6 +102,7 @@ class Items:
         # print
         console = Console()
         console.print(self._t)
+        console.print('')
 
 
 def main() -> None:
@@ -112,19 +117,19 @@ def main() -> None:
     # tools
     Items(
         '.', home/'.local/share/uv/tools',
-        title="Hard-linked tools environments",
+        title="Tools environments",
     ).present()
 
     # user envs
     Items(
         '.', home/'.uv/venv',
-        title="Hard-linked user environments:",
+        title="User environments",
     ).present()
 
     # project envs under repos
     Items(
         r'^\.venv$', home/'repos',
-        title="Hard-linked project .venv environments:",
+        title="Project .venv environments",
         max_depth=10,
     ).present()
 
