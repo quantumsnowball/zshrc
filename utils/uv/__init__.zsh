@@ -67,10 +67,10 @@ uv.cache.list-entries() {
 }
 
 # uv pip
-alias uv.pipi.install='uv pip install'
-alias uv.pipi=uv.pipi.install
-alias uv.pipi.install.editable='uv pip install -e'
-alias uv.pipi.e=uv.pipi.install.editable
+alias uv.pip.install='uv pip install'
+alias uv.pipi=uv.pip.install
+alias uv.pip.install.editable='uv pip install -e'
+alias uv.pipi.e=uv.pip.install.editable
 alias uv.pip.remove='uv pip uninstall'
 alias uv.piprm=uv.pip.remove
 uv.pip.install-basic()
