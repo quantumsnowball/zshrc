@@ -10,6 +10,7 @@ export UV_HTTP_TIMEOUT=300 # default is 30
 UV_DIR=$HOME/.uv
 VENV_DIR=$UV_DIR/venv/
 DEFAULT_VENV_FILE=$UV_DIR/default-venv
+[[ -f $DEFAULT_VENV_FILE ]] || return
 VENV_NAME=$(cat "$DEFAULT_VENV_FILE")
 VENV_PATH="$HOME/.uv/venv/$VENV_NAME/bin/activate"
 [[ -f "$VENV_PATH" ]] && source "$VENV_PATH"

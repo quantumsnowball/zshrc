@@ -5,9 +5,15 @@ ensure uv || return
 alias uv.python.list='uv python list'
 alias uvpyls=uv.python.list
 
-# list global tools
+# global tools
 alias uv.tool.list='uv tool list --show-version-specifiers --show-with --show-extras --show-python'
 alias uvtoolls=uv.tool.list
+alias uv.tool.install='uv tool install'
+alias uvtooli=uv.tool.install
+alias uv.tool.install.editable='uv tool install -e'
+alias uvtooli.e=uv.tool.install.editable
+alias uv.tool.uninstall='uv tool uninstall'
+alias uvtoolrm=uv.tool.uninstall
 
 # venv
 uv.venv.activate-local () {
@@ -20,9 +26,11 @@ uv.venv.activate-local () {
 
 # cache management
 alias uv.cache.prune='uv cache prune'
-uv.disk-usage () {
-    uv run $HOME/.config/zshrc/utils/_lib/uv.disk-usage.py
+alias uvprune=uv.cache.prune
+uv.venv-info () {
+    uv run $HOME/.config/zshrc/utils/uv/lib/venv-info.py
 }
+alias uv.disk-usage=uv.venv-info
 uv.trace-hardlink() {
     (( $# == 1 )) || { echo "Usage: uv.trace-hardlink <path-to-file-in-uv-cache>" && return 1 }
     # args
@@ -55,10 +63,16 @@ uv.cache.list-entries() {
         printf '%-40s %-40s %s\n' "$pkg" "$tag" "${dir:t}"
     done | 
         sort -f -k1 |  # sort by pkg name
-        less
+        less -c -S -R
 }
 
-# uv pip install basic
+# uv pip
+alias uv.pipi.install='uv pip install'
+alias uv.pipi=uv.pipi.install
+alias uv.pipi.install.editable='uv pip install -e'
+alias uv.pipi.e=uv.pipi.install.editable
+alias uv.pip.remove='uv pip uninstall'
+alias uv.piprm=uv.pip.remove
 uv.pip.install-basic()
 {
 # general
