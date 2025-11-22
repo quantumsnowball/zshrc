@@ -15,6 +15,9 @@ WIDTH_COL1 = 65
 TABLE_WIDTH = WIDTH_COL0 + WIDTH_COL1
 
 
+def to_tilda(path: Path)->str:
+    return f'~/{path.relative_to(Path.home())}'
+
 class Item:
     def __init__(self, path: Path, *, title: str) -> None:
         self.path = path
@@ -36,7 +39,7 @@ class Item:
 
     def present(self) -> None:
         self._t.add_column(f'[red]{self.size/1e9:,.3f} GB[/red]', width=WIDTH_COL0, justify='right')
-        self._t.add_column(f'[yellow]{self.path}[/yellow]', width=WIDTH_COL1, style='blue')
+        self._t.add_column(f'[yellow]{to_tilda(self.path)}[/yellow]', width=WIDTH_COL1, style='blue')
         # print
         console = Console()
         console.print(self._t)
@@ -72,9 +75,9 @@ class Items:
         sizes = self.cal_sizes()
         total_size = sum(s[1] for s in sizes)
         self._t.add_column(f'[red]{total_size/1e6:,.3f} GB[/red]', width=WIDTH_COL0, style='green', justify='right')
-        self._t.add_column(f'[yellow]{self.path}[/yellow]', width=WIDTH_COL1, style='blue')
+        self._t.add_column(f'[yellow]{to_tilda(self.path)}[/yellow]', width=WIDTH_COL1, style='blue')
         for path, size in sizes:
-            self._t.add_row(f'{size/1e6:,.3f} GB', str(path))
+            self._t.add_row(f'{size/1e6:,.3f} GB', to_tilda(path))
         # print
         console = Console()
         console.print(self._t)
