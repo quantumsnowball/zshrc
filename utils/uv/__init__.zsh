@@ -5,9 +5,11 @@ ensure uv || return
 alias uv.python.list='uv python list'
 alias uvpyls=uv.python.list
 
-# list global tools
+# global tools
 alias uv.tool.list='uv tool list --show-version-specifiers --show-with --show-extras --show-python'
 alias uvtoolls=uv.tool.list
+alias uv.tool.uninstall='uv tool uninstall'
+alias uvtoolrm=uv.tool.uninstall
 
 # venv
 uv.venv.activate-local () {
