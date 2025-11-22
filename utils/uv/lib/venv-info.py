@@ -61,6 +61,7 @@ class Items:
 
     def cal_sizes(self) -> list[tuple[Path, int]]:
         try:
+            assert self.path.exists()
             result = subprocess.check_output([
                 'fd', '-u',
                 '-t', 'd',
