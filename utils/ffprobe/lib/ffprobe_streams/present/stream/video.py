@@ -23,6 +23,12 @@ class Video(Stream[VideoStream]):
         return Entry(field, value)
 
     @property
+    def time_base(self) -> Entry:
+        field = f'[blue]time base[/blue]'
+        value = f'[white]{self._s.time_base}[/white]'
+        return Entry(field, value)
+
+    @property
     def r_frame_rate(self) -> Entry:
         field = f'[blue]frame rate[/blue]'
         value = f'[white]{self._s.r_frame_rate}[/white]'

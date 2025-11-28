@@ -40,6 +40,7 @@ class RichTable:
                 self._t.add_row(*v.resolution.tuple)
                 self._t.add_row(*v.sample_aspect_ratio.tuple)
                 self._t.add_row(*v.display_aspect_ratio.tuple)
+                self._t.add_row(*v.time_base.tuple)
                 self._t.add_row(*v.r_frame_rate.tuple)
                 self._t.add_row(*v.avg_frame_rate.tuple)
                 self._t.add_row(*v.nb_frames.tuple)
