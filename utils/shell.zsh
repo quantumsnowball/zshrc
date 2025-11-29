@@ -7,6 +7,7 @@ else
     alias sudo='sudo '
 fi
 alias root='/bin/sudo -E -s'
+alias sudo.as='sudo -u'
 # clear
 alias cl=clear
 # reload shell
