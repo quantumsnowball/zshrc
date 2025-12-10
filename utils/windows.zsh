@@ -18,3 +18,6 @@ alias code="$WINDOWS_APPDATA/Local/Programs/Microsoft\ VS\ Code/bin/code"
 
 # windows terminal
 alias windows.terminal.config="nvim $WINDOWS_APPDATA/Local/Packages/Microsoft.WindowsTerminal_*/LocalState/settings.json"
+
+# windows clipboard
+alias windows.clipboard="$WINDOWS_SYSTEM32/clip.exe"

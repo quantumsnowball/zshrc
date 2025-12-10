@@ -8,6 +8,7 @@ windows.whoami() {
 # system
 export WINDOWS_C="/mnt/c";
 export WINDOWS_WINDOWS="$WINDOWS_C/Windows";
+export WINDOWS_SYSTEM32="$WINDOWS_WINDOWS/System32"
 
 # users
 export WINDOWS_USERS="$WINDOWS_C/Users";
