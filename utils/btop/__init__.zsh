@@ -27,3 +27,8 @@ btop.with-boxes() {
     btop -c "$cfg"
 }
 
+alias btop.cpu-gpu='btop.with-boxes "cpu gpu"'
+alias btop.cpu-mem='btop.with-boxes "cpu mem"'
+alias btop.cpu-net='btop.with-boxes "cpu net"'
+alias btop.proc='btop.with-boxes "proc"'
+alias btop.net='btop.with-boxes "net"'
