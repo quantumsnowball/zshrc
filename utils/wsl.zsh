@@ -1,5 +1,6 @@
 alias wsl.config-etc-wsl.conf='sudo v /etc/wsl.conf'
 alias wsl.config-winhome-wslconfig='v ~/winhost/home/.wslconfig'
+alias wsl.to-wslpath='wslpath'
 
 wsl.disk-usage() {
     local vhd_path="/mnt/c/WSL/Arch/ext4.vhdx"
@@ -51,3 +52,9 @@ wsl.disk-usage() {
     
     echo "${BLUE}-----------------------------${RESET}"
 }
+
+# helper
+cd.win() {
+    cd "$(wslpath $1)"
+}
+
