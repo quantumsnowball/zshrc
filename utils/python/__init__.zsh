@@ -19,3 +19,7 @@ export PYTHONBREAKPOINT=pudb.set_trace
 pyclean () {
     find . -type f -name '*.py[co]' -delete -o -type d -name __pycache__ -delete
 }
+
+# refactor
+alias py.refactor.abs-to-rel="uv run --no-project --with=libcst --with=pudb $HOME/.config/zshrc/utils/python/refactor_utils/abs_to_rel.py"
+
