@@ -41,4 +41,5 @@ zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 
 autoload -Uz compinit
 compinit
 
-
+# pre command wrapper
+compdef _precommand pager
