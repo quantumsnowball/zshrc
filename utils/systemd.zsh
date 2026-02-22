@@ -2,6 +2,12 @@ installed systemctl || return
 
 
 # systemctl
+alias sysd.status='systemctl status'
+alias sysd.ls.enabled='systemctl list-unit-files --state=enabled'
+alias sysd.ls.disabled='systemctl list-unit-files --state=disabled'
+alias sysd.ls.all='systemctl list-unit-files'
+alias sysd.ls='sysd.ls.enabled'
+alias sysd.ls-grep='systemctl list-unit-files | rg'
 sysd.restart-service () {
     sudo systemctl restart $1
 }
@@ -19,12 +25,6 @@ sysd.disable-service () {
 }
 sysd.daemon-reload () {
     sudo systemctl daemon-reload
-}
-sysd.ls () {
-    sudo systemctl list-unit-files
-}
-sysd.ls-grep () {
-    sudo systemctl list-unit-files | rg $1
 }
 
 # journalctl
