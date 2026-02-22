@@ -1,4 +1,4 @@
-#compdef cf
+#compdef c
 
 
 local -a repos
