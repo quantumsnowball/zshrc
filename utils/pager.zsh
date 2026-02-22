@@ -8,8 +8,5 @@ pager() {
     # -c: Clear screen before painting
     # -S: Chop long lines (prevents wrapping mess)
     # -R: Repaint (shows colors)
-    "$@" | less -c -S -R
+    "$@" 2>&1 | less -c -S -R
 }
-
-# Tell zsh that 'pager' is a wrapper that follows its first argument
-# compdef _precommand pager
