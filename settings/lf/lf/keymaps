@@ -1,0 +1,8 @@
+# cut
+map x cut
+
+# clear
+map <esc> clear
+
+# show keymaps
+map ? maps

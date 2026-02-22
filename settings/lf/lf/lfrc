@@ -9,3 +9,4 @@ source "~/.config/lf/modules/operation/update"
 source "~/.config/lf/modules/operation/delete"
 source "~/.config/lf/modules/zip"
 
+source "~/.config/lf/keymaps"
