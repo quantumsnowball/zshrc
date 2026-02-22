@@ -3,7 +3,7 @@ alias wsl.config-winhome-wslconfig='v ~/winhost/home/.wslconfig'
 alias wsl.to-wslpath='wslpath'
 
 wsl.disk-usage() {
-    local vhd_path="/mnt/c/WSL/Arch/ext4.vhdx"
+    local vhd_path="/mnt/c/WSL/$1/ext4.vhdx"
     
     echo "${BLUE}--- WSL DISK USAGE REPORT ---${RESET}"
 
