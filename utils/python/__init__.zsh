@@ -21,5 +21,10 @@ pyclean () {
 }
 
 # refactor
+py.format.use-single-quote-string() {
+    ruff check --select Q --fix \
+        --config "lint.flake8-quotes.inline-quotes='single'" \
+        --config "lint.flake8-quotes.docstring-quotes='single'" "$@"
+}
 alias py.refactor.abs-to-rel="uv run --no-project --with=libcst --with=pudb $HOME/.config/zshrc/utils/python/refactor_utils/abs_to_rel.py"
 
