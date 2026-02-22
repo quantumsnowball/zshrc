@@ -21,6 +21,8 @@ zsh.resource-zshrc () {
     source ~/.zshrc
 }
 alias rrr=zsh.resource-zshrc
+# reset completion cache
+alias zsh.reset-completion-cache='rm ~/.zcompdump*'
 # exit
 alias x=exit
 alias q=exit
