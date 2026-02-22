@@ -2,38 +2,37 @@ installed systemctl || return
 
 
 # systemctl
-systemctl.restart-service () {
+sysd.restart-service () {
     sudo systemctl restart $1
 }
-systemctl.start-service () {
+sysd.start-service () {
     sudo systemctl start $1
 }
-systemctl.stop-service () {
+sysd.stop-service () {
     sudo systemctl start $1
 }
-systemctl.enable-service () {
+sysd.enable-service () {
     sudo systemctl enable $1
 }
-systemctl.disable-service () {
+sysd.disable-service () {
     sudo systemctl disable $1
 }
-systemctl.daemon-reload () {
+sysd.daemon-reload () {
     sudo systemctl daemon-reload
 }
-systemctl.ls () {
+sysd.ls () {
     sudo systemctl list-unit-files
 }
-systemctl.ls-grep () {
+sysd.ls-grep () {
     sudo systemctl list-unit-files | rg $1
 }
 
 # journalctl
-journalctl.log () {
-    sudo journalctl -u $1
+alias sysd.log='journalctl'
+sysd.log-for () {
+    journalctl -u $1
 }
-alias systemctl.log=journalctl.log
-journalctl.log.clear () {
+sysd.log.clear () {
     sudo journalctl --rotate
     sudo journalctl --vacuum-time=1s
 }
-alias systemctl.log.clear=journalctl.log.clear
