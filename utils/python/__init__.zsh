@@ -26,5 +26,9 @@ py.format.use-single-quote-string() {
         --config "lint.flake8-quotes.inline-quotes='single'" \
         --config "lint.flake8-quotes.docstring-quotes='single'" "$@"
 }
+py.refactor.remove-unused-import() {
+    ruff check --select F401 --fix "$@"
+}
+
 alias py.refactor.abs-to-rel="uv run --no-project --with=libcst --with=pudb $HOME/.config/zshrc/utils/python/refactor_utils/abs_to_rel.py"
 
