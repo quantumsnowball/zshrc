@@ -18,7 +18,7 @@ alias pmls=pm.ls
 alias pm.ls-grep='pacman -Q | rg'
 alias pmrg=pm.ls-grep
 
-alias pm.remove='sudo pacman -R'
+alias pm.remove='sudo pacman -Rsu'
 alias pmrm=pm.remove
 
 alias pm.update='sudo pacman -Sy && pacman -Qu'
