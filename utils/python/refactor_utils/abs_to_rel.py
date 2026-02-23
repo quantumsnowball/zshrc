@@ -2,12 +2,11 @@ from pathlib import Path
 from typing import Annotated
 
 import libcst as cst
-import typer
 from pathspec import PathSpec
 from rich.console import Console
-from typer import Argument, Option
+from typer import Argument, Option, Typer
 
-app = typer.Typer()
+app = Typer()
 console = Console(highlight=False)
 
 
@@ -60,8 +59,10 @@ class File:
 
     def refactor(self, fix: bool) -> None:
         source = self.path.read_text()
-        tree = cst.parse_module(source)
-        modified_tree = tree.visit(self._transformer)
+        source_tree = cst.parse_module(source)
+        modified_tree = source_tree.visit(self._transformer)
+        if modified_tree.deep_equals(source_tree):
+            return
         if not fix:
             console.print(f'[[yellow]FIXABLE[/]] {self.path}')
             return
