@@ -75,22 +75,24 @@ class File:
         self.path = path
         self._transformer = AbsToRelImportTransformer(self.path, max_dots)
 
-    def refactor(self, fix: bool, verbose: bool) -> None:
+    def refactor(self, fix: bool, verbose: bool) -> list[Syntax | str] | None:
+        output = []
         source = self.path.read_text()
         source_tree = cst.parse_module(source)
         modified_tree = source_tree.visit(self._transformer)
         if modified_tree.deep_equals(source_tree):
-            return
+            return None
         if not fix:
-            console.print(f'[[yellow]FIXABLE[/]] {self.path}')
+            output.append(f'[[yellow]FIXABLE[/]] {self.path}')
             if verbose:
-                console.print(Syntax(''.join(difflib.unified_diff(
+                output.append(Syntax(''.join(difflib.unified_diff(
                     source.splitlines(True),
                     modified_tree.code.splitlines(True)
                 )), 'diff'))
-            return
-        # self._path.write_text(modified_tree.code)
-        console.print(f'[[green]FIXED[/]] {self.path}')
+        else:
+            # self._path.write_text(modified_tree.code)
+            output.append(f'[[green]FIXED[/]] {self.path}')
+        return output
 
 
 class Project:
@@ -114,17 +116,22 @@ class Project:
         ignore_spec = PathSpec.from_lines('gitwildmatch', ignore)
         self._ignore_spec = gitignore_spec + ignore_spec
 
-    def _worker(self, path: Path, max_dots: int, fix: bool, verbose: bool) -> None:
+    def _worker(self, path: Path, max_dots: int, fix: bool, verbose: bool) -> list[Syntax | str] | None:
         return File(path, max_dots).refactor(fix, verbose)
 
     def refactor(self, fix: bool, verbose: bool) -> None:
         paths_selected_by_pattern = self.root_dir.rglob(self._pattern)
         paths_not_ignored = [p for p in paths_selected_by_pattern if not self._ignore_spec.match_file(p)]
         with futures.ProcessPoolExecutor() as executor:
-            executor.map(
+            results = executor.map(
                 partial(self._worker, max_dots=self._max_dots, fix=fix, verbose=verbose),
-                paths_not_ignored,
+                sorted(paths_not_ignored),
             )
+            for result in results:
+                if not result:
+                    continue
+                for rich_obj in result:
+                    console.print(rich_obj)
 
 
 @app.command(no_args_is_help=True)
