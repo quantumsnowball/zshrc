@@ -1,5 +1,7 @@
 import difflib
 import importlib.util
+from functools import cache
+from importlib.machinery import ModuleSpec
 from pathlib import Path
 from typing import Annotated
 
@@ -18,6 +20,13 @@ class AbsToRelImportTransformer(cst.CSTTransformer):
         self.current_path = current_path
         self.max_dots = max_dots
 
+    @cache
+    def _try_import_module(self, module_string: str) -> ModuleSpec | None:
+        try:
+            return importlib.util.find_spec(module_string)
+        except Exception:
+            return None
+
     def leave_ImportFrom(self, original_node: cst.ImportFrom, updated_node: cst.ImportFrom) -> cst.ImportFrom:
         # skip relative imports
         if len(updated_node.relative) > 0:
@@ -30,10 +39,7 @@ class AbsToRelImportTransformer(cst.CSTTransformer):
         # try to import the module string
         module_string = cst.Module(body=[]).code_for_node(updated_node.module)
         module_strings = module_string.split('.')
-        try:
-            import_result = importlib.util.find_spec(module_string)
-        except ModuleNotFoundError:
-            import_result = None
+        import_result = self._try_import_module(module_string)
 
         # skip builtin modules
         if import_result is not None:
