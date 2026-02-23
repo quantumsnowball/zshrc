@@ -1,79 +1,95 @@
-import ast
-import os
 from pathlib import Path
 
+import libcst as cst
 import typer
 
 app = typer.Typer()
 
 
-def convert_import(
-    node: ast.AST,
-    current_path: Path,
-    max_dots: int,
-) -> ast.AST:
-    """ Convert absolute import to relative import, restricted by max_dots """
-    # only convert import from
-    if not isinstance(node, ast.ImportFrom):
-        return node
-    # don't convert current relative import
-    if not node.level == 0:
-        return node
-    # ensure module
-    if not node.module:
-        return node
-    # Get the relative path using pathlib
-    module_path = Path(*node.module.split('.'))
-    try:
-        relative_path = module_path.relative_to(current_path.parent, walk_up=True)
-    except ValueError:
-        return node
+class AbsToRelImportTransformer(cst.CSTTransformer):
+    def __init__(self, current_path: Path, max_dots: int):
+        self.current_path = current_path
+        self.max_dots = max_dots
 
-    # Count the number of dots in the relative path
-    dot_count = relative_path.parts.count('..') + 1
-    if dot_count > max_dots:
-        return node
-    parts = [p for p in relative_path.parts if p != '..']
-    rel_names = '.'*dot_count + '.'.join(parts)
-    rel_node = ast.ImportFrom(
-        module=rel_names,
-        names=node.names,
-        level=dot_count,
-    )
-    return rel_node
+    def leave_ImportFrom(self, original_node: cst.ImportFrom, updated_node: cst.ImportFrom) -> cst.ImportFrom:
+        # 1. Skip if it's already a relative import (level > 0)
+        if len(updated_node.relative) > 0:
+            return updated_node
+
+        # 2. Ensure there is a module (skip 'from . import x')
+        if updated_node.module is None:
+            return updated_node
+
+        # 3. Get the module name as a string (e.g., "mosaic.utils.time")
+        module_str = cst.Module(body=[]).code_for_node(updated_node.module)
+
+        # 4. Use your Pathlib logic
+        module_path = Path(*module_str.split('.'))
+        try:
+            # Note: current_path must be absolute or relative to project root
+            relative_path = module_path.relative_to(self.current_path.parent, walk_up=True)
+        except ValueError:
+            return updated_node
+
+        # 5. Calculate dots (walk_up=True puts '..' in parts)
+        dot_count = list(relative_path.parts).count('..') + 1
+
+        if dot_count > self.max_dots:
+            return updated_node
+
+        # 6. Extract the remaining module parts (filtering out '..')
+        remaining_parts = [p for p in relative_path.parts if p != '..']
+        new_module_str = ".".join(remaining_parts)
+
+        # 7. Construct the new LibCST node
+        return updated_node.with_changes(
+            module=cst.parse_expression(new_module_str) if new_module_str else None,
+            relative=[cst.Dot() for _ in range(dot_count)]
+        )
 
 
-def refactor_file(
-    path: Path,
-    max_dots: int,
-) -> None:
-    """ Refactor a single Python file to convert imports to relative ones """
-    with open(path, 'r') as f:
-        source = f.read()
+class File:
+    def __init__(self, path: Path) -> None:
+        self.path = path
 
-    tree = ast.parse(source)
+    @property
+    def valid(self) -> bool:
+        return True
 
-    # Traverse and refactor the imports
-    for node in ast.walk(tree):
-        if isinstance(node, (ast.ImportFrom, )):
-            node = convert_import(node, path, max_dots)
+    def refactor(self, max_dots: int) -> None:
+        if not self.valid:
+            return
+        source = self.path.read_text()
+        tree = cst.parse_module(source)
+        transformer = AbsToRelImportTransformer(self.path, max_dots)
+        modified_tree = tree.visit(transformer)
+        # self._path.write_text(modified_tree.code)
+        typer.echo(f'refactored {self.path}')
 
-    # Write the modified code back to the file
-    modified_code = ast.unparse(tree)
-    with open(path, 'w') as f:
-        f.write(modified_code)
+
+class Project:
+    def __init__(
+        self,
+        dir: Path,
+        *,
+        pattern: str = '*.py',
+        ignored: tuple[str, ...] = ('.venv', '.git', '__pycache__', 'dist'),
+    ) -> None:
+        self._root_dir = dir
+        self._pattern = pattern
+        self._ignored = list(ignored)
+
+    def refactor(self, max_dots: int) -> None:
+        paths = self._root_dir.rglob(self._pattern)
+        for path in paths:
+            file = File(path)
+            if file.valid:
+                file.refactor(max_dots)
 
 
 @app.command()
-def refactor_project(
-    current_dir: Path,
-    max_dots: int = 2,
-) -> None:
-    """ Refactor all Python files in a project directory to use relative imports """
-    for current_file in current_dir.rglob('*.py'):
-        typer.echo(f'Refactoring {current_file}')
-        refactor_file(current_file, max_dots)
-    typer.echo(f"Refactoring completed for all Python files in {current_dir} with max {max_dots} dot(s) in relative imports.")
+def refactor_project(current_dir: Path, max_dots: int = 1) -> None:
+    Project(current_dir).refactor(max_dots)
 
 
 if __name__ == "__main__":
