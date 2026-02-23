@@ -1,9 +1,11 @@
+import difflib
 from pathlib import Path
 from typing import Annotated
 
 import libcst as cst
 from pathspec import PathSpec
 from rich.console import Console
+from rich.syntax import Syntax
 from typer import Argument, Option, Typer
 
 app = Typer()
@@ -57,7 +59,7 @@ class File:
         self.path = path
         self._transformer = AbsToRelImportTransformer(self.path, max_dots)
 
-    def refactor(self, fix: bool) -> None:
+    def refactor(self, fix: bool, verbose: bool) -> None:
         source = self.path.read_text()
         source_tree = cst.parse_module(source)
         modified_tree = source_tree.visit(self._transformer)
@@ -65,6 +67,11 @@ class File:
             return
         if not fix:
             console.print(f'[[yellow]FIXABLE[/]] {self.path}')
+            if verbose:
+                console.print(Syntax(''.join(difflib.unified_diff(
+                    source.splitlines(True),
+                    modified_tree.code.splitlines(True)
+                )), 'diff'))
             return
         # self._path.write_text(modified_tree.code)
         console.print(f'[[green]FIXED[/]] {self.path}')
@@ -91,11 +98,11 @@ class Project:
         ignore_spec = PathSpec.from_lines('gitwildmatch', ignore)
         self._ignore_spec = gitignore_spec + ignore_spec
 
-    def refactor(self, fix: bool) -> None:
+    def refactor(self, fix: bool, verbose: bool) -> None:
         paths_selected_by_pattern = self.root_dir.rglob(self._pattern)
         paths_not_ignored = [p for p in paths_selected_by_pattern if not self._ignore_spec.match_file(p)]
         for path in paths_not_ignored:
-            File(path, self._max_dots).refactor(fix)
+            File(path, self._max_dots).refactor(fix, verbose)
 
 
 @app.command(no_args_is_help=True)
@@ -106,6 +113,7 @@ def refactor_project(
     gitignore: Annotated[bool, Option(help='respect the .gitignore file')] = True,
     ignore: Annotated[list[str], Option(help='file ignore pattern(s), use git wild match')] = [],
     fix: Annotated[bool, Option('--fix', help='apply fix to the fixable file(s), use with care')] = False,
+    verbose: Annotated[bool, Option('--verbose', '-v', help='display verbose info')] = False,
 ) -> None:
     Project(
         current_dir,
@@ -113,7 +121,7 @@ def refactor_project(
         pattern=pattern,
         gitignore=gitignore,
         ignore=ignore,
-    ).refactor(fix)
+    ).refactor(fix, verbose)
 
 
 if __name__ == "__main__":
