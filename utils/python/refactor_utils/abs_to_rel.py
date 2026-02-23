@@ -2,6 +2,7 @@ from pathlib import Path
 
 import libcst as cst
 import typer
+from pathspec import PathSpec
 
 app = typer.Typer()
 
@@ -52,13 +53,7 @@ class File:
     def __init__(self, path: Path) -> None:
         self.path = path
 
-    @property
-    def valid(self) -> bool:
-        return True
-
     def refactor(self, max_dots: int) -> None:
-        if not self.valid:
-            return
         source = self.path.read_text()
         tree = cst.parse_module(source)
         transformer = AbsToRelImportTransformer(self.path, max_dots)
@@ -75,16 +70,19 @@ class Project:
         pattern: str = '*.py',
         ignored: tuple[str, ...] = ('.venv', '.git', '__pycache__', 'dist'),
     ) -> None:
-        self._root_dir = dir
+        self.root_dir = dir
         self._pattern = pattern
-        self._ignored = list(ignored)
+        self._ignore_spec = PathSpec.from_lines('gitwildmatch', [
+            line
+            for raw_line in (self.root_dir/'.gitignore').read_text().splitlines()
+            if (line := raw_line.strip()) and not line.startswith("#")
+        ]) + PathSpec.from_lines('gitwildmatch', ignored)
 
     def refactor(self, max_dots: int) -> None:
-        paths = self._root_dir.rglob(self._pattern)
-        for path in paths:
-            file = File(path)
-            if file.valid:
-                file.refactor(max_dots)
+        paths_selected_by_pattern = self.root_dir.rglob(self._pattern)
+        paths_not_ignored = [p for p in paths_selected_by_pattern if not self._ignore_spec.match_file(p)]
+        for path in paths_not_ignored:
+            File(path).refactor(max_dots)
 
 
 @app.command()
