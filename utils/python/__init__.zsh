@@ -29,10 +29,10 @@ py.format.use-single-quote-string() {
 py.refactor.remove-unused-import() {
     ruff check --select F401 --fix "$@"
 }
-
 py.refactor.abs-to-rel() {
+    PYTHONPATH="$HOME/.config/zshrc/utils/python:$PYTHONPATH" \
     uv run --no-project --python=3.14t \
         --with=typer --with=libcst --with=pathspec --with=ruff --with=pudb \
-        $HOME/.config/zshrc/utils/python/refactor_utils/abs_to_rel.py "$@"
+        -m refactor.abs_to_rel "$@"
 }
 
