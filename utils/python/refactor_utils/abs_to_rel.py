@@ -1,8 +1,10 @@
 from pathlib import Path
+from typing import Annotated
 
 import libcst as cst
 import typer
 from pathspec import PathSpec
+from typer import Argument, Option
 
 app = typer.Typer()
 
@@ -53,11 +55,13 @@ class File:
     def __init__(self, path: Path) -> None:
         self.path = path
 
-    def refactor(self, max_dots: int) -> None:
+    def refactor(self, max_dots: int, fix: bool) -> None:
         source = self.path.read_text()
         tree = cst.parse_module(source)
         transformer = AbsToRelImportTransformer(self.path, max_dots)
         modified_tree = tree.visit(transformer)
+        if not fix:
+            return
         # self._path.write_text(modified_tree.code)
         typer.echo(f'refactored {self.path}')
 
@@ -78,16 +82,20 @@ class Project:
             if (line := raw_line.strip()) and not line.startswith("#")
         ]) + PathSpec.from_lines('gitwildmatch', ignored)
 
-    def refactor(self, max_dots: int) -> None:
+    def refactor(self, max_dots: int, fix: bool) -> None:
         paths_selected_by_pattern = self.root_dir.rglob(self._pattern)
         paths_not_ignored = [p for p in paths_selected_by_pattern if not self._ignore_spec.match_file(p)]
         for path in paths_not_ignored:
-            File(path).refactor(max_dots)
+            File(path).refactor(max_dots, fix)
 
 
-@app.command()
-def refactor_project(current_dir: Path, max_dots: int = 1) -> None:
-    Project(current_dir).refactor(max_dots)
+@app.command(no_args_is_help=True)
+def refactor_project(
+    current_dir: Annotated[Path, Argument(help='target directory to refactor')],
+    max_dots: Annotated[int, Option('--max_dots', '-m', help='maximum allowed level of relative')] = 1,
+    fix: Annotated[bool, Option('--fix', help='')] = False,
+) -> None:
+    Project(current_dir).refactor(max_dots, fix)
 
 
 if __name__ == "__main__":
