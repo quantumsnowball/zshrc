@@ -32,7 +32,7 @@ py.refactor.remove-unused-import() {
 
 py.refactor.abs-to-rel() {
     uv run --no-project --python=3.14t \
-        --with=typer --with=libcst --with=pathspec --with=pudb \
+        --with=typer --with=libcst --with=pathspec --with=ruff --with=pudb \
         $HOME/.config/zshrc/utils/python/refactor_utils/abs_to_rel.py "$@"
 }
 

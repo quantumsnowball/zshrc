@@ -1,6 +1,7 @@
 import concurrent.futures as futures
 import difflib
 import importlib.util
+import subprocess
 from functools import cache, partial
 from importlib.machinery import ModuleSpec
 from pathlib import Path
@@ -75,6 +76,20 @@ class File:
         self.path = path
         self._transformer = AbsToRelImportTransformer(self.path, max_dots)
 
+    def _ruff_isort(self, input: str) -> str:
+        try:
+            return subprocess.check_output(
+                ['ruff', 'check', '--select', 'I', '--fix', '-'],
+                input=input,
+                stderr=subprocess.DEVNULL,
+                text=True,
+            )
+        except subprocess.CalledProcessError:
+            return input
+        except Exception as e:
+            console.print(f'[red]{e}[/]')
+            return input
+
     def refactor(self, fix: bool, verbose: bool) -> list[Syntax | str] | None:
         output = []
         source = self.path.read_text()
@@ -90,7 +105,8 @@ class File:
                     modified_tree.code.splitlines(True)
                 )), 'diff'))
         else:
-            self.path.write_text(modified_tree.code)
+            sorted_code = self._ruff_isort(modified_tree.code)
+            self.path.write_text(sorted_code)
             output.append(f'[[green]FIXED[/]] {self.path}')
         return output
 
