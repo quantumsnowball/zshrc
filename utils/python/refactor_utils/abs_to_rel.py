@@ -54,7 +54,7 @@ class AbsToRelImportTransformer(cst.CSTTransformer):
 
 
 class File:
-    def __init__(self, path: Path, *, max_dots: int) -> None:
+    def __init__(self, path: Path, max_dots: int) -> None:
         self.path = path
         self._transformer = AbsToRelImportTransformer(self.path, max_dots)
 
@@ -75,8 +75,8 @@ class Project:
         dir: Path,
         *,
         max_dots: int,
-        pattern: str = '*.py',
-        ignored: tuple[str, ...] = ('.venv', '.git', '__pycache__', 'dist'),
+        pattern: str,
+        ignore: list[str],
     ) -> None:
         self.root_dir = dir
         self._max_dots = max_dots
@@ -85,24 +85,28 @@ class Project:
             line
             for raw_line in (self.root_dir/'.gitignore').read_text().splitlines()
             if (line := raw_line.strip()) and not line.startswith("#")
-        ]) + PathSpec.from_lines('gitwildmatch', ignored)
+        ]) + PathSpec.from_lines('gitwildmatch', ignore)
 
     def refactor(self, fix: bool) -> None:
         paths_selected_by_pattern = self.root_dir.rglob(self._pattern)
         paths_not_ignored = [p for p in paths_selected_by_pattern if not self._ignore_spec.match_file(p)]
         for path in paths_not_ignored:
-            File(path, max_dots=self._max_dots).refactor(fix)
+            File(path, self._max_dots).refactor(fix)
 
 
 @app.command(no_args_is_help=True)
 def refactor_project(
     current_dir: Annotated[Path, Argument(help='target directory to refactor')],
     max_dots: Annotated[int, Option('--max_dots', '-m', help='maximum allowed level of relative')] = 1,
+    pattern: Annotated[str, Option('--pattern', help='glob pattern to select files')] = '*.py',
+    ignore: Annotated[list[str], Option('--ignore', help='file ignore pattern(s), use git wild match')] = [],
     fix: Annotated[bool, Option('--fix', help='')] = False,
 ) -> None:
     Project(
         current_dir,
         max_dots=max_dots,
+        pattern=pattern,
+        ignore=ignore,
     ).refactor(fix)
 
 
