@@ -11,7 +11,8 @@ pager() {
     
     # if first word is an alias, run in newe zsh interactitve shell and get output
     if alias "$1" >/dev/null; then
-        output=$(zsh -i -c "$@" 2>&1) 
+        # quote and escape the argumnt with printf
+        output=$(zsh -i -c "$(printf '%q ' "$@")" 2>&1) 
         echo "$output" | less -cSR
     # if not an alias, then just run it in current shell as a normal command
     else
