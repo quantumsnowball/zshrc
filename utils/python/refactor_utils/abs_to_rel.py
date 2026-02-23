@@ -72,20 +72,23 @@ class File:
 class Project:
     def __init__(
         self,
-        dir: Path,
+        root_dir: Path,
         *,
         max_dots: int,
         pattern: str,
+        gitignore: bool,
         ignore: list[str],
     ) -> None:
-        self.root_dir = dir
+        self.root_dir = root_dir
         self._max_dots = max_dots
         self._pattern = pattern
-        self._ignore_spec = PathSpec.from_lines('gitwildmatch', [
+        gitignore_spec = PathSpec.from_lines('gitwildmatch', [
             line
             for raw_line in (self.root_dir/'.gitignore').read_text().splitlines()
             if (line := raw_line.strip()) and not line.startswith("#")
-        ]) + PathSpec.from_lines('gitwildmatch', ignore)
+        ]) if gitignore else PathSpec([])
+        ignore_spec = PathSpec.from_lines('gitwildmatch', ignore)
+        self._ignore_spec = gitignore_spec + ignore_spec
 
     def refactor(self, fix: bool) -> None:
         paths_selected_by_pattern = self.root_dir.rglob(self._pattern)
@@ -98,14 +101,16 @@ class Project:
 def refactor_project(
     current_dir: Annotated[Path, Argument(help='target directory to refactor')],
     max_dots: Annotated[int, Option('--max_dots', '-m', help='maximum allowed level of relative')] = 1,
-    pattern: Annotated[str, Option('--pattern', help='glob pattern to select files')] = '*.py',
-    ignore: Annotated[list[str], Option('--ignore', help='file ignore pattern(s), use git wild match')] = [],
-    fix: Annotated[bool, Option('--fix', help='')] = False,
+    pattern: Annotated[str, Option(help='glob pattern to select files')] = '*.py',
+    gitignore: Annotated[bool, Option(help='respect the .gitignore file')] = True,
+    ignore: Annotated[list[str], Option(help='file ignore pattern(s), use git wild match')] = [],
+    fix: Annotated[bool, Option('--fix', help='apply fix to the fixable file(s), use with care')] = False,
 ) -> None:
     Project(
         current_dir,
         max_dots=max_dots,
         pattern=pattern,
+        gitignore=gitignore,
         ignore=ignore,
     ).refactor(fix)
 
