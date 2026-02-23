@@ -1,7 +1,7 @@
 import concurrent.futures as futures
 import difflib
 import importlib.util
-from functools import cache
+from functools import cache, partial
 from importlib.machinery import ModuleSpec
 from pathlib import Path
 from typing import Annotated
@@ -120,15 +120,10 @@ class Project:
     def refactor(self, fix: bool, verbose: bool) -> None:
         paths_selected_by_pattern = self.root_dir.rglob(self._pattern)
         paths_not_ignored = [p for p in paths_selected_by_pattern if not self._ignore_spec.match_file(p)]
-        n = len(paths_not_ignored)
-
         with futures.ProcessPoolExecutor() as executor:
             executor.map(
-                self._worker,
+                partial(self._worker, max_dots=self._max_dots, fix=fix, verbose=verbose),
                 paths_not_ignored,
-                (self._max_dots, ) * n,
-                (fix, ) * n,
-                (verbose, ) * n,
             )
 
 
