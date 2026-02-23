@@ -8,5 +8,13 @@ pager() {
     # -c: Clear screen before painting
     # -S: Chop long lines (prevents wrapping mess)
     # -R: Repaint (shows colors)
-    "$@" 2>&1 | less -c -S -R
+    
+    # if first word is an alias, run in newe zsh interactitve shell and get output
+    if alias "$1" >/dev/null; then
+        output=$(zsh -i -c "$@" 2>&1) 
+        echo "$output" | less -cSR
+    # if not an alias, then just run it in current shell as a normal command
+    else
+        "$@" 2>&1 | less -cSR
+    fi
 }
