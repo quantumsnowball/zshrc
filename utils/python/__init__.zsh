@@ -30,5 +30,9 @@ py.refactor.remove-unused-import() {
     ruff check --select F401 --fix "$@"
 }
 
-alias py.refactor.abs-to-rel="uv run --no-project --python=3.14t --with=typer --with=libcst --with=pathspec --with=pudb $HOME/.config/zshrc/utils/python/refactor_utils/abs_to_rel.py"
+py.refactor.abs-to-rel() {
+    uv run --no-project --python=3.14t \
+        --with=typer --with=libcst --with=pathspec --with=pudb \
+        $HOME/.config/zshrc/utils/python/refactor_utils/abs_to_rel.py "$@"
+}
 
