@@ -4,9 +4,11 @@ from typing import Annotated
 import libcst as cst
 import typer
 from pathspec import PathSpec
+from rich.console import Console
 from typer import Argument, Option
 
 app = typer.Typer()
+console = Console(highlight=False)
 
 
 class AbsToRelImportTransformer(cst.CSTTransformer):
@@ -52,18 +54,19 @@ class AbsToRelImportTransformer(cst.CSTTransformer):
 
 
 class File:
-    def __init__(self, path: Path) -> None:
+    def __init__(self, path: Path, *, max_dots: int) -> None:
         self.path = path
+        self._transformer = AbsToRelImportTransformer(self.path, max_dots)
 
-    def refactor(self, max_dots: int, fix: bool) -> None:
+    def refactor(self, fix: bool) -> None:
         source = self.path.read_text()
         tree = cst.parse_module(source)
-        transformer = AbsToRelImportTransformer(self.path, max_dots)
-        modified_tree = tree.visit(transformer)
+        modified_tree = tree.visit(self._transformer)
         if not fix:
+            console.print(f'[[yellow]FIXABLE[/]] {self.path}')
             return
         # self._path.write_text(modified_tree.code)
-        typer.echo(f'refactored {self.path}')
+        console.print(f'[[green]FIXED[/]] {self.path}')
 
 
 class Project:
@@ -71,10 +74,12 @@ class Project:
         self,
         dir: Path,
         *,
+        max_dots: int,
         pattern: str = '*.py',
         ignored: tuple[str, ...] = ('.venv', '.git', '__pycache__', 'dist'),
     ) -> None:
         self.root_dir = dir
+        self._max_dots = max_dots
         self._pattern = pattern
         self._ignore_spec = PathSpec.from_lines('gitwildmatch', [
             line
@@ -82,11 +87,11 @@ class Project:
             if (line := raw_line.strip()) and not line.startswith("#")
         ]) + PathSpec.from_lines('gitwildmatch', ignored)
 
-    def refactor(self, max_dots: int, fix: bool) -> None:
+    def refactor(self, fix: bool) -> None:
         paths_selected_by_pattern = self.root_dir.rglob(self._pattern)
         paths_not_ignored = [p for p in paths_selected_by_pattern if not self._ignore_spec.match_file(p)]
         for path in paths_not_ignored:
-            File(path).refactor(max_dots, fix)
+            File(path, max_dots=self._max_dots).refactor(fix)
 
 
 @app.command(no_args_is_help=True)
@@ -95,7 +100,10 @@ def refactor_project(
     max_dots: Annotated[int, Option('--max_dots', '-m', help='maximum allowed level of relative')] = 1,
     fix: Annotated[bool, Option('--fix', help='')] = False,
 ) -> None:
-    Project(current_dir).refactor(max_dots, fix)
+    Project(
+        current_dir,
+        max_dots=max_dots,
+    ).refactor(fix)
 
 
 if __name__ == "__main__":
