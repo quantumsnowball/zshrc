@@ -90,7 +90,7 @@ class File:
                     modified_tree.code.splitlines(True)
                 )), 'diff'))
         else:
-            # self._path.write_text(modified_tree.code)
+            self.path.write_text(modified_tree.code)
             output.append(f'[[green]FIXED[/]] {self.path}')
         return output
 
