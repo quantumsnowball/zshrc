@@ -1,3 +1,4 @@
+import concurrent.futures as futures
 import difflib
 import importlib.util
 from functools import cache
@@ -113,11 +114,22 @@ class Project:
         ignore_spec = PathSpec.from_lines('gitwildmatch', ignore)
         self._ignore_spec = gitignore_spec + ignore_spec
 
+    def _worker(self, path: Path, max_dots: int, fix: bool, verbose: bool) -> None:
+        return File(path, max_dots).refactor(fix, verbose)
+
     def refactor(self, fix: bool, verbose: bool) -> None:
         paths_selected_by_pattern = self.root_dir.rglob(self._pattern)
         paths_not_ignored = [p for p in paths_selected_by_pattern if not self._ignore_spec.match_file(p)]
-        for path in paths_not_ignored:
-            File(path, self._max_dots).refactor(fix, verbose)
+        n = len(paths_not_ignored)
+
+        with futures.ProcessPoolExecutor() as executor:
+            executor.map(
+                self._worker,
+                paths_not_ignored,
+                (self._max_dots, ) * n,
+                (fix, ) * n,
+                (verbose, ) * n,
+            )
 
 
 @app.command(no_args_is_help=True)
