@@ -2,7 +2,7 @@ from functools import partial
 from pathlib import Path
 from typing import Annotated
 
-import libcst as cst
+from libcst import Dot, ImportFrom, Module, parse_expression
 from typer import Argument, Option, Typer
 
 from ._base import Transformer
@@ -16,14 +16,18 @@ class Refactorer(Transformer):
         super().__init__(current_path)
         self.max_dots = max_dots
 
-    def leave_ImportFrom(self, original_node: cst.ImportFrom, updated_node: cst.ImportFrom) -> cst.ImportFrom:
+    def leave_ImportFrom(
+        self,
+        original_node: ImportFrom,
+        updated_node: ImportFrom,
+    ) -> ImportFrom:
         # skip relative imports
         n_rel = len(updated_node.relative)
         if n_rel > 0 or updated_node.module is None:
             return updated_node
 
         # skip if first part of module and file path don't match
-        module_str = cst.Module([]).code_for_node(updated_node.module)
+        module_str = Module([]).code_for_node(updated_node.module)
         module_parts = module_str.split('.')
         if self.current_path.parts[0] != module_parts[0]:
             return updated_node
@@ -47,8 +51,8 @@ class Refactorer(Transformer):
 
         # return the new libcst node
         return updated_node.with_changes(
-            module=cst.parse_expression(new_rel_module_str) if new_rel_module_str else None,
-            relative=[cst.Dot() for _ in range(n_dots)]
+            module=parse_expression(new_rel_module_str) if new_rel_module_str else None,
+            relative=[Dot() for _ in range(n_dots)]
         )
 
 

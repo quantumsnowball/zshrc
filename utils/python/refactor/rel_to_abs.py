@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Annotated
 
-import libcst as cst
+from libcst import ImportFrom, Module, parse_expression
 from typer import Argument, Option, Typer
 
 from ._base import Transformer
@@ -11,7 +11,11 @@ app = Typer()
 
 
 class Refactorer(Transformer):
-    def leave_ImportFrom(self, original_node: cst.ImportFrom, updated_node: cst.ImportFrom) -> cst.ImportFrom:
+    def leave_ImportFrom(
+        self,
+        original_node: ImportFrom,
+        updated_node: ImportFrom,
+    ) -> ImportFrom:
         # skip absolute imports
         n_rel = len(updated_node.relative)
         if n_rel == 0:
@@ -21,12 +25,12 @@ class Refactorer(Transformer):
         path_prefix_parts = self.current_path.parts[:-1]
         prefix_cutoff_index = len(path_prefix_parts)-n_rel+1
         module_prefix_str = '.'.join(path_prefix_parts[:prefix_cutoff_index])
-        module_suffix_str = cst.Module([]).code_for_node(m) if (m := updated_node.module) else ''
+        module_suffix_str = Module([]).code_for_node(m) if (m := updated_node.module) else ''
         new_abs_module_str = '.'.join(filter(lambda s: s != '', [module_prefix_str, module_suffix_str]))
 
         # return the new libcst node
         return updated_node.with_changes(
-            module=cst.parse_expression(new_abs_module_str) if new_abs_module_str else None,
+            module=parse_expression(new_abs_module_str) if new_abs_module_str else None,
             relative=[],
         )
 
