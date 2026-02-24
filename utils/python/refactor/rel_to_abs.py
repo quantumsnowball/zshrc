@@ -13,23 +13,24 @@ app = Typer()
 class Refactorer(Transformer):
     def leave_ImportFrom(self, original_node: cst.ImportFrom, updated_node: cst.ImportFrom) -> cst.ImportFrom:
         # skip absolute imports
-        dot_count = len(updated_node.relative)
-        if dot_count == 0:
+        n_rel = len(updated_node.relative)
+        if n_rel == 0:
             return updated_node
 
         # ensure there is a module
         if updated_node.module is None:
             return updated_node
 
-        # restore absolute part of the module
-        parts = self.current_path.parts[:-1]
-        module_string = cst.Module(body=[]).code_for_node(updated_node.module)
-        module_prefix = '.'.join(parts[:len(parts)-dot_count+1])
-        new_module_string = '.'.join(filter(lambda x: len(x) > 0, [module_prefix, module_string]))
+        # determine new absolute module string
+        path_prefix_parts = self.current_path.parts[:-1]
+        prefix_cutoff_index = len(path_prefix_parts)-n_rel+1
+        module_prefix_str = '.'.join(path_prefix_parts[:prefix_cutoff_index])
+        module_suffix_str = cst.Module(body=[]).code_for_node(updated_node.module)
+        new_abs_module_str = '.'.join(filter(lambda x: len(x) > 0, [module_prefix_str, module_suffix_str]))
 
         # return the new libcst node
         return updated_node.with_changes(
-            module=cst.parse_expression(new_module_string) if new_module_string else None,
+            module=cst.parse_expression(new_abs_module_str) if new_abs_module_str else None,
             relative=[],
         )
 
