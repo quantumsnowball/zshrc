@@ -22,13 +22,20 @@ class Project:
         self.root_dir = root_dir
         self._transformer_factory = transformer_factory
         self._pattern = pattern
-        gitignore_spec = PathSpec.from_lines('gitwildmatch', [
+        self._gitignore = gitignore
+        ignore_spec = PathSpec.from_lines('gitwildmatch', ignore)
+        self._ignore_spec = self._gitignore_spec + ignore_spec
+
+    @property
+    def _gitignore_spec(self) -> PathSpec:
+        gitignore_path = self.root_dir/'.gitignore'
+        if not gitignore_path.exists() or not self._gitignore:
+            return PathSpec([])
+        return PathSpec.from_lines('gitwildmatch', [
             line
             for raw_line in (self.root_dir/'.gitignore').read_text().splitlines()
             if (line := raw_line.strip()) and not line.startswith('#')
-        ]) if gitignore else PathSpec([])
-        ignore_spec = PathSpec.from_lines('gitwildmatch', ignore)
-        self._ignore_spec = gitignore_spec + ignore_spec
+        ])
 
     def _worker(self, path: Path, fix: bool, verbose: bool) -> RichObjects | None:
         file = File(path, transformer_factory=self._transformer_factory)
