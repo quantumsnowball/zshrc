@@ -3,10 +3,9 @@ from functools import partial
 from pathlib import Path
 
 from pathspec import PathSpec
-from rich.syntax import Syntax
 
 from ._base import TransformerFactory
-from ._file import File
+from ._file import File, RichObjects
 from ._utils import console
 
 
@@ -31,20 +30,26 @@ class Project:
         ignore_spec = PathSpec.from_lines('gitwildmatch', ignore)
         self._ignore_spec = gitignore_spec + ignore_spec
 
-    def _worker(self, path: Path, fix: bool, verbose: bool) -> list[Syntax | str] | None:
+    def _worker(self, path: Path, fix: bool, verbose: bool) -> RichObjects | None:
         file = File(path, transformer_factory=self._transformer_factory)
         return file.refactor(fix, verbose)
 
-    def refactor(self, fix: bool, verbose: bool) -> None:
+    def refactor(self, fix: bool, verbose: bool, debug: bool) -> None:
         paths_selected_by_pattern = self.root_dir.rglob(self._pattern)
         paths_not_ignored = [p for p in paths_selected_by_pattern if not self._ignore_spec.match_file(p)]
-        with futures.ProcessPoolExecutor() as executor:
-            results = executor.map(
-                partial(self._worker, fix=fix, verbose=verbose),
-                sorted(paths_not_ignored),
-            )
-            for result in results:
-                if not result:
-                    continue
-                for rich_obj in result:
-                    console.print(rich_obj)
+        if debug:
+            for path in paths_not_ignored:
+                if result := self._worker(path, fix, verbose):
+                    for rich_obj in result:
+                        console.print(rich_obj)
+        else:
+            with futures.ProcessPoolExecutor() as executor:
+                results = executor.map(
+                    partial(self._worker, fix=fix, verbose=verbose),
+                    sorted(paths_not_ignored),
+                )
+                for result in results:
+                    if not result:
+                        continue
+                    for rich_obj in result:
+                        console.print(rich_obj)

@@ -76,6 +76,7 @@ def main(
     ignore: Annotated[list[str], Option(help='file ignore pattern(s), use git wild match')] = [],
     fix: Annotated[bool, Option('--fix', help='apply fix to the fixable file(s), use with care')] = False,
     verbose: Annotated[bool, Option('--verbose', '-v', help='display verbose info')] = False,
+    debug: Annotated[bool, Option('--debug', help='enter debug mode, runs in single thread and process')] = False,
 ) -> None:
     Project(
         current_dir,
@@ -83,7 +84,7 @@ def main(
         pattern=pattern,
         gitignore=gitignore,
         ignore=ignore,
-    ).refactor(fix, verbose)
+    ).refactor(fix, verbose, debug)
 
 
 if __name__ == "__main__":
