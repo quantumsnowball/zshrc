@@ -19,12 +19,12 @@ pyclean () {
 
 # refactor
 py.format.use-single-quote-string() {
-    ruff check --select Q --fix \
+    ruff check --select Q \
         --config "lint.flake8-quotes.inline-quotes='single'" \
         --config "lint.flake8-quotes.docstring-quotes='single'" "$@"
 }
 py.refactor.remove-unused-import() {
-    ruff check --select F401 --fix "$@"
+    ruff check --select F401 "$@"
 }
 _py.refactor() {
     local module="$1"
