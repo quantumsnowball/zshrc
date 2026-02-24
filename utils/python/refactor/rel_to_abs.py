@@ -17,16 +17,12 @@ class Refactorer(Transformer):
         if n_rel == 0:
             return updated_node
 
-        # ensure there is a module
-        if updated_node.module is None:
-            return updated_node
-
         # determine new absolute module string
         path_prefix_parts = self.current_path.parts[:-1]
         prefix_cutoff_index = len(path_prefix_parts)-n_rel+1
         module_prefix_str = '.'.join(path_prefix_parts[:prefix_cutoff_index])
-        module_suffix_str = cst.Module(body=[]).code_for_node(updated_node.module)
-        new_abs_module_str = '.'.join(filter(lambda x: len(x) > 0, [module_prefix_str, module_suffix_str]))
+        module_suffix_str = cst.Module([]).code_for_node(m) if (m := updated_node.module) else ''
+        new_abs_module_str = '.'.join(filter(lambda s: s != '', [module_prefix_str, module_suffix_str]))
 
         # return the new libcst node
         return updated_node.with_changes(
