@@ -12,9 +12,6 @@ alias py.debug.pdb='python -m pdb'
 alias py.debug.pudb='python -m pudb'
 alias pyd=py.debug.pudb
 
-# breakpoint() use pudb
-export PYTHONBREAKPOINT=pudb.set_trace
-
 # clean pycache
 pyclean () {
     find . -type f -name '*.py[co]' -delete -o -type d -name __pycache__ -delete
@@ -29,10 +26,15 @@ py.format.use-single-quote-string() {
 py.refactor.remove-unused-import() {
     ruff check --select F401 --fix "$@"
 }
-py.refactor.abs-to-rel() {
+_py.refactor() {
+    local module="$1"
+    shift
+
     PYTHONPATH="$HOME/.config/zshrc/utils/python:$PYTHONPATH" \
     uv run --no-project --python=3.14t \
         --with=typer --with=libcst --with=pathspec --with=ruff --with=pudb \
-        -m refactor.abs_to_rel "$@"
+        -m "$module" "$@"
 }
+py.refactor.abs-to-rel() { _py.refactor refactor.abs_to_rel "$@" }
+py.refactor.rel-to-abs() { _py.refactor refactor.rel_to_abs "$@" }
 
