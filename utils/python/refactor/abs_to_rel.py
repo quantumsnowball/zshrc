@@ -1,0 +1,80 @@
+from functools import partial
+from pathlib import Path
+from typing import Annotated
+
+from libcst import Dot, ImportFrom, Module, parse_expression
+from typer import Argument, Option, Typer
+
+from ._base import Transformer
+from ._project import Project
+
+app = Typer()
+
+
+class Refactorer(Transformer):
+    def __init__(self, current_path: Path, *, max_dots: int) -> None:
+        super().__init__(current_path)
+        self.max_dots = max_dots
+
+    def leave_ImportFrom(
+        self,
+        original_node: ImportFrom,
+        updated_node: ImportFrom,
+    ) -> ImportFrom:
+        # skip relative imports
+        n_rel = len(updated_node.relative)
+        if n_rel > 0 or updated_node.module is None:
+            return updated_node
+
+        # skip if first part of module and file path don't match
+        module_str = Module([]).code_for_node(updated_node.module)
+        module_parts = module_str.split('.')
+        if self.current_path.parts[0] != module_parts[0]:
+            return updated_node
+
+        # determine relative position and dot count
+        module_path = Path(*module_parts)
+        try:
+            # Note: current_path must be absolute or relative to project root
+            relative_path = module_path.relative_to(self.current_path.parent, walk_up=True)
+        except ValueError:
+            return updated_node
+        n_dots = list(relative_path.parts).count('..') + 1
+
+        # skip if dot count greater than max_dots allows
+        if n_dots > self.max_dots:
+            return updated_node
+
+        # determine relative import module string
+        module_suffix_parts = [p for p in relative_path.parts if p != '..']
+        new_rel_module_str = '.'.join(module_suffix_parts)
+
+        # return the new libcst node
+        return updated_node.with_changes(
+            module=parse_expression(new_rel_module_str) if new_rel_module_str else None,
+            relative=[Dot() for _ in range(n_dots)]
+        )
+
+
+@app.command(no_args_is_help=True)
+def main(
+    current_dir: Annotated[Path, Argument(help='target directory to refactor')],
+    max_dots: Annotated[int, Option('--max_dots', '-m', help='maximum allowed level of relative')] = 1,
+    pattern: Annotated[str, Option(help='glob pattern to select files')] = '*.py',
+    gitignore: Annotated[bool, Option(help='respect the .gitignore file')] = True,
+    ignore: Annotated[list[str], Option(help='file ignore pattern(s), use git wild match')] = [],
+    fix: Annotated[bool, Option('--fix', help='apply fix to the fixable file(s), use with care')] = False,
+    verbose: Annotated[bool, Option('--verbose', '-v', help='display verbose info')] = False,
+    debug: Annotated[bool, Option('--debug', help='enter debug mode, runs in single thread and process')] = False,
+) -> None:
+    Project(
+        current_dir,
+        transformer_factory=partial(Refactorer, max_dots=max_dots),
+        pattern=pattern,
+        gitignore=gitignore,
+        ignore=ignore,
+    ).refactor(fix, verbose, debug)
+
+
+if __name__ == '__main__':
+    app()

@@ -1,0 +1,58 @@
+from pathlib import Path
+from typing import Annotated
+
+from libcst import ImportFrom, Module, parse_expression
+from typer import Argument, Option, Typer
+
+from ._base import Transformer
+from ._project import Project
+
+app = Typer()
+
+
+class Refactorer(Transformer):
+    def leave_ImportFrom(
+        self,
+        original_node: ImportFrom,
+        updated_node: ImportFrom,
+    ) -> ImportFrom:
+        # skip absolute imports
+        n_rel = len(updated_node.relative)
+        if n_rel == 0:
+            return updated_node
+
+        # determine new absolute module string
+        path_prefix_parts = self.current_path.parts[:-1]
+        prefix_cutoff_index = len(path_prefix_parts)-n_rel+1
+        module_prefix_str = '.'.join(path_prefix_parts[:prefix_cutoff_index])
+        module_suffix_str = Module([]).code_for_node(m) if (m := updated_node.module) else ''
+        new_abs_module_str = '.'.join(filter(lambda s: s != '', [module_prefix_str, module_suffix_str]))
+
+        # return the new libcst node
+        return updated_node.with_changes(
+            module=parse_expression(new_abs_module_str) if new_abs_module_str else None,
+            relative=[],
+        )
+
+
+@app.command(no_args_is_help=True)
+def main(
+    current_dir: Annotated[Path, Argument(help='target directory to refactor')],
+    pattern: Annotated[str, Option(help='glob pattern to select files')] = '*.py',
+    gitignore: Annotated[bool, Option(help='respect the .gitignore file')] = True,
+    ignore: Annotated[list[str], Option(help='file ignore pattern(s), use git wild match')] = [],
+    fix: Annotated[bool, Option('--fix', help='apply fix to the fixable file(s), use with care')] = False,
+    verbose: Annotated[bool, Option('--verbose', '-v', help='display verbose info')] = False,
+    debug: Annotated[bool, Option('--debug', help='enter debug mode, runs in single thread and process')] = False,
+) -> None:
+    Project(
+        current_dir,
+        transformer_factory=Refactorer,
+        pattern=pattern,
+        gitignore=gitignore,
+        ignore=ignore,
+    ).refactor(fix, verbose, debug)
+
+
+if __name__ == '__main__':
+    app()
