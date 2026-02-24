@@ -1,5 +1,5 @@
 import importlib.util
-from functools import cache
+from functools import cache, partial
 from importlib.machinery import ModuleSpec
 from pathlib import Path
 from typing import Annotated
@@ -14,6 +14,10 @@ app = Typer()
 
 
 class Refactorer(Transformer):
+    def __init__(self, current_path: Path, *, max_dots: int) -> None:
+        super().__init__(current_path)
+        self.max_dots = max_dots
+
     @cache
     def _try_import_module(self, module_string: str) -> ModuleSpec | None:
         try:
@@ -75,8 +79,7 @@ def main(
 ) -> None:
     Project(
         current_dir,
-        transformer_cls=Refactorer,
-        max_dots=max_dots,
+        transformer_factory=partial(Refactorer, max_dots=max_dots),
         pattern=pattern,
         gitignore=gitignore,
         ignore=ignore,

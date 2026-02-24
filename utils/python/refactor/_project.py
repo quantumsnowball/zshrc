@@ -5,7 +5,7 @@ from pathlib import Path
 from pathspec import PathSpec
 from rich.syntax import Syntax
 
-from ._base import Transformer
+from ._base import TransformerFactory
 from ._file import File
 from ._utils import console
 
@@ -15,15 +15,13 @@ class Project:
         self,
         root_dir: Path,
         *,
-        transformer_cls: type[Transformer],
-        max_dots: int,
+        transformer_factory: TransformerFactory,
         pattern: str,
         gitignore: bool,
         ignore: list[str],
     ) -> None:
         self.root_dir = root_dir
-        self._transformer_cls = transformer_cls
-        self._max_dots = max_dots
+        self._transformer_factory = transformer_factory
         self._pattern = pattern
         gitignore_spec = PathSpec.from_lines('gitwildmatch', [
             line
@@ -33,8 +31,8 @@ class Project:
         ignore_spec = PathSpec.from_lines('gitwildmatch', ignore)
         self._ignore_spec = gitignore_spec + ignore_spec
 
-    def _worker(self, path: Path, max_dots: int, fix: bool, verbose: bool) -> list[Syntax | str] | None:
-        file = File(path, max_dots, transformer_cls=self._transformer_cls)
+    def _worker(self, path: Path, fix: bool, verbose: bool) -> list[Syntax | str] | None:
+        file = File(path, transformer_factory=self._transformer_factory)
         return file.refactor(fix, verbose)
 
     def refactor(self, fix: bool, verbose: bool) -> None:
@@ -42,7 +40,7 @@ class Project:
         paths_not_ignored = [p for p in paths_selected_by_pattern if not self._ignore_spec.match_file(p)]
         with futures.ProcessPoolExecutor() as executor:
             results = executor.map(
-                partial(self._worker, max_dots=self._max_dots, fix=fix, verbose=verbose),
+                partial(self._worker, fix=fix, verbose=verbose),
                 sorted(paths_not_ignored),
             )
             for result in results:

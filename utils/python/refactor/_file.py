@@ -4,7 +4,7 @@ from pathlib import Path
 import libcst as cst
 from rich.syntax import Syntax
 
-from ._base import Transformer
+from ._base import TransformerFactory
 from ._utils import ruff_isort
 
 RichObjects = list[Syntax | str]
@@ -14,12 +14,11 @@ class File:
     def __init__(
         self,
         path: Path,
-        max_dots: int,
         *,
-        transformer_cls: type[Transformer],
+        transformer_factory: TransformerFactory,
     ) -> None:
         self.path = path
-        self._transformer = transformer_cls(self.path, max_dots)
+        self._transformer = transformer_factory(self.path)
 
     def refactor(self, fix: bool, verbose: bool) -> RichObjects | None:
         output: RichObjects = []
