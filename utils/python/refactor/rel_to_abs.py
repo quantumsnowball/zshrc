@@ -1,6 +1,3 @@
-import importlib.util
-from functools import cache
-from importlib.machinery import ModuleSpec
 from pathlib import Path
 from typing import Annotated
 
@@ -28,11 +25,11 @@ class Refactorer(Transformer):
         parts = self.current_path.parts[:-1]
         module_string = cst.Module(body=[]).code_for_node(updated_node.module)
         module_prefix = '.'.join(parts[:len(parts)-dot_count+1])
-        new_module_str = '.'.join(filter(lambda x: len(x) > 0, [module_prefix, module_string]))
+        new_module_string = '.'.join(filter(lambda x: len(x) > 0, [module_prefix, module_string]))
 
         # return the new libcst node
         return updated_node.with_changes(
-            module=cst.parse_expression(new_module_str) if new_module_str else None,
+            module=cst.parse_expression(new_module_string) if new_module_string else None,
             relative=[],
         )
 
@@ -56,5 +53,5 @@ def main(
     ).refactor(fix, verbose, debug)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app()

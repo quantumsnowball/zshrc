@@ -1,6 +1,4 @@
-import importlib.util
-from functools import cache, partial
-from importlib.machinery import ModuleSpec
+from functools import partial
 from pathlib import Path
 from typing import Annotated
 
@@ -18,13 +16,6 @@ class Refactorer(Transformer):
         super().__init__(current_path)
         self.max_dots = max_dots
 
-    @cache
-    def _try_import_module(self, module_string: str) -> ModuleSpec | None:
-        try:
-            return importlib.util.find_spec(module_string)
-        except Exception:
-            return None
-
     def leave_ImportFrom(self, original_node: cst.ImportFrom, updated_node: cst.ImportFrom) -> cst.ImportFrom:
         # skip relative imports
         if len(updated_node.relative) > 0:
@@ -34,13 +25,10 @@ class Refactorer(Transformer):
         if updated_node.module is None:
             return updated_node
 
-        # try to import the module string
+        # skip if first part of module and file path don't match
         module_string = cst.Module(body=[]).code_for_node(updated_node.module)
         module_strings = module_string.split('.')
-        import_result = self._try_import_module(module_string)
-
-        # skip builtin modules
-        if import_result is not None:
+        if self.current_path.parts[0] != module_strings[0]:
             return updated_node
 
         # determine relative position and dot count
@@ -58,11 +46,11 @@ class Refactorer(Transformer):
 
         # determine relative import module string
         remaining_parts = [p for p in relative_path.parts if p != '..']
-        new_module_str = ".".join(remaining_parts)
+        new_module_string = '.'.join(remaining_parts)
 
         # return the new libcst node
         return updated_node.with_changes(
-            module=cst.parse_expression(new_module_str) if new_module_str else None,
+            module=cst.parse_expression(new_module_string) if new_module_string else None,
             relative=[cst.Dot() for _ in range(dot_count)]
         )
 
@@ -87,5 +75,5 @@ def main(
     ).refactor(fix, verbose, debug)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app()

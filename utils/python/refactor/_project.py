@@ -25,7 +25,7 @@ class Project:
         gitignore_spec = PathSpec.from_lines('gitwildmatch', [
             line
             for raw_line in (self.root_dir/'.gitignore').read_text().splitlines()
-            if (line := raw_line.strip()) and not line.startswith("#")
+            if (line := raw_line.strip()) and not line.startswith('#')
         ]) if gitignore else PathSpec([])
         ignore_spec = PathSpec.from_lines('gitwildmatch', ignore)
         self._ignore_spec = gitignore_spec + ignore_spec
