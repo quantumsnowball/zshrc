@@ -18,18 +18,21 @@ pyclean () {
 }
 
 # refactor
-py.format.use-single-quote-string() {
+_py.format.convert-string-quote() {
+    local quote="$1"
+    shift
     ruff check --select Q \
-        --config "lint.flake8-quotes.inline-quotes='single'" \
-        --config "lint.flake8-quotes.docstring-quotes='single'" "$@"
+        --config "lint.flake8-quotes.inline-quotes='$quote'" \
+        --config "lint.flake8-quotes.docstring-quotes='$quote'" "$@"
 }
-py.refactor.remove-unused-import() {
+py.format.use-single-quote-string() { _py.format.convert-string-quote single "$@" }
+py.format.use-double-quote-string() { _py.format.convert-string-quote double "$@" }
+py.cleanup.remove-unused-import() {
     ruff check --select F401 "$@"
 }
 _py.refactor() {
     local module="$1"
     shift
-
     PYTHONPATH="$HOME/.config/zshrc/utils/python:$PYTHONPATH" \
     uv run --no-project --python=3.14t \
         --with=typer --with=libcst --with=pathspec --with=ruff --with=pudb \
