@@ -24,11 +24,9 @@ sysd.disable() { sudo systemctl disable "$@" }
 sysd.reload-daemon () { sudo systemctl daemon-reload }
 
 # journalctl
-alias sysd.log='journalctl'
-sysd.log-for () {
-    journalctl -u $1
-}
-sysd.log.clear () {
+sysd.logs() { journalctl "$@" }
+sysd.logs-for () { journalctl -u "$@" }
+sysd.logs.clear () {
     sudo journalctl --rotate
     sudo journalctl --vacuum-time=1s
 }
