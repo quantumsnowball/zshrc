@@ -7,3 +7,4 @@ export PYTHONBREAKPOINT=smart_breakpoint.set_trace
 
 # env helpers
 alias env.python.enable-verbose='PYTHONVERBOSE=1'
+alias env.python.enable-dev-mode='PYTHONDEVMODE=1'
