@@ -15,24 +15,13 @@ alias sysd.ls.everything.loaded='systemctl list-units --all'
 alias sysd.ls.everything.installed='systemctl list-unit-files --all'
 alias sysd.find.service.loaded='systemctl list-units --type=service | rg'
 alias sysd.find.service.installed='systemctl list-unit-files --type=service | rg'
-sysd.restart-service () {
-    sudo systemctl restart $1
-}
-sysd.start-service () {
-    sudo systemctl start $1
-}
-sysd.stop-service () {
-    sudo systemctl start $1
-}
-sysd.enable-service () {
-    sudo systemctl enable $1
-}
-sysd.disable-service () {
-    sudo systemctl disable $1
-}
-sysd.daemon-reload () {
-    sudo systemctl daemon-reload
-}
+sysd.restart() { sudo systemctl restart "$@" }
+sysd.reload() { sudo systemctl reload "$@" }
+sysd.start() { sudo systemctl start "$@" }
+sysd.stop() { sudo systemctl stop "$@" }
+sysd.enable() { sudo systemctl enable "$@" }
+sysd.disable() { sudo systemctl disable "$@" }
+sysd.reload-daemon () { sudo systemctl daemon-reload }
 
 # journalctl
 alias sysd.log='journalctl'
