@@ -21,9 +21,13 @@ zle -N edit-command-line
 bindkey -M vicmd '^E' edit-command-line
 
 # vi mode key bindings
+# free up space key so it can be used as prefix
+bindkey -M vicmd -r ' '
 # Home, End
 bindkey -M vicmd 'gh' vi-beginning-of-line
 bindkey -M vicmd 'gl' vi-end-of-line
+bindkey -M vicmd ' h' vi-beginning-of-line
+bindkey -M vicmd ' l' vi-end-of-line
 # navigate word using H, L
 bindkey -M vicmd 'L' vi-forward-blank-word-end
 bindkey -M vicmd 'H' vi-backward-blank-word
