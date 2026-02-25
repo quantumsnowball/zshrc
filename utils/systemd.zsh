@@ -3,11 +3,18 @@ installed systemctl || return
 
 # systemctl
 alias sysd.status='systemctl status'
-alias sysd.ls.enabled='systemctl list-unit-files --state=enabled'
-alias sysd.ls.disabled='systemctl list-unit-files --state=disabled'
-alias sysd.ls.all='systemctl list-unit-files'
-alias sysd.ls='sysd.ls.enabled'
-alias sysd.ls-grep='systemctl list-unit-files | rg'
+alias sysd.ls.service.loaded='systemctl list-units --type=service'
+alias sysd.ls.service.running='systemctl list-units --type=service --state=running'
+alias sysd.ls.service.running-user='systemctl --user list-units --type=service --state=running'
+alias sysd.ls.service.failed='systemctl list-units --type=service --state=failed'
+alias sysd.ls.service.installed='systemctl list-unit-files --type=service'
+alias sysd.ls.service.enabled='systemctl list-unit-files --type=service --state=enabled'
+alias sysd.ls.service.disabled='systemctl list-unit-files --type=service --state=disabled'
+alias sysd.ls.timers='systemctl list-timers'
+alias sysd.ls.everything.loaded='systemctl list-units --all'
+alias sysd.ls.everything.installed='systemctl list-unit-files --all'
+alias sysd.find.service.loaded='systemctl list-units --type=service | rg'
+alias sysd.find.service.installed='systemctl list-unit-files --type=service | rg'
 sysd.restart-service () {
     sudo systemctl restart $1
 }
