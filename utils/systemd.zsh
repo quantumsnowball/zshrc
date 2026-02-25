@@ -3,6 +3,7 @@ installed systemctl || return
 
 # systemctl
 alias sysd.status='systemctl status'
+alias sysd.ls='sysd.ls.service.running'
 alias sysd.ls.service.loaded='systemctl list-units --type=service'
 alias sysd.ls.service.running='systemctl list-units --type=service --state=running'
 alias sysd.ls.service.running-user='systemctl --user list-units --type=service --state=running'
