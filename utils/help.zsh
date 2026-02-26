@@ -26,6 +26,7 @@ wtf.in() {
 alias wtfin='wtf.in'
 
 # info
+alias wtf.is-my-os-release='cat /etc/os-release'
 ensure tldr || true
 alias info.disk.lsblk='lsblk'
 ensure neofetch && alias info.sys.neofetch='neofetch'
