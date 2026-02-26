@@ -1,6 +1,3 @@
-# editor
-ensure nvim && export EDITOR="nvim"
-
 # gemini
 if [[ -f ~/.gemini ]]; then
     source ~/.gemini
