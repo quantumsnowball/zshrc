@@ -20,20 +20,20 @@ alias sysd.ls.everything.installed='systemctl list-unit-files --all'
 alias sysd.find.service.loaded='systemctl list-units --type=service | rg'
 alias sysd.find.service.installed='systemctl list-unit-files --type=service | rg'
 # action
-sysd.restart() { sudo systemctl restart "$@" }
-sysd.reload() { sudo systemctl reload "$@" }
-sysd.start() { sudo systemctl start "$@" }
-sysd.stop() { sudo systemctl stop "$@" }
-sysd.enable() { sudo systemctl enable "$@" }
-sysd.disable() { sudo systemctl disable "$@" }
-sysd.reload-daemon () { sudo systemctl daemon-reload }
-sysd.edit () { sudo -E systemctl edit "$@" }
+alias sysd.restart='sudo systemctl restart'
+alias sysd.reload='sudo systemctl reload'
+alias sysd.start='sudo systemctl start'
+alias sysd.stop='sudo systemctl stop'
+alias sysd.enable='sudo systemctl enable'
+alias sysd.disable='sudo systemctl disable'
+alias sysd.reload-daemon='sudo systemctl daemon-reload'
+alias sysd.edit='sudo -E systemctl edit'
 # profile
 alias sysd.profiling='systemd-analyze critical-chain'
 
 # journalctl
-sysd.logs() { journalctl "$@" }
-sysd.logs-for () { journalctl -u "$@" }
+alias sysd.logs='journalctl'
+alias sysd.logs-for='journalctl -u'
 sysd.logs.clear () {
     sudo journalctl --rotate
     sudo journalctl --vacuum-time=1s
