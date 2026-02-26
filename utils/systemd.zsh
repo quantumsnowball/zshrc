@@ -12,6 +12,7 @@ alias sysd.ls.service.failed='systemctl list-units --type=service --state=failed
 alias sysd.ls.service.installed='systemctl list-unit-files --type=service'
 alias sysd.ls.service.enabled='systemctl list-unit-files --type=service --state=enabled'
 alias sysd.ls.service.disabled='systemctl list-unit-files --type=service --state=disabled'
+alias sysd.ls.jobs='systemctl list-jobs'
 alias sysd.ls.timers='systemctl list-timers'
 alias sysd.ls.everything.loaded='systemctl list-units --all'
 alias sysd.ls.everything.installed='systemctl list-unit-files --all'
