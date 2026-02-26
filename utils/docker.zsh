@@ -3,23 +3,18 @@ ensure docker || return
 
 # docker
 # ls
-docker.ls.images() { docker images "$@" }
-docker.ls.containers() { docker ps -a "$@" }
+alias docker.ls.containers='docker ps -a'
+alias docker.ls.images='docker images -a'
+alias docker.ls.images-tree='docker images -a --tree'
 
-# run
-docker.run() { docker run "$@" }
-docker.run-interactive() { docker run -it "$@" }
+# interact
+alias docker.run='docker run'
+alias docker.run-interactive='docker run -it'
+alias docker.attach='docker attach'
 
 # cleanup
-docker.cleanup.containers() { docker container prune "$@" }
-docker.cleanup.images() { docker system prune -a "$@" }
+alias docker.cleanup.containers='docker container prune'
+alias docker.cleanup.system='docker system prune'
 
 # sys
-docker.disk-usage() { docker system df "$@" }
-
-# alias dk.start="docker start"
-# alias dks=dk.start
-
-# alias dk.attach="docker attach"
-# alias dka=dk.attach
-
+alias docker.disk-usage='docker system df'
