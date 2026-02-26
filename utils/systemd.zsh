@@ -23,6 +23,7 @@ sysd.stop() { sudo systemctl stop "$@" }
 sysd.enable() { sudo systemctl enable "$@" }
 sysd.disable() { sudo systemctl disable "$@" }
 sysd.reload-daemon () { sudo systemctl daemon-reload }
+sysd.edit () { sudo -E systemctl edit "$@" }
 
 # journalctl
 sysd.logs() { journalctl "$@" }
