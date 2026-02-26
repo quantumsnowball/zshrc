@@ -2,17 +2,24 @@ ensure docker || return
 
 
 # docker
-alias dc="docker-compose"
-alias dk="docker"
+# ls
+docker.ls.images() { docker images "$@" }
+docker.ls.containers() { docker ps -a "$@" }
 
-alias dk.run-interactive="docker run -it"
-alias dkr=dk.run-interactive
+# run
+docker.run() { docker run "$@" }
+docker.run-interactive() { docker run -it "$@" }
 
-alias dk.start="docker start"
-alias dks=dk.start
+# cleanup
+docker.cleanup.containers() { docker container prune "$@" }
+docker.cleanup.images() { docker system prune -a "$@" }
 
-alias dk.attach="docker attach"
-alias dka=dk.attach
+# sys
+docker.disk-usage() { docker system df "$@" }
 
-alias dk.ls-container="docker ps -a"
-alias dkps=ls-container
+# alias dk.start="docker start"
+# alias dks=dk.start
+
+# alias dk.attach="docker attach"
+# alias dka=dk.attach
+
