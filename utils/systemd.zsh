@@ -3,6 +3,7 @@ installed systemctl || return
 
 # systemctl
 alias sysd.status='systemctl status'
+# ls
 alias sysd.ls='sysd.ls.service.running'
 alias sysd.ls.service.loaded='systemctl list-units --type=service'
 alias sysd.ls.service.running='systemctl list-units --type=service --state=running'
@@ -14,8 +15,10 @@ alias sysd.ls.service.disabled='systemctl list-unit-files --type=service --state
 alias sysd.ls.timers='systemctl list-timers'
 alias sysd.ls.everything.loaded='systemctl list-units --all'
 alias sysd.ls.everything.installed='systemctl list-unit-files --all'
+# find
 alias sysd.find.service.loaded='systemctl list-units --type=service | rg'
 alias sysd.find.service.installed='systemctl list-unit-files --type=service | rg'
+# action
 sysd.restart() { sudo systemctl restart "$@" }
 sysd.reload() { sudo systemctl reload "$@" }
 sysd.start() { sudo systemctl start "$@" }
@@ -24,6 +27,8 @@ sysd.enable() { sudo systemctl enable "$@" }
 sysd.disable() { sudo systemctl disable "$@" }
 sysd.reload-daemon () { sudo systemctl daemon-reload }
 sysd.edit () { sudo -E systemctl edit "$@" }
+# profile
+alias sysd.profiling='systemd-analyze critical-chain'
 
 # journalctl
 sysd.logs() { journalctl "$@" }
