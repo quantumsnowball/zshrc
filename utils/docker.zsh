@@ -12,6 +12,10 @@ alias docker.run='docker run'
 alias docker.run-interactive='docker run -it'
 alias docker.attach='docker attach'
 
+# remove
+alias docker.rm.image='docker rmi'
+alias docker.rm.container='docker rm'
+
 # cleanup
 alias docker.cleanup.containers='docker container prune'
 alias docker.cleanup.system='docker system prune'
