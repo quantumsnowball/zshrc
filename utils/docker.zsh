@@ -6,6 +6,7 @@ ensure docker || return
 alias docker.ls.containers='docker ps -a'
 alias docker.ls.images='docker images -a'
 alias docker.ls.images-tree='docker images -a --tree'
+alias docker.ls.volumes='docker volume ls'
 
 # interact
 alias docker.run='docker run'
