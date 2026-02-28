@@ -12,6 +12,8 @@ alias docker.ls.volumes='docker volume ls'
 alias docker.run='docker run'
 alias docker.run-interactive='docker run -it'
 alias docker.attach='docker attach'
+alias docker.start='docker start'
+alias docker.stop='docker stop'
 
 # remove
 alias docker.rm.image='docker rmi'
