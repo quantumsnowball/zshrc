@@ -1,4 +1,5 @@
 [[ -n "$WSL_DISTRO_NAME" ]] || return
+mountpoint -q /mnt/c || return
 
 # whoami
 windows.whoami() {
