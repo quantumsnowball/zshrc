@@ -6,7 +6,7 @@ alias tmux.create-new-session='tmux new -t'
 alias tmux.list-sessions='tmux ls'
 alias tmux.attach-to='tmux attach -t'
 # short hand
-alias t="tmux"
+alias t='tmux attach -t 0 || tmux new -s 0'
 alias t.create-new-session=tmux.create-new-session
 alias t.list-sessions=tmux.list-sessions
 alias t.attach-to=tmux.attach-to
