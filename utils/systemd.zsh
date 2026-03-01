@@ -6,8 +6,13 @@ alias sysd.status='systemctl status'
 # ls
 alias sysd.ls='sysd.ls.service.running'
 alias sysd.ls.service.loaded='systemctl list-units --type=service'
-alias sysd.ls.service.running='systemctl list-units --type=service --state=running'
+alias sysd.ls.service.running-system='systemctl list-units --type=service --state=running'
 alias sysd.ls.service.running-user='systemctl --user list-units --type=service --state=running'
+sysd.ls.service.running() {
+    sysd.ls.service.running-system 
+    echo '\n'
+    sysd.ls.service.running-user
+}
 alias sysd.ls.service.failed='systemctl list-units --type=service --state=failed'
 alias sysd.ls.service.installed='systemctl list-unit-files --type=service'
 alias sysd.ls.service.enabled='systemctl list-unit-files --type=service --state=enabled'
