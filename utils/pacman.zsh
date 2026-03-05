@@ -27,3 +27,13 @@ alias pmu=pm.update
 alias pm.upgrade='sudo pacman -Syu'
 alias pmup=pm.upgrade
 
+
+# update mirror list
+ensure reflector || return
+
+
+# mirror list
+alias pm.mirror.current='cat /etc/pacman.d/mirrorlist'
+alias pm.mirror.available='reflector'
+alias pm.mirror.hong-kong='reflector --country "Hong Kong"'
+alias pm.mirror.hong-kong.save-as-mirrorlist='sudo reflector --country "Hong Kong" --save /etc/pacman.d/mirrorlist'
