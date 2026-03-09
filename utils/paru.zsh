@@ -4,7 +4,7 @@ ensure paru || return
 # paru
 alias pr=paru
 
-alias pr.install='sudo paru -S'
+alias pr.install='paru -S'
 alias pri=pr.install
 
 alias prs='paru -Ss'
