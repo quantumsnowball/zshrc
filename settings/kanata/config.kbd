@@ -1,0 +1,18 @@
+;; Only select the keyboard device
+(defcfg
+  linux-dev-names-include (
+    "  2.4G Wireless Device Keyboard"
+    "  2.4G Wireless Device"
+  )
+)
+
+;; List all physical keys you want to intercept
+(defsrc
+  caps  esc   grv   lalt  lctrl  lmet
+)
+
+;; Map them to their new outputs in the exact same order
+(deflayer default
+  esc   grv   caps  lctl  lmet   lalt
+)
+
