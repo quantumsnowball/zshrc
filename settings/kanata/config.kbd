@@ -6,13 +6,18 @@
   )
 )
 
-;; List all physical keys you want to intercept
 (defsrc
-  caps  esc   grv   lalt  lctrl  lmet
+  caps  esc   grv   lalt  lctrl  lmet  ralt  h  j  k  l
 )
 
-;; Map them to their new outputs in the exact same order
+(defalias
+  vim-layer (layer-toggle vim)
+)
+
 (deflayer default
-  esc   grv   caps  lctl  lmet   lalt
+  esc   grv   caps  lctl  lmet   lalt  @vim-layer  h    j    k   l
 )
 
+(deflayer vim
+  _     _     _     _     _      _     _         left down up  right
+)
