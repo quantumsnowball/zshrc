@@ -1,4 +1,4 @@
-;; Only select the keyboard device
+;; select device
 (defcfg
   linux-dev-names-include (
     "  2.4G Wireless Device Keyboard"
@@ -6,18 +6,32 @@
   )
 )
 
+;; define source
 (defsrc
-  caps  esc   grv   lalt  lctrl  lmet  ralt  h  j  k  l  n  m  ,  .
+  caps esc grv
+  lalt lctrl lmet
+  ralt
+  h j k l
+  n m , .
 )
 
+;; define aliases
 (defalias
   vim-layer (layer-toggle vim)
 )
 
+;; define layers
 (deflayer default
-  esc   grv   caps  lctl  lmet   lalt  @vim-layer  h    j    k   l   n  m  ,  .
+  esc grv caps
+  lctl lmet lalt
+  @vim-layer
+  h j k l
+  n m , .
 )
-
 (deflayer vim
-  _     _     _     _     _      _     _         left down up  right home pgdn pgup end
+  _ _ _
+  _ _ _
+  _
+  left down up right
+  home pgdn pgup end
 )
