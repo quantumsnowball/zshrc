@@ -10,28 +10,40 @@
 (defsrc
   caps esc grv
   lalt lctrl lmet
-  ralt
+  ralt rctl
   h j k l
   n m , .
+  ' /
 )
 
 ;; define aliases
 (defalias
   vim-layer (layer-toggle vim)
+  media-layer (layer-toggle media)
 )
 
 ;; define layers
 (deflayer default
   esc grv caps
   lctl lmet lalt
-  @vim-layer
+  @vim-layer @media-layer
   h j k l
   n m , .
+  ' /
 )
 (deflayer vim
   _ _ _
   _ _ _
-  _
+  _ _
   left down up right
   home pgdn pgup end
+  _ _
+)
+(deflayer media
+  _ _ _
+  _ _ _
+  _ _
+  _ _ _ _
+  _ _ _ _
+  volu vold
 )
