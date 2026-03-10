@@ -4,6 +4,7 @@
     "  2.4G Wireless Device Keyboard"
     "  2.4G Wireless Device"
   )
+  process-unmapped-keys yes
 )
 
 ;; define source
