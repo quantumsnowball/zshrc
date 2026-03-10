@@ -267,3 +267,6 @@ show-on-mouse-pos=Meta+V,Meta+V,Show Clipboard Items at Mouse Position
 switch to next activity=,,Switch to Next Activity
 switch to previous activity=,,Switch to Previous Activity
 toggle do not disturb=,,Toggle do not disturb
+
+[services][org.kde.krunner.desktop]
+_launch=Alt+F2\tSearch\tCtrl+Space
