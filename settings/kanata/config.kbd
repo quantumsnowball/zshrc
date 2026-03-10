@@ -11,46 +11,42 @@
 ;;   key names ref:
 ;;   https://github.com/jtroo/kanata/blob/main/parser/src/keys/mod.rs
 (defsrc
-  caps esc grv
-  lalt lctrl lmet
-  home del
-  ralt rctl
-  h j k l
-  n m , .
-  ' / [ ]
+  grv
+  esc  1    2    3    4    5    6    7    8    9    0    -    =    bspc home
+  tab   q    w    e    r    t    y    u    i    o    p    [    ]    \   del
+  caps   a    s    d    f    g    h    j    k    l    ;    '    ret     pgup
+  lsft    z    x    c    v    b    n    m    ,    .    /   rsft     up  pgdn
+  lctl lmet lalt           spc                 ralt      rctl left down right
 )
 
 ;; define aliases
 (defalias
-  vim-layer (layer-toggle vim)
-  media-layer (layer-toggle media)
+  vim (layer-while-held vim-layer)
+  media (layer-while-held media-layer)
 )
 
 ;; define layers
 (deflayer default
-  esc grv caps
-  lctl lmet lalt
-  del home
-  @vim-layer @media-layer
-  _ _ _ _
-  _ _ _ _
-  _ _ _ _
+  caps
+  grv  _    _    _    _    _    _    _    _    _    _    _    _    _    del
+  _     _    _    _    _    _    _    _    _    _    _    _    _    _   home
+  esc    _    _    _    _    _    _    _    _    _    _    _    _         _   
+  _       _    _    _    _    _    _    _    _    _    _      _      _    _   
+  lmet lalt lctl              _               @vim     @media   _    _    _    
 )
-(deflayer vim
-  _ _ _
-  _ _ _
-  _ _
-  _ _
-  left down up right
-  home pgdn pgup end
-  _ _ _ _
+(deflayer vim-layer
+  _
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _      _
+  _     _    _    _    _    _    _    _    _    _    _    _    _    _     _ 
+  _      _    _    _    _    _  left down  up  right  _    _    _         _ 
+  _       _    _    _    _    _  home pgdn  pgup end   _      _      _    _ 
+  _     _    _                _                 _      _        _    _    _  
 )
-(deflayer media
-  _ _ _
-  _ _ _
-  _ _
-  _ _
-  _ _ _ _
-  _ _ _ pp
-  volu vold prev next
+(deflayer media-layer
+  _   
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _      _  
+  _     _    _    _    _    _    _    _    _    _    _  prev  next  _     _  
+  _      _    _    _    _    _    _    _    _    _    _  volu   _         _  
+  _       _    _    _    _    _    _    _    _   pp   vold    _      _    _  
+  _     _    _                _                 _      _        _    _    _  
 )
