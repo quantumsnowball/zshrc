@@ -8,6 +8,8 @@
 )
 
 ;; define source
+;;   key names ref:
+;;   https://github.com/jtroo/kanata/blob/main/parser/src/keys/mod.rs
 (defsrc
   caps esc grv
   lalt lctrl lmet
@@ -15,7 +17,7 @@
   ralt rctl
   h j k l
   n m , .
-  ' /
+  ' / [ ]
 )
 
 ;; define aliases
@@ -30,9 +32,9 @@
   lctl lmet lalt
   del home
   @vim-layer @media-layer
-  h j k l
-  n m , .
-  ' /
+  _ _ _ _
+  _ _ _ _
+  _ _ _ _
 )
 (deflayer vim
   _ _ _
@@ -41,7 +43,7 @@
   _ _
   left down up right
   home pgdn pgup end
-  _ _
+  _ _ _ _
 )
 (deflayer media
   _ _ _
@@ -49,6 +51,6 @@
   _ _
   _ _
   _ _ _ _
-  _ _ _ _
-  volu vold
+  _ _ _ pp
+  volu vold prev next
 )
