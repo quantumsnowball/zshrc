@@ -24,7 +24,7 @@ mute=Volume Mute,Volume Mute,Mute
 
 [ksmserver]
 Halt Without Confirmation=,,Shut Down Without Confirmation
-Lock Session=Meta+L\tScreensaver,Meta+L\tScreensaver,Lock Session
+Lock Session=Screensaver,Meta+L\tScreensaver,Lock Session
 Log Out=Ctrl+Alt+Del,Ctrl+Alt+Del,Show Logout Screen
 Log Out Without Confirmation=,,Log Out Without Confirmation
 LogOut=,,Log Out
@@ -44,8 +44,44 @@ ExposeAll=Meta+F10\tLaunch (C)\tCtrl+F10,Meta+F10\tLaunch (C)\tCtrl+F10,Toggle P
 ExposeClass=Meta+F7\tCtrl+F7,Meta+F7\tCtrl+F7,Toggle Present Windows (Window class)
 ExposeClassCurrentDesktop=none,none,Toggle Present Windows (Window class on current desktop)
 Grid View=Meta+G,Meta+G,Toggle Grid View
+Hello World Shortcut=none,none,Hello World description
 Increase Opacity=,,Increase Opacity of Active Window by 5%
 Kill Window=Meta+Ctrl+Esc,Meta+Ctrl+Esc,Kill Window
+KrohnkiteBTreeLayout=,none,Krohnkite: BTree Layout
+KrohnkiteColumnsLayout=,none,Krohnkite: Columns Layout
+KrohnkiteDecrease=,none,Krohnkite: Decrease
+KrohnkiteFloatAll=Meta+Shift+F,none,Krohnkite: Toggle Float All
+KrohnkiteFloatingLayout=,none,Krohnkite: Floating Layout
+KrohnkiteFocusDown=Meta+J,none,Krohnkite: Focus Down
+KrohnkiteFocusLeft=Meta+H,none,Krohnkite: Focus Left
+KrohnkiteFocusNext=,none,Krohnkite: Focus Next
+KrohnkiteFocusPrev=Meta+\\,,none,Krohnkite: Focus Previous
+KrohnkiteFocusRight=Meta+L,none,Krohnkite: Focus Right
+KrohnkiteFocusUp=Meta+K,none,Krohnkite: Focus Up
+KrohnkiteGrowHeight=Meta+Ctrl+J,none,Krohnkite: Grow Height
+KrohnkiteIncrease=,none,Krohnkite: Increase
+KrohnkiteMonocleLayout=Meta+M,none,Krohnkite: Monocle Layout
+KrohnkiteNextLayout=Meta+\\\\,none,Krohnkite: Next Layout
+KrohnkitePreviousLayout=Meta+|,none,Krohnkite: Previous Layout
+KrohnkiteQuarterLayout=,none,Krohnkite: Quarter Layout
+KrohnkiteRotate=,none,Krohnkite: Rotate
+KrohnkiteRotatePart=,none,Krohnkite: Rotate Part
+KrohnkiteSetMaster=Meta+Return,none,Krohnkite: Set master
+KrohnkiteShiftDown=Meta+Shift+J,none,Krohnkite: Move Down/Next
+KrohnkiteShiftLeft=Meta+Shift+H,none,Krohnkite: Move Left
+KrohnkiteShiftRight=Meta+Shift+L,none,Krohnkite: Move Right
+KrohnkiteShiftUp=Meta+Shift+K,none,Krohnkite: Move Up/Prev
+KrohnkiteShrinkHeight=Meta+Ctrl+K,none,Krohnkite: Shrink Height
+KrohnkiteShrinkWidth=Meta+Ctrl+H,none,Krohnkite: Shrink Width
+KrohnkiteSpiralLayout=,none,Krohnkite: Spiral Layout
+KrohnkiteSpreadLayout=,none,Krohnkite: Spread Layout
+KrohnkiteStackedLayout=,none,Krohnkite: Stacked Layout
+KrohnkiteStairLayout=,none,Krohnkite: Stair Layout
+KrohnkiteTileLayout=,none,Krohnkite: Tile Layout
+KrohnkiteToggleFloat=Meta+F,none,Krohnkite: Toggle Float
+KrohnkiteTreeColumnLayout=,none,Krohnkite: Three Column Layout
+KrohnkitegrowWidth=Meta+Ctrl+L,none,Krohnkite: Grow Width
+KrohnkitetoggleDock=,none,Krohnkite: Toggle Dock
 Move Tablet to Next LogicalOutput=none,none,Move the tablet to the next output
 MoveMouseToCenter=Meta+F6,Meta+F6,Move Mouse to Center
 MoveMouseToFocus=Meta+F5,Meta+F5,Move Mouse to Focus
@@ -270,3 +306,7 @@ toggle do not disturb=,,Toggle do not disturb
 
 [services][org.kde.krunner.desktop]
 _launch=Alt+F2\tSearch\tCtrl+Space
+
+[services][org.kde.spectacle.desktop]
+CurrentMonitorScreenShot=
+OpenWithoutScreenshot=
