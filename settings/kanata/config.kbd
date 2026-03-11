@@ -40,7 +40,7 @@
 )
 (deflayer vim-layer
   _
-  _    _    _    _    _    _    _    _    _    _    _    _    _   @b_w  @d_w
+  _    _    _    _    _   lrld  _    _    _    _    _    _    _   @b_w  @d_w
   _     _  @n_w   _    _    _    _    _    _    _    _    _    _    _     _ 
   _      _    _  @d_w   _    _  left down  up  right  _    _    _         _ 
   _       _    _  @d_w   _  @p_w home pgdn  pgup end   _      _      _    _ 
