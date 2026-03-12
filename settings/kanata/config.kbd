@@ -27,6 +27,10 @@
   p_w C-left
   d_w C-del
   b_w C-bspc
+  wsL M-C-left
+  wsR M-C-right
+  mwsL M-C-S-left
+  mwsR M-C-S-right
 )
 
 ;; define layers
@@ -48,9 +52,9 @@
 )
 (deflayer media-layer
   _   
-  _    _    _    _    _   lrld  _    _    _    _    _    _    _    _      _  
+  _   C-f1 C-f2 C-f3 C-f4 lrld  _    _    _    _    _    _    _    _      _  
   _     _    _    _    _    _    _    _    _    _    _  prev  next  _     _  
   _      _    _    _    _    _    _    _    _    _    _  volu   _         _  
-  _       _    _    _    _    _    _    _    _   pp   vold    _      _    _  
-  _     _    _                _                 _      _        _    _    _  
+  _       _    _    _    _    _    _    _    _   pp   vold    _    @mwsL  _  
+  _     _    _                _                 _      _      @wsL @mwsR @wsR
 )
