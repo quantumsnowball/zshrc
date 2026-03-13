@@ -3,12 +3,11 @@
 
 local -a repos
 repos=( 
-    settings
-    shared
     nvim 
     zsh 
     posh 
     tmux 
+    workspace
     ssh 
     alacritty 
     winterm  

@@ -6,12 +6,6 @@ ensure git || return
 c () {
     (
         case $1 in
-            setting | settings)
-                cd ~/.config/settings/ && nvim
-                ;;
-            shared )
-                cd ~/.config/settings-shared/ && nvim
-                ;;
             nvim | neovim)
                 cd ~/.config/nvim && nvim
                 ;;
@@ -23,6 +17,9 @@ c () {
                 ;;
             tmux)
                 cd ~/.config/tmux && nvim
+                ;;
+            work | workspace)
+                cd ~/.config/workspace && nvim
                 ;;
             ssh)
                 cd ~/.config/ssh && nvim
@@ -71,8 +68,7 @@ cf.fetch-all () {
         cf.fetch zshrc &
         cf.fetch nvim &
         cf.fetch tmux &
-        cf.fetch settings &
-        cf.fetch settings-shared &
+        cf.fetch workspace &
         cf.fetch ssh &
         wait
     )
@@ -82,8 +78,7 @@ cf.pull-all () {
         cf.pull zshrc &
         cf.pull nvim &
         cf.pull tmux &
-        cf.pull settings &
-        cf.pull settings-shared &
+        cf.pull workspace &
         cf.pull ssh &
         wait
     )

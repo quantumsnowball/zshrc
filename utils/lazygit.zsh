@@ -9,9 +9,6 @@ g () {
         # Define the base directory mapping
         local dir
         case $1 in
-            setting | settings )
-                cd "$HOME/.config/settings" && shift && lazygit $@
-                ;;
             nvim | neovim)
                 cd "$HOME/.config/nvim" && shift && lazygit $@
                 ;;
@@ -23,6 +20,9 @@ g () {
                 ;;
             tmux)
                 cd "$HOME/.config/tmux" && shift && lazygit $@
+                ;;
+            work | workspace)
+                cd "$HOME/.config/workspace" && shift && lazygit $@
                 ;;
             ssh)
                 cd "$HOME/.config/ssh" && shift && lazygit $@
