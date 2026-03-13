@@ -2,8 +2,8 @@
 
 src_dir="$XDG_CONFIG_HOME/zshrc/settings/alacritty"
 dst_dir="$XDG_CONFIG_HOME/alacritty"
-src="$src_dir/alacritty.yaml"
-dst="$dst_dir/alacritty.yaml"
+src="$src_dir/alacritty.toml"
+dst="$dst_dir/alacritty.toml"
 
 mkdir -p $dst_dir
 ln -sf $src $dst
