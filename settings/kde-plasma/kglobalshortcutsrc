@@ -51,7 +51,7 @@ KrohnkiteBTreeLayout=,none,Krohnkite: BTree Layout
 KrohnkiteColumnsLayout=Meta+2,none,Krohnkite: Columns Layout
 KrohnkiteDecrease=,none,Krohnkite: Decrease
 KrohnkiteFloatAll=Meta+Shift+F,none,Krohnkite: Toggle Float All
-KrohnkiteFloatingLayout=none,none,Krohnkite: Floating Layout
+KrohnkiteFloatingLayout=Meta+0,none,Krohnkite: Floating Layout
 KrohnkiteFocusDown=Meta+J,none,Krohnkite: Focus Down
 KrohnkiteFocusLeft=Meta+H,none,Krohnkite: Focus Left
 KrohnkiteFocusNext=,none,Krohnkite: Focus Next
@@ -234,7 +234,7 @@ Window to Screen 6=,,Move Window to Screen 6
 Window to Screen 7=,,Move Window to Screen 7
 _k_friendly_name=KWin
 disableInputCapture=Meta+Shift+Esc,Meta+Shift+Esc,Disable Active Input Capture
-view_actual_size=Meta+0,Meta+0,Zoom to Actual Size
+view_actual_size=none,Meta+0,Zoom to Actual Size
 view_zoom_in=Meta++\tMeta+=,Meta++\tMeta+=,Zoom In
 view_zoom_out=Meta+-,Meta+-,Zoom Out
 
