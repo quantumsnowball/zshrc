@@ -7,9 +7,7 @@ alias pm=pacman
 alias pm.install='sudo pacman -S'
 alias pmi=pm.install
 
-pm.search() {
-    pacman -Ss "$1" | fzf
-}
+alias pm.search='pacman -Ss'
 alias pms=pm.search
 
 alias pm.ls='pacman -Q'

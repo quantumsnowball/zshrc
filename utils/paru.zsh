@@ -7,7 +7,8 @@ alias pr=paru
 alias pr.install='paru -S'
 alias pri=pr.install
 
-alias prs='paru -Ss'
+alias pr.search='paru -Ss'
+alias prs=pr.search
 
 alias pr.ls='paru -Q'
 alias prls=paru.ls
