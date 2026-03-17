@@ -1,6 +1,11 @@
 installed steam || return
 
 
+# reset steam
+alias steam.reset='pkill -e -f "steam|gamescope|steamvr"'
+alias steam.reset.division='steam.reset && pkill -e -f "ubi|division"'
+alias steam.reset.assetto-corsa='steam.reset && pkill -e -f "acs"'
+
 # Update your .zshrc with this version
 steam.linux.installed-games() {
     local steam_dirs=(
