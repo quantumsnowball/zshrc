@@ -3,7 +3,7 @@ installed steam || return
 
 # reset steam
 alias steam.reset='pkill -e -f "steam|gamescope|steamvr"'
-alias steam.reset.division='steam.reset && pkill -e -f "ubi|division"'
+alias steam.reset.division='steam.reset && pkill -e -f "ubi|division|anticheat"'
 alias steam.reset.assetto-corsa='steam.reset && pkill -e -f "acs"'
 
 # Update your .zshrc with this version
@@ -32,5 +32,17 @@ steam.linux.installed-games() {
         # Format the final output: Name (Left-aligned) | AppID (Right-aligned)
         printf "%-50s | %s\n" "$name" "$appid"
     done
+}
+
+# 
+# Games
+#
+
+# Division 2
+# note: need to use gamescope to launch in niri
+# launch options: gamescope -W 2560 -H 1080 -f -- %command%
+games.division2() { 
+    # need to ensure sub-process see wayland display env
+    env -u WAYLAND_DISPLAY steam -silent -applaunch 2221490
 }
 
