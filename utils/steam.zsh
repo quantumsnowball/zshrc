@@ -44,3 +44,8 @@ games.division2() {
     mangohud steam -silent -applaunch 2221490
 }
 
+# Assetto Corsa
+games.assetto-corsa() { steam -silent -applaunch 244210 }
+
+# No Man's Sky
+games.no-mans-sky() { steam -silent -applaunch 275850 -nointro }
