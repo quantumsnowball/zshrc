@@ -4,8 +4,7 @@
 #   :completion:<function>:<completer>:<command>:<argument>:<tag>    
 
 # completion to fpath
-fpath+=~/.config/zshrc/completions/functions
-fpath+=~/.zfunc
+fpath=(~/.config/zshrc/completions/functions ~/.zfunc $fpath)
 
 # rc
 zstyle :compinstall filename "$HOME/.zshrc"
