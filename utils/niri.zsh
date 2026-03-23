@@ -34,3 +34,25 @@ niri._completions_zsh_quickfix() {
     fi
 }
 
+# update niri socket url to latest
+niri.refresh-ipc-socket-env() {
+    # get the latest socket url value from /run/user/<id>/
+    local socket
+    socket=$(/bin/ls -t /run/user/$(id -u)/niri.wayland-*.sock 2>/dev/null | head -n 1)
+
+    if [[ -n "$socket" ]]; then
+        # 1. Fix the current shell
+        export NIRI_SOCKET="$socket"
+        
+        # 2. Fix the tmux server global env vars for newer panes
+        if [[ -n "$TMUX" ]]; then
+            tmux set-environment -g NIRI_SOCKET "$socket"
+        fi
+        
+        echo "Refreshed NIRI_SOCKET: $NIRI_SOCKET"
+    else
+        echo "Error: No niri socket found."
+        return 1
+    fi
+}
+
