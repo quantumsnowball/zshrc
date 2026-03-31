@@ -2,7 +2,7 @@ installed steam || return
 
 
 # reset steam
-alias steam.reset='pkill -e -f "steam|gamescope|steamvr"'
+alias steam.reset='pkill -e -f "steam|gamescope|wine"'
 alias steam.reset.division='steam.reset && pkill -e -f "ubi|Ubisoft|division|anticheat"'
 alias steam.reset.assetto-corsa='steam.reset && pkill -e -f "acs"'
 
