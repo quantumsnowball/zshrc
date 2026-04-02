@@ -1,9 +1,11 @@
-# editor
-export EDITOR=nvim
-export VISUAL=nvim
-export SUDO_EDITOR=nvim
-
-# path
-if [[ -d "$HOME/.local/bin" ]] && [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
-    export PATH="$HOME/.local/bin:$PATH"
-fi
+#
+# ~/.zprofile runs only for login shell
+#
+# 1. interactive login
+#   SDDM desktop session, SSH
+# 2. non-interactive login
+#   SSH direct run command on remote
+#
+# Reference:
+# https://github.com/sambacha/dotfiles2
+#

@@ -7,3 +7,7 @@ ls -l "$HOME/.zshrc"
 # zprofile
 ln -sf "$HOME/.config/zshrc/zprofile" "$HOME/.zprofile"
 ls -l "$HOME/.zprofile"
+
+# zshenv
+ln -sf "$HOME/.config/zshrc/zshenv" "$HOME/.zshenv"
+ls -l "$HOME/.zshenv"
