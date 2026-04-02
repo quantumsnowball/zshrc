@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # zshrc
-ln -sf "$HOME/.config/zshrc/__init__.zsh" "$HOME/.zshrc"
+ln -sf "$HOME/.config/zshrc/zshrc" "$HOME/.zshrc"
 ls -l "$HOME/.zshrc"
 
 # zprofile
