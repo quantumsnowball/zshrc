@@ -43,10 +43,12 @@ zsh.completion.toggle_dotfiles_visibility() {
 }
 # update system
 up() {
-    # ubuntu / termux
-    installed apt && echo "\n${YELLOW}<<< apt update >>>${RESET}\n" && eval aptup
+    # cachyos
+    installed cachy-update && echo "\n${YELLOW}<<< cachy update >>>${RESET}\n" && eval cachy-update
     # arch
     installed pacman && echo "\n${YELLOW}<<< pacman update >>>${RESET}\n" && eval pmup
+    # ubuntu / termux
+    installed apt && echo "\n${YELLOW}<<< apt update >>>${RESET}\n" && eval aptup
     # snap
     installed snap && echo "\n${YELLOW}<<< snap update >>>${RESET}\n" && eval snapup
 }
