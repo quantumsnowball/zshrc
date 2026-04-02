@@ -10,6 +10,8 @@ export VISUAL=nvim
 export SUDO_EDITOR=nvim
 
 # path
+# NOTE: on Arch, ~/.config/environment.d/*.conf failed to set PATH, probably due to
+# PATH being hardcode and overwritten afterward, there have to set it here for login shell
 if [[ -d "$HOME/.local/bin" ]] && [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
     export PATH="$HOME/.local/bin:$PATH"
 fi
