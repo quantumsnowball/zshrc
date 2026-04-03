@@ -19,5 +19,9 @@ alias ll='_eza_base -a -l -h'
 alias lll='_eza_base -a -l -h --grid'
 
 # ls tree
-alias ltree='_eza_base --tree --level=2'
-alias ltr=ltree
+alias ls.tree='la --tree'
+alias ls.tree1='la --tree --level=1'
+alias ls.tree2='la --tree --level=2'
+alias ls.tree3='la --tree --level=3'
+alias ls.tree4='la --tree --level=4'
+alias ls.tree5='la --tree --level=5'
