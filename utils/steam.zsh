@@ -2,7 +2,10 @@ installed steam || return
 
 
 # reset steam
-alias steam.reset='pkill -e -f "steam|gamescope|wine"'
+steam.reset() {
+    pkill -e -f "steam|gamescope|wine"
+    killall xembedsniproxy && xembedsniproxy 2>/dev/null & disown
+}
 alias steam.reset.division='steam.reset && pkill -e -f "ubi|upc|Ubisoft|division|anticheat"'
 alias steam.reset.assetto-corsa='steam.reset && pkill -e -f "acs"'
 
