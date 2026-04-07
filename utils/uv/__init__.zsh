@@ -3,11 +3,11 @@ ensure uv || return
 
 # list python
 alias uv.python.list-installed-versions='uv python list'
-alias uvpyls=uv.python.list
+alias uvpyls=uv.python.ls
 
 # global tools
-alias uv.tool.list='uv tool list --show-version-specifiers --show-with --show-extras --show-python'
-alias uvtoolls=uv.tool.list
+alias uv.tool.ls='uv tool list --show-version-specifiers --show-with --show-extras --show-python'
+alias uvtoolls=uv.tool.ls
 alias uv.tool.install='uv tool install'
 alias uvtooli=uv.tool.install
 alias uv.tool.install.editable='uv tool install --with pudb -e'
@@ -44,7 +44,7 @@ uv.venv.activate-local () {
         echo "Error: ./.venv/bin/activate not found. No virtual environment activated."
     fi
 }
-alias uv.venv.list='uv.venv-info'
+alias uv.venv.ls='uv.venv-info'
 
 # cache management
 alias uv.cache.prune='uv cache prune'
