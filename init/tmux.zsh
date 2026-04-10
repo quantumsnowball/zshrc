@@ -7,12 +7,24 @@ if [[ -n "$TMUX" ]]; then
     preexec() {
         # Get the full command
         local full_cmd="$1"
+
         # Trim leading/trailing whitespace
         full_cmd="${full_cmd#"${full_cmd%%[![:space:]]*}"}"
-        # Truncate to 20 chars
-        if (( ${#full_cmd} > 20 )); then
+
+        # Special Case: v or nvim
+        local -a dir_context_cmds=(v nvim vi vim)
+        local first_word="${full_cmd%% *}"
+        # - the (r) flag searches for a match; if found, it returns the string
+        if [[ -n "${dir_context_cmds[(r)$first_word]}" ]]; then
+            local dir_name="${PWD##*/}"
+            full_cmd="${first_word}:${dir_name}"
+        fi
+
+        # Truncate to 30 chars
+        if (( ${#full_cmd} > 30 )); then
             full_cmd="${full_cmd[1,19]}…"
         fi
+
         # Update Tmux
         tmux rename-window "$full_cmd"
     }
