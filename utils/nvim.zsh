@@ -15,7 +15,7 @@ nvim.ai() {
             -c "lua vim.schedule(function() vim.fn.feedkeys(vim.api.nvim_replace_termcodes(\",A\", true, true, true)) end)"
     )
 }
-alias vai='nvim.ai'
+alias v.ai='nvim.ai'
 
 nvim.lazy.rm-all-plugins () {
     lazy_dir=~/.local/share/nvim/lazy/
