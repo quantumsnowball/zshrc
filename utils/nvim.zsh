@@ -17,6 +17,15 @@ nvim.ai() {
 }
 alias v.ai='nvim.ai'
 
+nvim.scratch()  {
+     (
+        mkdir -p /tmp/nvim.scratch && 
+        cd /tmp/nvim.scratch &&
+        nvim -c "lua vim.schedule(open_scratch_tabpage)"
+     )
+}
+alias v.note='nvim.scratch'
+
 nvim.lazy.rm-all-plugins () {
     lazy_dir=~/.local/share/nvim/lazy/
     read -q "confirm?Are you sure you want to remove all lazy plugins? (y/n): "
