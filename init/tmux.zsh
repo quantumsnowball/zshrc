@@ -11,8 +11,8 @@ if [[ -n "$TMUX" ]]; then
         # Trim leading/trailing whitespace
         full_cmd="${full_cmd#"${full_cmd%%[![:space:]]*}"}"
 
-        # Special Case: v or nvim
-        local -a dir_context_cmds=(v nvim vi vim)
+        # Special Case: v or nvim, y or yazi
+        local -a dir_context_cmds=(v nvim vi vim y yazi)
         local first_word="${full_cmd%% *}"
         # - the (r) flag searches for a match; if found, it returns the string
         if [[ -n "${dir_context_cmds[(r)$first_word]}" ]]; then
