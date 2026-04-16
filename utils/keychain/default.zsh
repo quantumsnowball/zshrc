@@ -18,6 +18,7 @@ kc.add () {
     ssh-add $1
 }
 alias kc=kc.add
+alias kc.add-ibc='kc ~/.ssh/id_ed25519_ibc'
 
 
 # start kc by default
