@@ -46,19 +46,12 @@ up() {
     # cachyos
     installed cachy-update && echo "\n${YELLOW}<<< cachy update >>>${RESET}\n" && eval cachy-update
     # arch
-    installed pacman && echo "\n${YELLOW}<<< pacman update >>>${RESET}\n" && eval pmup
+    not-installed cachy-update && installed pacman && echo "\n${YELLOW}<<< pacman update >>>${RESET}\n" && eval pmup
     # ubuntu / termux
     installed apt && echo "\n${YELLOW}<<< apt update >>>${RESET}\n" && eval aptup
     # snap
     installed snap && echo "\n${YELLOW}<<< snap update >>>${RESET}\n" && eval snapup
 }
-ups() {
-    # update all packages
-    eval up
-    # sync configs
-    echo "\n\n${YELLOW}<<< sync configs >>>${RESET}\n"
-    eval s
-}
-alias u=ups
+alias u=up
 # fix enter key not working print ^M
 alias zsh.fix_enter_key='stty sane'

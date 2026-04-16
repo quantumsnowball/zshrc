@@ -6,6 +6,9 @@ NOT_YET_INSTALL=""
 installed () {
     command -v "$1" 2>&1 >/dev/null
 }
+not-installed () {
+    ! command -v "$1" 2>&1 >/dev/null
+}
 
 # helper to be used as a guarding statement, put at first line of a script file: 
 #   ensure <binary name> || return
