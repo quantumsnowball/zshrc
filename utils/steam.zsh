@@ -36,18 +36,3 @@ steam.linux.installed-games() {
     done
 }
 
-# 
-# Games
-#
-
-# Division 2
-games.division2() { 
-    # need to ensure sub-process see wayland display env
-    mangohud steam -silent -applaunch 2221490
-}
-
-# Assetto Corsa
-games.assetto-corsa() { steam -silent -applaunch 244210 }
-
-# No Man's Sky
-games.no-mans-sky() { steam -silent -applaunch 275850 -nointro }
