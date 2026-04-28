@@ -15,3 +15,8 @@ letsplay.assetto-corsa() {
 letsplay.no-mans-sky() {
     letsplay steam 275850 --mangohud --launch-options '-nointro'
 }
+
+# Euro Truck Simulator 2
+letsplay.euro-truck-simulator-2() {
+    letsplay steam 227300 --mangohud --launch-options '-nointro'
+}
