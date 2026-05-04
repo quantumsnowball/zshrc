@@ -20,3 +20,8 @@ letsplay.no-mans-sky() {
 letsplay.euro-truck-simulator-2() {
     letsplay steam 227300 --mangohud --launch-options '-nointro'
 }
+
+# American Truck Simulator
+letsplay.american-truck-simulator() {
+    letsplay steam 270880 --mangohud --launch-options '-nointro'
+}
