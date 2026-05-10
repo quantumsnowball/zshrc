@@ -25,3 +25,8 @@ letsplay.euro-truck-simulator-2() {
 letsplay.american-truck-simulator() {
     letsplay steam 270880 --mangohud --launch-options '-nointro'
 }
+
+# The Crew 2
+letsplay.the-crew-2() {
+    letsplay steam 646910 --mangohud --launch-options 'WINEDLLOVERRIDES="uplay_r1_loader64=n,b;d3dgear64=d" %command%'
+}
