@@ -39,12 +39,16 @@ ffmpeg.embed-subtitles()
     return 1
   fi
 
+  # choose a subtitle format
+  local scodec="srt"
+  [[ "$output" == *.mp4 ]] && scodec="mov_text"
+
   # insert subtitles by ffmpeg
   ffmpeg \
     -i $input \
     -i $subs \
     -c copy \
-    -c:s mov_text \
+    -c:s "$scodec" \
     -metadata:s:s:0 language=eng \
     $output
 
