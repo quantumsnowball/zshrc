@@ -2,7 +2,7 @@ installed letsplay || return
 
 
 # Division 2
-letsplay.division2() { 
+letsplay.the-division-2() { 
     letsplay steam 2221490 --mangohud --launch-options 'PROTON_ENABLE_WAYLAND=1 %command'
 }
 
