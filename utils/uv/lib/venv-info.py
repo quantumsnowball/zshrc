@@ -15,8 +15,9 @@ WIDTH_COL2 = 25
 TABLE_WIDTH = WIDTH_COL0 + WIDTH_COL1 + WIDTH_COL2
 
 
-def to_tilda(path: Path)->str:
+def to_tilda(path: Path) -> str:
     return f'~/{path.relative_to(Path.home())}'
+
 
 class Item:
     def __init__(self, path: Path, *, title: str) -> None:
@@ -79,18 +80,33 @@ class Items:
             return []
 
     def get_venv_python_version_cfg(self, path: Path) -> str:
+        # init
+        version = None
+        is_freethreaded = False
         try:
+            # read venv config file lines
             cfg = path / 'pyvenv.cfg'
             for line in cfg.read_text().splitlines():
-                if line.startswith("home ="):
-                    home = Path(line.split("=", 1)[1].strip())
-                    for part in home.parts:
-                        if part.startswith('cpython-'):
-                            return part.split('-')[1]
+                # extract key val pairs
+                if '=' not in line:
+                    continue
+                key, val = [x.strip() for x in line.split('=', 1)]
+                # extract version
+                if key in ('version', 'version_info'):
+                    version = val
+                    continue
+                # detect if freethreaded is enabled
+                if key == 'home':
+                    is_freethreaded = 'freethreaded' in val.lower()
+                    continue
+            # output
+            if version:
+                return f'{version}t' if is_freethreaded else version
+            # on default
             return 'n.a.'
         except Exception:
+            # on exception
             return 'error'
-
 
     def present(self) -> None:
         sizes = self.cal_sizes()
@@ -118,22 +134,22 @@ def main() -> None:
     # tools
     Items(
         '.', home/'.local/share/uv/tools',
-        title="Tools environments",
+        title='Tools environments',
     ).present()
 
     # user envs
     Items(
         '.', home/'.uv/venv',
-        title="User environments",
+        title='User environments',
     ).present()
 
     # project envs under repos
     Items(
         r'^\.venv$', home/'repos',
-        title="Project .venv environments",
+        title='Project .venv environments',
         max_depth=10,
     ).present()
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
