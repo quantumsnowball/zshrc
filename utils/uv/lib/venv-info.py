@@ -80,28 +80,29 @@ class Items:
             return []
 
     def get_venv_python_version_cfg(self, path: Path) -> str:
-        # init
-        version = None
-        is_freethreaded = False
         try:
-            # read venv config file lines
-            cfg = path / 'pyvenv.cfg'
-            for line in cfg.read_text().splitlines():
-                # extract key val pairs
-                if '=' not in line:
-                    continue
-                key, val = [x.strip() for x in line.split('=', 1)]
-                # extract version
-                if key in ('version', 'version_info'):
-                    version = val
-                    continue
-                # detect if freethreaded is enabled
-                if key == 'home':
-                    is_freethreaded = 'freethreaded' in val.lower()
-                    continue
-            # output
-            if version:
-                return f'{version}t' if is_freethreaded else version
+            # try the best to locate the venv's internal python binary
+            py_bin = path/'bin'/'python'
+            py_bin = py_bin if py_bin.exists() else path/'bin'/'python3'
+            # extract info by running the binary
+            if py_bin.exists():
+                # python cmd string to output version and gil info
+                py_cmd = (
+                    "import sys; "
+                    "v = f'{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}'; "
+                    "g = sys._is_gil_enabled() if hasattr(sys, '_is_gil_enabled') else True; "
+                    "print(f'{v}|{g}')"
+                )
+                # read text output, expecting pattern: "3.14.4|True" or "3.14.4|False"
+                output = subprocess.check_output(
+                    [str(py_bin), '-c', py_cmd],
+                    text=True, stderr=subprocess.DEVNULL
+                ).strip()
+                # if pattern is valid, parse the output and return the answer
+                if output and '|' in output:
+                    version, gil_enabled = output.split('|', 1)
+                    is_freethreaded = (gil_enabled == 'False')
+                    return f'{version}t' if is_freethreaded else version
             # on default
             return 'n.a.'
         except Exception:
