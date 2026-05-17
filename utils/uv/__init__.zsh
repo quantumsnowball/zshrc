@@ -77,8 +77,8 @@ uv.cache.list-entries() {
         local wheel=($dir/**/*.dist-info/WHEEL(N))
         (( $#wheel )) || continue
         # get pkg name from the .dist-info directory
-        local pkg="${${wheel[1]:h}:t}"          # removes trailing .dist-info
-        pkg="${pkg%.dist-info}"                 # safety
+        local pkg="${${wheel[1]:h}:t}"
+        pkg="${pkg%.dist-info}"
         # get tag
         local tag=$(grep -m1 '^Tag:' "$wheel[1]" | cut -d' ' -f2-)
         # print
