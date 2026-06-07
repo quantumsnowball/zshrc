@@ -7,6 +7,10 @@ installed limine || return
 #   term_font_scale: 2x2
 #   wallpaper: boot():/EFI/limine/wallpaper.jpg
 #   wallpaper_style: stretched
+# caution:
+#   by default there is a default line `wallpaper: boot():/limine-splash.png`
+#   make sure to comment it out, otherwise there will be two wallpaper settings 
+#   and limine will randomly choose one to use causing weird behavior
 limine.use-wallpaper() {
     local src="$1"
     local dst="/boot/EFI/limine/wallpaper.jpg"
