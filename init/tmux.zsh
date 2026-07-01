@@ -20,6 +20,12 @@ if [[ -n "$TMUX" ]]; then
             full_cmd="${first_word}:${dir_name}"
         fi
 
+        # replace any forbidden character in window title
+        # - Modifier Letter Colon (U+A789):
+        full_cmd="${full_cmd//:/꞉}"
+        # - One Dot Leader (U+2024)
+        full_cmd="${full_cmd//./․}"
+
         # Truncate to 30 chars
         if (( ${#full_cmd} > 30 )); then
             full_cmd="${full_cmd[1,19]}…"
