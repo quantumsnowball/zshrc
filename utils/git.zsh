@@ -61,10 +61,15 @@ git.local.set-user() {
     git.config-summary
 }
 git.global.enable-auto-commit-signing() {
+    # auto sign all commits
     git config --global commit.gpgsign true
+    # use ssh key to sign commits
     git config --global gpg.format ssh
     git config --global gpg.ssh.allowedSignersFile ~/.ssh/allowed_signers
     git config --global user.signingkey ~/.ssh/id_ed25519.pub
+    # git log show signature by default 
+    git config --global log.showSignature true
+    #
     git.config-summary
 }
 git.global.edit-config() {
