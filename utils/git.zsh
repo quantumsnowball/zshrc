@@ -33,7 +33,33 @@ git.blame.fzf() {
 }
 
 # config
-git.enable-auto-commit-signing() {
+git.global.set-default-user() {
+    git config --global user.name "Quantum Snowball"
+    git config --global user.email "quantum.snowball@gmail.com"
+    echo "--- Updated config ---"
+    git config --list --show-scope
+}
+git.global.set-user() {
+    if [[ $# -ne 2 ]] then
+        echo "Usage: git.global.set-user <username> <email>"
+        return 1
+    fi
+    git config --global user.name "$1"
+    git config --global user.email "$2"
+    echo "--- Updated config ---"
+    git config --global --list --show-scope
+}
+git.local.set-user() {
+    if [[ $# -ne 2 ]] then
+        echo "Usage: git.local.set-user <username> <email>"
+        return 1
+    fi
+    git config --local user.name "$1"
+    git config --local user.email "$2"
+    echo "--- Updated config ---"
+    git config --local --list --show-scope
+}
+git.global.enable-auto-commit-signing() {
     git config --global commit.gpgsign true
     git config --global gpg.format ssh
     git config --global gpg.ssh.allowedSignersFile ~/.ssh/allowed_signers
