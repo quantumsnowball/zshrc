@@ -32,6 +32,14 @@ git.blame.fzf() {
                 --bind 'enter:execute(git show {1} | bat --color=always)' \
 }
 
+# config
+git.enable-auto-commit-signing() {
+    git config --global commit.gpgsign true
+    git config --global gpg.format ssh
+    git config --global gpg.ssh.allowedSignersFile ~/.ssh/allowed_signers
+    git config --global user.signingkey ~/.ssh/id_ed25519.pub
+}
+
 #helpers
 gh.clone-my-repo() {
     # default use https url
