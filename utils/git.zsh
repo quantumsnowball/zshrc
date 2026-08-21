@@ -65,14 +65,17 @@ git.global.enable-auto-commit-signing() {
     git config --global gpg.format ssh
     git config --global gpg.ssh.allowedSignersFile ~/.ssh/allowed_signers
     git config --global user.signingkey ~/.ssh/id_ed25519.pub
+    git.config-summary
 }
 git.global.edit-config() {
     [[ -f "$HOME/.gitconfig" ]] || { echo "Error: Global .gitconfig not found."; exit 1; }
     ${EDITOR:-vi} "$HOME/.gitconfig"
+    git.config-summary
 }
 git.local.edit-config() {
     [[ -f ".git/config" ]] || { echo "Error: Local .git/config not found."; exit 1; }
     ${EDITOR:-vi} ".git/config"
+    git.config-summary
 }
 
 #helpers
