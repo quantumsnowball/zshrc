@@ -33,11 +33,14 @@ git.blame.fzf() {
 }
 
 # config
+git.config-summary() {
+    echo "${CYAN}--- Git config summary ---${RESET}"
+    git config --list --show-scope
+}
 git.global.set-default-user() {
     git config --global user.name "Quantum Snowball"
     git config --global user.email "quantum.snowball@gmail.com"
-    echo "--- Updated config ---"
-    git config --list --show-scope
+    git.config-summary
 }
 git.global.set-user() {
     if [[ $# -ne 2 ]] then
@@ -46,8 +49,7 @@ git.global.set-user() {
     fi
     git config --global user.name "$1"
     git config --global user.email "$2"
-    echo "--- Updated config ---"
-    git config --global --list --show-scope
+    git.config-summary
 }
 git.local.set-user() {
     if [[ $# -ne 2 ]] then
@@ -56,8 +58,7 @@ git.local.set-user() {
     fi
     git config --local user.name "$1"
     git config --local user.email "$2"
-    echo "--- Updated config ---"
-    git config --local --list --show-scope
+    git.config-summary
 }
 git.global.enable-auto-commit-signing() {
     git config --global commit.gpgsign true
