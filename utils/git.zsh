@@ -67,8 +67,6 @@ git.global.enable-auto-commit-signing() {
     git config --global gpg.format ssh
     git config --global gpg.ssh.allowedSignersFile ~/.ssh/allowed_signers
     git config --global user.signingkey ~/.ssh/id_ed25519.pub
-    # git log show signature by default 
-    git config --global log.showSignature true
     #
     git.config-summary
 }
