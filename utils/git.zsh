@@ -11,7 +11,9 @@ ensure git || return
 export GIT_PAGER="less"
 
 # git
-alias git.log='git log --oneline --all'
+git.log() {
+    git log --graph --all --color=always --abbrev-commit --decorate --date=relative --pretty=format:"%C(yellow)%h%Creset%C(auto)%d%Creset %s %C(magenta)%cr%Creset %C(blue)%G?%Creset"
+}
 git.log.grep() {
     git log --oneline --all -i --grep="$1"
 }
