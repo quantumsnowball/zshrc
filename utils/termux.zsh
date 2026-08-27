@@ -18,15 +18,3 @@ termux.use-font() {
     ln -srf "$1" "$dst"
     termux-reload-settings
 }
-termux.nerd-fonts.hack () {
-    wget 'https://docs.google.com/uc?export=download&id=1OnxTvByrp24-qfW-4-lJDLZ2tvVOhfZT' -O ~/.termux/font.ttf
-}
-termux.nerd-fonts.hack-mono () {
-    wget 'https://docs.google.com/uc?export=download&id=1cvetA3bgOCiXWoEhoAQevgkvvvbxBsiy' -O ~/.termux/font.ttf
-}
-termux.nerd-fonts.meslo () {
-    wget 'https://docs.google.com/uc?export=download&id=1DUikjuAWKLS2zbt_ZysNLKwyv9SgywAZ' -O ~/.termux/font.ttf
-}
-termux.nerd-fonts.meslo-mono () {
-    wget 'https://docs.google.com/uc?export=download&id=1SQaqY3mRqrF897D2_RIur43hADURilNw' -O ~/.termux/font.ttf
-}
