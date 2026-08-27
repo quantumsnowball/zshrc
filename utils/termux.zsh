@@ -13,6 +13,11 @@ tm.theme () {
 
 
 # nerd fonts
+termux.use-font() {
+    dst="$HOME/.termux/font.ttf"
+    ln -srf "$1" "$dst"
+    termux-reload-settings
+}
 tm.nerd-fonts.hack () {
     wget 'https://docs.google.com/uc?export=download&id=1OnxTvByrp24-qfW-4-lJDLZ2tvVOhfZT' -O ~/.termux/font.ttf
 }
