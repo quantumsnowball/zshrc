@@ -32,6 +32,19 @@ c () {
 }
 
 
+# Git config
+c.git.remote-origin-urls() {
+    (
+        (cd ~/.config/zshrc && git config --local remote.origin.url) &
+        (cd ~/.config/nvim && git config --local remote.origin.url) &
+        (cd ~/.config/tmux && git config --local remote.origin.url) &
+        (cd ~/.config/workspace && git config --local remote.origin.url) &
+        (cd ~/.config/ssh && git config --local remote.origin.url) &
+        wait
+    )
+}
+
+
 # utils helpers
 cf.status () {
     [ -d ~/.config/$1 ] &&
