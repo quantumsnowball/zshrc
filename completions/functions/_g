@@ -1,0 +1,16 @@
+#compdef g
+
+
+local -a repos
+repos=( 
+    nvim 
+    zsh 
+    posh 
+    tmux 
+    workspace
+    workspace-private 
+    alacritty 
+    winterm  
+)
+
+_describe 'repos' repos
