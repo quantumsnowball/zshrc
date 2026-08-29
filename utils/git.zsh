@@ -82,6 +82,18 @@ git.local.edit-config() {
     ${EDITOR:-vi} ".git/config"
     git.config-summary
 }
+git.local.origin-use-ssh-url() {
+    current_url=$(git config --local remote.origin.url) &&
+    new_url=${current_url/https:\/\/github.com\//git@github.com:} &&
+    git config --local remote.origin.url $new_url &&
+    git.config-summary | grep remote.origin.url
+}
+git.local.origin-use-https-url() {
+    current_url=$(git config --local remote.origin.url) &&
+    new_url=${current_url/git@github.com:/https:\/\/github.com\/} &&
+    git config --local remote.origin.url $new_url &&
+    git.config-summary | grep remote.origin.url
+}
 
 #helpers
 gh.clone-my-repo() {
