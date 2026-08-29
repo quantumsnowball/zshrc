@@ -21,8 +21,8 @@ c () {
             work | workspace)
                 cd ~/.config/workspace && nvim
                 ;;
-            ssh)
-                cd ~/.config/ssh && nvim
+            pri | private | workspace-private | _work | work_ | _workspace | workspace_)
+                cd ~/.config/workspace-private && nvim
                 ;;
             winterm)
                 cd ~/winhost/home/AppData/Local/Packages/Microsoft.WindowsTerminal_*/LocalState/ && nvim settings.json
@@ -39,7 +39,7 @@ c.git.remote-origin-urls() {
         (cd ~/.config/nvim && git config --local remote.origin.url) &
         (cd ~/.config/tmux && git config --local remote.origin.url) &
         (cd ~/.config/workspace && git config --local remote.origin.url) &
-        (cd ~/.config/ssh && git config --local remote.origin.url) &
+        (cd ~/.config/workspace-private && git config --local remote.origin.url) &
         wait
     )
 }
@@ -82,7 +82,7 @@ cf.fetch-all () {
         cf.fetch nvim &
         cf.fetch tmux &
         cf.fetch workspace &
-        cf.fetch ssh &
+        cf.fetch workspace-private &
         wait
     )
 }
@@ -92,7 +92,7 @@ cf.pull-all () {
         cf.pull nvim &
         cf.pull tmux &
         cf.pull workspace &
-        cf.pull ssh &
+        cf.pull workspace-private &
         wait
     )
     # reload shell after pull
