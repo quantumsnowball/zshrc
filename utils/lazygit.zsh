@@ -24,8 +24,8 @@ g () {
             work | workspace)
                 cd "$HOME/.config/workspace" && shift && lazygit $@
                 ;;
-            ssh)
-                cd "$HOME/.config/ssh" && shift && lazygit $@
+            pri | private | workspace-private | _work | work_ | _workspace | workspace_)
+                cd "$HOME/.config/workspace-private" && shift && lazygit $@
                 ;;
             -h | --help)
                 echo "lg\n  Usage:\n    lg {set|nvim|zsh|posh|tmux|ssh|-h} [lazygit-args]\n"
