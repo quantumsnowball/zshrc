@@ -7,11 +7,17 @@ rclone.check-remotes() {
     (
         # start multiple background jobs to connect to each client
         for name in $(rclone listremotes); do
-            ( 
-                # basic test is to list the files with depth 1
-                rclone lsf "$name" --max-depth 1 &>/dev/null \
-                    && printf "%-25s ${GREEN}SUCCESS${RESET}\n" "$name" \
-                    || printf "%-25s ${RED}FAILED${RESET}\n" "$name" 
+            (
+                # basic test is to list the files with depth 1 with a 5s timeout
+                timeout 10s rclone lsf "$name" --max-depth 1 &>/dev/null
+                res=$?
+                if [ $res -eq 0 ]; then
+                    printf "%-25s ${GREEN}SUCCESS${RESET}\n" "$name"
+                elif [ $res -eq 124 ]; then
+                    printf "%-25s ${YELLOW}TIMEOUT${RESET}\n" "$name"
+                else
+                    printf "%-25s ${RED}FAILED${RESET}\n" "$name"
+                fi
             ) &
         done
         # wait before all job done and exit
