@@ -35,12 +35,11 @@ c () {
 # Git config
 c.git.remote-origin-urls() {
     (
-        (cd ~/.config/zshrc && git config --local remote.origin.url) &
-        (cd ~/.config/nvim && git config --local remote.origin.url) &
-        (cd ~/.config/tmux && git config --local remote.origin.url) &
-        (cd ~/.config/workspace && git config --local remote.origin.url) &
-        (cd ~/.config/workspace-private && git config --local remote.origin.url) &
-        wait
+        (cd ~/.config/zshrc && git config --local remote.origin.url)
+        (cd ~/.config/nvim && git config --local remote.origin.url)
+        (cd ~/.config/tmux && git config --local remote.origin.url)
+        (cd ~/.config/workspace && git config --local remote.origin.url)
+        (cd ~/.config/workspace-private && git config --local remote.origin.url)
     )
 }
 
@@ -101,5 +100,3 @@ cf.pull-all () {
 
 # alias
 alias s='cf.pull-all'
-alias cfp='cf.pull-all'
-alias cff='cf.fetch-all'
