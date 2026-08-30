@@ -5,7 +5,7 @@
 # ]
 # ///
 
-import time
+import asyncio
 
 from rich.live import Live
 from rich.table import Table
@@ -26,7 +26,7 @@ class Repo:
         self.col = col
         self.state = 'PULLING'
 
-    def pull(self) -> None:
+    async def pull(self) -> None:
         self.state = 'SUCCESS'
 
 
@@ -42,9 +42,9 @@ class Host:
         self.col = col
         self.repos = [Repo(name, self.col, i) for i, name in enumerate(Repo.NAMES)]
 
-    def pull(self) -> None:
+    async def pull(self) -> None:
         for repo in self.repos:
-            repo.pull()
+            await repo.pull()
 
 
 class Manager:
@@ -61,20 +61,20 @@ class Manager:
             table.add_row(repo_name, *states)
         return table
 
-    def pull(self) -> None:
+    async def pull(self) -> None:
         # Use Live to handle in-place cell updates
         with Live(self.generate_table(), refresh_per_second=10) as live:
-            time.sleep(1)
+            await asyncio.sleep(1)
             for host in self.hosts:
-                host.pull()
+                await host.pull()
             live.update(self.generate_table())
-            time.sleep(1)
+            await asyncio.sleep(1)
 
 
-def main() -> None:
+async def main() -> None:
     manager = Manager()
-    manager.pull()
+    await manager.pull()
 
 
 if __name__ == '__main__':
-    main()
+    asyncio.run(main())
