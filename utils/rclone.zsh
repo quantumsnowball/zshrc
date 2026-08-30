@@ -6,7 +6,7 @@ rclone.check-remotes() {
     # run in a subshell to avoid printing the background job debug messages
     (
         # start multiple background jobs to connect to each client
-        for name in $(rclone listremotes); do
+        for name in $(rclone listremotes $1); do
             (
                 # basic test is to list the files with depth 1 with a 5s timeout
                 timeout 10s rclone lsf "$name" --max-depth 1 &>/dev/null
@@ -25,3 +25,5 @@ rclone.check-remotes() {
     )
     echo ""
 }
+rclone.check-remotes.drive() { rclone.check-remotes drive }
+rclone.check-remotes.sftp() { rclone.check-remotes sftp }
