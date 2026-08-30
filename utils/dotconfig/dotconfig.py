@@ -27,7 +27,9 @@ class Repo:
         self.state = 'PULLING'
 
     async def pull(self) -> None:
+        await asyncio.sleep(1)
         self.state = 'SUCCESS'
+        await asyncio.sleep(1)
 
 
 class Host:
@@ -43,8 +45,8 @@ class Host:
         self.repos = [Repo(name, self.col, i) for i, name in enumerate(Repo.NAMES)]
 
     async def pull(self) -> None:
-        for repo in self.repos:
-            await repo.pull()
+        tasks = [repo.pull() for repo in self.repos]
+        asyncio.gather(*tasks)
 
 
 class Manager:
@@ -64,9 +66,13 @@ class Manager:
     async def pull(self) -> None:
         # Use Live to handle in-place cell updates
         with Live(self.generate_table(), refresh_per_second=10) as live:
+            tasks = [host.pull() for host in self.hosts]
+            asyncio.gather(*tasks)
             await asyncio.sleep(1)
-            for host in self.hosts:
-                await host.pull()
+            live.update(self.generate_table())
+            await asyncio.sleep(1)
+            live.update(self.generate_table())
+            await asyncio.sleep(1)
             live.update(self.generate_table())
             await asyncio.sleep(1)
 
