@@ -20,11 +20,14 @@ class Repo:
         'workspace-private',
     )
 
-    def __init__(self, name: str) -> None:
+    def __init__(self, name: str, row: int, col: int) -> None:
         self.name = name
+        self.row = row
+        self.col = col
+        self.state = 'PULLING'
 
-    def pull(self) -> int:
-        return 0
+    def pull(self) -> None:
+        self.state = 'SUCCESS'
 
 
 class Host:
@@ -34,47 +37,46 @@ class Host:
         'a56',
     )
 
-    def __init__(self, name: str) -> None:
+    def __init__(self, name: str, col: int) -> None:
         self.name = name
-        self.repos = [Repo(name) for name in Repo.NAMES]
+        self.col = col
+        self.repos = [Repo(name, self.col, i) for i, name in enumerate(Repo.NAMES)]
 
     def pull(self) -> None:
-        pass
+        for repo in self.repos:
+            repo.pull()
 
 
 class Manager:
-    def __init__(self, hosts: list[Host]) -> None:
-        self.hosts = hosts
-        self._table = Table(title='SSH Host Dot Repos Manager')
-        self._table.add_column('Host', style='bold white', width=15)
+    def __init__(self) -> None:
+        self.hosts = [Host(name, i) for i, name in enumerate(Host.NAMES)]
+
+    def generate_table(self) -> Table:
+        table = Table(title='SSH Host Dot Repos Manager')
+        table.add_column('Host', style='bold white', width=20)
         for host_name in Host.NAMES:
-            self._table.add_column(host_name, style='bold cyan', width=10)
-        for repo_name in Repo.NAMES:
-            self._table.add_row(repo_name)
+            table.add_column(host_name, style='bold cyan', width=10)
+        for i, repo_name in enumerate(Repo.NAMES):
+            table.add_row(
+                repo_name,
+                self.hosts[0].repos[i].state,
+                self.hosts[1].repos[i].state,
+                self.hosts[2].repos[i].state,
+            )
+        return table
 
     def pull(self) -> None:
         # Use Live to handle in-place cell updates
-        with Live(self._table, refresh_per_second=10):
+        with Live(self.generate_table(), refresh_per_second=10) as live:
             time.sleep(1)
-
-            # Update Row 0, Column 1 (nvim)
-            # self._table.columns[1]._cells[0] = '[bold green]● SUCCESS[/bold green]'
-
-            time.sleep(1)
-
-            # Update Row 2, Column 1 (ghostty)
-            # self._table.columns[1]._cells[2] = '[bold red]● FAILED[/bold red]'
-
-            time.sleep(1)
-
-            # Update Row 1, Column 1 (zsh)
-            # self._table.columns[1]._cells[1] = '[bold green]● SUCCESS[/bold green]'
-
+            for host in self.hosts:
+                host.pull()
+            live.update(self.generate_table())
             time.sleep(1)
 
 
 def main() -> None:
-    manager = Manager(hosts=[Host(name) for name in Host.NAMES])
+    manager = Manager()
     manager.pull()
 
 
