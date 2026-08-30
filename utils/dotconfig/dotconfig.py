@@ -9,6 +9,7 @@ import asyncio
 import random
 from typing import Callable
 
+import rich
 from rich.live import Live
 from rich.table import Table
 
@@ -39,10 +40,10 @@ class Repo:
         # Set initial state and update UI
         self._state = '[yellow]PULLING[/]'
         live.update(renderer())
-        # Construct the target git pull command
+        # Git pull command, starts in the repo directory, rebase and autostash
         git_cmd = f'git -C ~/.config/{self._name} pull --rebase --autostash'
         try:
-            # Execute SSH asynchronously
+            # Execute each SSH command asynchronously
             process = await asyncio.create_subprocess_exec(
                 'ssh',
                 '-A',                           # SSH agent forwarding, use the the current machine's ssh key for remote auth
@@ -51,15 +52,25 @@ class Repo:
                 self._host,
                 git_cmd,
                 stdout=asyncio.subprocess.DEVNULL,
-                stderr=asyncio.subprocess.DEVNULL,
+                stderr=asyncio.subprocess.PIPE,
             )
-            # Wait for process to complete
-            await process.wait()
+            # Wait for process to complete, communicate to get stdout or stderr
+            _, stderr = await process.communicate()
             # Update state based on SSH return code
-            self._state = '[bold green]SUCCESS[/]' if process.returncode == 0 else '[bold red]FAILED[/]'
+            if process.returncode == 0:
+                # SUCCESS
+                self._state = '[bold green]SUCCESS[/]'
+            else:
+                # FAILED, print failed message above the table
+                self._state = '[bold red]FAILED[/]'
+                live.console.print(f'\n[red]FAILED[/] Host: [yellow]{self._host}[/], Repo: [magenta]{self._name}[/]\n')
+                live.console.print(stderr.decode())
         except Exception:
+            # ERROR, on any exception, try to print it
             self._state = '[bold red]ERROR[/]'
+            live.console.print_exception()
         finally:
+            # Finally must update the table to reflect final state
             live.update(renderer())
 
 
@@ -73,6 +84,7 @@ class Host:
 
     def __init__(self, name: str) -> None:
         self._name = name
+        # Each host handles all repos on that machine
         self._repos = [Repo(name, host=self._name) for name in Repo.NAMES]
 
     @property
@@ -86,6 +98,7 @@ class Host:
 
 class Manager:
     def __init__(self) -> None:
+        # Manager handles all the SSH hosts
         self._hosts = [Host(name) for name in Host.NAMES]
 
     def _renderer(self) -> Table:
@@ -102,7 +115,7 @@ class Manager:
         # Table object giving back for render
         return table
 
-    async def pull(self) -> None:
+    async def run(self) -> None:
         # The Live object for rendering the Table
         with Live(self._renderer(), refresh_per_second=10) as live:
             # Gather each host pulling all their repos
@@ -111,9 +124,9 @@ class Manager:
 
 
 async def main() -> None:
-    # Manager can do the pull action
+    # Manager
     manager = Manager()
-    await manager.pull()
+    await manager.run()
 
 
 if __name__ == '__main__':
