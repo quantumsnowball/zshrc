@@ -24,15 +24,51 @@ class Repo:
         'workspace-private',
     )
 
-    def __init__(self, name: str) -> None:
+    def __init__(self, name: str, *, host: str) -> None:
         self.name = name
+        self.host = host
         self.state = ''
 
     async def pull(self, live: Live, renderer: Renderer) -> None:
-        await asyncio.sleep(random.random()*5)
-        self.state = 'SUCCESS'
+        # Set initial state and update UI
+        self.state = '[yellow]PULLING[/yellow]'
         live.update(renderer())
-        await asyncio.sleep(random.random()*5)
+
+        # Construct the target git pull command
+        target_path = f'~/.config/{self.name}'
+        git_cmd = f'git -C {target_path} pull --rebase --autostash'
+
+        try:
+            # Execute SSH asynchronously
+            process = await asyncio.create_subprocess_exec(
+                'ssh',
+                '-o', 'ConnectTimeout=25',      # Fast fail if device is offline
+                '-o', 'BatchMode=yes',          # Prevent hanging on password prompts
+                self.host,
+                git_cmd,
+                stdout=asyncio.subprocess.DEVNULL,
+                stderr=asyncio.subprocess.DEVNULL,
+            )
+
+            # Wait for process to complete
+            await process.wait()
+
+            # Update state based on SSH return code
+            if process.returncode == 0:
+                self.state = '[bold green]SUCCESS[/bold green]'
+                print(f'yes: {self.host=} {self.name=} {git_cmd=}')
+            else:
+                self.state = '[bold red]FAILED[/bold red]'
+                print(f'no: {self.host=} {self.name=} {git_cmd=}')
+
+        except asyncio.CancelledError:
+            self.state = '[dim white]CANCELLED[/dim white]'
+            raise
+        except Exception:
+            self.state = '[bold red]ERROR[/bold red]'
+        finally:
+            # Re-render the table with final status
+            live.update(renderer())
 
 
 class Host:
@@ -44,7 +80,7 @@ class Host:
 
     def __init__(self, name: str) -> None:
         self.name = name
-        self.repos = [Repo(name) for name in Repo.NAMES]
+        self.repos = [Repo(name, host=self.name) for name in Repo.NAMES]
 
     async def pull(self, live: Live, renderer: Renderer) -> None:
         tasks = [repo.pull(live, renderer) for repo in self.repos]
