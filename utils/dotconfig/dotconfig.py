@@ -12,10 +12,12 @@ from typing import Callable
 from rich.live import Live
 from rich.table import Table
 
+# Types
 Renderer = Callable[[], Table]
 
 
 class Repo:
+    # Exact repo directory names
     NAMES = (
         'zshrc',
         'nvim',
@@ -25,19 +27,20 @@ class Repo:
     )
 
     def __init__(self, name: str, *, host: str) -> None:
-        self.name = name
-        self.host = host
-        self.state = ''
+        self._name = name
+        self._host = host
+        # State
+        self._state = ''
+
+    @property
+    def state(self) -> str: return self._state
 
     async def pull(self, live: Live, renderer: Renderer) -> None:
         # Set initial state and update UI
-        self.state = '[yellow]PULLING[/yellow]'
+        self._state = '[yellow]PULLING[/]'
         live.update(renderer())
-
         # Construct the target git pull command
-        target_path = f'~/.config/{self.name}'
-        git_cmd = f'git -C {target_path} pull --rebase --autostash'
-
+        git_cmd = f'git -C ~/.config/{self._name} pull --rebase --autostash'
         try:
             # Execute SSH asynchronously
             process = await asyncio.create_subprocess_exec(
@@ -45,32 +48,23 @@ class Repo:
                 '-A',                           # SSH agent forwarding, use the the current machine's ssh key for remote auth
                 '-o', 'ConnectTimeout=10',      # Fast fail if device is offline
                 '-o', 'BatchMode=yes',          # Prevent hanging on password prompts
-                self.host,
+                self._host,
                 git_cmd,
                 stdout=asyncio.subprocess.DEVNULL,
                 stderr=asyncio.subprocess.DEVNULL,
             )
-
             # Wait for process to complete
             await process.wait()
-
             # Update state based on SSH return code
-            if process.returncode == 0:
-                self.state = '[bold green]SUCCESS[/bold green]'
-            else:
-                self.state = '[bold red]FAILED[/bold red]'
-
-        except asyncio.CancelledError:
-            self.state = '[dim white]CANCELLED[/dim white]'
-            raise
+            self._state = '[bold green]SUCCESS[/]' if process.returncode == 0 else '[bold red]FAILED[/]'
         except Exception:
-            self.state = '[bold red]ERROR[/bold red]'
+            self._state = '[bold red]ERROR[/]'
         finally:
-            # Re-render the table with final status
             live.update(renderer())
 
 
 class Host:
+    # Exact ssh profile names
     NAMES = (
         's7',
         'a9',
@@ -78,38 +72,50 @@ class Host:
     )
 
     def __init__(self, name: str) -> None:
-        self.name = name
-        self.repos = [Repo(name, host=self.name) for name in Repo.NAMES]
+        self._name = name
+        self._repos = [Repo(name, host=self._name) for name in Repo.NAMES]
+
+    @property
+    def repos(self) -> list[Repo]: return self._repos
 
     async def pull(self, live: Live, renderer: Renderer) -> None:
-        tasks = [repo.pull(live, renderer) for repo in self.repos]
+        # Gather each repo pulling themself
+        tasks = [repo.pull(live, renderer) for repo in self._repos]
         await asyncio.gather(*tasks)
 
 
 class Manager:
     def __init__(self) -> None:
-        self.hosts = [Host(name) for name in Host.NAMES]
+        self._hosts = [Host(name) for name in Host.NAMES]
 
-    def renderer(self) -> Table:
-        table = Table(title='SSH Host Dot Repos Manager')
+    def _renderer(self) -> Table:
+        # Create a rich Table
+        table = Table()
+        # Add column headers
         table.add_column('Host', style='bold white', width=20)
         for host_name in Host.NAMES:
             table.add_column(host_name, style='bold cyan', width=10)
+        # Add row value based on the current state
         for i, repo_name in enumerate(Repo.NAMES):
-            states = [host.repos[i].state for host in self.hosts]
+            states = [host.repos[i].state for host in self._hosts]
             table.add_row(repo_name, *states)
+        # Table object giving back for render
         return table
 
     async def pull(self) -> None:
-        with Live(self.renderer(), refresh_per_second=10) as live:
-            tasks = [host.pull(live, self.renderer) for host in self.hosts]
+        # The Live object for rendering the Table
+        with Live(self._renderer(), refresh_per_second=10) as live:
+            # Gather each host pulling all their repos
+            tasks = [host.pull(live, self._renderer) for host in self._hosts]
             await asyncio.gather(*tasks)
 
 
 async def main() -> None:
+    # Manager can do the pull action
     manager = Manager()
     await manager.pull()
 
 
 if __name__ == '__main__':
+    # main
     asyncio.run(main())
