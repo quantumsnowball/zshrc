@@ -41,7 +41,7 @@ dotconfig.git.remote-origin-urls() {
     (cd ~/.config/workspace && git config --local remote.origin.url)
     (cd ~/.config/workspace-private && git config --local remote.origin.url)
 }
-c.git.remote-origin-urls() { dotconfig.git.remote-origin-urls; }
+c.show-git-remote-urls() { dotconfig.git.remote-origin-urls; }
 
 
 # utils helpers
@@ -101,15 +101,15 @@ dotconfig.pull-all-and-reload-shell() {
 }
 s() { dotconfig.pull-all-and-reload-shell ; }
 
-# remotes
-dotconfig.pull-all.for-all-remotes() {
+# ssh hosts
+dotconfig.pull-all.for-all-ssh-hosts() {
     # do a dotconfig.pull-all on this remote list
     local remotes=(s7 a9 a56)
     for remote in "${remotes[@]}"; do
-        print -P "\n%F{cyan}%B┌─[ Remote: %F{yellow}$remote%F{cyan} ]"
-        print -P "└────────────────────────────────────────%b%f\n"
+        print -P "\n\n%F{cyan}%B┌─[ Remote: %F{yellow}$remote%F{cyan} ]"
+        print -P "└───────────────────────────────────────────────────%b%f\n"
         # launch dotconfig.pull-all via a zsh interactive shell
         ssh -t "$remote" 'zsh -i -c dotconfig.pull-all'
     done
 }
-s.sync-all-remotes() { dotconfig.pull-all.for-all-remotes; }
+s.pull-all-ssh-hosts() { dotconfig.pull-all.for-all-ssh-hosts; }
