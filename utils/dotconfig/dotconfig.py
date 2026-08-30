@@ -6,9 +6,13 @@
 # ///
 
 import asyncio
+import random
+from typing import Callable
 
 from rich.live import Live
 from rich.table import Table
+
+Renderer = Callable[[], Table]
 
 
 class Repo:
@@ -24,12 +28,13 @@ class Repo:
         self.name = name
         self.row = row
         self.col = col
-        self.state = 'PULLING'
+        self.state = ''
 
-    async def pull(self) -> None:
-        await asyncio.sleep(1)
+    async def pull(self, live: Live, renderer: Renderer) -> None:
+        await asyncio.sleep(random.random()*5)
         self.state = 'SUCCESS'
-        await asyncio.sleep(1)
+        live.update(renderer())
+        await asyncio.sleep(random.random()*5)
 
 
 class Host:
@@ -44,16 +49,16 @@ class Host:
         self.col = col
         self.repos = [Repo(name, self.col, i) for i, name in enumerate(Repo.NAMES)]
 
-    async def pull(self) -> None:
-        tasks = [repo.pull() for repo in self.repos]
-        asyncio.gather(*tasks)
+    async def pull(self, live: Live, renderer: Renderer) -> None:
+        tasks = [repo.pull(live, renderer) for repo in self.repos]
+        await asyncio.gather(*tasks)
 
 
 class Manager:
     def __init__(self) -> None:
         self.hosts = [Host(name, i) for i, name in enumerate(Host.NAMES)]
 
-    def generate_table(self) -> Table:
+    def renderer(self) -> Table:
         table = Table(title='SSH Host Dot Repos Manager')
         table.add_column('Host', style='bold white', width=20)
         for host_name in Host.NAMES:
@@ -64,17 +69,9 @@ class Manager:
         return table
 
     async def pull(self) -> None:
-        # Use Live to handle in-place cell updates
-        with Live(self.generate_table(), refresh_per_second=10) as live:
-            tasks = [host.pull() for host in self.hosts]
-            asyncio.gather(*tasks)
-            await asyncio.sleep(1)
-            live.update(self.generate_table())
-            await asyncio.sleep(1)
-            live.update(self.generate_table())
-            await asyncio.sleep(1)
-            live.update(self.generate_table())
-            await asyncio.sleep(1)
+        with Live(self.renderer(), refresh_per_second=10) as live:
+            tasks = [host.pull(live, self.renderer) for host in self.hosts]
+            await asyncio.gather(*tasks)
 
 
 async def main() -> None:
