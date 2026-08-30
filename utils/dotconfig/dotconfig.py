@@ -105,13 +105,13 @@ class Manager:
         # Create a rich Table
         table = Table()
         # Add column headers
-        table.add_column('Host', style='bold white', width=20)
+        table.add_column(f'[bold magenta]Repo[/] \\ [bold blue]Host[/]', width=20)
         for host_name in Host.NAMES:
-            table.add_column(host_name, style='bold cyan', width=10)
+            table.add_column(f'[bold cyan]{host_name}[/]', width=10)
         # Add row value based on the current state
         for i, repo_name in enumerate(Repo.NAMES):
             states = [host.repos[i].state for host in self._hosts]
-            table.add_row(repo_name, *states)
+            table.add_row(f'[bold white]{repo_name}[/]', *states)
         # Table object giving back for render
         return table
 
