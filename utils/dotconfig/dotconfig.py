@@ -42,7 +42,8 @@ class Repo:
             # Execute SSH asynchronously
             process = await asyncio.create_subprocess_exec(
                 'ssh',
-                '-o', 'ConnectTimeout=25',      # Fast fail if device is offline
+                '-A',                           # SSH agent forwarding, use the the current machine's ssh key for remote auth
+                '-o', 'ConnectTimeout=10',      # Fast fail if device is offline
                 '-o', 'BatchMode=yes',          # Prevent hanging on password prompts
                 self.host,
                 git_cmd,
@@ -56,10 +57,8 @@ class Repo:
             # Update state based on SSH return code
             if process.returncode == 0:
                 self.state = '[bold green]SUCCESS[/bold green]'
-                print(f'yes: {self.host=} {self.name=} {git_cmd=}')
             else:
                 self.state = '[bold red]FAILED[/bold red]'
-                print(f'no: {self.host=} {self.name=} {git_cmd=}')
 
         except asyncio.CancelledError:
             self.state = '[dim white]CANCELLED[/dim white]'
