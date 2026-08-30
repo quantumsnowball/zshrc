@@ -3,7 +3,7 @@ ensure git || return
 
 # nvim editor config repos directly
 # NOTE: run in a subshell can retain current directory
-c () {
+dotconfig() {
     (
         case $1 in
             nvim | neovim)
@@ -30,22 +30,22 @@ c () {
         esac
     )
 }
+c() { dotconfig $1; }
 
 
 # Git config
-c.git.remote-origin-urls() {
-    (
-        (cd ~/.config/zshrc && git config --local remote.origin.url)
-        (cd ~/.config/nvim && git config --local remote.origin.url)
-        (cd ~/.config/tmux && git config --local remote.origin.url)
-        (cd ~/.config/workspace && git config --local remote.origin.url)
-        (cd ~/.config/workspace-private && git config --local remote.origin.url)
-    )
+dotconfig.git.remote-origin-urls() {
+    (cd ~/.config/zshrc && git config --local remote.origin.url)
+    (cd ~/.config/nvim && git config --local remote.origin.url)
+    (cd ~/.config/tmux && git config --local remote.origin.url)
+    (cd ~/.config/workspace && git config --local remote.origin.url)
+    (cd ~/.config/workspace-private && git config --local remote.origin.url)
 }
+c.git.remote-origin-urls() { dotconfig.git.remote-origin-urls; }
 
 
 # utils helpers
-cf.status () {
+dotconfig.status() {
     [ -d ~/.config/$1 ] &&
     echo "$(
         echo "#\n# < $1 >\n#" &&
@@ -53,7 +53,7 @@ cf.status () {
         git -c color.ui=always status --short --branch 2>&1
     )\n"
 }
-cf.fetch () {
+dotconfig.fetch() {
     [ -d ~/.config/$1 ] &&
     echo "$(
         echo "#\n# < $1 >\n#" &&
@@ -62,7 +62,7 @@ cf.fetch () {
         git -c color.ui=always status --short --branch 2>&1
     )\n"
 }
-cf.pull () {
+dotconfig.pull() {
     [ -d ~/.config/$1 ] &&
     echo "$(
         echo "#\n# < $1 >\n#" &&
@@ -75,28 +75,26 @@ cf.pull () {
 
 # batch helpers
 # NOTE: run in a subshell can avoid printing the & [1] <PID> and + done debug message 
-cf.fetch-all () {
+dotconfig.fetch-all() {
     (
-        cf.fetch zshrc &
-        cf.fetch nvim &
-        cf.fetch tmux &
-        cf.fetch workspace &
-        cf.fetch workspace-private &
+        dotconfig.fetch zshrc &
+        dotconfig.fetch nvim &
+        dotconfig.fetch tmux &
+        dotconfig.fetch workspace &
+        dotconfig.fetch workspace-private &
         wait
     )
 }
-cf.pull-all () {
+dotconfig.pull-all() {
     (
-        cf.pull zshrc &
-        cf.pull nvim &
-        cf.pull tmux &
-        cf.pull workspace &
-        cf.pull workspace-private &
+        dotconfig.pull zshrc &
+        dotconfig.pull nvim &
+        dotconfig.pull tmux &
+        dotconfig.pull workspace &
+        dotconfig.pull workspace-private &
         wait
     )
     # reload shell after pull
     zsh.reload-shell
 }
-
-# alias
-alias s='cf.pull-all'
+s() { dotconfig.pull-all; }
