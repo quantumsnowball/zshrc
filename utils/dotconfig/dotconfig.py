@@ -24,10 +24,8 @@ class Repo:
         'workspace-private',
     )
 
-    def __init__(self, name: str, row: int, col: int) -> None:
+    def __init__(self, name: str) -> None:
         self.name = name
-        self.row = row
-        self.col = col
         self.state = ''
 
     async def pull(self, live: Live, renderer: Renderer) -> None:
@@ -44,10 +42,9 @@ class Host:
         'a56',
     )
 
-    def __init__(self, name: str, col: int) -> None:
+    def __init__(self, name: str) -> None:
         self.name = name
-        self.col = col
-        self.repos = [Repo(name, self.col, i) for i, name in enumerate(Repo.NAMES)]
+        self.repos = [Repo(name) for name in Repo.NAMES]
 
     async def pull(self, live: Live, renderer: Renderer) -> None:
         tasks = [repo.pull(live, renderer) for repo in self.repos]
@@ -56,7 +53,7 @@ class Host:
 
 class Manager:
     def __init__(self) -> None:
-        self.hosts = [Host(name, i) for i, name in enumerate(Host.NAMES)]
+        self.hosts = [Host(name) for name in Host.NAMES]
 
     def renderer(self) -> Table:
         table = Table(title='SSH Host Dot Repos Manager')
