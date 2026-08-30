@@ -74,8 +74,8 @@ dotconfig.pull() {
 
 
 # batch helpers
-# NOTE: run in a subshell can avoid printing the & [1] <PID> and + done debug message 
 dotconfig.fetch-all() {
+    # run in a subshell can avoid printing the & [1] <PID> and + done debug message 
     (
         dotconfig.fetch zshrc &
         dotconfig.fetch nvim &
@@ -94,7 +94,9 @@ dotconfig.pull-all() {
         dotconfig.pull workspace-private &
         wait
     )
-    # reload shell after pull
+}
+dotconfig.pull-all-and-reload-shell() {
+    dotconfig.pull-all
     zsh.reload-shell
 }
 s() { dotconfig.pull-all; }
