@@ -57,12 +57,8 @@ class Manager:
         for host_name in Host.NAMES:
             table.add_column(host_name, style='bold cyan', width=10)
         for i, repo_name in enumerate(Repo.NAMES):
-            table.add_row(
-                repo_name,
-                self.hosts[0].repos[i].state,
-                self.hosts[1].repos[i].state,
-                self.hosts[2].repos[i].state,
-            )
+            states = [host.repos[i].state for host in self.hosts]
+            table.add_row(repo_name, *states)
         return table
 
     def pull(self) -> None:
