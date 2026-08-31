@@ -1,38 +1,44 @@
-from typing import Any, Protocol, Self, Sequence
+from typing import Any, Mapping, Protocol, Self, Sequence
 
-from rich.console import Console
+from rich.console import Console, RenderableType
 from rich.live import Live
-from rich.table import Table
+from rich.table import Column, Table
+
+
+class Cell(Protocol):
+    @property
+    def text(self) -> str: ...
 
 
 class LiveTable:
-    class Cell(Protocol):
-        @property
-        def text(self) -> str: ...
-
     def __init__(
         self,
+        # cells is a 2d sequence, cells[row][column] structure
         cells: Sequence[Sequence[Cell]],
         *,
-        title: str | None = None,
-        column_headers: Sequence[str] = (),
-        column_header_color: str = 'bold cyan',
-        column_width: int = 10,
-        row_headers: Sequence[str] | None = None,
-        row_header_color: str = 'bold white',
-        stub_header: str = '',
-        refresh_per_second: int = 10,
+        # stub column
+        stub_header: RenderableType = '',
+        stubs: Sequence[RenderableType] | None = None,
+        # cell columns
+        cell_headers: Sequence[RenderableType] = (),
+        # kwargs
+        stub_column_kwargs: Mapping[str, Any] | None = None,
+        cell_column_kwargs: Mapping[str, Any] | None = None,
+        table_kwargs: Mapping[str, Any] | None = None,
+        live_kwargs: Mapping[str, Any] | None = None,
     ) -> None:
+        # data
         self._cells = cells
-        self._column_headers = column_headers
-        self._column_header_color = column_header_color
-        self._column_width = column_width
-        self._row_headers = row_headers
-        self._row_header_color = row_header_color
         self._stub_header = stub_header
-        self._refresh_per_second = refresh_per_second
-        # rich
-        self._live = Live(self._renderer(), refresh_per_second=self._refresh_per_second)
+        self._stubs = stubs
+        self._cell_headers = cell_headers
+        # kwargs
+        self._stub_column_kwargs = stub_column_kwargs or {}
+        self._cell_column_kwargs = cell_column_kwargs or {}
+        self._table_kwargs = table_kwargs or {}
+        self._live_kwargs = live_kwargs or {}
+        # rich live
+        self._live = Live(self._renderer(), **self._live_kwargs)
 
     @property
     def console(self) -> Console:
@@ -46,18 +52,19 @@ class LiveTable:
         self._live.__exit__(*_)
 
     def _renderer(self) -> Table:
-        # Create a rich Table
-        table = Table()
-        # Add column headers
-        if self._row_headers is not None:
-            table.add_column(self._stub_header)
-        for column_header in self._column_headers:
-            table.add_column(f'[{self._column_header_color}]{column_header}[/]', width=self._column_width)
-        # Add row value based on the current state
+        # create columns
+        columns = [
+            *((Column(self._stub_header, **self._stub_column_kwargs), ) if self._stubs is not None else ()),
+            *(Column(cell_header, **self._cell_column_kwargs) for cell_header in self._cell_headers)
+        ]
+        # create a rich Table
+        table = Table(*columns, **self._table_kwargs)
+        # add row values based on the current state
         for i, row_cells in enumerate(self._cells):
-            texts = [cell.text for cell in row_cells]
-            if self._row_headers is not None:
-                texts = [f'[{self._row_header_color}]{self._row_headers[i]}[/]'] + texts
+            texts = [
+                *((self._stubs[i],) if self._stubs is not None else ()),
+                *(cell.text for cell in row_cells),
+            ]
             table.add_row(*texts)
 
         # Table object giving back for render

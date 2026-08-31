@@ -9,13 +9,9 @@
 # zsh = { path = "../../lib", editable = true }
 # ///
 
-import asyncio
-import random
-from typing import Callable
 
-import rich
-from rich.live import Live
-from rich.table import Table
+import asyncio
+
 from zsh import ssh
 from zsh.ui import LiveTable
 
@@ -40,23 +36,23 @@ class Repo:
         self._name = name
         self._host = host
         # State
-        self._text = ''
+        self._text = '       '
 
     @property
     def text(self) -> str: return self._text
 
     async def pull(self, table: LiveTable) -> None:
-        # Set initial state and update UI
+        # set initial state and update UI
         self._text = '[yellow]PULLING[/]'
         table.update()
         try:
-            # Execute each SSH command asynchronously
+            # execute each SSH command asynchronously
             result = await ssh.exec(
                 host=self._host,
                 # Git pull command, starts in the repo directory, rebase and autostash
                 cmd=f'git -C ~/.config/{self._name} pull --rebase --autostash'
             )
-            # Update state based on SSH return code
+            # update state based on SSH return code
             if result.ok:
                 # SUCCESS
                 self._text = '[bold green]SUCCESS[/]'
@@ -76,6 +72,7 @@ class Repo:
 
 class Manager:
     def __init__(self) -> None:
+        # the cells for LiveTable
         self._repos = [
             [
                 Repo(repo_name, host=host_name)
@@ -87,9 +84,17 @@ class Manager:
     async def run(self) -> None:
         with LiveTable(
             self._repos,
-            column_headers=HOST_NAMES,
-            row_headers=REPO_NAMES,
             stub_header=f'[bold magenta]Repo[/] \\ [bold blue]Host[/]',
+            stubs=REPO_NAMES,
+            cell_headers=HOST_NAMES,
+            stub_column_kwargs=dict(
+                style='bold white',
+            ),
+            cell_column_kwargs=dict(
+                header_style='bold cyan',
+                justify='center',
+                min_width=7,
+            ),
         ) as table:
             tasks = [
                 repo.pull(table) for row in self._repos for repo in row
