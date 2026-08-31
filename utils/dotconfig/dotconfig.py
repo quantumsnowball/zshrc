@@ -84,9 +84,17 @@ class Manager:
     async def run(self) -> None:
         with LiveTable(
             self._repos,
+            stub_head=f'[bold magenta]Repo[/] \\ [bold blue]Host[/]',
+            stubs=REPO_NAMES,
             column_headers=HOST_NAMES,
-            row_headers=REPO_NAMES,
-            stub_header=f'[bold magenta]Repo[/] \\ [bold blue]Host[/]',
+            stub_column_kwargs=dict(
+                style='bold white',
+            ),
+            cell_column_kwargs=dict(
+                header_style='bold cyan',
+                justify='center',
+                min_width=7,
+            ),
         ) as table:
             tasks = [
                 repo.pull(table) for row in self._repos for repo in row
