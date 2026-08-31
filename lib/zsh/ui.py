@@ -1,4 +1,4 @@
-from typing import Protocol, Self, Sequence
+from typing import Any, Protocol, Self, Sequence
 
 from rich.console import Console
 from rich.live import Live
@@ -17,7 +17,6 @@ class LiveTable:
         # cells is a 2d sequence, cells[row][column] structure
         cells: Sequence[Sequence[TableCell]],
         *,
-        title: str | None = None,
         # column headers is always shown
         column_headers: Sequence[str] = (),
         column_header_color: str = 'bold cyan',
@@ -26,7 +25,8 @@ class LiveTable:
         row_headers: Sequence[str] | None = None,
         row_header_color: str = 'bold white',
         stub_header: str = '',
-        refresh_per_second: int = 10,
+        # table kwargs
+        **table_kwargs: Any,
     ) -> None:
         self._cells = cells
         self._column_headers = column_headers
@@ -35,9 +35,9 @@ class LiveTable:
         self._row_headers = row_headers
         self._row_header_color = row_header_color
         self._stub_header = stub_header
-        self._refresh_per_second = refresh_per_second
+        self._table_kwargs = table_kwargs
         # rich
-        self._live = Live(self._renderer(), refresh_per_second=self._refresh_per_second)
+        self._live = Live(self._renderer())
 
     @property
     def console(self) -> Console:
@@ -52,7 +52,7 @@ class LiveTable:
 
     def _renderer(self) -> Table:
         # Create a rich Table
-        table = Table()
+        table = Table(**self._table_kwargs)
         # Add column headers
         if self._row_headers is not None:
             table.add_column(self._stub_header)
