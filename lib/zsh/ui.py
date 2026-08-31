@@ -11,7 +11,6 @@ class TableCell(Protocol):
 
 
 class LiveTable:
-
     def __init__(
         self,
         # cells is a 2d sequence, cells[row][column] structure
@@ -25,8 +24,9 @@ class LiveTable:
         row_headers: Sequence[str] | None = None,
         row_header_color: str = 'bold white',
         stub_header: str = '',
-        # table kwargs
-        **table_kwargs: Any,
+        # kwargs
+        table_kwargs: dict[str, Any] = {},
+        live_kwargs: dict[str, Any] = {},
     ) -> None:
         self._cells = cells
         self._column_headers = column_headers
@@ -35,9 +35,9 @@ class LiveTable:
         self._row_headers = row_headers
         self._row_header_color = row_header_color
         self._stub_header = stub_header
-        self._table_kwargs = table_kwargs
         # rich
-        self._live = Live(self._renderer())
+        self._table_kwargs = table_kwargs
+        self._live = Live(self._renderer(), **live_kwargs)
 
     @property
     def console(self) -> Console:
