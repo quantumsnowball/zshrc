@@ -9,3 +9,15 @@ for item in $HOME/.config/zshrc/utils/*; do
         source $item
     fi
 done
+
+# manually add external source here
+items=(
+    $XDG_CONFIG_HOME/workspace-private/keepass/script/__init__.zsh
+    $XDG_CONFIG_HOME/workspace-private/rclone/script/__init__.zsh
+)
+for item in $items; do 
+    if [ -f $item ]; then
+        source $item
+    fi
+done
+
