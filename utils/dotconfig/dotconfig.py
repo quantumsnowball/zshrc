@@ -84,9 +84,9 @@ class Manager:
     async def run(self) -> None:
         with LiveTable(
             self._repos,
-            stub_head=f'[bold magenta]Repo[/] \\ [bold blue]Host[/]',
+            stub_header=f'[bold magenta]Repo[/] \\ [bold blue]Host[/]',
             stubs=REPO_NAMES,
-            column_headers=HOST_NAMES,
+            cell_headers=HOST_NAMES,
             stub_column_kwargs=dict(
                 style='bold white',
             ),
