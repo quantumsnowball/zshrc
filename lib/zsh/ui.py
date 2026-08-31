@@ -1,11 +1,11 @@
-from typing import Any, Protocol, Self, Sequence
+from typing import Any, Mapping, Protocol, Self, Sequence
 
 from rich.console import Console, RenderableType
 from rich.live import Live
 from rich.table import Column, Table
 
 
-class TableCell(Protocol):
+class Cell(Protocol):
     @property
     def text(self) -> str: ...
 
@@ -14,7 +14,7 @@ class LiveTable:
     def __init__(
         self,
         # cells is a 2d sequence, cells[row][column] structure
-        cells: Sequence[Sequence[TableCell]],
+        cells: Sequence[Sequence[Cell]],
         *,
         # stub column
         stub_head: RenderableType = '',
@@ -22,20 +22,23 @@ class LiveTable:
         # cell columns
         column_headers: Sequence[RenderableType] = (),
         # kwargs
-        stub_column_kwargs: dict[str, Any] = dict(),
-        cell_column_kwargs: dict[str, Any] = dict(),
-        table_kwargs: dict[str, Any] = dict(),
-        live_kwargs: dict[str, Any] = dict(),
+        stub_column_kwargs: Mapping[str, Any] | None = None,
+        cell_column_kwargs: Mapping[str, Any] | None = None,
+        table_kwargs: Mapping[str, Any] | None = None,
+        live_kwargs: Mapping[str, Any] | None = None,
     ) -> None:
+        # data
         self._cells = cells
         self._stub_head = stub_head
         self._stubs = stubs
         self._column_headers = column_headers
-        # rich
-        self._stub_column_kwargs = stub_column_kwargs
-        self._cell_column_kwargs = cell_column_kwargs
-        self._table_kwargs = table_kwargs
-        self._live = Live(self._renderer(), **live_kwargs)
+        # kwargs
+        self._stub_column_kwargs = stub_column_kwargs or {}
+        self._cell_column_kwargs = cell_column_kwargs or {}
+        self._table_kwargs = table_kwargs or {}
+        self._live_kwargs = live_kwargs or {}
+        # rich live
+        self._live = Live(self._renderer(), **self._live_kwargs)
 
     @property
     def console(self) -> Console:
