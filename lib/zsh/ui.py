@@ -1,5 +1,6 @@
 from typing import Any, Protocol, Self, Sequence
 
+from rich.console import Console
 from rich.live import Live
 from rich.table import Table
 
@@ -32,6 +33,10 @@ class LiveTable:
         self._refresh_per_second = refresh_per_second
         # rich
         self._live = Live(self._renderer(), refresh_per_second=self._refresh_per_second)
+
+    @property
+    def console(self) -> Console:
+        return self._live.console
 
     def __enter__(self) -> Self:
         self._live.__enter__()
