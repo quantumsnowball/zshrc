@@ -2,7 +2,7 @@ from typing import Any, Protocol, Self, Sequence
 
 from rich.console import Console
 from rich.live import Live
-from rich.table import Table
+from rich.table import Column, Table
 
 
 class TableCell(Protocol):
@@ -38,6 +38,7 @@ class LiveTable:
         # rich
         self._table_kwargs = table_kwargs
         self._live = Live(self._renderer(), **live_kwargs)
+        Column()
 
     @property
     def console(self) -> Console:
@@ -51,13 +52,13 @@ class LiveTable:
         self._live.__exit__(*_)
 
     def _renderer(self) -> Table:
+        # create columns
+        columns = [
+            *((Column(self._stub_header), ) if self._row_headers is not None else ()),
+            *(Column(f'[{self._column_header_color}]{column_header}[/]', width=self._column_width) for column_header in self._column_headers)
+        ]
         # Create a rich Table
-        table = Table(**self._table_kwargs)
-        # Add column headers
-        if self._row_headers is not None:
-            table.add_column(self._stub_header)
-        for column_header in self._column_headers:
-            table.add_column(f'[{self._column_header_color}]{column_header}[/]', width=self._column_width)
+        table = Table(*columns, **self._table_kwargs)
         # Add row value based on the current state
         for i, row_cells in enumerate(self._cells):
             texts = [cell.text for cell in row_cells]
