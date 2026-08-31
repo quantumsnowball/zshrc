@@ -45,12 +45,11 @@ class Repo:
         # Set initial state and update UI
         self._state = '[yellow]PULLING[/]'
         live.update(renderer())
-        # Git pull command, starts in the repo directory, rebase and autostash
-        git_cmd = f'git -C ~/.config/{self._name} pull --rebase --autostash'
         try:
             # Execute each SSH command asynchronously
             result = await ssh.exec(
                 host=self._host,
+                # Git pull command, starts in the repo directory, rebase and autostash
                 cmd=f'git -C ~/.config/{self._name} pull --rebase --autostash'
             )
             # Update state based on SSH return code
