@@ -1,23 +1,28 @@
-from typing import Any, Protocol, Self, Sequence
+from typing import Protocol, Self, Sequence
 
 from rich.console import Console
 from rich.live import Live
 from rich.table import Table
 
 
+class TableCell(Protocol):
+    @property
+    def text(self) -> str: ...
+
+
 class LiveTable:
-    class Cell(Protocol):
-        @property
-        def text(self) -> str: ...
 
     def __init__(
         self,
-        cells: Sequence[Sequence[Cell]],
+        # cells is a 2d sequence, cells[row][column] structure
+        cells: Sequence[Sequence[TableCell]],
         *,
         title: str | None = None,
+        # column headers is always shown
         column_headers: Sequence[str] = (),
         column_header_color: str = 'bold cyan',
         column_width: int = 10,
+        # row headers can be omitted
         row_headers: Sequence[str] | None = None,
         row_header_color: str = 'bold white',
         stub_header: str = '',

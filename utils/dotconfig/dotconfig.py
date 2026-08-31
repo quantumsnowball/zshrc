@@ -9,13 +9,9 @@
 # zsh = { path = "../../lib", editable = true }
 # ///
 
-import asyncio
-import random
-from typing import Callable
 
-import rich
-from rich.live import Live
-from rich.table import Table
+import asyncio
+
 from zsh import ssh
 from zsh.ui import LiveTable
 
@@ -76,6 +72,7 @@ class Repo:
 
 class Manager:
     def __init__(self) -> None:
+        # the cells for LiveTable
         self._repos = [
             [
                 Repo(repo_name, host=host_name)
