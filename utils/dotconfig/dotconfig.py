@@ -80,6 +80,7 @@ class Host:
         's7',
         'a9',
         'a56',
+        'quest2',
     )
 
     def __init__(self, name: str) -> None:

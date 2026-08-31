@@ -55,7 +55,7 @@ up() {
 u() { up; }
 u.sync() {
     # do a update on this remote list
-    local remotes=(s7 a9 a56 vpn proxy)
+    local remotes=(s7 a9 a56 quest2 vpn proxy)
     for remote in "${remotes[@]}"; do
         print -P "\n\n%F{cyan}%B┌─[ Remote: %F{yellow}$remote%F{cyan} ]"
         print -P "└───────────────────────────────────────────────────%b%f\n"

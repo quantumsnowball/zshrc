@@ -104,7 +104,7 @@ s() { dotconfig.pull-all-and-reload-shell ; }
 # ssh hosts
 dotconfig.pull-all.for-all-ssh-hosts() {
     # do a dotconfig.pull-all on this remote list
-    local remotes=(s7 a9 a56)
+    local remotes=(s7 a9 a56 quest2)
     for remote in "${remotes[@]}"; do
         print -P "\n\n%F{cyan}%B┌─[ Remote: %F{yellow}$remote%F{cyan} ]"
         print -P "└───────────────────────────────────────────────────%b%f\n"
