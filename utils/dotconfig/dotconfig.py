@@ -17,34 +17,38 @@ import rich
 from rich.live import Live
 from rich.table import Table
 from zsh import ssh
+from zsh.ui import LiveTable
 
-# Types
-Renderer = Callable[[], Table]
+HOST_NAMES = (
+    's7',
+    'a9',
+    'a56',
+    'quest2',
+)
+
+REPO_NAMES = (
+    'zshrc',
+    'nvim',
+    'tmux',
+    'workspace',
+    'workspace-private',
+)
 
 
 class Repo:
-    # Exact repo directory names
-    NAMES = (
-        'zshrc',
-        'nvim',
-        'tmux',
-        'workspace',
-        'workspace-private',
-    )
-
     def __init__(self, name: str, *, host: str) -> None:
         self._name = name
         self._host = host
         # State
-        self._state = ''
+        self._text = ''
 
     @property
-    def state(self) -> str: return self._state
+    def text(self) -> str: return self._text
 
-    async def pull(self, live: Live, renderer: Renderer) -> None:
+    async def pull(self, table: LiveTable) -> None:
         # Set initial state and update UI
-        self._state = '[yellow]PULLING[/]'
-        live.update(renderer())
+        self._text = '[yellow]PULLING[/]'
+        table.update()
         try:
             # Execute each SSH command asynchronously
             result = await ssh.exec(
@@ -55,68 +59,41 @@ class Repo:
             # Update state based on SSH return code
             if result.ok:
                 # SUCCESS
-                self._state = '[bold green]SUCCESS[/]'
+                self._text = '[bold green]SUCCESS[/]'
             else:
                 # FAILED, print failed message above the table
-                self._state = '[bold red]FAILED[/]'
-                live.console.print(f'\n[red]FAILED[/] Host: [yellow]{self._host}[/], Repo: [magenta]{self._name}[/]\n')
-                live.console.print(result.stderr_str)
+                self._text = '[bold red]FAILED[/]'
+                table.console.print(f'\n[red]FAILED[/] Host: [yellow]{self._host}[/], Repo: [magenta]{self._name}[/]\n')
+                table.console.print(result.stderr_str)
         except Exception:
             # ERROR, on any exception, try to print it
-            self._state = '[bold red]ERROR[/]'
-            live.console.print_exception()
+            self._text = '[bold red]ERROR[/]'
+            table.console.print_exception()
         finally:
             # Finally must update the table to reflect final state
-            live.update(renderer())
-
-
-class Host:
-    # Exact ssh profile names
-    NAMES = (
-        's7',
-        'a9',
-        'a56',
-        'quest2',
-    )
-
-    def __init__(self, name: str) -> None:
-        self._name = name
-        # Each host handles all repos on that machine
-        self._repos = [Repo(name, host=self._name) for name in Repo.NAMES]
-
-    @property
-    def repos(self) -> list[Repo]: return self._repos
-
-    async def pull(self, live: Live, renderer: Renderer) -> None:
-        # Gather each repo pulling themself
-        tasks = [repo.pull(live, renderer) for repo in self._repos]
-        await asyncio.gather(*tasks)
+            table.update()
 
 
 class Manager:
     def __init__(self) -> None:
-        # Manager handles all the SSH hosts
-        self._hosts = [Host(name) for name in Host.NAMES]
-
-    def _renderer(self) -> Table:
-        # Create a rich Table
-        table = Table()
-        # Add column headers
-        table.add_column(f'[bold magenta]Repo[/] \\ [bold blue]Host[/]', width=20)
-        for host_name in Host.NAMES:
-            table.add_column(f'[bold cyan]{host_name}[/]', width=10)
-        # Add row value based on the current state
-        for i, repo_name in enumerate(Repo.NAMES):
-            states = [host.repos[i].state for host in self._hosts]
-            table.add_row(f'[bold white]{repo_name}[/]', *states)
-        # Table object giving back for render
-        return table
+        self._repos = [
+            [
+                Repo(repo_name, host=host_name)
+                for host_name in HOST_NAMES
+            ]
+            for repo_name in REPO_NAMES
+        ]
 
     async def run(self) -> None:
-        # The Live object for rendering the Table
-        with Live(self._renderer(), refresh_per_second=10) as live:
-            # Gather each host pulling all their repos
-            tasks = [host.pull(live, self._renderer) for host in self._hosts]
+        with LiveTable(
+            self._repos,
+            column_headers=HOST_NAMES,
+            row_headers=REPO_NAMES,
+            stub_header=f'[bold magenta]Repo[/] \\ [bold blue]Host[/]',
+        ) as table:
+            tasks = [
+                repo.pull(table) for row in self._repos for repo in row
+            ]
             await asyncio.gather(*tasks)
 
 
