@@ -1,3 +1,8 @@
+[tool.pyright]
+extraPaths = [
+    "lib",
+]
+
 [tool.ruff.lint]
 # Q = flake8-quotes (surgical string fixing)
 # I = isort (import sorting)

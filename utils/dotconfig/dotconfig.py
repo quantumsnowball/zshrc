@@ -1,8 +1,12 @@
 #!/usr/bin/env -S uv run
 # /// script
 # dependencies = [
+#   "zsh",
 #   "rich",
 # ]
+#
+# [tool.uv.sources]
+# zsh = { path = "../../lib", editable = true }
 # ///
 
 import asyncio
@@ -12,6 +16,7 @@ from typing import Callable
 import rich
 from rich.live import Live
 from rich.table import Table
+from zsh import ssh
 
 # Types
 Renderer = Callable[[], Table]
@@ -44,27 +49,19 @@ class Repo:
         git_cmd = f'git -C ~/.config/{self._name} pull --rebase --autostash'
         try:
             # Execute each SSH command asynchronously
-            process = await asyncio.create_subprocess_exec(
-                'ssh',
-                '-A',                           # SSH agent forwarding, use the the current machine's ssh key for remote auth
-                '-o', 'ConnectTimeout=10',      # Fast fail if device is offline
-                '-o', 'BatchMode=yes',          # Prevent hanging on password prompts
-                self._host,
-                git_cmd,
-                stdout=asyncio.subprocess.DEVNULL,
-                stderr=asyncio.subprocess.PIPE,
+            result = await ssh.exec(
+                host=self._host,
+                cmd=f'git -C ~/.config/{self._name} pull --rebase --autostash'
             )
-            # Wait for process to complete, communicate to get stdout or stderr
-            _, stderr = await process.communicate()
             # Update state based on SSH return code
-            if process.returncode == 0:
+            if result.ok:
                 # SUCCESS
                 self._state = '[bold green]SUCCESS[/]'
             else:
                 # FAILED, print failed message above the table
                 self._state = '[bold red]FAILED[/]'
                 live.console.print(f'\n[red]FAILED[/] Host: [yellow]{self._host}[/], Repo: [magenta]{self._name}[/]\n')
-                live.console.print(stderr.decode())
+                live.console.print(result.stderr_str)
         except Exception:
             # ERROR, on any exception, try to print it
             self._state = '[bold red]ERROR[/]'
