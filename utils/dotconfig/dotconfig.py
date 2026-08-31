@@ -42,17 +42,17 @@ class Repo:
     def text(self) -> str: return self._text
 
     async def pull(self, table: LiveTable) -> None:
-        # Set initial state and update UI
+        # set initial state and update UI
         self._text = '[yellow]PULLING[/]'
         table.update()
         try:
-            # Execute each SSH command asynchronously
+            # execute each SSH command asynchronously
             result = await ssh.exec(
                 host=self._host,
                 # Git pull command, starts in the repo directory, rebase and autostash
                 cmd=f'git -C ~/.config/{self._name} pull --rebase --autostash'
             )
-            # Update state based on SSH return code
+            # update state based on SSH return code
             if result.ok:
                 # SUCCESS
                 self._text = '[bold green]SUCCESS[/]'

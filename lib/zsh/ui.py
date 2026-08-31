@@ -2,7 +2,6 @@ from typing import Any, Protocol, Self, Sequence
 
 from rich.console import Console, RenderableType
 from rich.live import Live
-from rich.style import StyleType
 from rich.table import Column, Table
 
 
@@ -55,13 +54,14 @@ class LiveTable:
             *((Column(self._stub_head, **self._stub_column_kwargs), ) if self._stubs is not None else ()),
             *(Column(column_header, **self._cell_column_kwargs) for column_header in self._column_headers)
         ]
-        # Create a rich Table
+        # create a rich Table
         table = Table(*columns, **self._table_kwargs)
-        # Add row value based on the current state
+        # add row values based on the current state
         for i, row_cells in enumerate(self._cells):
-            texts = [cell.text for cell in row_cells]
-            if self._stubs is not None:
-                texts = [self._stubs[i]] + texts
+            texts = [
+                *((self._stubs[i],) if self._stubs is not None else ()),
+                *(cell.text for cell in row_cells),
+            ]
             table.add_row(*texts)
 
         # Table object giving back for render
