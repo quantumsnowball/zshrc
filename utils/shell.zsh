@@ -52,6 +52,16 @@ up() {
     # snap
     installed snap && echo "\n${YELLOW}<<< snap update >>>${RESET}\n" && eval snapup
 }
-alias u=up
+u() { up; }
+u.sync() {
+    # do a update on this remote list
+    local remotes=(s7 a9 a56 vpn proxy)
+    for remote in "${remotes[@]}"; do
+        print -P "\n\n%F{cyan}%B┌─[ Remote: %F{yellow}$remote%F{cyan} ]"
+        print -P "└───────────────────────────────────────────────────%b%f\n"
+        # launch via a zsh interactive shell
+        ssh -t "$remote" 'zsh -i -c up'
+    done
+}
 # fix enter key not working print ^M
 alias zsh.fix_enter_key='stty sane'
