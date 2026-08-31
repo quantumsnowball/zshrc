@@ -36,7 +36,7 @@ class Repo:
         self._name = name
         self._host = host
         # State
-        self._text = ''
+        self._text = '       '
 
     @property
     def text(self) -> str: return self._text

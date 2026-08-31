@@ -19,26 +19,28 @@ class LiveTable:
         # column headers is always shown
         column_headers: Sequence[str] = (),
         column_header_color: str = 'bold cyan',
-        column_width: int = 10,
         # row headers can be omitted
         row_headers: Sequence[str] | None = None,
         row_header_color: str = 'bold white',
         stub_header: str = '',
         # kwargs
-        table_kwargs: dict[str, Any] = {},
-        live_kwargs: dict[str, Any] = {},
+        stub_column_kwargs: dict[str, Any] = dict(),
+        cell_column_kwargs: dict[str, Any] = dict(),
+        table_kwargs: dict[str, Any] = dict(),
+        live_kwargs: dict[str, Any] = dict(),
     ) -> None:
         self._cells = cells
         self._column_headers = column_headers
         self._column_header_color = column_header_color
-        self._column_width = column_width
+        # self._column_width = column_width
         self._row_headers = row_headers
         self._row_header_color = row_header_color
         self._stub_header = stub_header
         # rich
+        self._stub_column_kwargs = stub_column_kwargs
+        self._cell_column_kwargs = cell_column_kwargs
         self._table_kwargs = table_kwargs
         self._live = Live(self._renderer(), **live_kwargs)
-        Column()
 
     @property
     def console(self) -> Console:
@@ -54,8 +56,8 @@ class LiveTable:
     def _renderer(self) -> Table:
         # create columns
         columns = [
-            *((Column(self._stub_header), ) if self._row_headers is not None else ()),
-            *(Column(f'[{self._column_header_color}]{column_header}[/]', width=self._column_width) for column_header in self._column_headers)
+            *((Column(self._stub_header, **self._stub_column_kwargs), ) if self._row_headers is not None else ()),
+            *(Column(f'[{self._column_header_color}]{column_header}[/]', **self._cell_column_kwargs) for column_header in self._column_headers)
         ]
         # Create a rich Table
         table = Table(*columns, **self._table_kwargs)
