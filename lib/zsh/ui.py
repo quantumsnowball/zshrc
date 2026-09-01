@@ -20,6 +20,8 @@ class LiveTable:
         stub_header: RenderableType = '',
         stubs: Sequence[RenderableType] | None = None,
         # cell columns
+        # - if columns is provided, will override related settings
+        cell_columns: Sequence[Column] | None = None,
         cell_headers: Sequence[RenderableType] = (),
         # kwargs
         stub_column_kwargs: Mapping[str, Any] | None = None,
@@ -31,6 +33,7 @@ class LiveTable:
         self._cells = cells
         self._stub_header = stub_header
         self._stubs = stubs
+        self._cell_columns = cell_columns
         self._cell_headers = cell_headers
         # kwargs
         self._stub_column_kwargs = stub_column_kwargs or {}
@@ -54,8 +57,16 @@ class LiveTable:
     def _renderer(self) -> Table:
         # create columns
         columns = [
-            *((Column(self._stub_header, **self._stub_column_kwargs), ) if self._stubs is not None else ()),
-            *(Column(cell_header, **self._cell_column_kwargs) for cell_header in self._cell_headers)
+            *(
+                (Column(self._stub_header, **self._stub_column_kwargs), )
+                if self._stubs is not None else
+                ()
+            ),
+            *(
+                self._cell_columns
+                if self._cell_columns is not None else
+                (Column(cell_header, **self._cell_column_kwargs) for cell_header in self._cell_headers)
+            ),
         ]
         # create a rich Table
         table = Table(*columns, **self._table_kwargs)
