@@ -14,7 +14,7 @@ class LiveTable:
     def __init__(
         self,
         # cells, 2d sequence, cells[row][column] structure
-        cells: list[Sequence[Cell]],
+        cells: Sequence[Sequence[Cell]],
         *,
         # stub column (the left most column)
         stubs: Sequence[RenderableType] | None = None,
@@ -31,7 +31,7 @@ class LiveTable:
         live_kwargs: Mapping[str, Any] | None = None,
     ) -> None:
         # data
-        self._cells = cells
+        self._cells = list(cells)
         # stub column
         self._stubs = stubs
         self._stub_header = stub_header
