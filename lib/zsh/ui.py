@@ -14,7 +14,7 @@ class LiveTable:
     def __init__(
         self,
         # cells is a 2d sequence, cells[row][column] structure
-        cells: Sequence[Sequence[Cell]],
+        cells: list[Sequence[Cell]],
         *,
         # stub column
         stub_header: RenderableType = '',
@@ -72,3 +72,6 @@ class LiveTable:
 
     def update(self) -> None:
         self._live.update(self._renderer())
+
+    def add_row(self, row: Sequence[Cell]) -> None:
+        self._cells.append(row)
