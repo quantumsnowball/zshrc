@@ -7,7 +7,7 @@ from rich.table import Column, Table
 
 class Cell(Protocol):
     @property
-    def text(self) -> str: ...
+    def text(self) -> RenderableType: ...
 
 
 class LiveTable:
