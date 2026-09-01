@@ -1,4 +1,3 @@
-from copy import deepcopy
 from typing import Any, Mapping, Protocol, Self, Sequence
 
 from rich.console import Console, RenderableType
@@ -21,8 +20,8 @@ class LiveTable:
         stub_header: RenderableType = '',
         stubs: Sequence[RenderableType] | None = None,
         # cell columns
-        # - if columns is provided, will override related settings
-        cell_columns: Sequence[Column] | None = None,
+        # - if cell_columns is provided, will override related settings
+        cell_columns: Sequence[Mapping[str, Any]] | None = None,
         cell_headers: Sequence[RenderableType] = (),
         # kwargs
         stub_column_kwargs: Mapping[str, Any] | None = None,
@@ -64,8 +63,7 @@ class LiveTable:
                 ()
             ),
             *(
-                # TODO: create deep copy is a quick fix to avoid reusing the mutable Column object, but don't rely on this pattern, change it soon
-                deepcopy(self._cell_columns)
+                (Column(**kw) for kw in self._cell_columns)
                 if self._cell_columns is not None else
                 (Column(cell_header, **self._cell_column_kwargs) for cell_header in self._cell_headers)
             ),
