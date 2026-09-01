@@ -24,6 +24,8 @@ class LiveTable:
         cell_columns: Sequence[Mapping[str, Any]] | None = None,
         cell_headers: Sequence[RenderableType] = (),
         cell_column_kwargs: Mapping[str, Any] | None = None,
+        # tweaks
+        hide_empty_table: bool = True,
         # rich
         table_kwargs: Mapping[str, Any] | None = None,
         live_kwargs: Mapping[str, Any] | None = None,
@@ -41,6 +43,8 @@ class LiveTable:
         # kwargs
         self._table_kwargs = table_kwargs or {}
         self._live_kwargs = live_kwargs or {}
+        # tweaks
+        self._hide_empty_table = hide_empty_table
         # rich
         self._live = Live(self._renderer(), **self._live_kwargs)
 
@@ -55,7 +59,10 @@ class LiveTable:
     def __exit__(self, *_) -> None:
         self._live.__exit__(*_)
 
-    def _renderer(self) -> Table:
+    def _renderer(self) -> RenderableType:
+        # empty table guard
+        if self._hide_empty_table and not self._cells:
+            return ''
         # create column objects
         columns = [
             *(
