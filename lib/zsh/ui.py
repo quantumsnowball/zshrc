@@ -1,3 +1,4 @@
+from copy import deepcopy
 from typing import Any, Mapping, Protocol, Self, Sequence
 
 from rich.console import Console, RenderableType
@@ -63,7 +64,8 @@ class LiveTable:
                 ()
             ),
             *(
-                self._cell_columns
+                # TODO: create deep copy is a quick fix to avoid reusing the mutable Column object, but don't rely on this pattern, change it soon
+                deepcopy(self._cell_columns)
                 if self._cell_columns is not None else
                 (Column(cell_header, **self._cell_column_kwargs) for cell_header in self._cell_headers)
             ),
