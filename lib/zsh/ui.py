@@ -17,8 +17,8 @@ class LiveTable:
         cells: list[Sequence[Cell]],
         *,
         # stub column (the left most column)
-        stub_header: RenderableType = '',
         stubs: Sequence[RenderableType] | None = None,
+        stub_header: RenderableType = '',
         stub_column_kwargs: Mapping[str, Any] | None = None,
         # cell columns (all data columns)
         cell_columns: Sequence[Mapping[str, Any]] | None = None,
@@ -31,8 +31,8 @@ class LiveTable:
         # data
         self._cells = cells
         # stub column
-        self._stub_header = stub_header
         self._stubs = stubs
+        self._stub_header = stub_header
         self._stub_column_kwargs = stub_column_kwargs or {}
         # cell columns
         self._cell_columns = cell_columns
