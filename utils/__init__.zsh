@@ -12,6 +12,7 @@ done
 
 # manually add external source here
 items=(
+    $XDG_CONFIG_HOME/workspace/termux/script/__init__.zsh
     $XDG_CONFIG_HOME/workspace-private/keepass/script/__init__.zsh
     $XDG_CONFIG_HOME/workspace-private/rclone/script/__init__.zsh
 )
