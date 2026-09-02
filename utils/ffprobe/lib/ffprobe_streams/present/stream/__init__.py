@@ -13,7 +13,7 @@ class Stream(ABC, Generic[T]):
     def __init__(self, s: T) -> None:
         self._s = s
 
-    def title(self, i: int) -> Entry:
+    def heading(self, i: int) -> Entry:
         field = f'[green]Stream {i}[/green]'
         color = 'yellow' if self._s.codec_type == 'video' else 'magenta'
         value = f'[{color}]{self._s.codec_type} [{self._s.duration_hms}][/{color}]'

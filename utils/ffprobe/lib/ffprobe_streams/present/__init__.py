@@ -37,7 +37,7 @@ class RichTable:
             if isinstance(s, VideoStream):
                 v = Video(s)
                 self._t.add_section()
-                self._t.add_row(*v.title(i).tuple)
+                self._t.add_row(*v.heading(i).tuple)
                 self._t.add_section()
                 self._t.add_row(*v.codec.tuple)
                 self._t.add_row(*v.resolution.tuple)
@@ -53,7 +53,7 @@ class RichTable:
             elif isinstance(s, AudioStream):
                 a = Audio(s)
                 self._t.add_section()
-                self._t.add_row(*a.title(i).tuple)
+                self._t.add_row(*a.heading(i).tuple)
                 self._t.add_section()
                 self._t.add_row(*a.codec.tuple)
                 self._t.add_row(*a.bit_rate.tuple)
@@ -63,7 +63,7 @@ class RichTable:
             elif isinstance(s, SubtitleStream):
                 t = Subtitle(s)
                 self._t.add_section()
-                self._t.add_row(*t.title(i).tuple)
+                self._t.add_row(*t.heading(i).tuple)
                 self._t.add_section()
                 self._t.add_row(*t.codec.tuple)
                 self._t.add_row(*t.language.tuple)
