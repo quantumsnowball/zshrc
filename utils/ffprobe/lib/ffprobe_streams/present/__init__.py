@@ -1,13 +1,16 @@
-from ffprobe_streams.present.format import Format
-from ffprobe_streams.present.general import General
-from ffprobe_streams.present.stream.audio import Audio
-from ffprobe_streams.present.stream.video import Video
-from ffprobe_streams.result import Result
-from ffprobe_streams.result.stream.audio import AudioStream
-from ffprobe_streams.result.stream.video import VideoStream
 from rich import box
 from rich.console import Console
 from rich.table import Table
+
+from ffprobe_streams.present.format import Format
+from ffprobe_streams.present.general import General
+from ffprobe_streams.present.stream.audio import Audio
+from ffprobe_streams.present.stream.subtitle import Subtitle
+from ffprobe_streams.present.stream.video import Video
+from ffprobe_streams.result import Result
+from ffprobe_streams.result.stream.audio import AudioStream
+from ffprobe_streams.result.stream.subtitle import SubtitleStream
+from ffprobe_streams.result.stream.video import VideoStream
 
 
 class RichTable:
@@ -56,7 +59,13 @@ class RichTable:
                 self._t.add_row(*a.bit_rate.tuple)
                 self._t.add_row(*a.sample_rate.tuple)
                 self._t.add_row(*a.language.tuple)
-
+            # subtitle stream
+            elif isinstance(s, SubtitleStream):
+                t = Subtitle(s)
+                self._t.add_section()
+                self._t.add_row(*t.title(i).tuple)
+                self._t.add_section()
+                self._t.add_row(*t.language.tuple)
         # print
         console = Console()
         console.print(self._t)
