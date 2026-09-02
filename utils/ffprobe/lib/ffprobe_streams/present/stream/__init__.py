@@ -39,3 +39,9 @@ class Stream(ABC, Generic[T]):
         field = f'[blue]language[/blue]'
         value = f'[white]{v}[/white]' if (v := self._s.language) else None
         return Entry(field, value)
+
+    @property
+    def title(self) -> Entry:
+        field = f'[blue]title[/blue]'
+        value = f'[white]{v}[/white]' if (v := self._s.title) else None
+        return Entry(field, value)
