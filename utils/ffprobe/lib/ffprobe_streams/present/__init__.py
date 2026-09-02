@@ -65,6 +65,7 @@ class RichTable:
                 self._t.add_section()
                 self._t.add_row(*t.title(i).tuple)
                 self._t.add_section()
+                self._t.add_row(*t.codec.tuple)
                 self._t.add_row(*t.language.tuple)
         # print
         console = Console()
