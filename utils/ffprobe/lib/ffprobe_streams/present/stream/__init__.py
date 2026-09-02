@@ -15,7 +15,11 @@ class Stream(ABC, Generic[T]):
 
     def heading(self, i: int) -> Entry:
         field = f'[green]Stream {i}[/green]'
-        color = 'yellow' if self._s.codec_type == 'video' else 'magenta'
+        match self._s.codec_type:
+            case 'video': color = 'yellow'
+            case 'audio': color = 'magenta'
+            case 'subtitle': color = 'cyan'
+            case _: color = 'white'
         value = f'[{color}]{self._s.codec_type} [{self._s.duration_hms}][/{color}]'
         return Entry(field, value)
 
