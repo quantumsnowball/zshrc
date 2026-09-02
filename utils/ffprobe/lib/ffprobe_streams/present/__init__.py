@@ -32,43 +32,53 @@ class RichTable:
         self._t.add_row(*f.bit_rate.tuple)
 
         # present streams
-        for i, s in enumerate(self._r.streams):
+        def video_layout(i: int, stream: VideoStream) -> None:
+            s = Video(stream)
+            self._t.add_section()
+            self._t.add_row(*s.heading(i).tuple)
+            self._t.add_section()
+            self._t.add_row(*s.codec.tuple)
+            self._t.add_row(*s.resolution.tuple)
+            self._t.add_row(*s.sample_aspect_ratio.tuple)
+            self._t.add_row(*s.display_aspect_ratio.tuple)
+            self._t.add_row(*s.time_base.tuple)
+            self._t.add_row(*s.r_frame_rate.tuple)
+            self._t.add_row(*s.avg_frame_rate.tuple)
+            self._t.add_row(*s.nb_frames.tuple)
+            self._t.add_row(*s.bit_rate.tuple)
+            self._t.add_row(*s.language.tuple)
+
+        def audio_layout(i: int, stream: AudioStream) -> None:
+            s = Audio(stream)
+            self._t.add_section()
+            self._t.add_row(*s.heading(i).tuple)
+            self._t.add_section()
+            self._t.add_row(*s.codec.tuple)
+            self._t.add_row(*s.title.tuple)
+            self._t.add_row(*s.bit_rate.tuple)
+            self._t.add_row(*s.sample_rate.tuple)
+            self._t.add_row(*s.language.tuple)
+
+        def subtitle_layout(i: int, stream: SubtitleStream) -> None:
+            s = Subtitle(stream)
+            self._t.add_section()
+            self._t.add_row(*s.heading(i).tuple)
+            self._t.add_section()
+            self._t.add_row(*s.codec.tuple)
+            self._t.add_row(*s.title.tuple)
+            self._t.add_row(*s.language.tuple)
+
+        # present streams
+        for i, stream in enumerate(self._r.streams):
             # video stream
-            if isinstance(s, VideoStream):
-                v = Video(s)
-                self._t.add_section()
-                self._t.add_row(*v.heading(i).tuple)
-                self._t.add_section()
-                self._t.add_row(*v.codec.tuple)
-                self._t.add_row(*v.resolution.tuple)
-                self._t.add_row(*v.sample_aspect_ratio.tuple)
-                self._t.add_row(*v.display_aspect_ratio.tuple)
-                self._t.add_row(*v.time_base.tuple)
-                self._t.add_row(*v.r_frame_rate.tuple)
-                self._t.add_row(*v.avg_frame_rate.tuple)
-                self._t.add_row(*v.nb_frames.tuple)
-                self._t.add_row(*v.bit_rate.tuple)
-                self._t.add_row(*v.language.tuple)
+            if isinstance(stream, VideoStream):
+                video_layout(i, stream)
             # audio stream
-            elif isinstance(s, AudioStream):
-                a = Audio(s)
-                self._t.add_section()
-                self._t.add_row(*a.heading(i).tuple)
-                self._t.add_section()
-                self._t.add_row(*a.codec.tuple)
-                self._t.add_row(*a.title.tuple)
-                self._t.add_row(*a.bit_rate.tuple)
-                self._t.add_row(*a.sample_rate.tuple)
-                self._t.add_row(*a.language.tuple)
+            elif isinstance(stream, AudioStream):
+                audio_layout(i, stream)
             # subtitle stream
-            elif isinstance(s, SubtitleStream):
-                t = Subtitle(s)
-                self._t.add_section()
-                self._t.add_row(*t.heading(i).tuple)
-                self._t.add_section()
-                self._t.add_row(*t.codec.tuple)
-                self._t.add_row(*t.title.tuple)
-                self._t.add_row(*t.language.tuple)
+            elif isinstance(stream, SubtitleStream):
+                subtitle_layout(i, stream)
         # print
         console = Console()
         console.print(self._t)
