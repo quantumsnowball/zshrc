@@ -1,4 +1,10 @@
 git.clone-my-repo() {
+    # constant
+    export gh=https://github.com
+    export myghname=quantumsnowball
+    export mygh=$gh/$myghname
+    export myghssh=git@github.com:$myghname
+
     # default use https url
     local use_ssh=false
     local use_token=false
@@ -44,4 +50,4 @@ git.clone-my-repo() {
         git clone "$mygh/$repo.git" "$@"
     fi
 }
-gh.clone-my-repo() { git.clone-my-repo; }
+gh.clone-my-repo() { git.clone-my-repo $@; }
