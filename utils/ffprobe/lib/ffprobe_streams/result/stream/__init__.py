@@ -58,3 +58,10 @@ class Stream(ABC):
             return result
         # else
         return None
+
+    @property
+    def title(self) -> str | None:
+        if (tags := self._d['tags']) and (result := tags['title']):
+            return result
+        # else
+        return None
