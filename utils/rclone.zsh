@@ -1,7 +1,8 @@
 ensure rclone || return
 
 
-rclone.check-remotes() {
+# check
+rclone.remote.check() {
     echo ""
     # run in a subshell to avoid printing the background job debug messages
     (
@@ -25,8 +26,8 @@ rclone.check-remotes() {
     )
     echo ""
 }
-rclone.check-remotes.drive() { rclone.check-remotes drive }
-rclone.check-remotes.sftp() { rclone.check-remotes sftp }
+rclone.remote.check-drive() { rclone.remote.check drive }
+rclone.remote.check-sftp() { rclone.remote.check sftp }
 
 # list
 rclone.remote.list() { rclone listremotes }
