@@ -38,6 +38,6 @@ if [[ -n "$TMUX" ]]; then
     # Fired when the command finishes
     precmd() {
         # Reset window to emtpy single space
-        tmux rename-window " "
+        # tmux rename-window " "
     }
 fi
