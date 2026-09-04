@@ -61,28 +61,19 @@
 ensure ss || return 
 
 
-# ports with LISTEN state
-alias ss.tcp-ports.listening='ss -nplt'
-alias lstcp=ss.tcp-ports.listening
+() {
+    # namespaces
+    local ns=(ss socket net network ip port sys os)
 
-alias ss.udp-ports.listening='ss -nplu'
-alias lsudp=ss.udp-ports.listening
+    # ports with LISTEN state
+    alias ${^ns}.tcp-ports.listening='ss -nplt'
+    alias ${^ns}.udp-ports.listening='ss -nplu'
+    alias ${^ns}.ports.listening='ss -npltu'
+    alias ${^ns}.sockets.listening='ss -npl'
 
-alias ss.ports.listening='ss -npltu'
-alias lsport=ss.ports.listening
-
-alias ss.sockets.listening='ss -npl'
-alias lssocket=ss.sockets.listening
-
-# ports with all states
-alias ss.tcp-ports.all-states='ss -npat'
-alias lstcp-all=ss.tcp-ports.all-states
-
-alias ss.udp-ports.all-states='ss -npau'
-alias lsudp-all=ss.udp-ports.all-states
-
-alias ss.ports.all-states='ss -npatu'
-alias lsport-all=ss.ports.all-states
-
-alias ss.sockets.all-states='ss -npa'
-alias lssocket-all=ss.sockets.all-states
+    # ports with all states
+    alias ${^ns}.tcp-ports.all-states='ss -npat'
+    alias ${^ns}.udp-ports.all-states='ss -npau'
+    alias ${^ns}.ports.all-states='ss -npatu'
+    alias ${^ns}.sockets.all-states='ss -npa'
+}
