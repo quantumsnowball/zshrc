@@ -18,3 +18,11 @@ ssh.touch-remote () {
     [ -f ~/.config/workspace-private/ssh/touch-remote] || return 1
     . ~/.config/workspace-private/ssh/touch-remote $1
 }
+
+() {
+    # namespaces
+    local ns=(ssh sshd scp sftp keychain kc)
+
+    # list added keys
+    alias ${^ns}.list-added-keys='ssh-add -l'
+}
