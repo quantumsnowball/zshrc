@@ -27,3 +27,8 @@ rclone.check-remotes() {
 }
 rclone.check-remotes.drive() { rclone.check-remotes drive }
 rclone.check-remotes.sftp() { rclone.check-remotes sftp }
+
+# list
+rclone.remote.list() { rclone listremotes }
+rclone.remote.list-sftp() { rclone listremotes --type sftp }
+rclone.remote.list-drive() { rclone listremotes --type drive }
