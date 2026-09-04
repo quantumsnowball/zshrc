@@ -53,7 +53,7 @@ up() {
     installed snap && echo "\n${YELLOW}<<< snap update >>>${RESET}\n" && eval snapup
 }
 u() { up; }
-u.sync() {
+u.sync-sequencial() {
     # do a update on this remote list
     local remotes=(s7 a9 a56 quest2 vpn proxy)
     for remote in "${remotes[@]}"; do
@@ -62,6 +62,23 @@ u.sync() {
         # launch via a zsh interactive shell
         ssh -t "$remote" 'zsh -i -c up'
     done
+}
+u.sync() {
+    local session_name="update-all"
+    local remotes=(s7 a9 a56 quest2 vpn proxy)
+
+    # create new tmux session holding the first command
+    tmux new-session -d -s "$session_name" -n "${remotes[1]}" "ssh -t ${remotes[1]} 'zsh -i -c up'; exec zsh"
+    # add the remaining commands to new tmux windows
+    for remote in "${remotes[@]:1}"; do
+        tmux new-window -t "$session_name:" -n "$remote" "ssh -t $remote 'zsh -i -c up'; exec zsh"
+    done
+    # switch to or attach to the new session to see the result
+    if [[ -n "$TMUX" ]]; then
+        tmux switch-client -t "$session_name"
+    else
+        tmux attach-session -t "$session_name"
+    fi
 }
 # fix enter key not working print ^M
 alias zsh.fix_enter_key='stty sane'
