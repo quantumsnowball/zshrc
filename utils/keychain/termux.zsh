@@ -2,7 +2,7 @@
 # if ssh-agent is already running, find it
 # anyway, will output the necessary env and eval it
 # can accept any keychain args
-kc.start () {
+keychain.start () {
     # in Termux, keychain failed to find running ssh-agent, probably no permission
     # in such case, can't depend on keychain to find ssh-agent, need to manually restore
     # first try to manually restore the env from ~/.keychain script
@@ -19,15 +19,22 @@ kc.start () {
 # call this in a new shell, or the current shell, or inside of lazygit 
 # where ever necessary to add a key it should let most other shell instance 
 # able to find the added key
-kc.add () {
+keychain.add () {
     # normally boot up keychain
-    kc.start
+    keychain.start
 
     # then add default key or custom key
     ssh-add $1
 }
-alias kc=kc.add
+alias kc=keychain.add
 
+() {
+    # namespaces
+    local ns=(ssh sshd scp sftp keychain kc)
+
+    #helpers
+    alias ${^ns}.add-key='keychain.add'
+}
 
 #
 # init
@@ -38,4 +45,4 @@ alias kc=kc.add
 # - find any existing ssh-agent and use it quietly
 # - refresh the env so every shell should store updated env vars
 # - initially don't ask for password, user can add key only when necessary
-kc.start
+keychain.start
