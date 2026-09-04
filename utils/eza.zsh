@@ -18,10 +18,25 @@ alias lt='_eza_base -a -s time --reverse'
 alias ll='_eza_base -a -l -h'
 alias lll='_eza_base -a -l -h --grid'
 
-# ls tree
-alias ls.tree='la --tree'
-alias ls.tree1='la --tree --level=1'
-alias ls.tree2='la --tree --level=2'
-alias ls.tree3='la --tree --level=3'
-alias ls.tree4='la --tree --level=4'
-alias ls.tree5='la --tree --level=5'
+() {
+    # namespaces
+    local ns=(ls dir directory file fs)
+
+    # ls all
+    alias ${^ns}.list-all='la'
+
+    # ls last modified 
+    alias ${^ns}.list-last-modified='lt'
+
+    # ls long
+    alias ${^ns}.list-long='ll'
+    alias ${^ns}.list-long-grid='lll'
+
+    # ls tree
+    alias ${^ns}.tree='la --tree'
+    alias ${^ns}.tree1='la --tree --level=1'
+    alias ${^ns}.tree2='la --tree --level=2'
+    alias ${^ns}.tree3='la --tree --level=3'
+    alias ${^ns}.tree4='la --tree --level=4'
+    alias ${^ns}.tree5='la --tree --level=5'
+}
