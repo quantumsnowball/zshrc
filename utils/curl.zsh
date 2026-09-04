@@ -5,26 +5,25 @@ ensure curl || return
 ip.public.addr4 () {
     curl -s -4 ifconfig.me | grep -v '^$'
 }
-alias lsip4.pub=ip.public.addr4
-alias myip4.pub=ip.public.addr4
-
 ip.public.addr6 () {
     curl -s -6 ifconfig.me | grep -v '^$'
 }
-alias lsip6.pub=ip.public.addr6
-alias myip6.pub=ip.public.addr6
-
 ip.public.addr () {
     ip.public.addr4
     ip.public.addr6
 }
-alias lsip.pub=ip.public.addr
-alias myip.pub=ip.public.addr
-
 ip.public.where-am-i () {
     installed jq && 
         curl -s ipinfo.io | jq ||
         curl -s ipinfo.io
 }
-alias whereami=ip.public.where-am-i
 
+() {
+    # namespaces
+    local ns=(ip net network nic if route gateway sys os)
+
+    alias ${^ns}.public.addr4='ip.public.addr4'
+    alias ${^ns}.public.addr6='ip.public.addr6'
+    alias ${^ns}.public.addr='ip.public.addr'
+    alias ${^ns}.public.where-am-i='ip.public.where-am-i'
+}
