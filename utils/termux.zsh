@@ -11,6 +11,10 @@ termux.theme () {
         echo "Please installed termux-style at:\nhttps://github.com/adi1090x/termux-style"
 }
 
+# config
+termux.config.reload() {
+    termux-reload-settings
+}
 
 # nerd fonts
 termux.use-font() {
