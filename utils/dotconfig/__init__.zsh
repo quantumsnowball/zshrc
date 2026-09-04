@@ -21,7 +21,7 @@ dotconfig() {
             work | workspace)
                 cd ~/.config/workspace && nvim
                 ;;
-            pri | private | workspace-private | _work | work_ | _workspace | workspace_)
+            pri | private | workspace-private | _work | work_ | work__ | work___ | _workspace | workspace_ | workspace__ | workspace___)
                 cd ~/.config/workspace-private && nvim
                 ;;
             winterm)
