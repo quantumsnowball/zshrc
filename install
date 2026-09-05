@@ -1,13 +1,18 @@
 #!/bin/sh
 
-# zshrc
-ln -sf "$HOME/.config/zshrc/zshrc" "$HOME/.zshrc"
-ls -l "$HOME/.zshrc"
+# zshenv
+ln -sf "$HOME/.config/zshrc/zshenv" "$HOME/.zshenv"
+ls -l "$HOME/.zshenv"
 
 # zprofile
 ln -sf "$HOME/.config/zshrc/zprofile" "$HOME/.zprofile"
 ls -l "$HOME/.zprofile"
 
-# zshenv
-ln -sf "$HOME/.config/zshrc/zshenv" "$HOME/.zshenv"
-ls -l "$HOME/.zshenv"
+# zshrc
+ln -sf "$HOME/.config/zshrc/zshrc" "$HOME/.zshrc"
+ls -l "$HOME/.zshrc"
+
+# zlogin
+ln -sf "$HOME/.config/zshrc/zlogin" "$HOME/.zlogin"
+ls -l "$HOME/.zlogin"
+
