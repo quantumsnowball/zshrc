@@ -13,21 +13,20 @@ if (!inputFilePath) {
     process.exit(1);
 }
 
-// 1. Resolve path to ~/Projects/exkeymo/js/builder.js
-const homeDir = process.env.HOME;
-const exkeymoJsDir = path.join(homeDir, 'Projects/exkeymo/js');
-const builderPath = path.join(exkeymoJsDir, 'builder.js');
-
 try {
-    const { buildApk } = await import(`file://${builderPath}`);
-
     const inputFileContent = await fs.readFile(inputFilePath, 'utf-8');
 
     console.log(inputFileContent);
 
     console.log(outputFilePath)
 
-    console.log(buildApk)
+    // console.log('Compiling APK...');
+    // const apkBytes = await buildApk(inputFileContent, null);
+
+    // console.log(`Writing APK to: ${outputFilePath}`);
+    // await fs.writeFile(outputFilePath, Buffer.from(apkBytes));
+
+    // console.log('Build complete!');
 
 } catch (err) {
     console.error(`Error reading file "${inputFilePath}":`, err.message);
