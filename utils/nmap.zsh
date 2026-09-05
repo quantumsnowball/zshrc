@@ -21,9 +21,12 @@ nmap.ls-ping() {
 }
 
 # show all ssh host
-nmap.open-ssh-hosts() {
+nmap.opened-ssh-hosts() {
     nmap -Pn -p 8022,22 192.168.1.0/24 --open
 }
 nmap.local-arp-sweep() {
     nmap -sn -PR 192.168.1.0/24
+}
+nmap.scan-top-common-ports() {
+    nmap -Pn --top-ports 20 -T4 "$1"
 }
