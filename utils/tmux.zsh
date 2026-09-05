@@ -1,18 +1,16 @@
 ensure tmux || return
 
 
-# tmux utils
-alias tmux.create-new-session='tmux new -t'
-alias tmux.list-sessions='tmux ls'
-alias tmux.attach-to='tmux attach -t'
 # short hand
 alias t='tmux attach -t 0 || tmux new -s 0'
-alias t.create-new-session=tmux.create-new-session
-alias t.list-sessions=tmux.list-sessions
-alias t.attach-to=tmux.attach-to
-# even shorter
-alias tn=tmux.create-new-session
-alias tls=tmux.list-sessions
-alias ta=tmux.attach-to
-# helpers
-alias ta0='tmux.attach-to 0'
+
+() {
+    # namespaces
+    local ns=(t tmux)
+
+    # tmux utils
+    alias ${^ns}.create-new-session='tmux new -t'
+    alias ${^ns}.list-sessions='tmux ls'
+    alias ${^ns}.attach-to='tmux attach -t'
+    alias ${^ns}.attach-to-0='tmux attach -t 0'
+}
