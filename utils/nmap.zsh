@@ -30,3 +30,6 @@ nmap.local-arp-sweep() {
 nmap.scan-top-common-ports() {
     nmap -Pn --top-ports 20 -T4 "$1"
 }
+nmap.scan-service-version-and-os-fingerprint() {
+    sudo nmap -Pn -sV -O "$1"
+}
