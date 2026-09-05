@@ -7,3 +7,8 @@ exkeymo.start-local-builder-server() {
         python -m http.server 8080
     )
 }
+
+exkeymo.compile-kcm-to-apk() {
+    # pass any args into compile.js
+    node "$XDG_CONFIG_HOME/zshrc/utils/exkeymo/compiler/main.js" "$@"
+}
