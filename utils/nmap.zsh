@@ -19,3 +19,8 @@ nmap.ls-ping() {
         | grep -v '^192\.168' \
         | awk '{gsub(/[()]/, ""); printf "\033[32m%-15s\033[0m %s\n", $2, $1}'
 }
+
+# show all ssh host
+nmap.open-ssh-hosts() {
+    nmap -Pn -p 8022,22 192.168.1.0/24 --open
+}
