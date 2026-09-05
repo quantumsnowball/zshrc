@@ -14,21 +14,27 @@ exkeymo.compile-kcm-to-apk() {
 }
 
 exkeymo.use-kcm-layout() {
-    local kcm_file="$1"
-    # local output_apk="$TMPDIR/exkeymo.apk"
-    local output_apk="$HOME/storage/downloads/exkeymo.apk"
+    local input_kcm="$1"
+    local output_apk="$TMPDIR/exkeymo-layout-cache.apk"
 
-    if [[ -z "$kcm_file" ]]; then
+    # ensure 
+    if [[ ! -f "$input_kcm" ]]; then
         echo "Usage: Exkeymo.compile-and-use-kcm-layout <input.kcm>" >&2
         return 1
     fi
 
-    # Compile the layout to /tmp/output.apk
-    exkeymo.compile-kcm-to-apk "$kcm_file" "$output_apk" || return 1
+    # ensure clean
+    if [[ -f "$output_apk" ]]; then
+        rm "$output_apk"
+    fi
 
-    # Trigger Android's package installer interface
+    # compile the layout to /tmp/output.apk, quit on non-zero status
+    exkeymo.compile-kcm-to-apk "$input_kcm" "$output_apk" || return 1
+
+    # trigger Android's package installer interface
     if [[ -f "$output_apk" ]]; then
         echo "Launching Android package installer..."
+        # note: need to set `allow-external-apps = true` in termux.properties
         termux-open "$output_apk"
     fi
 }
