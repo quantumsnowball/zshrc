@@ -24,9 +24,21 @@ t() {
     # namespaces
     local ns=(t tmux)
 
-    # tmux utils
-    alias ${^ns}.create-new-session='tmux new -t'
-    alias ${^ns}.list-sessions='tmux ls'
-    alias ${^ns}.attach-to='tmux attach -t'
-    alias ${^ns}.attach-to-0='tmux attach -t 0'
+    # create
+    alias ${^ns}.go-to='t'
+    alias ${^ns}.ls='tmux list-sessions'
+    alias ${^ns}.list-sessions='tmux list-sessions'
+    # manage
+    alias ${^ns}.tree-overview='tmux choose-tree'
+    alias ${^ns}.rename-session='tmux rename-session'
+    alias ${^ns}.rename-window='tmux rename-window'
+    alias ${^ns}.kill-session='tmux kill-session -t'
+    # detach
+    alias ${^ns}.detach='tmux detach-client'
+    alias ${^ns}.quit='tmux detach-client'
+    alias ${^ns}.exit='tmux detach-client'
+    # kill
+    alias ${^ns}.reset-everything='tmux kill-server'
+    # config
+    alias ${^ns}.reload-config='tmux source-file ~/.config/tmux/tmux.conf'
 }
