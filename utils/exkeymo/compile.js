@@ -1,27 +1,36 @@
 #!/usr/bin / env node
 
 import fs from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const args = process.argv.slice(2);
-const inputFile = args[0];
-const outputFile = args[1];
+const inputFilePath = args[0];
+const outputFilePath = args[1];
 
-if (!inputFile) {
+if (!inputFilePath) {
     console.error("Error: No input file specified.");
     process.exit(1);
 }
 
-try {
-    // Read file as UTF-8 string
-    const inputFileContent = await fs.readFile(inputFile, 'utf-8');
+// 1. Resolve path to ~/Projects/exkeymo/js/builder.js
+const homeDir = process.env.HOME;
+const exkeymoJsDir = path.join(homeDir, 'Projects/exkeymo/js');
+const builderPath = path.join(exkeymoJsDir, 'builder.js');
 
-    // Print content to stdout
+try {
+    const { buildApk } = await import(`file://${builderPath}`);
+
+    const inputFileContent = await fs.readFile(inputFilePath, 'utf-8');
+
     console.log(inputFileContent);
 
-    console.log(outputFile)
+    console.log(outputFilePath)
+
+    console.log(buildApk)
 
 } catch (err) {
-    console.error(`Error reading file "${inputFile}":`, err.message);
+    console.error(`Error reading file "${inputFilePath}":`, err.message);
     process.exit(1);
 }
 
