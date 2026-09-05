@@ -20,7 +20,7 @@ nmap.ls-ping() {
         | awk '{gsub(/[()]/, ""); printf "\033[32m%-15s\033[0m %s\n", $2, $1}'
 }
 
-# show all ssh host
+# helpers
 nmap.opened-ssh-hosts() {
     nmap -Pn -p 8022,22 192.168.1.0/24 --open
 }
@@ -32,4 +32,7 @@ nmap.scan-top-common-ports() {
 }
 nmap.scan-service-version-and-os-fingerprint() {
     sudo nmap -Pn -sV -O "$1"
+}
+nmap.test-this-host-and-port-for-reason() {
+    nmap -Pn -p "$2" --reason "$1"
 }
