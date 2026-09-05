@@ -24,3 +24,6 @@ nmap.ls-ping() {
 nmap.open-ssh-hosts() {
     nmap -Pn -p 8022,22 192.168.1.0/24 --open
 }
+nmap.local-arp-sweep() {
+    nmap -sn -PR 192.168.1.0/24
+}
