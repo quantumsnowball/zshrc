@@ -7,8 +7,8 @@ const args = process.argv.slice(2);
 const inputFilePath = args[0];
 const outputFilePath = args[1];
 
-if (!inputFilePath) {
-    console.error("Error: No input file specified.");
+if (!inputFilePath || !outputFilePath) {
+    console.error("Usage: exkeymo.compile-kcm-to-apk <input.kcm> <output.apk>");
     process.exit(1);
 }
 
