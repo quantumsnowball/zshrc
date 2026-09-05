@@ -8,6 +8,8 @@
 //    optional second layout.
 //  - Re-signs the resulting ZIP via signer.js.
 
+import fs from 'node:fs/promises';
+import path from 'node:path';
 import { unzip, zip } from './zip.js';
 import { signV1 } from './signer.js';
 
@@ -17,25 +19,19 @@ const KEYBOARD_LAYOUT2_FILE_NAME = 'res/_f.kcm';
 const ENC = new TextEncoder();
 
 // Lazy asset loaders — everything's relative to the page that imported this module.
-const assetCache = new Map();
-async function loadAsset(path) {
-    if (assetCache.has(path)) return assetCache.get(path);
-    const p = fetch(path).then(async (r) => {
-        if (!r.ok) throw new Error(`fetch ${path}: ${r.status}`);
-        return r;
-    });
-    assetCache.set(path, p);
-    return p;
+async function loadAsset(relPath) {
+    const absolutePath = path.resolve(import.meta.dirname, relPath);
+    return await fs.readFile(absolutePath);
 }
 
-async function loadBinary(path) {
-    const r = await loadAsset(path);
-    return new Uint8Array(await r.clone().arrayBuffer());
+async function loadBinary(relPath) {
+    const buf = await loadAsset(relPath);
+    return new Uint8Array(buf);
 }
 
-async function loadText(path) {
-    const r = await loadAsset(path);
-    return r.clone().text();
+async function loadText(relPath) {
+    const absolutePath = path.resolve(import.meta.dirname, relPath);
+    return await fs.readFile(absolutePath, 'utf-8');
 }
 
 /**
