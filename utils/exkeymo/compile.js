@@ -1,11 +1,28 @@
-#!/usr/bin/env node
+#!/usr/bin / env node
 
-console.log("Hello World from ExKeyMo CLI compiler!");
+import fs from 'node:fs/promises';
 
-// Print any arguments passed from the shell
 const args = process.argv.slice(2);
-if (args.length > 0) {
-    console.log("Target input file:", args[0]);
-    console.log("Target output file:", args[1]);
+const inputFile = args[0];
+const outputFile = args[1];
+
+if (!inputFile) {
+    console.error("Error: No input file specified.");
+    process.exit(1);
 }
+
+try {
+    // Read file as UTF-8 string
+    const inputFileContent = await fs.readFile(inputFile, 'utf-8');
+
+    // Print content to stdout
+    console.log(inputFileContent);
+
+    console.log(outputFile)
+
+} catch (err) {
+    console.error(`Error reading file "${inputFile}":`, err.message);
+    process.exit(1);
+}
+
 
