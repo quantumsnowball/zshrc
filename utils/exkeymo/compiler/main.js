@@ -1,6 +1,7 @@
 #!/usr/bin / env node
 
 import fs from 'node:fs/promises';
+import { buildApk } from './builder.js';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -19,6 +20,8 @@ try {
     console.log(inputFileContent);
 
     console.log(outputFilePath)
+
+    console.log(buildApk)
 
     // console.log('Compiling APK...');
     // const apkBytes = await buildApk(inputFileContent, null);
