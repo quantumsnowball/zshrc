@@ -9,20 +9,20 @@ ensure nmap || return
 # ==============================================================================
 
 # list known hosts in LAN via DNS lookups
-nmap.discover.by-dns-lookup() {
+nmap.discover.hosts-by-dns-lookup() {
     nmap -sL "${1:-$NMAP_DEFAULT_SUBNET}" --dns-servers "$NMAP_DEFAULT_DNS"
 }
-nmap.discover.by-dns-lookup.show-only-valid-names() {
-    nmap.discover.by-dns-lookup "$@" | grep -vE '^Nmap scan report for .*[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$'
+nmap.discover.hosts-by-dns-lookup.show-only-valid-names() {
+    nmap.discover.hosts-by-dns-lookup "$@" | grep -vE '^Nmap scan report for .*[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$'
 }
 
 # list active hosts via ping scan
-nmap.discover.by-ping() {
+nmap.discover.hosts-by-ping() {
     nmap -sn "${1:-$NMAP_DEFAULT_SUBNET}" --dns-servers "$NMAP_DEFAULT_DNS"
 }
 
 # ARP sweep local subnet
-nmap.discover.by-arp-sweep() {
+nmap.discover.hosts-by-arp-sweep() {
     nmap -sn -PR "${1:-$NMAP_DEFAULT_SUBNET}"
 }
 
