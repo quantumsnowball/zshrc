@@ -47,7 +47,7 @@ nmap.discover.ssh-hosts() {
 # Fast scan top 20 ports
 nmap.scan.top-ports() {
     [[ -z "$1" ]] && { echo "Usage: nmap.scan.top-ports <target>"; return 1; }
-    nmap -Pn --top-ports 20 -T4 "$1"
+    nmap -Pn --top-ports 20 -T4 -R --dns-servers "$NMAP_DEFAULT_DNS" "$1"
 }
 
 # Deep service versioning and OS identification
