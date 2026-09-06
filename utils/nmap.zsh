@@ -14,29 +14,29 @@ ensure nmap || return
 # }
 
 # ==============================================================================
-# Discovery
+# Discover
 # ==============================================================================
 
 # List known hosts in LAN via DNS lookups
-nmap.discovery.by-dns-lookup() {
+nmap.discover.by-dns-lookup() {
     nmap -sL "${1:-$NMAP_DEFAULT_SUBNET}" --dns-servers "$NMAP_DEFAULT_DNS"
 }
-nmap.discovery.by-dns-lookup.show-only-valid-names() {
-    nmap.discovery.by-dns-lookup "$@" | grep -vE '^Nmap scan report for .*[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$'
+nmap.discover.by-dns-lookup.show-only-valid-names() {
+    nmap.discover.by-dns-lookup "$@" | grep -vE '^Nmap scan report for .*[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$'
 }
 
 # List active hosts via ping scan
-nmap.discovery.by-ping() {
+nmap.discover.by-ping() {
     nmap -sn "${1:-$NMAP_DEFAULT_SUBNET}" --dns-servers "$NMAP_DEFAULT_DNS"
 }
 
 # ARP sweep local subnet
-nmap.discovery.by-arp-sweep() {
+nmap.discover.by-arp-sweep() {
     nmap -sn -PR "${1:-$NMAP_DEFAULT_SUBNET}"
 }
 
 # Find open SSH ports across local network
-nmap.discovery.opened-ssh-hosts() {
+nmap.discover.opened-ssh-hosts() {
     nmap -Pn -p 22,8022 "${1:-$NMAP_DEFAULT_SUBNET}" --open
 }
 
