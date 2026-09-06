@@ -32,3 +32,7 @@ nvim.lazy.rm-all-plugins () {
     [[ "$confirm" =~ ^[Yy]$ ]] && rm -rf $lazy_dir
     [[ -d ~/.local/share/nvim/lazy/ ]] || echo "\n$lazy_dir has been deleted. Please reinstall all plugins again."
 }
+
+nvim.download-word-alpha-dictionary() {
+    wget -P "$XDG_CONFIG_HOME/nvim/.dictionary" "https://raw.github.com/dwyl/english-words/master/words_alpha.txt"
+}
