@@ -64,3 +64,12 @@ nmap.probe.port-reason() {
     fi
     nmap -Pn -R --dns-servers "$NMAP_DEFAULT_DNS" -p "$2" --reason "$1"
 }
+
+# grab HTTP title and server response headers
+nmap.probe.http-info() {
+    if [[ -z "$1" ]]; then
+        echo "Usage: nmap.probe.http-info <target> [port=80]"
+        return 1
+    fi
+    nmap -Pn -p "${2:-80}" --script http-title,http-headers -R --dns-servers "$NMAP_DEFAULT_DNS" "$1"
+}
