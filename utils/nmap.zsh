@@ -66,5 +66,5 @@ nmap.probe.port-reason() {
         echo "Usage: nmap.probe.port-reason <target> <port>"
         return 1
     fi
-    nmap -Pn -p "$2" --reason "$1"
+    nmap -Pn -R --dns-servers "$NMAP_DEFAULT_DNS" -p "$2" --reason "$1"
 }
