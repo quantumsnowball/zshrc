@@ -36,8 +36,8 @@ nmap.discover.by-arp-sweep() {
 }
 
 # Find open SSH ports across local network
-nmap.discover.opened-ssh-hosts() {
-    nmap -Pn -p 22,8022 "${1:-$NMAP_DEFAULT_SUBNET}" --open
+nmap.discover.ssh-hosts() {
+    nmap -p 22,8022 -R --open --dns-servers "$NMAP_DEFAULT_DNS"  "${1:-$NMAP_DEFAULT_SUBNET}"
 }
 
 # ==============================================================================
