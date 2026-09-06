@@ -5,7 +5,7 @@ ensure nmap || return
 : "${NMAP_DEFAULT_DNS:=192.168.1.1}"
 
 # ==============================================================================
-# Discover
+# Discover - target a whole subnet
 # ==============================================================================
 
 # List known hosts in LAN via DNS lookups
@@ -32,7 +32,7 @@ nmap.discover.ssh-hosts() {
 }
 
 # ==============================================================================
-# Scanning
+# Scanning - target a single host
 # ==============================================================================
 
 # Fast scan top 20 ports
@@ -48,7 +48,7 @@ nmap.scan.fingerprint() {
 }
 
 # ==============================================================================
-# Probing
+# Probing - target a socket (a host:port pair)
 # ==============================================================================
 
 # Check port status and return exact match reason
