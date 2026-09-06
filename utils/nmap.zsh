@@ -40,13 +40,19 @@ nmap.discover.web-hosts() {
 # Scanning - target a single host
 # ==============================================================================
 
-# Fast scan top 20 ports
-nmap.scan.top-ports() {
-    [[ -z "$1" ]] && { echo "Usage: nmap.scan.top-ports <target>"; return 1; }
+# fast scan top 20 ports
+nmap.scan.top-TCP-ports() {
+    [[ -z "$1" ]] && { echo "Usage: nmap.scan.top-TCP-ports <target>"; return 1; }
     nmap -Pn --top-ports 20 -T4 -R --dns-servers "$NMAP_DEFAULT_DNS" "$1"
 }
 
-# Deep service versioning and OS identification
+# scan top common UDP ports
+nmap.scan.top-UDP-ports() {
+    [[ -z "$1" ]] && { echo "Usage: nmap.scan.top-UDP-ports <target>"; return 1; }
+    sudo nmap -Pn -sU --top-ports 20 -T4 -R --dns-servers "$NMAP_DEFAULT_DNS" "$1"
+}
+
+# deep service versioning and OS identification
 nmap.scan.fingerprint() {
     [[ -z "$1" ]] && { echo "Usage: nmap.scan.fingerprint <target>"; return 1; }
     sudo nmap -Pn -sV -O "$1"
