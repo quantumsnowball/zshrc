@@ -1,17 +1,22 @@
 ensure tmux || return
 
 
-# Only run this if we are actually inside a tmux session
+# only run this if we are actually inside a tmux session
 if [[ -n "$TMUX" ]]; then
-    # Fired after hit Enter, to update the tmux window name 
+    # this fired after hit Enter, to update the tmux window name 
     preexec() {
-        # Get the full command
+        # ensure auto rename wiwndow title only apply to single pane window 
+        local pane_count
+        pane_count=$(tmux display-message -p '#{window_panes}' 2>/dev/null)
+        [[ "$pane_count" -ne 1 ]] && return
+
+        # get the full command
         local full_cmd="$1"
 
         # Trim leading/trailing whitespace
         full_cmd="${full_cmd#"${full_cmd%%[![:space:]]*}"}"
 
-        # Special Case: v or nvim, y or yazi
+        # special Case: v or nvim, y or yazi
         local -a dir_context_cmds=(v nvim vi vim y yazi)
         local first_word="${full_cmd%% *}"
         # - the (r) flag searches for a match; if found, it returns the string
@@ -37,7 +42,7 @@ if [[ -n "$TMUX" ]]; then
 
     # Fired when the command finishes
     precmd() {
-        # Reset window to emtpy single space
+        # Reset window to empty single space
         # tmux rename-window " "
     }
 fi
