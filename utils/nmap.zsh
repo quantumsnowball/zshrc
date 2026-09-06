@@ -73,3 +73,12 @@ nmap.probe.http-info() {
     fi
     nmap -Pn -p "${2:-80}" --script http-title,http-headers -R --dns-servers "$NMAP_DEFAULT_DNS" "$1"
 }
+
+# inspect SSL/TLS cert info, expiry, and SANs
+nmap.probe.ssl-cert() {
+    if [[ -z "$1" ]]; then
+        echo "Usage: nmap.probe.ssl-cert <target> [port=443]"
+        return 1
+    fi
+    nmap -Pn -p "${2:-443}" --script ssl-cert,ssl-enum-ciphers -R --dns-servers "$NMAP_DEFAULT_DNS" "$1"
+}
