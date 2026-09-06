@@ -31,6 +31,11 @@ nmap.discover.ssh-hosts() {
     nmap -p 22,8022 -R --open --dns-servers "$NMAP_DEFAULT_DNS"  "${1:-$NMAP_DEFAULT_SUBNET}"
 }
 
+# find web servers (80, 443, 8080, 8443)
+nmap.discover.web-hosts() {
+    nmap -p 80,443,8080,8443 --open -R --dns-servers "$NMAP_DEFAULT_DNS" "${1:-$NMAP_DEFAULT_SUBNET}"
+}
+
 # ==============================================================================
 # Scanning - target a single host
 # ==============================================================================
