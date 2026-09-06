@@ -21,7 +21,9 @@ ensure nmap || return
 nmap.discovery.by-dns-lookup() {
     nmap -sL "${1:-$NMAP_DEFAULT_SUBNET}" --dns-servers "$NMAP_DEFAULT_DNS"
 }
-
+nmap.discovery.by-dns-lookup.show-only-valid-names() {
+    nmap.discovery.by-dns-lookup "$@" | grep -vE '^Nmap scan report for .*[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$'
+}
 
 # List active hosts via ping scan
 nmap.discovery.by-ping() {
