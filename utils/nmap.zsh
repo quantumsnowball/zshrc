@@ -1,6 +1,6 @@
 ensure nmap || return
 
-# Target subnet defaults
+# target subnet defaults
 : "${NMAP_DEFAULT_SUBNET:=192.168.1.0/24}"
 : "${NMAP_DEFAULT_DNS:=192.168.1.1}"
 
@@ -8,7 +8,7 @@ ensure nmap || return
 # Discover - target a whole subnet
 # ==============================================================================
 
-# List known hosts in LAN via DNS lookups
+# list known hosts in LAN via DNS lookups
 nmap.discover.by-dns-lookup() {
     nmap -sL "${1:-$NMAP_DEFAULT_SUBNET}" --dns-servers "$NMAP_DEFAULT_DNS"
 }
@@ -16,7 +16,7 @@ nmap.discover.by-dns-lookup.show-only-valid-names() {
     nmap.discover.by-dns-lookup "$@" | grep -vE '^Nmap scan report for .*[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$'
 }
 
-# List active hosts via ping scan
+# list active hosts via ping scan
 nmap.discover.by-ping() {
     nmap -sn "${1:-$NMAP_DEFAULT_SUBNET}" --dns-servers "$NMAP_DEFAULT_DNS"
 }
@@ -26,7 +26,7 @@ nmap.discover.by-arp-sweep() {
     nmap -sn -PR "${1:-$NMAP_DEFAULT_SUBNET}"
 }
 
-# Find open SSH ports across local network
+# find open SSH ports across local network
 nmap.discover.ssh-hosts() {
     nmap -p 22,8022 -R --open --dns-servers "$NMAP_DEFAULT_DNS"  "${1:-$NMAP_DEFAULT_SUBNET}"
 }
@@ -58,11 +58,17 @@ nmap.scan.fingerprint() {
     sudo nmap -Pn -sV -O "$1"
 }
 
+# check host against common CVE databases (NSE scripts), verbose output
+nmap.scan.vulns() {
+    [[ -z "$1" ]] && { echo "Usage: nmap.scan.vulns <target>"; return 1; }
+    nmap -v3 -Pn -sV --script vuln "$1"
+}
+
 # ==============================================================================
 # Probing - target a socket (a host:port pair)
 # ==============================================================================
 
-# Check port status and return exact match reason
+# check port status and return exact match reason
 nmap.probe.port-reason() {
     if [[ -z "$1" || -z "$2" ]]; then
         echo "Usage: nmap.probe.port-reason <target> <port>"
