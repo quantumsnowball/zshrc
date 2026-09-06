@@ -114,3 +114,4 @@ dotconfig.pull-all.for-all-ssh-hosts() {
 }
 s.pull-all-ssh-hosts() { dotconfig.pull-all.for-all-ssh-hosts; }
 s.sync() { uv run $XDG_CONFIG_HOME/zshrc/utils/dotconfig/dotconfig.py; }
+alias sa='s.sync'
