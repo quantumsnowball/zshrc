@@ -36,6 +36,11 @@ nmap.discover.web-hosts() {
     nmap -p 80,443,8080,8443 --open -R --dns-servers "$NMAP_DEFAULT_DNS" "${1:-$NMAP_DEFAULT_SUBNET}"
 }
 
+# detect duplicate IP addresses / MAC address collisions on LAN
+nmap.discover.ip-conflicts() {
+    sudo nmap -sn -PR --script ip-forwarding,arp-ignore "${1:-$NMAP_DEFAULT_SUBNET}"
+}
+
 # ==============================================================================
 # Scanning - target a single host
 # ==============================================================================
