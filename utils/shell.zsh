@@ -80,5 +80,6 @@ u.sync() {
         tmux attach-session -t "$session_name"
     fi
 }
+alias ua='u.sync'
 # fix enter key not working print ^M
 alias zsh.fix_enter_key='stty sane'
