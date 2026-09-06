@@ -15,12 +15,15 @@ zsh.reload-shell () {
     export ZSH_RELOADING=true
     exec zsh
 }
-alias rr=zsh.reload-shell
+alias r=zsh.reload-shell
 zsh.resource-zshrc () {
     export ZSH_RESOURCING=true
     source ~/.zshrc
 }
-alias rrr=zsh.resource-zshrc
+alias rr=zsh.resource-zshrc
+# redo command
+alias zsh.repeat-last-command='fc -e -'
+alias rrr='fc -e -'
 # reset completion cache
 alias zsh.reset-completion-cache='rm ~/.zcompdump*'
 # exit
