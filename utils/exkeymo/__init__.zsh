@@ -3,8 +3,19 @@ ensure apktool || return
 
 
 exkeymo.use-kcm-layout() {
+    # help
+    local help_text="Usage: $0 <layout>.kcm [<tag>]"
+    
+    # assert layout file exists and is a kcm file
     local layout_kcm_file="$1"
+    [[ ! -f "$layout_kcm_file" ]] && { echo "Error: layout file does not exists"; echo "$help_text"; return 1 } 
+    [[ "$layout_kcm_file" != *.kcm ]] && { echo "Error: layout file must be a .kcm file"; echo "$help_text"; return 1 }
+
+    # ensure tag contains only alphabets
     local tag="${2:-$(basename "$layout_kcm_file" .kcm)}"
+    [[ ! "$tag" =~ ^[a-zA-Z]+$ ]] && { echo "Error: tag only support alphabets"; echo "$help_text"; return 1; }
+
+    # vars
     local work_dir="$TMPDIR/.exkeymo"
     local original_template_file="$XDG_CONFIG_HOME/workspace/exkeymo/template.apk"
     local renaming_template_dir="$work_dir/renaming-template/"
