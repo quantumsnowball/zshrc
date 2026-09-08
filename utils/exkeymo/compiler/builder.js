@@ -13,7 +13,7 @@ import path from 'node:path';
 import { unzip, zip } from './zip.js';
 import { signV1 } from './signer.js';
 
-const KEYBOARD_LAYOUT_FILE_NAME = 'res/Q2.kcm';
+const KEYBOARD_LAYOUT_FILE_NAME = 'res/raw/keyboard_layout.kcm';
 
 const ENC = new TextEncoder();
 
@@ -57,6 +57,7 @@ export async function buildApk(layoutFilePath) {
         if (e.name === KEYBOARD_LAYOUT_FILE_NAME) {
             const layout = await fs.readFile(layoutFilePath, 'utf-8');
             patched.push({ name: e.name, data: ENC.encode(layout) });
+            console.log('Successfully inject your custom kcm file.')
             continue;
         }
         patched.push({ name: e.name, data: e.data });
