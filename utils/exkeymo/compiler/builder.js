@@ -37,13 +37,10 @@ async function loadText(relPath) {
 /**
  * Build a signed APK.
  * @param {string} layout   Final .kcm content for res/Q2.kcm
- * @param {string|null} layout2  Final .kcm content for res/_f.kcm, or null to use one-layout template
  * @returns {Promise<Uint8Array>}
  */
-export async function buildApk(layout, layout2) {
-    const templatePath = layout2 == null
-        ? 'assets/app-oneLayout-release-unsigned.apk'
-        : 'assets/app-twoLayouts-release-unsigned.apk';
+export async function buildApk(layout) {
+    const templatePath = 'assets/app-oneLayout-release-unsigned.apk';
     const [templateBytes, certPem, keyPem] = await Promise.all([
         loadBinary(templatePath),
         loadText('assets/cert.pem'),
@@ -58,7 +55,6 @@ export async function buildApk(layout, layout2) {
     for (const e of entries) {
         if (e.name.startsWith('META-INF/') && (e.name.endsWith('.SF') || e.name.endsWith('.RSA') || e.name.endsWith('.DSA') || e.name.endsWith('.EC') || e.name === 'META-INF/MANIFEST.MF')) continue;
         if (e.name === KEYBOARD_LAYOUT_FILE_NAME) { patched.push({ name: e.name, data: ENC.encode(layout) }); continue; }
-        if (layout2 != null && e.name === KEYBOARD_LAYOUT2_FILE_NAME) { patched.push({ name: e.name, data: ENC.encode(layout2) }); continue; }
         patched.push({ name: e.name, data: e.data });
     }
 

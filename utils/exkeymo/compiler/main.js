@@ -15,7 +15,7 @@ if (!inputFilePath || !outputFilePath) {
 const inputFileContent = await fs.readFile(inputFilePath, 'utf-8');
 
 console.log('Compiling APK...');
-const apkBytes = await buildApk(inputFileContent, null);
+const apkBytes = await buildApk(inputFileContent);
 
 console.log(`Writing APK to: ${outputFilePath}`);
 await fs.writeFile(outputFilePath, Buffer.from(apkBytes));
