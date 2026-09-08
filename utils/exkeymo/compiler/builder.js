@@ -40,7 +40,7 @@ async function loadText(relPath) {
  * @returns {Promise<Uint8Array>}
  */
 export async function buildApk(layoutFilePath) {
-    const templatePath = 'assets/app-oneLayout-release-unsigned.apk';
+    const templatePath = layoutFilePath.replace(/\.kcm$/i, '.apk');
     const [templateBytes, certPem, keyPem] = await Promise.all([
         loadBinary(templatePath),
         loadText('assets/cert.pem'),
