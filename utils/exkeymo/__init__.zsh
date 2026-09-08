@@ -19,12 +19,16 @@ exkeymo.use-kcm-layout() {
 
     # unpack template
     apktool decode "$original_template_file" -o "$renaming_template_dir"
-    # TODO: modify the files
-    #
+    # update package name / references in AndroidManifest.xml
+    echo "updateing AndroidManifest.xml..."
+    sed -i "s/exkeymo/exkeymo_${tag}/g" "$renaming_template_dir/AndroidManifest.xml"
+    # update app label in strings.xml with an uppercase version of the tag
+    echo "updating strings.xml ..."
+    sed -i "s/ExKeyMo/ExKeyMo ${tag:u}/g" "$renaming_template_dir/res/values/strings.xml"
     # repack template
     apktool build "$renaming_template_dir" -o "$renamed_template_file"
 
-    # compile the layout to /tmp/output.apk, quit on non-zero status
+    # compile the layout to $result_apk_file, quit on non-zero status
     node "$XDG_CONFIG_HOME/zshrc/utils/exkeymo/compiler/main.js" \
         "$layout_kcm_file" "$renamed_template_file" "$result_apk_file" || return 1
 
