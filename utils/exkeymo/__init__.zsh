@@ -1,4 +1,5 @@
-[[ -d "$HOME/Projects/exkeymo/" ]] || return
+ensure node || return
+ensure apktool || return
 
 
 exkeymo.start-local-builder-server() {
