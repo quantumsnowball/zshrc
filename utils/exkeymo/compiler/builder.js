@@ -35,11 +35,10 @@ async function loadText(relPath) {
 
 /**
  * Build a signed APK.
- * @param {string} layoutFilePath   Final .kcm content for res/Q2.kcm
+ * @param {string} layoutPath   Final .kcm content for res/Q2.kcm
  * @returns {Promise<Uint8Array>}
  */
-export async function buildApk(layoutFilePath) {
-    const templatePath = layoutFilePath.replace(/\.kcm$/i, '.apk');
+export async function buildApk(layoutPath, templatePath) {
     const [templateBytes, certPem, keyPem] = await Promise.all([
         loadBinary(templatePath),
         loadText('assets/cert.pem'),
@@ -55,7 +54,7 @@ export async function buildApk(layoutFilePath) {
         if (e.name.startsWith('META-INF/') && (e.name.endsWith('.SF') || e.name.endsWith('.RSA') || e.name.endsWith('.DSA') || e.name.endsWith('.EC') || e.name === 'META-INF/MANIFEST.MF'))
             continue;
         if (e.name === KEYBOARD_LAYOUT_FILE_NAME) {
-            const layout = await fs.readFile(layoutFilePath, 'utf-8');
+            const layout = await fs.readFile(layoutPath, 'utf-8');
             patched.push({ name: e.name, data: ENC.encode(layout) });
             console.log('Successfully inject your custom kcm file.')
             continue;

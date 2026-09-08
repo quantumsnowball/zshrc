@@ -3,28 +3,34 @@ ensure apktool || return
 
 
 exkeymo.use-kcm-layout() {
-    local input_kcm="$1"
-    local output_apk="$TMPDIR/exkeymo-layout-cache.apk"
+    local layout_kcm_file="$1"
+    local tag="$2"
+    local work_dir="$TMPDIR/.exkeymo"
+    local original_template_file="$XDG_CONFIG_HOME/workspace/exkeymo/template.apk"
+    local renaming_template_dir="$work_dir/renaming-template/"
+    local renamed_template_file=$work_dir/exkeymo-template.apk
+    local result_apk_file="$work_dir/exkeymo.apk"
 
-    # ensure 
-    if [[ ! -f "$input_kcm" ]]; then
-        echo "Usage: Exkeymo.compile-and-use-kcm-layout <input.kcm>" >&2
-        return 1
-    fi
+    # cleanup
+    rm -rf "$work_dir"
+    # prepare work_dir
+    echo "Working directory at $work_dir"
+    mkdir -p "$work_dir"
 
-    # ensure clean
-    if [[ -f "$output_apk" ]]; then
-        rm "$output_apk"
-    fi
+    # unpack template
+    apktool decode "$original_template_file" -o "$renaming_template_dir"
+    # TODO: modify the files
+    #
+    # repack template
+    apktool build "$renaming_template_dir" -o "$renamed_template_file"
 
     # compile the layout to /tmp/output.apk, quit on non-zero status
-    node "$XDG_CONFIG_HOME/zshrc/utils/exkeymo/compiler/main.js" "$input_kcm" "$output_apk" || return 1
+    node "$XDG_CONFIG_HOME/zshrc/utils/exkeymo/compiler/main.js" \
+        "$layout_kcm_file" "$renamed_template_file" "$result_apk_file" || return 1
 
     # trigger Android's package installer interface
-    if [[ -f "$output_apk" ]]; then
-        echo "Launching Android package installer..."
-        # note: need to set `allow-external-apps = true` in termux.properties
-        termux-open "$output_apk"
-    fi
+    # note: need to set `allow-external-apps = true` in termux.properties
+    echo "Launching Android package installer..."
+    termux-open "$result_apk_file"
 }
 
