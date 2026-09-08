@@ -36,10 +36,10 @@ async function loadText(relPath) {
 
 /**
  * Build a signed APK.
- * @param {string} layout   Final .kcm content for res/Q2.kcm
+ * @param {string} layoutFilePath   Final .kcm content for res/Q2.kcm
  * @returns {Promise<Uint8Array>}
  */
-export async function buildApk(layout) {
+export async function buildApk(layoutFilePath) {
     const templatePath = 'assets/app-oneLayout-release-unsigned.apk';
     const [templateBytes, certPem, keyPem] = await Promise.all([
         loadBinary(templatePath),
@@ -53,8 +53,13 @@ export async function buildApk(layout) {
     // artifacts (the template isn't signed but this keeps things safe).
     const patched = [];
     for (const e of entries) {
-        if (e.name.startsWith('META-INF/') && (e.name.endsWith('.SF') || e.name.endsWith('.RSA') || e.name.endsWith('.DSA') || e.name.endsWith('.EC') || e.name === 'META-INF/MANIFEST.MF')) continue;
-        if (e.name === KEYBOARD_LAYOUT_FILE_NAME) { patched.push({ name: e.name, data: ENC.encode(layout) }); continue; }
+        if (e.name.startsWith('META-INF/') && (e.name.endsWith('.SF') || e.name.endsWith('.RSA') || e.name.endsWith('.DSA') || e.name.endsWith('.EC') || e.name === 'META-INF/MANIFEST.MF'))
+            continue;
+        if (e.name === KEYBOARD_LAYOUT_FILE_NAME) {
+            const layout = await fs.readFile(layoutFilePath, 'utf-8');
+            patched.push({ name: e.name, data: ENC.encode(layout) });
+            continue;
+        }
         patched.push({ name: e.name, data: e.data });
     }
 
