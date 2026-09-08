@@ -2,11 +2,6 @@ ensure node || return
 ensure apktool || return
 
 
-exkeymo.compile-kcm-to-apk() {
-    # pass any args into compile.js
-    node "$XDG_CONFIG_HOME/zshrc/utils/exkeymo/compiler/main.js" "$@"
-}
-
 exkeymo.use-kcm-layout() {
     local input_kcm="$1"
     local output_apk="$TMPDIR/exkeymo-layout-cache.apk"
@@ -23,7 +18,7 @@ exkeymo.use-kcm-layout() {
     fi
 
     # compile the layout to /tmp/output.apk, quit on non-zero status
-    exkeymo.compile-kcm-to-apk "$input_kcm" "$output_apk" || return 1
+    node "$XDG_CONFIG_HOME/zshrc/utils/exkeymo/compiler/main.js" "$input_kcm" "$output_apk" || return 1
 
     # trigger Android's package installer interface
     if [[ -f "$output_apk" ]]; then
