@@ -14,7 +14,6 @@ import { unzip, zip } from './zip.js';
 import { signV1 } from './signer.js';
 
 const KEYBOARD_LAYOUT_FILE_NAME = 'res/Q2.kcm';
-const KEYBOARD_LAYOUT2_FILE_NAME = 'res/_f.kcm';
 
 const ENC = new TextEncoder();
 
