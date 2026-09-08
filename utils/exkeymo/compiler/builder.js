@@ -13,8 +13,7 @@ import path from 'node:path';
 import { unzip, zip } from './zip.js';
 import { signV1 } from './signer.js';
 
-const KEYBOARD_LAYOUT_FILE_NAME = 'res/Q2.kcm';
-const KEYBOARD_LAYOUT2_FILE_NAME = 'res/_f.kcm';
+const KEYBOARD_LAYOUT_FILE_NAME = 'res/raw/keyboard_layout.kcm';
 
 const ENC = new TextEncoder();
 
@@ -36,14 +35,10 @@ async function loadText(relPath) {
 
 /**
  * Build a signed APK.
- * @param {string} layout   Final .kcm content for res/Q2.kcm
- * @param {string|null} layout2  Final .kcm content for res/_f.kcm, or null to use one-layout template
+ * @param {string} layoutPath   Final .kcm content for res/Q2.kcm
  * @returns {Promise<Uint8Array>}
  */
-export async function buildApk(layout, layout2) {
-    const templatePath = layout2 == null
-        ? 'assets/app-oneLayout-release-unsigned.apk'
-        : 'assets/app-twoLayouts-release-unsigned.apk';
+export async function buildApk(layoutPath, templatePath) {
     const [templateBytes, certPem, keyPem] = await Promise.all([
         loadBinary(templatePath),
         loadText('assets/cert.pem'),
@@ -56,9 +51,14 @@ export async function buildApk(layout, layout2) {
     // artifacts (the template isn't signed but this keeps things safe).
     const patched = [];
     for (const e of entries) {
-        if (e.name.startsWith('META-INF/') && (e.name.endsWith('.SF') || e.name.endsWith('.RSA') || e.name.endsWith('.DSA') || e.name.endsWith('.EC') || e.name === 'META-INF/MANIFEST.MF')) continue;
-        if (e.name === KEYBOARD_LAYOUT_FILE_NAME) { patched.push({ name: e.name, data: ENC.encode(layout) }); continue; }
-        if (layout2 != null && e.name === KEYBOARD_LAYOUT2_FILE_NAME) { patched.push({ name: e.name, data: ENC.encode(layout2) }); continue; }
+        if (e.name.startsWith('META-INF/') && (e.name.endsWith('.SF') || e.name.endsWith('.RSA') || e.name.endsWith('.DSA') || e.name.endsWith('.EC') || e.name === 'META-INF/MANIFEST.MF'))
+            continue;
+        if (e.name === KEYBOARD_LAYOUT_FILE_NAME) {
+            const layout = await fs.readFile(layoutPath, 'utf-8');
+            patched.push({ name: e.name, data: ENC.encode(layout) });
+            console.log('Successfully inject your custom kcm file.')
+            continue;
+        }
         patched.push({ name: e.name, data: e.data });
     }
 

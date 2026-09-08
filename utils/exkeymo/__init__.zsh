@@ -1,41 +1,51 @@
-[[ -d "$HOME/Projects/exkeymo/" ]] || return
+ensure node || return
+ensure apktool || return
 
 
-exkeymo.start-local-builder-server() {
-    (
-        cd "$HOME/Projects/exkeymo/"
-        python -m http.server 8080
-    )
-}
+exkeymo.install-layout() {
+    # help
+    local help_text="Usage: $0 <layout>.kcm [<tag>]"
+    
+    # assert layout file exists and is a kcm file
+    local layout_kcm_file="$1"
+    [[ ! -f "$layout_kcm_file" ]] && { echo "Error: layout file does not exists"; echo "$help_text"; return 1 } 
+    [[ "$layout_kcm_file" != *.kcm ]] && { echo "Error: layout file must be a .kcm file"; echo "$help_text"; return 1 }
 
-exkeymo.compile-kcm-to-apk() {
-    # pass any args into compile.js
-    node "$XDG_CONFIG_HOME/zshrc/utils/exkeymo/compiler/main.js" "$@"
-}
+    # ensure tag contains only alphabets
+    local tag="${2:-$(basename "$layout_kcm_file" .kcm)}"
+    [[ ! "$tag" =~ ^[a-zA-Z]+$ ]] && { echo "Error: tag only support alphabets"; echo "$help_text"; return 1; }
 
-exkeymo.use-kcm-layout() {
-    local input_kcm="$1"
-    local output_apk="$TMPDIR/exkeymo-layout-cache.apk"
+    # vars
+    local work_dir="$TMPDIR/.exkeymo"
+    local original_template_file="$XDG_CONFIG_HOME/workspace/exkeymo/template.apk"
+    local renaming_template_dir="$work_dir/renaming-template/"
+    local renamed_template_file=$work_dir/exkeymo-template.apk
+    local result_apk_file="$work_dir/exkeymo.apk"
 
-    # ensure 
-    if [[ ! -f "$input_kcm" ]]; then
-        echo "Usage: Exkeymo.compile-and-use-kcm-layout <input.kcm>" >&2
-        return 1
-    fi
+    # cleanup
+    rm -rf "$work_dir"
+    # prepare work_dir
+    echo "Working directory at $work_dir"
+    mkdir -p "$work_dir"
 
-    # ensure clean
-    if [[ -f "$output_apk" ]]; then
-        rm "$output_apk"
-    fi
+    # unpack template
+    apktool decode "$original_template_file" -o "$renaming_template_dir"
+    # update package name / references in AndroidManifest.xml
+    echo "updateing AndroidManifest.xml..."
+    sed -i "s/exkeymo/exkeymo_${tag}/g" "$renaming_template_dir/AndroidManifest.xml"
+    # update app label in strings.xml with an uppercase version of the tag
+    echo "updating strings.xml ..."
+    sed -i "s/ExKeyMo/ExKeyMo ${tag:u}/g" "$renaming_template_dir/res/values/strings.xml"
+    # repack template
+    apktool build "$renaming_template_dir" -o "$renamed_template_file"
 
-    # compile the layout to /tmp/output.apk, quit on non-zero status
-    exkeymo.compile-kcm-to-apk "$input_kcm" "$output_apk" || return 1
+    # compile the layout to $result_apk_file, quit on non-zero status
+    node "$XDG_CONFIG_HOME/zshrc/utils/exkeymo/compiler/main.js" \
+        "$layout_kcm_file" "$renamed_template_file" "$result_apk_file" || return 1
 
     # trigger Android's package installer interface
-    if [[ -f "$output_apk" ]]; then
-        echo "Launching Android package installer..."
-        # note: need to set `allow-external-apps = true` in termux.properties
-        termux-open "$output_apk"
-    fi
+    # note: need to set `allow-external-apps = true` in termux.properties
+    echo "Launching Android package installer..."
+    termux-open "$result_apk_file"
 }
 
