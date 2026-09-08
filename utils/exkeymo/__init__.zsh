@@ -2,7 +2,7 @@ ensure node || return
 ensure apktool || return
 
 
-exkeymo.use-kcm-layout() {
+exkeymo.install-layout() {
     # help
     local help_text="Usage: $0 <layout>.kcm [<tag>]"
     
