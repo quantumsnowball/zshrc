@@ -4,7 +4,7 @@ ensure apktool || return
 
 exkeymo.use-kcm-layout() {
     local layout_kcm_file="$1"
-    local tag="$2"
+    local tag="${2:-$(basename "$layout_kcm_file" .kcm)}"
     local work_dir="$TMPDIR/.exkeymo"
     local original_template_file="$XDG_CONFIG_HOME/workspace/exkeymo/template.apk"
     local renaming_template_dir="$work_dir/renaming-template/"
