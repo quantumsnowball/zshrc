@@ -36,8 +36,11 @@ luks.drive.enable-auto-unlock.by-tpm2() {
     local target="${1}"
     [[ -b "${target}" ]] || { echo "device ${target} does not exist"; return 1 }
 
-    # step 1: enroll key to tpm2
-    sudo systemd-cryptenroll --tpm2-device=auto --tpm2-pcrs=0+7 "${target}" || return 1
+    # remove old tpm2 keys
+    sudo systemd-cryptenroll --wipe-slot=tpm2 "${target}"
+
+    # enroll key to tpm2
+    sudo systemd-cryptenroll --tpm2-device=auto --tpm2-pcrs=0+7 "${target}"
 
     # step 2: extract drive uuid
     local uuid
