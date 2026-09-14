@@ -4,16 +4,24 @@ luks.drives() {
 luks.drives.list-encrypted() {
     lsblk -p -o NAME,FSTYPE,SIZE,MOUNTPOINTS,UUID | grep crypto_LUKS
 }
-luks.drive.list-keyslots() {
+luks.drive.list-keys() {
     [[ -b "$1" ]] || { echo "device $1 does not exists"; return 1; }
     sudo cryptsetup luksDump "$1"
 }
-luks.drive.add-key() {
+luks.drive.list-slots() {
+    [[ -b "$1" ]] || { echo "device $1 does not exists"; return 1; }
+    sudo systemd-cryptenroll "$1"
+}
+luks.drive.add-passphrase() {
     [[ -b "$1" ]] || { echo "device $1 does not exists"; return 1; }
     sudo cryptsetup luksAddKey "$1"
 }
-luks.drive.remove-key() {
+luks.drive.remove-passphrase() {
     [[ -b "$1" ]] || { echo "device $1 does not exists"; return 1; }
     sudo cryptsetup luksRemoveKey "$1"
+}
+luks.drive.remove-tpm2-slot() {
+    [[ -b "$1" ]] || { echo "device $1 does not exists"; return 1; }
+    sudo systemd-cryptenroll --wipe-slot=tpm2 "$1"
 }
 
