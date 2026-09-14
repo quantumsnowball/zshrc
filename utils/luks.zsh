@@ -1,10 +1,10 @@
 luks.drives() {
     lsblk -p -o NAME,FSTYPE,SIZE,MOUNTPOINTS,UUID
 }
-luks.drives.list-encrypted() {
+luks.drives-encrypted() {
     lsblk -p -o NAME,FSTYPE,SIZE,MOUNTPOINTS,UUID | grep crypto_LUKS
 }
-luks.drive.test-passphrase() {
+luks.test-passphrase() {
     local target="${1}"
     local slot="${2:-0}"
     [[ -b "$target" ]] || { echo "device $target does not exists"; return 1; }
@@ -12,27 +12,27 @@ luks.drive.test-passphrase() {
     sudo cryptsetup luksOpen --test-passphrase "$target" --key-slot="${slot}" &&
         echo "Passphrase is CORRECT!" || echo "Passphrase is WRONG!"
 }
-luks.drive.list-keys() {
+luks.list-keys() {
     [[ -b "$1" ]] || { echo "device $1 does not exists"; return 1; }
     sudo cryptsetup luksDump "$1"
 }
-luks.drive.list-slots() {
+luks.list-slots() {
     [[ -b "$1" ]] || { echo "device $1 does not exists"; return 1; }
     sudo systemd-cryptenroll "$1"
 }
-luks.drive.add-passphrase() {
+luks.add-passphrase() {
     [[ -b "$1" ]] || { echo "device $1 does not exists"; return 1; }
     sudo cryptsetup luksAddKey "$1"
 }
-luks.drive.remove-passphrase() {
+luks.remove-passphrase() {
     [[ -b "$1" ]] || { echo "device $1 does not exists"; return 1; }
     sudo cryptsetup luksRemoveKey "$1"
 }
-luks.drive.remove-tpm2-slot() {
+luks.remove-tpm2-slot() {
     [[ -b "$1" ]] || { echo "device $1 does not exists"; return 1; }
     sudo systemd-cryptenroll --wipe-slot=tpm2 "$1"
 }
-luks.drive.enable-auto-unlock.by-tpm2() {
+luks.enable-auto-unlock.by-tpm2() {
     local target="${1}"
     [[ -b "${target}" ]] || { echo "device ${target} does not exist"; return 1 }
 
