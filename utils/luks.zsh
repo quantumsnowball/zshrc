@@ -8,4 +8,8 @@ luks.drive.list-keyslots() {
     [[ -b "$1" ]] || { echo "device $1 does not exists"; return 1 }
     sudo cryptsetup luksDump "$1"
 }
+luks.drive.add-key() {
+    [[ -b "$1" ]] || { echo "device $1 does not exists"; return 1 }
+    sudo cryptsetup luksAddKey "$1"
+}
 
