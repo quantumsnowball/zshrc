@@ -35,6 +35,14 @@ git.global.enable-auto-commit-signing() {
     #
     git.config-summary
 }
+git.local.set-signing-key() {
+    [[ -f "$1" ]] || { echo "Usage: $0 <signing key path>"; return 1; }
+    git config --local commit.gpgsign true
+    git config --local gpg.format ssh
+    git config --local gpg.ssh.allowedSignersFile ~/.ssh/allowed_signers
+    git config --local user.signingkey "$1"
+    git.config-summary
+}
 git.global.edit-config() {
     [[ -f "$HOME/.gitconfig" ]] || { echo "Error: Global .gitconfig not found."; exit 1; }
     ${EDITOR:-vi} "$HOME/.gitconfig"
