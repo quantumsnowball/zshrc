@@ -1,6 +1,10 @@
 installed limine || return
 
 
+# config
+alias limine.config.edit='sudo v /boot/limine.conf'
+alias limine.config='sudo cat /boot/limine.conf | bat -l yaml'
+
 # set limine boot loader wallpaper
 # note:
 # in /boot/limine.conf, add these lines at the top global session:
