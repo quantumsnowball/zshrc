@@ -43,17 +43,23 @@ ssh.touch-remote () {
 }
 
 # enable agent forwarding
-ssh.allow_agent_forwarding() {
-    # ~/.ssh/agent/ directory must have permission to write and execute
-    local agent="$HOME/.ssh/agent/"
+ssh.allow-agent-forwarding() {
+    # setup agent directory
+    local agent="$HOME/.ssh/agent"
     mkdir -p "$agent"
     chmod 700 "$agent"
-    # if some distro disabled agent forward by default
-    # run `grep -i AllowAgentForwarding /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*` to confirm
-    # add an overriding file to sshd_config.d/
-    # echo "AllowAgentForwarding yes" | sudo tee /etc/ssh/sshd_config.d/10-agent-forwarding.conf > /dev/null
-    # restart the sshd service
-    sudo systemctl restart sshd
+    echo "Setting permissions on $agent to 700 ..."
+
+    # check effective sshd runtime configuration
+    if sudo sshd -T 2>/dev/null | grep -iq '^allowagentforwarding no'; then
+        echo "Agent forwarding is disabled in sshd config, creating override ..."
+        sudo mkdir -p /etc/ssh/sshd_config.d
+        echo "AllowAgentForwarding yes" | sudo tee /etc/ssh/sshd_config.d/10-agent-forwarding.conf > /dev/null
+        sudo systemctl reload sshd
+        echo "Reloaded sshd service with agent forwarding enabled"
+    else
+        echo "Agent forwarding is already enabled in sshd"
+    fi
 }
 
 () {
@@ -67,4 +73,5 @@ ssh.allow_agent_forwarding() {
     alias ${^ns}.list-ssh-config='cat ~/.ssh/config'
     alias ${^ns}.reset-known-hosts='rm ~/.ssh/known_hosts'
     alias ${^ns}.touch-remote='ssh.touch-remote'
+    alias ${^ns}.allow-agent-forwarding='ssh.allow-agent-forwarding'
 }
