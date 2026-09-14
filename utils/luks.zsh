@@ -4,6 +4,14 @@ luks.drives() {
 luks.drives.list-encrypted() {
     lsblk -p -o NAME,FSTYPE,SIZE,MOUNTPOINTS,UUID | grep crypto_LUKS
 }
+luks.drive.test-passphrase() {
+    local target="${1}"
+    local slot="${2:-0}"
+    [[ -b "$target" ]] || { echo "device $target does not exists"; return 1; }
+    echo "Testing passphrase at slot $slot"
+    sudo cryptsetup luksOpen --test-passphrase "$target" --key-slot="${slot}" &&
+        echo "Passphrase is CORRECT!" || echo "Passphrase is WRONG!"
+}
 luks.drive.list-keys() {
     [[ -b "$1" ]] || { echo "device $1 does not exists"; return 1; }
     sudo cryptsetup luksDump "$1"
