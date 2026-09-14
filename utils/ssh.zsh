@@ -42,6 +42,20 @@ ssh.touch-remote () {
     esac
 }
 
+# enable agent forwarding
+ssh.allow_agent_forwarding() {
+    # ~/.ssh/agent/ directory must have permission to write and execute
+    local agent="$HOME/.ssh/agent/"
+    mkdir -p "$agent"
+    chmod 700 "$agent"
+    # if some distro disabled agent forward by default
+    # run `grep -i AllowAgentForwarding /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*` to confirm
+    # add an overriding file to sshd_config.d/
+    # echo "AllowAgentForwarding yes" | sudo tee /etc/ssh/sshd_config.d/10-agent-forwarding.conf > /dev/null
+    # restart the sshd service
+    sudo systemctl restart sshd
+}
+
 () {
     # namespaces
     local ns=(ssh sshd scp sftp keychain kc)
