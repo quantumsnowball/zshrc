@@ -10,9 +10,36 @@ ssh.my-public-keys() {
         echo ""
     done
 }
+
+# sync ssh authorized_keys and config to a remote host
 ssh.touch-remote () {
-    [ -f ~/.config/workspace-private/ssh/touch-remote] || return 1
-    . ~/.config/workspace-private/ssh/touch-remote $1
+    # check for missing target host or help flags
+    if [[ -z "$1" || "$1" == "-h" || "$1" == "--help" ]]; then
+        echo "usage: sync_ssh <ssh-hostname> [key|config]"
+        return 1
+    fi
+
+    local host="$1"
+    local mode="$2"
+
+    case "$mode" in
+        key|keys)
+            # fix local file permissions before transfer
+            chmod 600 "$HOME/.ssh/authorized_keys"
+            scp "$HOME/.ssh/authorized_keys" "$host:~/.ssh/authorized_keys"
+            ;;
+        config|configs)
+            # fix local file permissions before transfer
+            chmod 600 "$HOME/.ssh/config"
+            scp "$HOME/.ssh/config" "$host:~/.ssh/config"
+            ;;
+        *)
+            # fix local file permissions before transfer
+            chmod 600 "$HOME/.ssh/authorized_keys" "$HOME/.ssh/config"
+            scp "$HOME/.ssh/authorized_keys" "$host:~/.ssh/authorized_keys"
+            scp "$HOME/.ssh/config" "$host:~/.ssh/config"
+            ;;
+    esac
 }
 
 () {
