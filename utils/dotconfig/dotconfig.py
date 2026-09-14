@@ -16,6 +16,7 @@ from zsh import ssh
 from zsh.ui import LiveTable
 
 HOST_NAMES = (
+    'cachy',
     's7',
     'a9',
     'a56',
