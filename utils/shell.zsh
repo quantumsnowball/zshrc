@@ -68,7 +68,7 @@ u.sync-sequencial() {
 }
 u.sync() {
     local session_name="update-all"
-    local remotes=(s7 a9 a56 quest2 vpn proxy)
+    local remotes=(cachy s7 a9 a56 quest2 vpn proxy)
 
     # create new tmux session holding the first command
     tmux new-session -d -s "$session_name" -n "${remotes[1]}" "ssh -t ${remotes[1]} 'zsh -i -c up'; exec zsh"
