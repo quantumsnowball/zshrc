@@ -58,7 +58,7 @@ niri.refresh-ipc-socket-env() {
 
 () {
     # namespaces
-    local ns=(niri power sys os)
+    local ns=(niri desktop workstation power sys os)
 
     # helpers
     alias ${^ns}.power-on-monitors='niri msg action power-on-monitors'
