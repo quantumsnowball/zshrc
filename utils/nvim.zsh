@@ -49,8 +49,10 @@ nvim.install-essential-tools() {
         pnpm install -g \
             bash-language-server \
             pyright \
-            autopep8 \
             typescript-language-server \
+        ;
+        uv tool install \
+            autopep8
         ;
     else
         paru -S \
