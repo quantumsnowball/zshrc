@@ -46,7 +46,7 @@ nvim.install-essential-tools() {
             ruff \
             rust-analyzer \
         ;
-        npm install -g \ 
+        pnpm install -g \
             bash-language-server \
             pyright \
             autopep8 \
