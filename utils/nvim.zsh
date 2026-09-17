@@ -43,12 +43,14 @@ nvim.install-essential-tools() {
         pkg install \
             tree-sitter \
             lua-language-server \
+            ruff \
+            rust-analyzer \
+        ;
+        npm install -g \ 
             bash-language-server \
             pyright \
             autopep8 \
-            ruff \
             typescript-language-server \
-            rust-analyzer \
         ;
     else
         paru -S \
