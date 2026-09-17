@@ -42,6 +42,7 @@ nvim.install-essential-tools() {
     if [[ -v TERMUX_VERSION ]]; then
         pkg install \
             tree-sitter \
+            tree-sitter-cli \
             lua-language-server \
             ruff \
             rust-analyzer \
@@ -58,6 +59,7 @@ nvim.install-essential-tools() {
     else
         paru -S \
             tree-sitter \
+            tree-sitter-cli \
             lua-language-server \
             bash-language-server \
             pyright \
