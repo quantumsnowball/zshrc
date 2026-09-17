@@ -42,32 +42,36 @@ nvim.install-essential-tools() {
     if [[ -v TERMUX_VERSION ]]; then
         # tree-sitter
         ## termux version tree-sitter already include tree-sitter-cli
-        pkg install tree-sitter
+        pkg install tree-sitter &&
         # shell
-        pnpm install -g bash-language-server
+        pnpm install -g bash-language-server &&
         # lua
-        pkg install lua-language-server
+        pkg install lua-language-server &&
         # python
-        pkg install ruff
-        pnpm install -g pyright
-        uv tool install autopep8
+        pkg install ruff &&
+        pnpm install -g pyright &&
+        uv tool install autopep8 &&
         # typescript webdev
         pnpm install -g typescript-language-server prettier
         # rust
-        pkg install rust-analyzer
+        pkg install rust-analyzer &&
+        # success
+        echo "\n\n${GREEN}All neovim essential tools have been installed${RESET}\n\n"
     else
         # tree-sitter
         ## linux tree-sitter includes tree-sitter-cli but need separate installation
-        paru -S tree-sitter tree-sitter-cli
+        paru -S tree-sitter tree-sitter-cli &&
         # shell
-        paru -S bash-language-server
+        paru -S bash-language-server &&
         # lua
-        paru -S lua-language-server
+        paru -S lua-language-server &&
         # python
-        paru -S pyright autopep8 ruff
+        paru -S pyright autopep8 ruff &&
         # typescript webdev
-        paru -S typescript-language-server prettier
+        paru -S typescript-language-server prettier &&
         # rust
-        paru -S rust-analyzer
+        paru -S rust-analyzer &&
+        # success
+        echo "\n\n${GREEN}All neovim essential tools have been installed${RESET}\n\n"
     fi
 }
