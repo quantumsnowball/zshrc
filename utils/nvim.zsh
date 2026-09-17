@@ -42,12 +42,12 @@ nvim.install-essential-tools() {
     if [[ -v TERMUX_VERSION ]]; then
         pkg install \
             tree-sitter \
-            tree-sitter-cli \
             lua-language-server \
             ruff \
             rust-analyzer \
         ;
         pnpm install -g \
+            tree-sitter-cli \
             bash-language-server \
             pyright \
             typescript-language-server \
