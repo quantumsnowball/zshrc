@@ -40,14 +40,15 @@ nvim.download-word-alpha-dictionary() {
 # install essential tools
 nvim.install-essential-tools() {
     if [[ -v TERMUX_VERSION ]]; then
+        # [tree-sitter]
+        # termux version tree-sitter already include tree-sitter-cli
+        pkg install tree-sitter
         pkg install \
-            tree-sitter \
             lua-language-server \
             ruff \
             rust-analyzer \
         ;
         pnpm install -g \
-            tree-sitter-cli \
             bash-language-server \
             pyright \
             typescript-language-server \
@@ -57,10 +58,10 @@ nvim.install-essential-tools() {
             autopep8
         ;
     else
-        paru -S \
-            tree-sitter \
-            tree-sitter-cli \
-            lua-language-server \
+        # [tree-sitter]
+        # linux tree-sitter includes tree-sitter-cli but need separate installation
+        paru -S tree-sitter tree-sitter-cli
+        paru -S lua-language-server \
             bash-language-server \
             pyright \
             autopep8 \
