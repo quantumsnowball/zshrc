@@ -50,6 +50,7 @@ nvim.install-essential-tools() {
             bash-language-server \
             pyright \
             typescript-language-server \
+            prettier \
         ;
         uv tool install \
             autopep8
@@ -63,6 +64,7 @@ nvim.install-essential-tools() {
             autopep8 \
             ruff \
             typescript-language-server \
+            prettier \
             rust-analyzer \
         ;
     fi
