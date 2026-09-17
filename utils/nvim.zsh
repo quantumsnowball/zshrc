@@ -36,3 +36,30 @@ nvim.lazy.rm-all-plugins () {
 nvim.download-word-alpha-dictionary() {
     wget -P "$XDG_CONFIG_HOME/nvim/.dictionary" "https://raw.github.com/dwyl/english-words/master/words_alpha.txt"
 }
+
+# install essential tools
+nvim.install-essential-tools() {
+    if [[ -v $TERMUX_VERSION ]]; then
+        pkg install \
+            tree-sitter \
+            lua-language-server \
+            bash-language-server \
+            pyright \
+            autopep8 \
+            ruff \
+            typescript-language-server \
+            rust-analyzer \
+        ;
+    else
+        paru -S \
+            tree-sitter \
+            lua-language-server \
+            bash-language-server \
+            pyright \
+            autopep8 \
+            ruff \
+            typescript-language-server \
+            rust-analyzer \
+        ;
+    fi
+}
