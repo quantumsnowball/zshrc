@@ -40,35 +40,34 @@ nvim.download-word-alpha-dictionary() {
 # install essential tools
 nvim.install-essential-tools() {
     if [[ -v TERMUX_VERSION ]]; then
-        # [tree-sitter]
-        # termux version tree-sitter already include tree-sitter-cli
+        # tree-sitter
+        ## termux version tree-sitter already include tree-sitter-cli
         pkg install tree-sitter
-        pkg install \
-            lua-language-server \
-            ruff \
-            rust-analyzer \
-        ;
-        pnpm install -g \
-            bash-language-server \
-            pyright \
-            typescript-language-server \
-            prettier \
-        ;
-        uv tool install \
-            autopep8
-        ;
+        # shell
+        pnpm install -g bash-language-server
+        # lua
+        pkg install lua-language-server
+        # python
+        pkg install ruff
+        pnpm install -g pyright
+        uv tool install autopep8
+        # typescript webdev
+        pnpm install -g typescript-language-server prettier
+        # rust
+        pkg install rust-analyzer
     else
-        # [tree-sitter]
-        # linux tree-sitter includes tree-sitter-cli but need separate installation
+        # tree-sitter
+        ## linux tree-sitter includes tree-sitter-cli but need separate installation
         paru -S tree-sitter tree-sitter-cli
-        paru -S lua-language-server \
-            bash-language-server \
-            pyright \
-            autopep8 \
-            ruff \
-            typescript-language-server \
-            prettier \
-            rust-analyzer \
-        ;
+        # shell
+        paru -S bash-language-server
+        # lua
+        paru -S lua-language-server
+        # python
+        paru -S pyright autopep8 ruff
+        # typescript webdev
+        paru -S typescript-language-server prettier
+        # rust
+        paru -S rust-analyzer
     fi
 }
