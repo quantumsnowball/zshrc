@@ -39,7 +39,7 @@ nvim.download-word-alpha-dictionary() {
 
 # install essential tools
 nvim.install-essential-tools() {
-    if [[ -v $TERMUX_VERSION ]]; then
+    if [[ -v TERMUX_VERSION ]]; then
         pkg install \
             tree-sitter \
             lua-language-server \
