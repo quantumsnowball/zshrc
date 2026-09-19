@@ -70,6 +70,9 @@ luks.set-reserved-blocks-percentage-to-zero() {
     [[ -n "$1" && -b "$1" && "$1" == /dev/mapper/* ]] || { echo "usage: $0 <valid /dev/mapper/ block device path>"; return 1; }
     sudo tune2fs -m 0 "$1"
 }
+luks.list-keyfiles() {
+    sudo /bin/ls -l /etc/cryptsetup-keys.d/
+}
 luks.generate-keyfile() {
     [[ -z "$1" ]] && { echo "usage: $0 <label>"; return 1; }
     sudo dd if=/dev/urandom of="/etc/cryptsetup-keys.d/$1.key" bs=1024 count=4 status=none && sudo chmod 400 "/etc/cryptsetup-keys.d/$1.key"
