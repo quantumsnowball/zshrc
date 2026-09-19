@@ -66,3 +66,7 @@ luks.enable-auto-unlock.by-tpm2() {
     sudo mkinitcpio -P
     echo "done! reboot to test auto-unlock"
 }
+luks.set-reserved-blocks-percentage-to-zero() {
+    [[ -n "$1" && -b "$1" && "$1" == /dev/mapper/* ]] || { echo "usage: $0 <valid /dev/mapper/ block device path>"; return 1; }
+    sudo tune2fs -m 0 "$1"
+}
