@@ -90,7 +90,7 @@ luks.list-keyfiles() {
     sudo find /etc/cryptsetup-keys.d/ -type f -exec md5sum {} + 2>/dev/null
 }
 luks.generate-keyfile() {
-    [[ -z "$1" ]] && { echo "usage: $0 <label>"; return 1; }
+    [[ -e "/dev/disk/by-partlabel/$1" ]] || { echo "Usage: $0 <partlabel>"; return 1; }
     sudo dd if=/dev/urandom of="/etc/cryptsetup-keys.d/$1.key" bs=1024 count=4 status=none && sudo chmod 400 "/etc/cryptsetup-keys.d/$1.key"
     sudo md5sum /etc/cryptsetup-keys.d/$1.key
 }
