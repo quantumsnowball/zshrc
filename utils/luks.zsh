@@ -124,3 +124,13 @@ luks.mount() {
     sudo mkdir -p "$mount_point"
     sudo mount "$mapper_path" "$mount_point" && echo "Mounted $mapper_path at $mount_point"
 }
+luks.unmount() {
+    local label="$1"
+    [[ -n "$1" && -e "/dev/disk/by-label/$1" ]] || { echo "Label $label does not exist" >&2; return 1; }
+    local mapper_path="$(realpath "/dev/disk/by-label/$label")"
+    local mount_point="$(findmnt -n -o TARGET "$mapper_path")"
+    [[ -d "$mount_point" ]] || { echo "Failed to locate mount point from label" >&2; return 1; }
+    sudo umount "$mount_point" && echo "Unmounted $mount_point" &&
+    sudo rmdir "$mount_point" && echo "Removed $mount_point" &&
+    sudo cryptsetup close "$mapper_path" && echo "Closed $mapper_path"
+}
