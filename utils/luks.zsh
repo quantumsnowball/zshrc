@@ -7,7 +7,8 @@ luks.drives-encrypted() {
 luks.test-passphrase() {
     local target="${1}"
     local slot="${2:-0}"
-    [[ ! -b "$target" && -e "/dev/disk/by-partlabel/$target" ]] && target="/dev/disk/by-partlabel/$target"
+    [[ ! -b "$target" && -e "/dev/disk/by-partlabel/$target" ]] && target="$(realpath "/dev/disk/by-partlabel/$target")" &&
+        echo "Label resolves to $target"
     [[ -n "$target" && -b "$target" ]] || { echo "Usage: $0 <block device path or partlabel> [<slot to test>]"; return 1; }
     echo "Testing passphrase for $target at slot $slot"
     sudo cryptsetup luksOpen --test-passphrase "$target" --key-slot="${slot}" &&
