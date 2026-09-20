@@ -102,4 +102,25 @@ luks.add-keyfile() {
     local target="$(luks.resolve-label "${label}")"
     sudo cryptsetup luksAddKey "$target" "$keyfile"
 }
+# luks.remove-keyfile() {
+#     [[ -n "$1" && -e "/dev/disk/by-partlabel/$1" ]] || { echo "Usage: $0 <partlabel>" >&2; return 1; }
+#     local label="${1}"
+#     local keyfile="/etc/cryptsetup-keys.d/$label.key"
+# }
+luks.mount() {
+    local label="${1}"
+    local target; target="$(luks.resolve-label "$label")" || { echo "Usage: $0 <valid block device path or partlabel>" >&2; return 1; }
+    local mapper_name="$label"
+    local mapper_path="$(realpath "/dev/disk/by-label/$label")"
+    local keyfile="/etc/cryptsetup-keys.d/${label}.key"
+    local mount_point="${2:-/run/media/${USER}/${label}}"
+    if sudo test -e "$keyfile"; then
+        echo "Unlocking $target using keyfile $keyfile..."
+        sudo cryptsetup open "$target" "$mapper_name" --key-file "$keyfile" || return 1
+    else
+        echo "Unlocking $target using passphrase..."
+        sudo cryptsetup open "$target" "$mapper_name" || return 1
+    fi
+    sudo mkdir -p "$mount_point"
+    sudo mount "$mapper_path" "$mount_point" && echo "Mounted $mapper_path at $mount_point"
 }
