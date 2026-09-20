@@ -49,8 +49,7 @@ luks.remove-tpm2-slot() {
     sudo systemd-cryptenroll --wipe-slot=tpm2 "$target"
 }
 luks.enable-auto-unlock.by-tpm2() {
-    [[ -n "$1" && -b "$1" ]] || { echo "Usage: $0 <valid block device path>"; return 1; }
-    local target="${1}"
+    local target; target="$(luks.resolve-label "${1}")" || { echo "Usage: $0 <valid block device path or partlabel>" >&2; return 1; }
 
     # remove old tpm2 keys
     sudo systemd-cryptenroll --wipe-slot=tpm2 "${target}"
