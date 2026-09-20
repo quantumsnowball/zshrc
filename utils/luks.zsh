@@ -87,7 +87,7 @@ luks.set-reserved-blocks-percentage-to-zero() {
     sudo tune2fs -m 0 "$1"
 }
 luks.list-keyfiles() {
-    sudo /bin/ls -l /etc/cryptsetup-keys.d/
+    sudo find /etc/cryptsetup-keys.d/ -type f -exec md5sum {} + 2>/dev/null
 }
 luks.generate-keyfile() {
     [[ -z "$1" ]] && { echo "usage: $0 <label>"; return 1; }
