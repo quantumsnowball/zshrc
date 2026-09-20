@@ -102,11 +102,14 @@ luks.add-keyfile() {
     local target="$(luks.resolve-label "${label}")"
     sudo cryptsetup luksAddKey "$target" "$keyfile"
 }
-# luks.remove-keyfile() {
-#     [[ -n "$1" && -e "/dev/disk/by-partlabel/$1" ]] || { echo "Usage: $0 <partlabel>" >&2; return 1; }
-#     local label="${1}"
-#     local keyfile="/etc/cryptsetup-keys.d/$label.key"
-# }
+luks.remove-keyfile() {
+    local label="$1"
+    local target; target="$(luks.resolve-label "$label")" || { echo "Usage: $0 <partlabel>" >&2; return 1; }
+    local keyfile="/etc/cryptsetup-keys.d/$label.key"
+    sudo test -e "$keyfile" || { echo "Key file does not exists for $label" >&2; return 1; }
+    sudo cryptsetup luksRemoveKey "$target" "$keyfile" && echo "Removed keyfile $keyfile from $target" &&
+    sudo rm "$keyfile"
+}
 luks.mount() {
     local label="${1}"
     local target; target="$(luks.resolve-label "$label")" || { echo "Usage: $0 <partlabel>" >&2; return 1; }
