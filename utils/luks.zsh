@@ -109,11 +109,11 @@ luks.add-keyfile() {
 # }
 luks.mount() {
     local label="${1}"
-    local target; target="$(luks.resolve-label "$label")" || { echo "Usage: $0 <valid block device path or partlabel>" >&2; return 1; }
+    local target; target="$(luks.resolve-label "$label")" || { echo "Usage: $0 <partlabel>" >&2; return 1; }
     local mapper_name="$label"
     local mapper_path="$(realpath "/dev/disk/by-label/$label")"
     local keyfile="/etc/cryptsetup-keys.d/${label}.key"
-    local mount_point="${2:-/run/media/${USER}/${label}}"
+    local mount_point="${2:-/mnt/${label}}"
     if sudo test -e "$keyfile"; then
         echo "Unlocking $target using keyfile $keyfile..."
         sudo cryptsetup open "$target" "$mapper_name" --key-file "$keyfile" || return 1
