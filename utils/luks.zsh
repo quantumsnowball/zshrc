@@ -7,6 +7,18 @@ luks.drives() {
 luks.drives-encrypted() {
     lsblk -p -o NAME,FSTYPE,SIZE,MOUNTPOINTS,UUID | grep crypto_LUKS
 }
+luks.resolve-label() {
+    local target="${1}"
+    # assert non empty input
+    [[ -z "$target" ]] && return 1
+    # resolve partition label or use block device path as is
+    [[ ! -b "$target" && -e "/dev/disk/by-partlabel/$target" ]] && target="$(realpath "/dev/disk/by-partlabel/$target")" &&
+        echo "Label resolves to $target" >&2
+    # assert valid block device
+    [[ ! -b "$target" ]] && return 1
+    # return
+    echo "$target"
+}
 luks.test-passphrase() {
     local target="${1}"
     local slot="${2:-0}"
