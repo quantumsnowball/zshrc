@@ -45,8 +45,8 @@ luks.remove-passphrase() {
     sudo cryptsetup luksRemoveKey "$target"
 }
 luks.remove-tpm2-slot() {
-    [[ -n "$1" && -b "$1" ]] || { echo "Usage: $0 <valid block device path>"; return 1; }
-    sudo systemd-cryptenroll --wipe-slot=tpm2 "$1"
+    local target; target="$(luks.resolve-label "${1}")" || { echo "Usage: $0 <valid block device path or partlabel>" >&2; return 1; }
+    sudo systemd-cryptenroll --wipe-slot=tpm2 "$target"
 }
 luks.enable-auto-unlock.by-tpm2() {
     [[ -n "$1" && -b "$1" ]] || { echo "Usage: $0 <valid block device path>"; return 1; }
