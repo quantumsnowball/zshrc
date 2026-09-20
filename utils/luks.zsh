@@ -89,24 +89,23 @@ luks.set-reserved-blocks-percentage-to-zero() {
 luks.list-keyfiles() {
     sudo find /etc/cryptsetup-keys.d/ -type f -exec md5sum {} + 2>/dev/null
 }
-luks.generate-keyfile() {
-    [[ -n "$1" && -e "/dev/disk/by-partlabel/$1" ]] || { echo "Usage: $0 <partlabel>" >&2; return 1; }
-    sudo dd if=/dev/urandom of="/etc/cryptsetup-keys.d/$1.key" bs=1024 count=4 status=none && sudo chmod 400 "/etc/cryptsetup-keys.d/$1.key"
-    sudo md5sum /etc/cryptsetup-keys.d/$1.key
-}
 luks.add-keyfile() {
-    [[ -n "$1" && -e "/dev/disk/by-partlabel/$1" ]] || { echo "Usage: $0 <partlabel>" >&2; return 1; }
     local label="${1}"
+    [[ -n "$label" && -e "/dev/disk/by-partlabel/$label" ]] || { echo "Please provide a valid label" >&2; return 1; }
+    local target="$(realpath "/dev/disk/by-partlabel/$label")"
     local keyfile="/etc/cryptsetup-keys.d/$label.key"
-    sudo test -e "$keyfile" || { echo "Key file does not exists for $1, run luks.generate-keyfile <label> first" >&2; return 1; }
-    local target="$(luks.resolve-label "${label}")"
-    sudo cryptsetup luksAddKey "$target" "$keyfile"
+    sudo test -e "$keyfile" && { echo "Key file already exists for $1, will not overwrite existing keyfile" >&2; return 1; }
+    sudo dd if=/dev/urandom of="$keyfile" bs=1024 count=4 status=none && sudo chmod 400 "$keyfile" && echo "Created keyfile at $keyfile"
+    sudo cryptsetup luksAddKey "$target" "$keyfile" && echo "Added $keyfile to $target as a key slot"
 }
-# luks.remove-keyfile() {
-#     [[ -n "$1" && -e "/dev/disk/by-partlabel/$1" ]] || { echo "Usage: $0 <partlabel>" >&2; return 1; }
-#     local label="${1}"
-#     local keyfile="/etc/cryptsetup-keys.d/$label.key"
-# }
+luks.remove-keyfile() {
+    local label="$1"
+    local target; target="$(luks.resolve-label "$label")" || { echo "Usage: $0 <partlabel>" >&2; return 1; }
+    local keyfile="/etc/cryptsetup-keys.d/$label.key"
+    sudo test -e "$keyfile" || { echo "Key file does not exists for $label" >&2; return 1; }
+    sudo cryptsetup luksRemoveKey "$target" "$keyfile" && echo "Removed keyfile $keyfile from $target" &&
+    sudo rm "$keyfile"
+}
 luks.mount() {
     local label="${1}"
     local target; target="$(luks.resolve-label "$label")" || { echo "Usage: $0 <partlabel>" >&2; return 1; }
@@ -123,4 +122,14 @@ luks.mount() {
     fi
     sudo mkdir -p "$mount_point"
     sudo mount "$mapper_path" "$mount_point" && echo "Mounted $mapper_path at $mount_point"
+}
+luks.unmount() {
+    local label="$1"
+    [[ -n "$1" && -e "/dev/disk/by-label/$1" ]] || { echo "Label $label does not exist" >&2; return 1; }
+    local mapper_path="$(realpath "/dev/disk/by-label/$label")"
+    local mount_point="$(findmnt -n -o TARGET "$mapper_path")"
+    [[ -d "$mount_point" ]] || { echo "Failed to locate mount point from label" >&2; return 1; }
+    sudo umount "$mount_point" && echo "Unmounted $mount_point" &&
+    sudo rmdir "$mount_point" && echo "Removed $mount_point" &&
+    sudo cryptsetup close "$mapper_path" && echo "Closed $mapper_path"
 }
