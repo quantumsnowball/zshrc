@@ -1,40 +1,55 @@
+installed lsblk || return
+
+
 luks.drives() {
     lsblk -p -o NAME,FSTYPE,SIZE,MOUNTPOINTS,UUID
 }
 luks.drives-encrypted() {
     lsblk -p -o NAME,FSTYPE,SIZE,MOUNTPOINTS,UUID | grep crypto_LUKS
 }
-luks.test-passphrase() {
+luks.resolve-label() {
     local target="${1}"
+    # assert non empty input
+    [[ -z "$target" ]] && return 1
+    # resolve partition label or use block device path as is
+    if [[ ! -b "$target" && -e "/dev/disk/by-partlabel/$target" ]]; then
+        target="$(realpath "/dev/disk/by-partlabel/$target")"
+        echo "Label resolves to $target" >&2
+    fi
+    # assert valid block device
+    [[ ! -b "$target" ]] && return 1
+    # return
+    echo "$target"
+}
+luks.test-passphrase() {
+    local target; target="$(luks.resolve-label "${1}")" || { echo "Usage: $0 <valid block device path or partlabel>" >&2; return 1; }
     local slot="${2:-0}"
-    [[ -n "$1" && -b "$1" ]] || { echo "Usage: $0 <valid block device path> [<slot to test>]"; return 1; }
-    echo "Testing passphrase at slot $slot"
+    echo "Testing passphrase for $target at slot $slot"
     sudo cryptsetup luksOpen --test-passphrase "$target" --key-slot="${slot}" &&
         echo "Passphrase is CORRECT!" || echo "Passphrase is WRONG!"
 }
 luks.list-keys() {
-    [[ -n "$1" && -b "$1" ]] || { echo "Usage: $0 <valid block device path>"; return 1; }
-    sudo cryptsetup luksDump "$1"
+    local target; target="$(luks.resolve-label "${1}")" || { echo "Usage: $0 <valid block device path or partlabel>" >&2; return 1; }
+    sudo cryptsetup luksDump "$target"
 }
 luks.list-slots() {
-    [[ -n "$1" && -b "$1" ]] || { echo "Usage: $0 <valid block device path>"; return 1; }
-    sudo systemd-cryptenroll "$1"
+    local target; target="$(luks.resolve-label "${1}")" || { echo "Usage: $0 <valid block device path or partlabel>" >&2; return 1; }
+    sudo systemd-cryptenroll "$target"
 }
 luks.add-passphrase() {
-    [[ -n "$1" && -b "$1" ]] || { echo "Usage: $0 <valid block device path>"; return 1; }
-    sudo cryptsetup luksAddKey "$1"
+    local target; target="$(luks.resolve-label "${1}")" || { echo "Usage: $0 <valid block device path or partlabel>" >&2; return 1; }
+    sudo cryptsetup luksAddKey "$target"
 }
 luks.remove-passphrase() {
-    [[ -n "$1" && -b "$1" ]] || { echo "Usage: $0 <valid block device path>"; return 1; }
-    sudo cryptsetup luksRemoveKey "$1"
+    local target; target="$(luks.resolve-label "${1}")" || { echo "Usage: $0 <valid block device path or partlabel>" >&2; return 1; }
+    sudo cryptsetup luksRemoveKey "$target"
 }
 luks.remove-tpm2-slot() {
-    [[ -n "$1" && -b "$1" ]] || { echo "Usage: $0 <valid block device path>"; return 1; }
-    sudo systemd-cryptenroll --wipe-slot=tpm2 "$1"
+    local target; target="$(luks.resolve-label "${1}")" || { echo "Usage: $0 <valid block device path or partlabel>" >&2; return 1; }
+    sudo systemd-cryptenroll --wipe-slot=tpm2 "$target"
 }
 luks.enable-auto-unlock.by-tpm2() {
-    [[ -n "$1" && -b "$1" ]] || { echo "Usage: $0 <valid block device path>"; return 1; }
-    local target="${1}"
+    local target; target="$(luks.resolve-label "${1}")" || { echo "Usage: $0 <valid block device path or partlabel>" >&2; return 1; }
 
     # remove old tpm2 keys
     sudo systemd-cryptenroll --wipe-slot=tpm2 "${target}"
@@ -67,6 +82,7 @@ luks.enable-auto-unlock.by-tpm2() {
     echo "done! reboot to test auto-unlock"
 }
 luks.set-reserved-blocks-percentage-to-zero() {
+    # TODO: resolve the label to a mapper
     [[ -n "$1" && -b "$1" && "$1" == /dev/mapper/* ]] || { echo "usage: $0 <valid /dev/mapper/ block device path>"; return 1; }
     sudo tune2fs -m 0 "$1"
 }
