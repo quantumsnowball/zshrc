@@ -94,4 +94,12 @@ luks.generate-keyfile() {
     sudo dd if=/dev/urandom of="/etc/cryptsetup-keys.d/$1.key" bs=1024 count=4 status=none && sudo chmod 400 "/etc/cryptsetup-keys.d/$1.key"
     sudo md5sum /etc/cryptsetup-keys.d/$1.key
 }
+luks.add-keyfile() {
+    [[ -n "$1" && -e "/dev/disk/by-partlabel/$1" ]] || { echo "Usage: $0 <partlabel>" >&2; return 1; }
+    local label="${1}"
+    local keyfile="/etc/cryptsetup-keys.d/$label.key"
+    sudo test -e "$keyfile" || { echo "Key file does not exists for $1, run luks.generate-keyfile <label> first" >&2; return 1; }
+    local target="$(luks.resolve-label "${label}")"
+    sudo cryptsetup luksAddKey "$target" "$keyfile"
+}
 }
