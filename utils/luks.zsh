@@ -12,8 +12,10 @@ luks.resolve-label() {
     # assert non empty input
     [[ -z "$target" ]] && return 1
     # resolve partition label or use block device path as is
-    [[ ! -b "$target" && -e "/dev/disk/by-partlabel/$target" ]] && target="$(realpath "/dev/disk/by-partlabel/$target")" &&
+    if [[ ! -b "$target" && -e "/dev/disk/by-partlabel/$target" ]]; then
+        target="$(realpath "/dev/disk/by-partlabel/$target")"
         echo "Label resolves to $target" >&2
+    fi
     # assert valid block device
     [[ ! -b "$target" ]] && return 1
     # return
