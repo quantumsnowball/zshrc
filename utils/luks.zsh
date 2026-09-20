@@ -83,15 +83,44 @@ luks.enable-auto-unlock.by-tpm2() {
 }
 luks.set-reserved-blocks-percentage-to-zero() {
     # TODO: resolve the label to a mapper
-    [[ -n "$1" && -b "$1" && "$1" == /dev/mapper/* ]] || { echo "usage: $0 <valid /dev/mapper/ block device path>"; return 1; }
+    [[ -n "$1" && -b "$1" && "$1" == /dev/mapper/* ]] || { echo "Usage: $0 <valid /dev/mapper/ block device path>" >&2; return 1; }
     sudo tune2fs -m 0 "$1"
 }
 luks.list-keyfiles() {
-    sudo /bin/ls -l /etc/cryptsetup-keys.d/
+    sudo find /etc/cryptsetup-keys.d/ -type f -exec md5sum {} + 2>/dev/null
 }
 luks.generate-keyfile() {
-    [[ -z "$1" ]] && { echo "usage: $0 <label>"; return 1; }
+    [[ -n "$1" && -e "/dev/disk/by-partlabel/$1" ]] || { echo "Usage: $0 <partlabel>" >&2; return 1; }
     sudo dd if=/dev/urandom of="/etc/cryptsetup-keys.d/$1.key" bs=1024 count=4 status=none && sudo chmod 400 "/etc/cryptsetup-keys.d/$1.key"
     sudo md5sum /etc/cryptsetup-keys.d/$1.key
 }
+luks.add-keyfile() {
+    [[ -n "$1" && -e "/dev/disk/by-partlabel/$1" ]] || { echo "Usage: $0 <partlabel>" >&2; return 1; }
+    local label="${1}"
+    local keyfile="/etc/cryptsetup-keys.d/$label.key"
+    sudo test -e "$keyfile" || { echo "Key file does not exists for $1, run luks.generate-keyfile <label> first" >&2; return 1; }
+    local target="$(luks.resolve-label "${label}")"
+    sudo cryptsetup luksAddKey "$target" "$keyfile"
+}
+# luks.remove-keyfile() {
+#     [[ -n "$1" && -e "/dev/disk/by-partlabel/$1" ]] || { echo "Usage: $0 <partlabel>" >&2; return 1; }
+#     local label="${1}"
+#     local keyfile="/etc/cryptsetup-keys.d/$label.key"
+# }
+luks.mount() {
+    local label="${1}"
+    local target; target="$(luks.resolve-label "$label")" || { echo "Usage: $0 <partlabel>" >&2; return 1; }
+    local mapper_name="$label"
+    local mapper_path="$(realpath "/dev/disk/by-label/$label")"
+    local keyfile="/etc/cryptsetup-keys.d/${label}.key"
+    local mount_point="${2:-/mnt/${label}}"
+    if sudo test -e "$keyfile"; then
+        echo "Unlocking $target using keyfile $keyfile..."
+        sudo cryptsetup open "$target" "$mapper_name" --key-file "$keyfile" || return 1
+    else
+        echo "Unlocking $target using passphrase..."
+        sudo cryptsetup open "$target" "$mapper_name" || return 1
+    fi
+    sudo mkdir -p "$mount_point"
+    sudo mount "$mapper_path" "$mount_point" && echo "Mounted $mapper_path at $mount_point"
 }
