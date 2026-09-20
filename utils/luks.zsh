@@ -82,9 +82,10 @@ luks.enable-auto-unlock.by-tpm2() {
     echo "done! reboot to test auto-unlock"
 }
 luks.set-reserved-blocks-percentage-to-zero() {
-    # TODO: resolve the label to a mapper
-    [[ -n "$1" && -b "$1" && "$1" == /dev/mapper/* ]] || { echo "Usage: $0 <valid /dev/mapper/ block device path>" >&2; return 1; }
-    sudo tune2fs -m 0 "$1"
+    local label="${1}"
+    [[ -n "$label" && -e "/dev/disk/by-label/$label" ]] || { echo "Please provide a valid label" >&2; return 1; }
+    local mapper_path="$(realpath "/dev/disk/by-label/$label")"
+    sudo tune2fs -m 0 "$mapper_path"
 }
 luks.list-keyfiles() {
     sudo find /etc/cryptsetup-keys.d/ -type f -exec md5sum {} + 2>/dev/null
