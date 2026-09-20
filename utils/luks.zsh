@@ -1,3 +1,6 @@
+installed lsblk || return
+
+
 luks.drives() {
     lsblk -p -o NAME,FSTYPE,SIZE,MOUNTPOINTS,UUID
 }
