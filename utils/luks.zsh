@@ -30,8 +30,8 @@ luks.test-passphrase() {
         echo "Passphrase is CORRECT!" || echo "Passphrase is WRONG!"
 }
 luks.list-keys() {
-    local target="$(luks.resolve-label "${1}")"
-    [[ -n "$target" && -b "$target" ]] || { echo "Usage: $0 <valid block device path or partlabel>"; return 1; }
+    local target
+    target="$(luks.resolve-label "${1}")" || { echo "Usage: $0 <valid block device path or partlabel>"; return 1; }
     sudo cryptsetup luksDump "$target"
 }
 luks.list-slots() {
