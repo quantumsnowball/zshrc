@@ -2,6 +2,8 @@ ensure openrgb || return
 
 
 # openrgb static color shortcuts
+openrgb.off()     { openrgb --mode static --color 000000 }
+openrgb.on()      { openrgb --mode static --color FFFFFF }
 openrgb.black()   { openrgb --mode static --color 000000 }
 openrgb.white()   { openrgb --mode static --color FFFFFF }
 openrgb.red()     { openrgb --mode static --color FF0000 }
