@@ -52,3 +52,16 @@ rclone.copy-1t() {
 rclone.copy-1t.preview() {
     rclone.copy "$@" --transfers=1 --dry-run
 }
+
+# sync
+rclone.sync() {
+    # ensure src and dst exists
+    (( $# < 2 )) && { echo "usage: rclone.sync <src> <dst> [flags...]" >&2; return 1; }
+    local src="$1" dst="$2"; shift 2
+    # default to verbose output, show progress
+    # use track renames via default strategy (hash)
+    rclone sync -vP "$src" "$dst" --track-renames "$@"
+}
+rclone.sync.preview() {
+    rclone.sync "$@" --dry-run
+}
