@@ -65,3 +65,10 @@ rclone.sync() {
 rclone.sync.preview() {
     rclone.sync "$@" --dry-run
 }
+rclone.sync-fast() {
+    # avoid heavy hashing large files but still careful enough not to mix up files
+    rclone.sync "$@" --track-renames-strategy modtime
+}
+rclone.sync-fast.preview() {
+    rclone.sync "$@" --track-renames-strategy modtime --dry-run
+}
