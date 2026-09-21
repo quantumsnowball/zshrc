@@ -50,7 +50,8 @@ rclone.copy() {
     (( $# < 2 )) && { echo "usage: rclone.copy <src> <dst> [flags...]" >&2; return 1; }
     local src="$1" dst="$2"; shift 2
     # default to verbose output and show progress
-    rclone copy -vP "$src" "$dst" "$@"
+    # also will download abuse file
+    rclone copy -vP "$src" "$dst" --drive-acknowledge-abuse "$@"
 }
 rclone.copy.preview() {
     rclone.copy "$@" --dry-run
@@ -70,7 +71,8 @@ rclone.sync() {
     local src="$1" dst="$2"; shift 2
     # default to verbose output, show progress
     # use track renames via default strategy (hash)
-    rclone sync -vP "$src" "$dst" --track-renames "$@"
+    # also will download abuse file
+    rclone sync -vP "$src" "$dst" --drive-acknowledge-abuse --track-renames "$@"
 }
 rclone.sync.preview() {
     rclone.sync "$@" --dry-run
