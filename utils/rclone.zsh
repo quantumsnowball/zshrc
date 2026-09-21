@@ -26,13 +26,23 @@ rclone.remote.check() {
     )
     echo ""
 }
-rclone.remote.check-drive() { rclone.remote.check drive }
-rclone.remote.check-sftp() { rclone.remote.check sftp }
+rclone.remote.check-drive() {
+    rclone.remote.check drive
+}
+rclone.remote.check-sftp() {
+    rclone.remote.check sftp
+}
 
 # list
-rclone.remote.list() { rclone listremotes }
-rclone.remote.list-sftp() { rclone listremotes --type sftp }
-rclone.remote.list-drive() { rclone listremotes --type drive }
+rclone.remote.list() {
+    rclone listremotes
+}
+rclone.remote.list-sftp() {
+    rclone listremotes --type sftp
+}
+rclone.remote.list-drive() {
+    rclone listremotes --type drive
+}
 
 # copy
 rclone.copy() {
