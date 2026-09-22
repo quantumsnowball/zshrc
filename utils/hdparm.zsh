@@ -20,7 +20,21 @@ hdparm.power-state() {
     fi
 }
 hdparm.spin-down() {
-    sudo hdparm -y "$1"
-    echo "\n\nDrive states:"
-    hdparm.current-power-state 
+    # if no args are supplied, spin down all physical SATA disks
+    if [[ $# -eq 0 ]]; then
+        local -a drives
+        drives=($(lsblk -d -n -o PATH,TYPE | awk '$2=="disk" && $1 ~ /\/dev\/sd/ {print $1}'))
+
+        if [[ ${#drives} -eq 0 ]]; then
+            echo "no HDD drives found"
+            return 1
+        fi
+
+        sudo hdparm -y "${drives[@]}"
+    else
+        sudo hdparm -y "$@"
+    fi
+
+    echo "\nDrive states:"
+    hdparm.power-state "$@"
 }
