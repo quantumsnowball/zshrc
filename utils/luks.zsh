@@ -111,7 +111,6 @@ luks.mount() {
     local label="${1}"
     local target; target="$(luks.resolve-label "$label")" || { echo "Usage: $0 <partlabel>" >&2; return 1; }
     local mapper_name="$label"
-    local mapper_path="$(realpath "/dev/disk/by-label/$label")"
     local keyfile="/etc/cryptsetup-keys.d/${label}.key"
     local mount_point="${2:-/mnt/${label}}"
     if sudo test -e "$keyfile"; then
@@ -121,6 +120,7 @@ luks.mount() {
         echo "Unlocking $target using passphrase..."
         sudo cryptsetup open "$target" "$mapper_name" || return 1
     fi
+    local mapper_path="$(realpath "/dev/disk/by-label/$label")"
     sudo mkdir -p "$mount_point"
     sudo mount "$mapper_path" "$mount_point" && echo "Mounted $mapper_path at $mount_point"
 }
