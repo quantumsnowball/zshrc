@@ -87,7 +87,7 @@ rclone.sync() {
     # default to verbose output, show progress
     # use track renames via default strategy (hash)
     # also will download abuse file, use 64 checkers to speed up
-    rclone sync -vP "$src" "$dst" --drive-acknowledge-abuse --checkers 64 --track-renames "$@"
+    rclone sync -vP -i "$src" "$dst" --drive-acknowledge-abuse --checkers 64 --track-renames "$@"
 }
 rclone.sync.preview() {
     rclone.sync "$@" --dry-run
