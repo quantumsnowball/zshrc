@@ -56,7 +56,7 @@ rclone.check() {
 rclone.check-fast() {
     # check using size and modtime only without reading disk hashes
     # use more checkers to speed up
-    rclone.check "$@" --checkers 128 --size-only
+    rclone.check "$@" --checkers 128 --fast-list --size-only
 }
 
 # copy
