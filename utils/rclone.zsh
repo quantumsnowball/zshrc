@@ -94,8 +94,8 @@ rclone.sync.preview() {
 }
 rclone.sync-fast() {
     # avoid heavy hashing large files but still careful enough not to mix up files
-    rclone.sync "$@" --track-renames-strategy modtime
+    rclone.sync "$@" --track-renames-strategy modtime --fast-list
 }
 rclone.sync-fast.preview() {
-    rclone.sync "$@" --track-renames-strategy modtime --dry-run
+    rclone.sync "$@" --track-renames-strategy modtime --fast-list --dry-run
 }
