@@ -5,7 +5,7 @@ luks.drives() {
     lsblk -p -o NAME,FSTYPE,SIZE,MOUNTPOINTS,UUID
 }
 luks.drives-encrypted() {
-    lsblk -p -o NAME,FSTYPE,SIZE,MOUNTPOINTS,UUID | grep crypto_LUKS
+    lsblk -p -o NAME,FSTYPE,SIZE,UUID | grep -E "crypto_LUKS|NAME" | column -t
 }
 luks.resolve-label() {
     local target="${1}"
