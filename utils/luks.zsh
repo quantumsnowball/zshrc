@@ -2,7 +2,7 @@ installed lsblk || return
 
 
 luks.drives() {
-    lsblk -p -o NAME,FSTYPE,SIZE,MOUNTPOINTS,UUID
+    lsblk -p -o NAME,FSTYPE,SIZE,MOUNTPOINTS
 }
 luks.drives-encrypted() {
     lsblk -p -o NAME,FSTYPE,SIZE,UUID | grep -E "crypto_LUKS|NAME" | column -t
