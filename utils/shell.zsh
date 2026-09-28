@@ -48,10 +48,11 @@ zsh.completion.toggle_dotfiles_visibility() {
 up() {
     # termux environment check
     if [ -n "$TERMUX_VERSION" ]; then
-        echo "\n${YELLOW}<<< termux update >>>${RESET}\n"
         # link the asia mirror list
+        echo "\n${YELLOW}<<< selected the asia mirror list >>>${RESET}\n"
         ln -sf "$PREFIX/etc/termux/mirrors/asia" "$PREFIX/etc/termux/chosen_mirrors"
         # run pkg install / upgrade
+        echo "\n${YELLOW}<<< termux update >>>${RESET}\n"
         pkg upgrade
         return 0
     fi
