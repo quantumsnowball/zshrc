@@ -47,10 +47,12 @@ hdd.unplug() {
         # unmount
         echo -n "Unmounting $label ... "
         if findmnt "/dev/mapper/$label" &>/dev/null; then
-            luks.unmount "$label" &>/dev/null && echo "${GREEN}SUCCESS${RESET}" || {
+            if luks.unmount "$label" &>/dev/null; then
+                echo "${GREEN}SUCCESS${RESET}"
+            else
                 echo "${RED}FAILED${RESET}"
                 continue
-            }
+            fi
         else
             echo "${YELLOW}NOT MOUNTED${RESET}"
         fi
@@ -59,10 +61,12 @@ hdd.unplug() {
         echo -n "Spinning down $label ($device) ... "
         local device="/dev/disk/by-partlabel/$label"
         if [[ -b "$device" ]]; then
-            hdparm.spin-down "$device" &>/dev/null && echo "${GREEN}SUCCESS${RESET}" || {
+            if hdparm.spin-down "$device" &>/dev/null; then
+                echo "${GREEN}SUCCESS${RESET}"
+            else
                 echo "${RED}FAILED${RESET}"
                 continue
-            }
+            fi
         else
             echo "${YELLOW}NOT FOUND${RESET}"
             continue
