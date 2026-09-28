@@ -25,3 +25,32 @@ hdparm.spin-down() {
     echo "\nDrive states:"
     hdparm.power-state "$@"
 }
+
+hdd.unplug() {
+    # args: hdd labels
+    local labels=("$@")
+    if (( $# == 0 )); then
+        labels=(t2018 t2014)
+    fi
+
+    # need sudo
+    sudo -v || { echo "${RED}Failed to authenticate, unplug aborted${RESET}"; return 1}
+
+    # flush all pending filesystem writes to disk first
+    sync
+
+    for label in "${labels[@]}"; do
+        echo "${CYAN}----------------------------------------\n  $label\n----------------------------------------${RESET}"
+        # unmount
+        echo -n "Unmounting $label ... "
+        luks.unmount "$label" &>/dev/null && echo "${GREEN}SUCCESS${RESET}" || echo "${RED}FAILED${RESET}"
+
+        # spin down
+        local device="/dev/disk/by-partlabel/$label"
+        echo -n "Spinning down $label ($device) ... "
+        hdparm.spin-down "$device" &>/dev/null && echo "${GREEN}SUCCESS${RESET}" || echo "${RED}FAILED${RESET}"
+
+        # done
+        echo "${GREEN}You can safely power down $label now${RESET}\n"
+    done
+}
