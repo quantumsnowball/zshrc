@@ -1,6 +1,9 @@
 installed powerprofilesctl || return
 
 
+# NOTE: if shown ModuleNotFoundError: No module named 'gi' exception
+# - run: `uv.pipi pygobject` to install pygobject in the current activate python env
+
 powerprofilesctl.current() {
     powerprofilesctl get
 }
