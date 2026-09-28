@@ -56,9 +56,17 @@ hdd.unplug() {
         fi
 
         # spin down
-        local device="/dev/disk/by-partlabel/$label"
         echo -n "Spinning down $label ($device) ... "
-        hdparm.spin-down "$device" &>/dev/null && echo "${GREEN}SUCCESS${RESET}" || echo "${RED}FAILED${RESET}"
+        local device="/dev/disk/by-partlabel/$label"
+        if [[ -b "$device" ]]; then
+            hdparm.spin-down "$device" &>/dev/null && echo "${GREEN}SUCCESS${RESET}" || {
+                echo "${RED}FAILED${RESET}"
+                continue
+            }
+        else
+            echo "${YELLOW}NOT FOUND${RESET}"
+            continue
+        fi
 
         # done
         echo "${GREEN}You can safely unplug $label now${RESET}\n"
