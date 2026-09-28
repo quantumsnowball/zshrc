@@ -43,9 +43,17 @@ hdd.unplug() {
 
     for label in "${labels[@]}"; do
         echo "${CYAN}----------------------------------------\n  $label\n----------------------------------------${RESET}"
+
         # unmount
         echo -n "Unmounting $label ... "
-        luks.unmount "$label" &>/dev/null && echo "${GREEN}SUCCESS${RESET}" || echo "${RED}FAILED${RESET}"
+        if findmnt "/dev/mapper/$label" &>/dev/null; then
+            luks.unmount "$label" &>/dev/null && echo "${GREEN}SUCCESS${RESET}" || {
+                echo "${RED}FAILED${RESET}"
+                continue
+            }
+        else
+            echo "${YELLOW}NOT MOUNTED${RESET}"
+        fi
 
         # spin down
         local device="/dev/disk/by-partlabel/$label"
@@ -53,6 +61,6 @@ hdd.unplug() {
         hdparm.spin-down "$device" &>/dev/null && echo "${GREEN}SUCCESS${RESET}" || echo "${RED}FAILED${RESET}"
 
         # done
-        echo "${GREEN}You can safely power down $label now${RESET}\n"
+        echo "${GREEN}You can safely unplug $label now${RESET}\n"
     done
 }
