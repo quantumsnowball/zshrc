@@ -75,7 +75,7 @@ up() {
         if [[ $(find /etc/pacman.d/mirrorlist -mmin +7200 2>/dev/null) ]]; then
             echo "\n${YELLOW}<<< ranking arch mirrors >>>${RESET}\n"
             if installed rate-mirrors; then
-                rate-mirrors --save=/etc/pacman.d/mirrorlist arch
+                rate-mirrors arch | sudo tee /etc/pacman.d/mirrorlist
             elif installed reflector; then
                 sudo reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
             fi
