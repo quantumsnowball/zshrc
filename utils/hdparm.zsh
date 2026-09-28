@@ -56,8 +56,8 @@ hdd.unplug() {
         fi
 
         # spin down
-        echo -n "Spinning down $label ($device) ... "
         local device="/dev/disk/by-partlabel/$label"
+        echo -n "Spinning down $label ($device) ... "
         if [[ ! -b "$device" ]]; then
             echo "${YELLOW}NOT FOUND${RESET}"
             continue
