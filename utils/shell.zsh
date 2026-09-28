@@ -60,17 +60,25 @@ up() {
 
     # cachyos
     if installed cachy-update; then
-        echo "\n${YELLOW}<<< ranking cachyos mirrors >>>${RESET}\n"
-        installed cachyos-rate-mirrors && sudo cachyos-rate-mirrors
+        # rank mirrors only if mirrorlist is older than 5 days
+        if [[ $(find /etc/pacman.d/mirrorlist -mmin +7200 2>/dev/null) ]]; then
+            echo "\n${YELLOW}<<< ranking cachyos mirrors >>>${RESET}\n"
+            if installed cachyos-rate-mirrors; then
+                sudo cachyos-rate-mirrors
+            fi
+        fi
         echo "\n${YELLOW}<<< cachy update >>>${RESET}\n"
         cachy-update
     # standard arch fallback
     elif installed pacman; then
-        echo "\n${YELLOW}<<< ranking arch mirrors >>>${RESET}\n"
-        if installed rate-mirrors; then
-            rate-mirrors --save=/etc/pacman.d/mirrorlist arch
-        elif installed reflector; then
-            sudo reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+        # rank mirrors only if mirrorlist is older than 5 days
+        if [[ $(find /etc/pacman.d/mirrorlist -mmin +7200 2>/dev/null) ]]; then
+            echo "\n${YELLOW}<<< ranking arch mirrors >>>${RESET}\n"
+            if installed rate-mirrors; then
+                rate-mirrors --save=/etc/pacman.d/mirrorlist arch
+            elif installed reflector; then
+                sudo reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+            fi
         fi
         echo "\n${YELLOW}<<< pacman update >>>${RESET}\n"
         sudo pacman -Syu
