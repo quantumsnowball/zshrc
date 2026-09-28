@@ -46,14 +46,45 @@ zsh.completion.toggle_dotfiles_visibility() {
 }
 # update system
 up() {
+    # termux environment check
+    if [ -n "$TERMUX_VERSION" ]; then
+        echo "\n${YELLOW}<<< termux update >>>${RESET}\n"
+        # link the asia mirror list
+        ln -sf "$PREFIX/etc/termux/mirrors/asia" "$PREFIX/etc/termux/chosen_mirrors"
+        # run pkg install / upgrade
+        pkg upgrade
+        return 0
+    fi
+
     # cachyos
-    installed cachy-update && echo "\n${YELLOW}<<< cachy update >>>${RESET}\n" && eval cachy-update
-    # arch
-    not-installed cachy-update && installed pacman && echo "\n${YELLOW}<<< pacman update >>>${RESET}\n" && eval pmup
-    # ubuntu / termux
-    installed apt && echo "\n${YELLOW}<<< apt update >>>${RESET}\n" && eval aptup
+    if installed cachy-update; then
+        echo "\n${YELLOW}<<< ranking cachyos mirrors >>>${RESET}\n"
+        installed cachyos-rate-mirrors && sudo cachyos-rate-mirrors
+        echo "\n${YELLOW}<<< cachy update >>>${RESET}\n"
+        cachy-update
+    # standard arch fallback
+    elif installed pacman; then
+        echo "\n${YELLOW}<<< ranking arch mirrors >>>${RESET}\n"
+        if installed rate-mirrors; then
+            rate-mirrors --save=/etc/pacman.d/mirrorlist arch
+        elif installed reflector; then
+            sudo reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+        fi
+        echo "\n${YELLOW}<<< pacman update >>>${RESET}\n"
+        sudo pacman -Syu
+    fi
+
+    # ubuntu / debian
+    if installed apt; then
+        echo "\n${YELLOW}<<< apt update >>>${RESET}\n"
+        sudo apt update && sudo apt upgrade
+    fi
+
     # snap
-    installed snap && echo "\n${YELLOW}<<< snap update >>>${RESET}\n" && eval snapup
+    if installed snap; then
+        echo "\n${YELLOW}<<< snap update >>>${RESET}\n"
+        sudo snap refresh
+    fi
 }
 u() { up; }
 u.sync-sequencial() {
