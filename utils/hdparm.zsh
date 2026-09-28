@@ -27,6 +27,8 @@ hdparm.spin-down() {
 }
 
 hdd.unplug() {
+    installed luks.unmount || { echo "${RED}Essential shell function luks.unmount is not available, exiting${RESET}"; return 1}
+
     # args: hdd labels
     local labels=("$@")
     if (( $# == 0 )); then
