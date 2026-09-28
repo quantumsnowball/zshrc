@@ -50,8 +50,6 @@ up() {
     if [ -n "$TERMUX_VERSION" ]; then
         # link the asia mirror list
         echo "\n${YELLOW}<<< selected the asia mirror list >>>${RESET}\n"
-        rm -f "$PREFIX/etc/termux/mirrors/asia/chosen_mirrors" 2>/dev/null
-        rm -f "$PREFIX/etc/termux/chosen_mirrors"
         ln -sfn "$PREFIX/etc/termux/mirrors/asia" "$PREFIX/etc/termux/chosen_mirrors"
         ls -l "$PREFIX/etc/termux/chosen_mirrors"
         # run pkg install / upgrade
