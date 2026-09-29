@@ -1,4 +1,4 @@
 ensure usbtree || return
 
 
-alias usbtree='usbtree --nerd-font'
+alias usbtree='sudo modprobe usbmon 2>/dev/null; sudo -E usbtree --nerd-font'
