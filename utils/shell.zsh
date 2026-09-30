@@ -48,13 +48,17 @@ zsh.completion.toggle_dotfiles_visibility() {
 up() {
     # termux environment check
     if [ -n "$TERMUX_VERSION" ]; then
-        # link the asia mirror list
-        echo "\n${YELLOW}<<< selected the asia mirror list >>>${RESET}\n"
-        ln -sfn "$PREFIX/etc/termux/mirrors/asia" "$PREFIX/etc/termux/chosen_mirrors"
-        ls -l "$PREFIX/etc/termux/chosen_mirrors"
-        # run pkg install / upgrade
+        # refresh and relink only if missing or older than 5 days
+        if [[ ! -L "$PREFIX/etc/termux/chosen_mirrors" ]] || [[ -n "$PREFIX/etc/termux/chosen_mirrors"(N-m+5) ]]; then
+            echo "${YELLOW}<<< refreshing and checking asia mirror list >>>${RESET}\n"
+            ln -sfn "$PREFIX/etc/termux/mirrors/asia" "$PREFIX/etc/termux/chosen_mirrors"
+            touch "$PREFIX/etc/termux/mirrors/asia"
+            pkg --check-mirror update
+        else
+            pkg update
+        fi
         echo "\n${YELLOW}<<< termux update >>>${RESET}\n"
-        pkg --check-mirror update && pkg upgrade
+        pkg upgrade -y
         return 0
     fi
 
