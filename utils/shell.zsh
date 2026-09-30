@@ -54,7 +54,7 @@ up() {
         ls -l "$PREFIX/etc/termux/chosen_mirrors"
         # run pkg install / upgrade
         echo "\n${YELLOW}<<< termux update >>>${RESET}\n"
-        pkg upgrade
+        pkg --check-mirror update && pkg upgrade
         return 0
     fi
 
