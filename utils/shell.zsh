@@ -57,8 +57,8 @@ up() {
         else
             pkg update
         fi
-        echo "\n${YELLOW}<<< termux update >>>${RESET}\n"
-        pkg upgrade -y
+        echo "\n${YELLOW}<<< termux upgrade >>>${RESET}\n"
+        pkg upgrade
         return 0
     fi
 
