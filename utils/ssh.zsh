@@ -67,7 +67,7 @@ ssh.allow-agent-forwarding() {
     local ns=(ssh sshd scp sftp keychain kc)
 
     # helpers
-    alias ${^ns}.list-added-keys='ssh-add -l'
+    alias ${^ns}.list-added-keys='installed keychain && keychain list || ssh-add -l'
     alias ${^ns}.list-public-keys='ssh.my-public-keys'
     alias ${^ns}.list-authorized-keys='cat ~/.ssh/authorized_keys'
     alias ${^ns}.list-ssh-config='cat ~/.ssh/config'
