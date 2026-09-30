@@ -73,6 +73,19 @@ up() {
         fi
         echo "\n${YELLOW}<<< cachy update >>>${RESET}\n"
         cachy-update
+    # paru as alternative
+    elif installed paru; then
+        # rank mirrors only if mirrorlist is older than 5 days
+        if [[ $(find /etc/pacman.d/mirrorlist -mmin +7200 2>/dev/null) ]]; then
+            echo "\n${YELLOW}<<< ranking paru mirrors >>>${RESET}\n"
+            if installed rate-mirrors; then
+                rate-mirrors arch | sudo tee /etc/pacman.d/mirrorlist
+            elif installed reflector; then
+                sudo reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+            fi
+        fi
+        echo "\n${YELLOW}<<< paru update >>>${RESET}\n"
+        paru -Syu
     # standard arch fallback
     elif installed pacman; then
         # rank mirrors only if mirrorlist is older than 5 days
