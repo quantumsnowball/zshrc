@@ -7,15 +7,15 @@ kc.start () {
 }
 
 # this is the most common use case, has to be short and handy
-# call this in a new shell, or the current shell, or inside of lazygit 
-# where ever necessary to add a key it should let most other shell instance 
+# call this in a new shell, or the current shell, or inside of lazygit
+# where ever necessary to add a key it should let most other shell instance
 # able to find the added key
 kc.add () {
     # normally boot up keychain
     eval $(keychain --eval --quiet)
 
     # then add default key or custom key
-    ssh-add $1
+    keychain add --immediate ${1:-$HOME/.ssh/id_ed25519}
 }
 alias kc=kc.add
 alias kc.add-ibc='kc ~/.ssh/id_ed25519_ibc'
