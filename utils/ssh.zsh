@@ -62,6 +62,23 @@ ssh.allow-agent-forwarding() {
     fi
 }
 
+ssh.run() {
+    # check if required parameters are provided
+    if [ $# -lt 2 ]; then
+        echo "usage: ssh.run <host> <command>" >&2
+        return 1
+    fi
+
+    local host="$1"
+    shift
+    local cmd="$*"
+
+    # escape single quotes inside the command string to prevent syntax errors
+    local escaped_cmd="${cmd//\'/\'\\\'\'}"
+
+    ssh -t "$host" "zsh -ic '$escaped_cmd'"
+}
+
 () {
     # namespaces
     local ns=(ssh sshd scp sftp keychain kc)
