@@ -27,7 +27,7 @@ hdparm.spin-down() {
 }
 
 hdd.plug() {
-    installed luks.mount || { echo "${RED}Essential shell function luks.mount is not available, exiting${RESET}"; return 1; }
+    installed luks.mount || { echo "${RED}Essential shell function luks.mount is not available, exiting${RESET}\n"; return 1; }
 
     # args: hdd labels
     local labels=("$@")
@@ -36,7 +36,7 @@ hdd.plug() {
     fi
 
     # need sudo
-    sudo -v || { echo "${RED}Failed to authenticate, unplug aborted${RESET}"; return 1; }
+    sudo -v || { echo "${RED}Failed to authenticate, unplug aborted${RESET}\n"; return 1; }
 
 
     for label in "${labels[@]}"; do
@@ -55,7 +55,7 @@ hdd.plug() {
 }
 
 hdd.unplug() {
-    installed luks.unmount || { echo "${RED}Essential shell function luks.unmount is not available, exiting${RESET}"; return 1; }
+    installed luks.unmount || { echo "${RED}Essential shell function luks.unmount is not available, exiting${RESET}\n"; return 1; }
 
     # args: hdd labels
     local labels=("$@")
@@ -64,7 +64,7 @@ hdd.unplug() {
     fi
 
     # need sudo
-    sudo -v || { echo "${RED}Failed to authenticate, unplug aborted${RESET}"; return 1; }
+    sudo -v || { echo "${RED}Failed to authenticate, unplug aborted${RESET}\n"; return 1; }
 
     # flush all pending filesystem writes to disk first
     sync
@@ -79,7 +79,7 @@ hdd.unplug() {
         elif luks.unmount "$label" &>/dev/null; then
             echo "${GREEN}done${RESET}"
         else
-            echo "${RED}failed${RESET}"
+            echo "${RED}failed${RESET}\n"
             continue
         fi
 
@@ -87,10 +87,10 @@ hdd.unplug() {
         local device="/dev/disk/by-partlabel/$label"
         echo -n "Spinning down $label ($device) ... "
         if [[ ! -b "$device" ]]; then
-            echo "${YELLOW}device not found${RESET}"
+            echo "${YELLOW}device not found${RESET}\n"
             continue
         elif ! hdparm.spin-down "$device" &>/dev/null; then
-            echo "${RED}failed${RESET}"
+            echo "${RED}failed${RESET}\n"
             continue
         else
             echo "${GREEN}done${RESET}"
