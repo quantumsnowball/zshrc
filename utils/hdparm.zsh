@@ -26,6 +26,33 @@ hdparm.spin-down() {
     hdparm.power-state "$@"
 }
 
+hdd.plug() {
+    installed luks.mount || { echo "${RED}Essential shell function luks.mount is not available, exiting${RESET}"; return 1}
+
+    # args: hdd labels
+    local labels=("$@")
+    if (( $# == 0 )); then
+        labels=(t2018 t2014)
+    fi
+
+    # need sudo
+    sudo -v || { echo "${RED}Failed to authenticate, unplug aborted${RESET}"; return 1}
+
+
+    for label in "${labels[@]}"; do
+        echo "${CYAN}----------------------------------------\n  $label\n----------------------------------------${RESET}"
+
+        # mount
+        echo "Mounting $label ... "
+        if luks.mount "$label"; then
+            echo "${GREEN}done${RESET}\n"
+        else
+            echo "${RED}failed${RESET}\n"
+            continue
+        fi
+    done
+}
+
 hdd.unplug() {
     installed luks.unmount || { echo "${RED}Essential shell function luks.unmount is not available, exiting${RESET}"; return 1}
 
