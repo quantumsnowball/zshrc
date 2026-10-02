@@ -44,11 +44,12 @@ hdd.plug() {
 
         # mount
         echo "Mounting $label ... "
-        if luks.mount "$label"; then
+        if findmnt "/dev/mapper/$label" &>/dev/null; then
+            echo "${YELLOW}device already mounted${RESET}\n"
+        elif luks.mount "$label"; then
             echo "${GREEN}done${RESET}\n"
         else
             echo "${RED}failed${RESET}\n"
-            continue
         fi
     done
 }
