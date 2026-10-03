@@ -27,3 +27,7 @@ mitmproxy.auto-install-certificate() {
         return 1
     fi
 }
+
+mitmproxy.show-certificate() {
+    trust list | rg -C3 'label: mitmproxy'
+}
