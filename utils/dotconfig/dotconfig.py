@@ -37,14 +37,14 @@ class Repo:
         self._name = name
         self._host = host
         # State
-        self._text = '       '
+        self._text = '     '
 
     @property
     def text(self) -> str: return self._text
 
     async def pull(self, table: LiveTable) -> None:
         # set initial state and update UI
-        self._text = '[yellow]PULLING[/]'
+        self._text = '[yellow]PULL[/]'
         table.update()
         try:
             # execute each SSH command asynchronously
@@ -56,11 +56,11 @@ class Repo:
             # update state based on SSH return code
             if result.ok:
                 # SUCCESS
-                self._text = '[bold green]SUCCESS[/]'
+                self._text = '[bold green]DONE[/]'
             else:
                 # FAILED, print failed message above the table
-                self._text = '[bold red]FAILED[/]'
-                table.console.print(f'\n[red]FAILED[/] Host: [yellow]{self._host}[/], Repo: [magenta]{self._name}[/]\n')
+                self._text = '[bold red]FAIL[/]'
+                table.console.print(f'\n[red]FAIL[/] Host: [yellow]{self._host}[/], Repo: [magenta]{self._name}[/]\n')
                 table.console.print(result.stderr_str)
         except Exception:
             # ERROR, on any exception, try to print it
@@ -92,7 +92,7 @@ class Manager:
             cell_column_kwargs=dict(
                 header_style='bold cyan',
                 justify='center',
-                min_width=7,
+                min_width=5,
             ),
         ) as table:
             tasks = [
