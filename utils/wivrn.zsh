@@ -2,8 +2,11 @@ installed wivrn-dashboard || return
 
 
 wivrn.status() {
-    # check for active established tcp connections on either 9757 (wifi) or 19757 (wired)
-    local active_conn=$(ss -H -t state established 'sport = :9757 or dport = :9757 or sport = :19757 or dport = :19757')
+    local PORT_WIFI=9757
+    local PORT_USB=19757
+
+    # check for active established tcp connections on either port
+    local active_conn=$(ss -H -t state established "sport = :${PORT_WIFI} or dport = :${PORT_WIFI} or sport = :${PORT_USB} or dport = :${PORT_USB}")
 
     # no active established session
     if [[ -z "$active_conn" ]]; then
@@ -12,9 +15,9 @@ wivrn.status() {
     fi
 
     # check port used in active socket output
-    local port="9757"
-    if echo "$active_conn" | grep -q '19757'; then
-        port="19757"
+    local port="$PORT_WIFI"
+    if echo "$active_conn" | grep -q "$PORT_USB"; then
+        port="$PORT_USB"
     fi
 
     # check transport type
