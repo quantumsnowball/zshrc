@@ -2,8 +2,6 @@ ensure paru || return
 
 
 # paru
-alias pr=paru
-
 alias paru.install='paru -S'
 alias pri=paru.install
 
