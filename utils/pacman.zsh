@@ -2,8 +2,6 @@ installed pacman || return
 
 
 # pacman
-alias pm=pacman
-
 alias pacman.install='sudo pacman -S'
 alias pmi=pacman.install
 
