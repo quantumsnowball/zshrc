@@ -11,11 +11,17 @@ wivrn.status() {
         return 1
     fi
 
-    # check if connected via port 19757 or loopback 127.0.0.1 (adb tunnel)
+    # check port used in active socket output
+    local port="9757"
+    if echo "$active_conn" | grep -q '19757'; then
+        port="19757"
+    fi
+
+    # check transport type
     if echo "$active_conn" | grep -qE '127\.0\.0\.1'; then
-        echo "${GREEN}Connected: Wired (USB)${RESET}"
+        echo "${GREEN}Connected: Wired (USB) [Port: ${port}]${RESET}"
     else
-        echo "${CYAN}Connected: Wireless (WiFi)${RESET}"
+        echo "${CYAN}Connected: Wireless (WiFi) [Port: ${port}]${RESET}"
     fi
 }
 
