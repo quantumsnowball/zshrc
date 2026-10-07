@@ -4,26 +4,26 @@ installed pacman || return
 # pacman
 alias pm=pacman
 
-alias pm.install='sudo pacman -S'
-alias pmi=pm.install
+alias pacman.install='sudo pacman -S'
+alias pmi=pacman.install
 
-alias pm.search='pacman -Ss'
-alias pms=pm.search
+alias pacman.search='pacman -Ss'
+alias pms=pacman.search
 
-alias pm.ls='pacman -Q'
-alias pmls=pm.ls
+alias pacman.ls='pacman -Q'
+alias pmls=pacman.ls
 
-alias pm.ls-grep='pacman -Q | rg'
-alias pmrg=pm.ls-grep
+alias pacman.ls-grep='pacman -Q | rg'
+alias pmrg=pacman.ls-grep
 
-alias pm.remove='sudo pacman -Rsu'
-alias pmrm=pm.remove
+alias pacman.remove='sudo pacman -Rsu'
+alias pmrm=pacman.remove
 
-alias pm.update='sudo pacman -Sy && pacman -Qu'
-alias pmu=pm.update
+alias pacman.update='sudo pacman -Sy && pacman -Qu'
+alias pmu=pacman.update
 
-alias pm.upgrade='sudo pacman -Syu'
-alias pmup=pm.upgrade
+alias pacman.upgrade='sudo pacman -Syu'
+alias pmup=pacman.upgrade
 
 
 # update mirror list
@@ -31,7 +31,7 @@ ensure reflector || return
 
 
 # mirror list
-alias pm.mirror.current='cat /etc/pacman.d/mirrorlist'
-alias pm.mirror.available='reflector'
-alias pm.mirror.hong-kong='reflector --country "Hong Kong"'
-alias pm.mirror.hong-kong.save-as-mirrorlist='sudo reflector --country "Hong Kong" --save /etc/pacman.d/mirrorlist'
+alias pacman.mirror.current='cat /etc/pacman.d/mirrorlist'
+alias pacman.mirror.available='reflector'
+alias pacman.mirror.hong-kong='reflector --country "Hong Kong"'
+alias pacman.mirror.hong-kong.save-as-mirrorlist='sudo reflector --country "Hong Kong" --save /etc/pacman.d/mirrorlist'
