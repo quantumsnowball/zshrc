@@ -50,9 +50,9 @@ up() {
     if [ -n "$TERMUX_VERSION" ]; then
         # refresh and relink only if missing or older than 5 days
         if [[ $(find $PREFIX/etc/termux/chosen_mirrors -mmin +7200 2>/dev/null) ]]; then
-            echo "${YELLOW}<<< refreshing and checking asia mirror list >>>${RESET}\n"
-            ln -sfn "$PREFIX/etc/termux/mirrors/asia" "$PREFIX/etc/termux/chosen_mirrors"
-            touch "$PREFIX/etc/termux/mirrors/asia"
+            echo "${YELLOW}<<< refreshing and checking all mirror list >>>${RESET}\n"
+            ln -sfn "$PREFIX/etc/termux/mirrors" "$PREFIX/etc/termux/chosen_mirrors"
+            touch "$PREFIX/etc/termux/mirrors"
             pkg --check-mirror update
         else
             pkg update
