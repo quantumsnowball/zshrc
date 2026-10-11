@@ -4,10 +4,10 @@ ensure niri || return
 # BUG:
 # The auto generated and installed _niri zfunc is located in /usr/share/zsh/site-functions/_niri
 # However this version is buggy, causing the second completion being duplicated
-# According to the officia Niri github issue, ref: 
+# According to the officia Niri github issue, ref:
 # https://github.com/niri-wm/niri/issues/1682
 # This is not a Niri bug, but a `clap_complete` bug, who is responsible for generating the completion
-# The bug remains unfixed as of 2026-03-23, so here comes for a quickfix 
+# The bug remains unfixed as of 2026-03-23, so here comes for a quickfix
 niri._completions_zsh_quickfix() {
     # This target_dir must be prepanded in front of the system fpath
     local target_dir="$HOME/.zfunc"
@@ -43,25 +43,15 @@ niri.refresh-ipc-socket-env() {
     if [[ -n "$socket" ]]; then
         # 1. Fix the current shell
         export NIRI_SOCKET="$socket"
-        
+
         # 2. Fix the tmux server global env vars for newer panes
         if [[ -n "$TMUX" ]]; then
             tmux set-environment -g NIRI_SOCKET "$socket"
         fi
-        
+
         echo "Refreshed NIRI_SOCKET: $NIRI_SOCKET"
     else
         echo "Error: No niri socket found."
         return 1
     fi
 }
-
-() {
-    # namespaces
-    local ns=(niri desktop workstation power sys os)
-
-    # helpers
-    alias ${^ns}.power-on-monitors='niri msg action power-on-monitors'
-    alias ${^ns}.power-off-monitors='niri msg action power-off-monitors'
-}
-
