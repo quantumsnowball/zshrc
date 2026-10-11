@@ -26,3 +26,9 @@ export RESET="\033[0m"       #
 if [[ -d "$HOME/.local/bin" ]] && [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
     export PATH="$HOME/.local/bin:$PATH"
 fi
+
+# niri socket
+if [[ -z "$NIRI_SOCKET" ]]; then
+    sock=$(/bin/ls /run/user/$(id -u)/niri*.sock 2>/dev/null | head -n 1)
+    [[ -S "$sock" ]] && export NIRI_SOCKET="$sock"
+fi
