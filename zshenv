@@ -29,6 +29,6 @@ fi
 
 # niri socket
 if [[ -z "$NIRI_SOCKET" ]]; then
-    sock=$(/bin/ls "/run/user/$(id -u)/niri*" 2>/dev/null | head -n 1)
+    sock=( /run/user/$(id -u)/niri*.sock(N[1]) )
     [[ -S "$sock" ]] && export NIRI_SOCKET="$sock"
 fi
