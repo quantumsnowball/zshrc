@@ -34,3 +34,8 @@ gnirehtet.connect() {
     gnirehtet run
 }
 
+gnirehtet.connect.quest2()  {
+    # quest2 only need a simple connect
+    gnirehtet.connect
+}
+
