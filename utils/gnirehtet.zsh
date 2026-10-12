@@ -1,7 +1,10 @@
 # generic helper on the client side
 gnirehtet.test-connection() {
-    # ping test
+    # ping test tunnel
     ping -c 2 10.0.0.2
+
+    # curl test the host-only sunshine admin web server
+    curl -v -kI https://10.0.2.2:47990
 }
 
 # needs adb
