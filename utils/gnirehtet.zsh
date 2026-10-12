@@ -42,3 +42,10 @@ gnirehtet.connect.quest2()  {
     gnirehtet.connect
 }
 
+gnirehtet.connect.s7() {
+    # run gnirehtet normally
+    gnirehtet.connect
+
+    # TODO: restore the original vpn here
+    # gnirehtet.restore-wireguard-vpn
+}
