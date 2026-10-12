@@ -21,3 +21,16 @@ gnirehtet.device() {
 
     echo "${GREEN}Active connected device: ${dev_list[1]}${RESET}"
 }
+# needs functions
+# needs gnirehtet
+ensure gnirehtet || return
+
+
+gnirehtet.connect() {
+    # guard
+    gnirehtet.device || return 1
+
+    # run
+    gnirehtet run
+}
+
