@@ -34,3 +34,7 @@ niri._completions_zsh_quickfix() {
     fi
 }
 
+niri.list-outputs() {
+    niri msg outputs
+}
+
