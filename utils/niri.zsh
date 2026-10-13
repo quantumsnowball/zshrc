@@ -34,6 +34,10 @@ niri._completions_zsh_quickfix() {
     fi
 }
 
+niri.list-windows() {
+    niri msg windows
+}
+
 niri.list-outputs() {
     niri msg outputs
 }
