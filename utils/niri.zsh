@@ -50,3 +50,12 @@ niri.remove-virtual-output() {
     niri msg remove-virtual-output "$@"
 }
 
+niri.reset-outputs() {
+    # remove all virtual outputs
+    niri msg --json outputs 2>/dev/null |
+    jq -r 'keys[] | select(test("HEADLESS|virtual|AUTO-"; "i"))' |
+    while read -r name; do
+        [[ -n "$name" ]] && niri msg remove-virtual-output "$name"
+    done
+}
+
