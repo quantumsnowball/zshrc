@@ -42,3 +42,11 @@ niri.list-outputs() {
     niri msg outputs
 }
 
+niri.create-virtual-output() {
+    niri msg create-virtual-output "$@"
+}
+
+niri.remove-virtual-output() {
+    niri msg remove-virtual-output "$@"
+}
+
