@@ -76,7 +76,8 @@ ssh.run() {
     # escape single quotes inside the command string to prevent syntax errors
     local escaped_cmd="${cmd//\'/\'\\\'\'}"
 
-    ssh -t "$host" "zsh -ic '$escaped_cmd'"
+    # login, interactive zsh to run the command
+    ssh -t "$host" "zsh -l -i -c '$escaped_cmd'"
 }
 
 () {
