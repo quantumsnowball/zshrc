@@ -15,7 +15,10 @@ tethering.device() {
     echo "${GREEN}Active connected device: ${dev_list[1]}${RESET}"
 }
 
-tethering.connect() {
+tethering.connect-quest2() {
+    # special thanks to this tutorial:
+    # <https://blog.ronbachmann.dev/posts/quest3-usb-ncm-sunshine>
+
     # ensure only one device connected
     tethering.device || return 1
 
@@ -79,4 +82,10 @@ tethering.connect() {
     # safely kill the dhcp server
     sleep 1 &&
     sudo kill $dnsmasq_pid
+}
+
+tethering.connect-s7()  {
+    # TODO:
+    # toggle on the android native tethering button
+    # disable wifi adaptor
 }
