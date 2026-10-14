@@ -1,7 +1,7 @@
 ensure adb || return
 
 
-usb0.device() {
+tethering.device() {
     local dev_list=($(adb devices | grep -w "device"))
 
     if ((${#dev_list} == 0)); then
@@ -15,9 +15,9 @@ usb0.device() {
     echo "${GREEN}Active connected device: ${dev_list[1]}${RESET}"
 }
 
-usb0.connect() {
+tethering.connect() {
     # ensure only one device connected
-    usb0.device || return 1
+    tethering.device || return 1
 
     # enable the usb link layer device
     sleep 1 &&
