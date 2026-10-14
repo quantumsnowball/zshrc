@@ -29,31 +29,54 @@ usb0.connect() {
 
     # extract host new usb interface name
     local host_iface
-    host_iface=$(ip -br link show | awk '$1 ~ /^enp/ || $1 ~ /^usb/ {print $1}' | tail -n 1)
+    host_iface=$(ip -br link show | awk '$1 ~ /^enp0/ || $1 ~ /^usb/ {print $1}' | tail -n 1)
 
     [[ -n "$host_iface" ]] || { echo "failed to detect host usb interface"; return 1; }
     echo "\nDetected host interface: $host_iface"
 
     # ensure ufw allow all incoming network traffics for this interface
+    sleep 1 &&
     sudo ufw allow in on "$host_iface" comment "android usb-ncm"
 
     # assign an ip address to the server side
-    sudo ip addr flush dev "$host_iface"
-    sudo ip addr add 10.77.0.1/24 dev "$host_iface"
-    sudo ip link set "$host_iface" up
-    ip -4 addr show dev "$host_iface"
+    sudo ip addr flush dev "$host_iface" &&
+    sudo ip addr add 10.77.0.1/24 dev "$host_iface" &&
+    sudo ip link set "$host_iface" up &&
+    ip -4 addr show dev "$host_iface" &&
 
-    # assign an ip address to the client side
-    # TODO: the example use dnsmasq to make a dhcp server, but can i simplified it
-    # TODO: can I just request a fixed ip addr of 10.77.0.2 always?
+    # start a dhcp server on the host and let
+    # note: ip addr through rtnetlink gives permissio error, so impossible to set fixed ip here
+    sleep 1 &&
+    sudo dnsmasq \
+        --no-daemon \
+        --log-dhcp \
+        --port=0 \
+        --interface="$host_iface" \
+        --bind-interfaces \
+        --dhcp-authoritative \
+        --dhcp-range=10.77.0.2,10.77.0.2,255.255.255.0,24h \
+        &
+    dnsmasq_pid=$!
+
+    # make the android client request an ip through dhcp
+    sleep 1 &&
+    adb shell cmd ethernet set-ip-configuration usb0 dhcp
 
     # confirm the client ip is acquired successfully
-    adb shell ip -4 addr show dev usb0
+    sleep 1 &&
+    adb shell ip -4 addr show dev usb0 &&
+    sleep 1 &&
     adb shell ip -4 route show dev usb0
 
     # test the usb connection
+    sleep 1 &&
     adb shell ping -c 3 -I usb0 10.77.0.1
 
     # disable the client's wifi
+    sleep 1 &&
     adb shell svc wifi disable
+
+    # safely kill the dhcp server
+    sleep 1 &&
+    sudo kill $dnsmasq_pid
 }
