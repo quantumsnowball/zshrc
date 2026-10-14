@@ -85,7 +85,14 @@ tethering.connect-quest2() {
 }
 
 tethering.connect-s7()  {
-    # TODO:
+    # ensure only one device connected
+    tethering.device || return 1
+
     # toggle on the android native tethering button
-    # disable wifi adaptor
+    sleep 1 &&
+    adb shell svc usb setFunctions rndis
+
+    # disable the client's wifi
+    sleep 1 &&
+    adb shell svc wifi disable
 }
