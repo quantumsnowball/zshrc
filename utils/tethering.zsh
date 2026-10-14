@@ -86,7 +86,8 @@ tethering.connect-quest2() {
         --dhcp-option=3,"$host_ip" \
         &>/dev/null &
     dnsmasq_pid=$!
-    echo "$dnsmasq_pid" > /tmp/tethering_dnsmasq.pid
+    local dnsmasq_pid_path="/tmp/tethering_dnsmasq.pid"
+    echo "$dnsmasq_pid" > "$dnsmasq_pid_path"
     echo "\n${YELLOW}Started temporary dnsmasq DHCP server${RESET}"
 
     # make the android client request an ip through dhcp
@@ -114,6 +115,7 @@ tethering.connect-quest2() {
     echo "${YELLOW}Cleaning up any ad-hoc spawn dnsmasq DHCP process ...${RESET}"
     sleep 1
     sudo kill $dnsmasq_pid &>/dev/null &&
+    rm -f "$dnsmasq_pid_path" &&
     echo "${GREEN}Done clean up any ad-hoc spawn dnsmasq DHCP process${RESET}"
 
     #
@@ -182,10 +184,11 @@ tethering.disconnect() {
     echo "${RED}Failed to reset USB functions on android side${RESET}"
 
     # clean up any ad-hoc spawn dnsmasq dhcp leftover
+    local dnsmasq_pid_path="/tmp/tethering_dnsmasq.pid"
     sleep 1
-    if [[ -f /tmp/tethering_dnsmasq.pid ]]; then
-        sudo kill "$(cat /tmp/tethering_dnsmasq.pid)" 2>/dev/null
-        rm -f /tmp/usb0_dnsmasq.pid
+    if [[ -f "$dnsmasq_pid_path" ]]; then
+        sudo kill "$(cat "$dnsmasq_pid_path")" 2>/dev/null
+        rm -f "$dnsmasq_pid_path"
         echo "${GREEN}Done clean up any ad-hoc spawn dnsmasq DHCP process${RESET}"
     fi
 }
