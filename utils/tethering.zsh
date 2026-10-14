@@ -60,6 +60,7 @@ tethering.connect-quest2() {
         --dhcp-range=10.77.0.2,10.77.0.2,255.255.255.0,24h \
         &
     dnsmasq_pid=$!
+    echo "$dnsmasq_pid" > /tmp/tethering_dnsmasq.pid
 
     # make the android client request an ip through dhcp
     sleep 1 &&
@@ -95,4 +96,23 @@ tethering.connect-s7()  {
     # disable the client's wifi
     sleep 1 &&
     adb shell svc wifi disable
+}
+
+tethering.disconnect() {
+    # ensure only one device connected
+    tethering.device || return 1
+
+    # toggle back on client's wifi
+    sleep 1 &&
+    adb shell svc wifi enable
+
+    # reset usb functions on android side
+    adb shell svc usb setFunctions mtp 2>/dev/null
+
+    # clean up any ad-hoc spawn dnsmasq dhcp leftover
+    sleep 1
+    if [[ -f /tmp/tethering_dnsmasq.pid ]]; then
+        sudo kill "$(cat /tmp/tethering_dnsmasq.pid)" 2>/dev/null
+        rm -f /tmp/usb0_dnsmasq.pid
+    fi
 }
