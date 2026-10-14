@@ -66,7 +66,7 @@ tethering.connect-quest2() {
     # start a dhcp server on the host and let
     # note: ip addr through rtnetlink gives permissio error, so impossible to set fixed ip here
     sleep 1
-    sudo dnsmasq \
+    (sudo dnsmasq \
         --no-daemon \
         --log-dhcp \
         --port=0 \
@@ -74,7 +74,8 @@ tethering.connect-quest2() {
         --bind-interfaces \
         --dhcp-authoritative \
         --dhcp-range=10.77.0.2,10.77.0.2,255.255.255.0,24h \
-        &
+        &>/dev/null
+    ) &
     dnsmasq_pid=$!
     echo "$dnsmasq_pid" > /tmp/tethering_dnsmasq.pid
     echo "\n${YELLOW}Started temporary dnsmasq DHCP server${RESET}"
@@ -99,7 +100,7 @@ tethering.connect-quest2() {
 
     # safely kill the dhcp server
     sleep 1
-    sudo kill $dnsmasq_pid &&
+    sudo kill $dnsmasq_pid &>/dev/null &&
     echo "${GREEN}Done clean up any ad-hoc spawn dnsmasq DHCP process${RESET}"
 
     #
