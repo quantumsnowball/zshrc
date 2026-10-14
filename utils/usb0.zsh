@@ -38,10 +38,10 @@ usb0.connect() {
     sudo ufw allow in on "$host_iface" comment "android usb-ncm"
 
     # assign an ip address to the server side
-    sudo ip addr flush dev enp60s0u1i3
-    sudo ip addr add 10.77.0.1/24 dev enp60s0u1i3
-    sudo ip link set enp60s0u1i3 up
-    ip -4 addr show dev enp60s0u1i3
+    sudo ip addr flush dev "$host_iface"
+    sudo ip addr add 10.77.0.1/24 dev "$host_iface"
+    sudo ip link set "$host_iface" up
+    ip -4 addr show dev "$host_iface"
 
     # assign an ip address to the client side
     # TODO: the example use dnsmasq to make a dhcp server, but can i simplified it
