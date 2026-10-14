@@ -35,7 +35,7 @@ usb0.connect() {
     echo "\nDetected host interface: $host_iface"
 
     # ensure ufw allow all incoming network traffics for this interface
-    # TODO
+    sudo ufw allow in on "$host_iface" comment "android usb-ncm"
 
     # assign an ip address to the server side
     sudo ip addr flush dev enp60s0u1i3
