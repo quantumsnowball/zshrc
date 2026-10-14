@@ -28,7 +28,11 @@ usb0.connect() {
     echo "\nClient link layer status:" && adb shell ip -br link
 
     # extract host new usb interface name
-    # TODO
+    local host_iface
+    host_iface=$(ip -br link show | awk '$1 ~ /^enp/ || $1 ~ /^usb/ {print $1}' | tail -n 1)
+
+    [[ -n "$host_iface" ]] || { echo "failed to detect host usb interface"; return 1; }
+    echo "\nDetected host interface: $host_iface"
 
     # ensure ufw allow all incoming network traffics for this interface
     # TODO
