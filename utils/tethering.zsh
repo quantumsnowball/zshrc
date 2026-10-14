@@ -30,6 +30,9 @@ tethering.connect-quest2() {
     # special thanks to this tutorial:
     # <https://blog.ronbachmann.dev/posts/quest3-usb-ncm-sunshine>
 
+    # get root permission first
+    sudo -v || { echo "${RED}Failed to get root permission${RESET}"; return 1; }
+
     # ensure only one device connected
     tethering.device || return 1
 
@@ -118,6 +121,9 @@ tethering.connect-quest2() {
 tethering.connect-s7()  {
     # ensure only one device connected
     tethering.device || return 1
+
+    # get root permission first
+    sudo -v || { echo "${RED}Failed to get root permission${RESET}"; return 1; }
 
     # toggle on the android native tethering button
     echo "${YELLOW}Turning on Android native tethering ...${RESET}"
