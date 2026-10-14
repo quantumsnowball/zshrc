@@ -62,7 +62,8 @@ tethering.connect-quest2() {
 
     # assign an ip address to the server side
     echo "${YELLOW}Setting up host IP address ...${RESET}"
-    local host_addr="10.77.0.1/24"
+    local host_ip="10.77.0.1"
+    local host_addr="$host_ip/24"
     sudo ip addr flush dev "$host_iface" &&
     sudo ip addr add "$host_addr" dev "$host_iface" &&
     sudo ip link set "$host_iface" up &&
@@ -73,6 +74,7 @@ tethering.connect-quest2() {
     # start a dhcp server on the host and let
     # note: ip addr through rtnetlink gives permissio error, so impossible to set fixed ip here
     sleep 1
+    local client_ip="10.77.0.2"
     sudo dnsmasq \
         --no-daemon \
         --log-dhcp \
@@ -80,8 +82,8 @@ tethering.connect-quest2() {
         --interface="$host_iface" \
         --bind-interfaces \
         --dhcp-authoritative \
-        --dhcp-range=10.77.0.2,10.77.0.2,255.255.255.0,24h \
-        --dhcp-option=3,10.77.0.1 \
+        --dhcp-range="$client_ip","$client_ip",255.255.255.0,24h \
+        --dhcp-option=3,"$host_ip" \
         &>/dev/null &
     dnsmasq_pid=$!
     echo "$dnsmasq_pid" > /tmp/tethering_dnsmasq.pid
@@ -97,7 +99,7 @@ tethering.connect-quest2() {
     # test the usb connection
     echo "${YELLOW}Testing network connectivity from client side ...${RESET}"
     sleep 1
-    adb shell ping -c 3 -I usb0 10.77.0.1 &&
+    adb shell ping -c 3 -I usb0 "$host_ip" &&
     echo "${GREEN}Client passed the ping test${RESET}" ||
     echo "${RED}Client failed the ping test${RESET}"
 
