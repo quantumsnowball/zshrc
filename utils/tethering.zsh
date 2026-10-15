@@ -104,7 +104,7 @@ tethering.connect-quest2() {
     # test the usb connection
     sleep 10
     echo "${YELLOW}Testing network connectivity from client side ...${RESET}"
-    adb shell ping -c 3 -I usb0 "$host_ip" &&
+    adb shell ping -c 5 -I usb0 "$host_ip" &&
     echo "${GREEN}Client passed the ping test${RESET}" ||
     echo "${RED}Client failed the ping test${RESET}"
 
