@@ -118,6 +118,14 @@ tethering.connect-quest2() {
     rm -f "$dnsmasq_pid_path" &&
     echo "${GREEN}Done clean up any ad-hoc spawn dnsmasq DHCP process${RESET}"
 
+    # make sure adb reverse is off so only tethering is active
+    echo "${YELLOW}Removing all adb reverse channels and killing the adb server ...${RESET}"
+    sleep 1
+    adb reverse --remove-all &&
+    adb kill-server &&
+    echo "${GREEN}Removed all adb reverse channels and killed adb server${RESET}" ||
+    echo "${RED}Failed to remove all adb reverse channels and kill adb server${RESET}"
+
     #
     sleep 1
     echo "${GREEN}Your USB network is ready!${RESET}"
@@ -160,6 +168,14 @@ tethering.connect-s7()  {
     adb shell svc wifi disable &&
     echo "${GREEN}Disabled client's WiFi adaptor${RESET}" ||
     echo "${RED}Failed to disabled client's WiFi adaptor${RESET}"
+
+    # make sure adb reverse is off so only tethering is active
+    echo "${YELLOW}Removing all adb reverse channels and killing the adb server ...${RESET}"
+    sleep 1
+    adb reverse --remove-all &&
+    adb kill-server &&
+    echo "${GREEN}Removed all adb reverse channels and killed adb server${RESET}" ||
+    echo "${RED}Failed to remove all adb reverse channels and kill adb server${RESET}"
 
     #
     sleep 1
