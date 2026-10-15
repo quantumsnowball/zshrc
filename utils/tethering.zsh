@@ -99,7 +99,7 @@ tethering.connect-quest2() {
     echo "${RED}Failed to make Android client request an IP address via DHCP${RESET}"
 
     # test the usb connection
-    sleep 1
+    sleep 5
     echo "${YELLOW}Testing network connectivity from client side ...${RESET}"
     adb shell ping -c 3 -I usb0 "$host_ip" &&
     echo "${GREEN}Client passed the ping test${RESET}" ||
