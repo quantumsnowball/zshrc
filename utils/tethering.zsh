@@ -100,13 +100,22 @@ tethering.connect-quest2() {
     adb shell cmd ethernet set-ip-configuration usb0 dhcp &&
     echo "${GREEN}Made Android client request an IP address via DHCP${RESET}" ||
     echo "${RED}Failed to make Android client request an IP address via DHCP${RESET}"
-
-    # test the usb connection
     sleep 10
+
+    # test the usb connection from client side
+    sleep 1
     echo "${YELLOW}Testing network connectivity from client side ...${RESET}"
     adb shell ping -c 5 -I usb0 "$host_ip" &&
     echo "${GREEN}Client passed the ping test${RESET}" ||
     echo "${RED}Client failed the ping test${RESET}"
+
+    # test the usb connection from host side
+    sleep 1
+    echo "${YELLOW}Testing network connectivity from host side ...${RESET}"
+    local client_ip=$(awk '{print $3}' "$dnsmasq_leasefile_path" | tail -n 1)
+    ping -c 5 -I "$host_iface" "$client_ip" &&
+    echo "${GREEN}Host passed the ping test${RESET}" ||
+    echo "${RED}Host failed the ping test${RESET}"
 
     # disable the client's WiFi
     sleep 1
