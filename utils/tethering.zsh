@@ -84,7 +84,7 @@ tethering.connect-quest2() {
         --dhcp-authoritative \
         --dhcp-range="$client_ip","$client_ip",255.255.255.0,24h \
         --dhcp-option=3,"$host_ip" \
-        &>/dev/null &
+        &
     dnsmasq_pid=$!
     local dnsmasq_pid_path="/tmp/tethering_dnsmasq.pid"
     echo "$dnsmasq_pid" > "$dnsmasq_pid_path"
