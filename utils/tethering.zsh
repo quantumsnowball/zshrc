@@ -134,11 +134,10 @@ tethering.connect-quest2() {
 
     # make sure adb reverse is off so only tethering is active
     sleep 1
-    echo "${YELLOW}Removing all adb reverse channels and killing the adb server ...${RESET}"
+    echo "${YELLOW}Removing all adb reverse channels ...${RESET}"
     adb reverse --remove-all &&
-    adb kill-server &&
-    echo "${GREEN}Removed all adb reverse channels and killed adb server${RESET}" ||
-    echo "${RED}Failed to remove all adb reverse channels and kill adb server${RESET}"
+    echo "${GREEN}Removed all adb reverse channels${RESET}" ||
+    echo "${RED}Failed to remove all adb reverse channels${RESET}"
 
     #
     sleep 1
