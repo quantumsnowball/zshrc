@@ -76,10 +76,13 @@ tethering.connect-quest2() {
     # start a dhcp server on the host and let
     # note: ip addr through rtnetlink gives permissio error, so impossible to set fixed ip here
     sleep 1
+    local dnsmasq_leasefile_path="/tmp/tethering_dnsmasq.leases"
+    sudo truncate -s 0 "$dnsmasq_leasefile_path"
     sudo dnsmasq \
         --no-daemon \
         --log-dhcp \
         --port=0 \
+        --dhcp-leasefile="$dnsmasq_leasefile_path" \
         --interface="$host_iface" \
         --bind-interfaces \
         --dhcp-authoritative \
@@ -117,6 +120,7 @@ tethering.connect-quest2() {
     echo "${YELLOW}Cleaning up any ad-hoc spawn dnsmasq DHCP process ...${RESET}"
     sudo kill $dnsmasq_pid &>/dev/null &&
     rm -f "$dnsmasq_pid_path" &&
+    sudo rm "$dnsmasq_leasefile_path"
     echo "${GREEN}Done clean up any ad-hoc spawn dnsmasq DHCP process${RESET}"
 
     # make sure adb reverse is off so only tethering is active
