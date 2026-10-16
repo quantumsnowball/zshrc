@@ -5,13 +5,13 @@ ensure eza || return
 alias _eza_base='eza --classify=always --icons=always'
 
 # ls basic
-alias ls=_eza_base
-alias  l=_eza_base
+# alias ls=_eza_base
+alias l=_eza_base
 
 # ls all
 alias la='_eza_base -a'
 
-# ls last modified 
+# ls last modified
 alias lt='_eza_base -a -s time --reverse'
 
 # ls long
@@ -25,7 +25,7 @@ alias lll='_eza_base -a -l -h --grid'
     # ls all
     alias ${^ns}.list-all='la'
 
-    # ls last modified 
+    # ls last modified
     alias ${^ns}.list-last-modified='lt'
 
     # ls long
