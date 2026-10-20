@@ -6,10 +6,11 @@ from rich import print
 
 def set_client_wifi(*, enable: bool) -> None:
     result = sh.run(['adb', 'shell', 'svc', 'wifi', 'enable' if enable else 'disable'])
+    state = 'on' if enable else 'off'
     if result.returncode == 0:
-        print("[green]Toggled back on client's WiFi[/]")
+        print(f"[green]Turned {state} client's WiFi[/]")
     else:
-        print("[red]Failed to toggle back on client's WiFi[/]")
+        print(f"[red]Failed to turn {state} client's WiFi[/]")
 
 
 def enable_android_native_tethering(*, check_delay: int = 1) -> bool:
