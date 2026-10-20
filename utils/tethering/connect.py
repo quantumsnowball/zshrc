@@ -62,7 +62,7 @@ def s7() -> None:
 
     # ensure ufw allow all incoming network traffics for this interface
     sleep(1)
-    firewall_allow_interface(host_iface)
+    firewall_allow_interface(host_iface, comment='tethering-s7')
 
     # disable the client's WiFi
     sleep(1)
