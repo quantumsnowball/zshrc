@@ -7,6 +7,7 @@ from firewall import firewall_allow_interface
 from network import (
     detect_host_interface,
     enable_android_native_tethering,
+    enable_usb0_link_layer_device,
     remove_all_adb_reverse_channels,
     set_client_wifi,
 )
@@ -27,6 +28,11 @@ def quest2() -> None:
 
     # ensure only one device connected
     if not device():
+        return
+
+    # enable the usb link layer device
+    sleep(1)
+    if not enable_usb0_link_layer_device():
         return
 
 

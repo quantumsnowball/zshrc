@@ -13,6 +13,19 @@ def set_client_wifi(*, enable: bool) -> None:
         print(f"[red]Failed to turn {state} client's WiFi[/]")
 
 
+def enable_usb0_link_layer_device(*, check_delay: int = 3) -> bool:
+    print('[yellow]Setting up usb0 link layer device ...[/]')
+    sh.run(['adb', 'shell', 'svc', 'usb', 'setFunctions', 'ncm'])
+    sleep(check_delay)
+    result = sh.run(['adb', 'shell', 'ip', '-br', 'link'], capture_output=True, text=True)
+    if 'usb0' in result.stdout:
+        print('[green]Enabled the usb0 link layer device[/]')
+        return True
+    else:
+        print('[red]Failed to enable the usb0 link layer device[/]')
+        return False
+
+
 def enable_android_native_tethering(*, check_delay: int = 1) -> bool:
     print('[yellow]Turning on Android native tethering ...[/]')
     sh.run(['adb', 'shell', 'svc', 'usb', 'setFunctions', 'rndis'])
