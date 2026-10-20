@@ -13,6 +13,7 @@ from network import (
     set_client_wifi,
     setup_host_ip,
 )
+from ping import ping_from_client_to
 from rich import print
 
 from utils import touch_sudo
@@ -61,6 +62,10 @@ def quest2() -> None:
     # make the android client request an ip through dhcp
     sleep(1)
     setup_client_ip()
+
+    # test the usb connection from client side
+    sleep(1)
+    ping_from_client_to(host_ip)
 
 
 def s7() -> None:
