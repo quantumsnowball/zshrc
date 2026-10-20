@@ -3,9 +3,8 @@ from pathlib import Path
 from time import sleep
 
 from device import main as device
+from network import set_client_wifi
 from rich import print
-
-from utils import set_client_wifi
 
 DNSMASQ_PID_PATH = Path('/tmp/tethering_dnsmasq.pid')
 
