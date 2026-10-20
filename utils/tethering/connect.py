@@ -40,6 +40,10 @@ def quest2() -> None:
     if not (host_iface := detect_host_interface(name_starts_with='enp0')):
         return
 
+    # ensure ufw allow all incoming network traffics for this interface
+    sleep(1)
+    firewall_allow_interface(host_iface, comment='tethering-quest2')
+
 
 def s7() -> None:
     # get root permission first
