@@ -52,6 +52,10 @@ def s7() -> None:
     sleep(1)
     remove_all_adb_reverse_channels()
 
+    #
+    sleep(1)
+    print('[green]Your USB network is ready![/]')
+
 
 @app.command()
 def main(
