@@ -71,6 +71,10 @@ def quest2() -> None:
     sleep(1)
     ping_from_host(host_iface)
 
+    # disable the client's WiFi
+    sleep(1)
+    set_client_wifi(enable=False)
+
 
 def s7() -> None:
     # get root permission first
