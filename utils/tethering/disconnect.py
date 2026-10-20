@@ -3,20 +3,11 @@ from pathlib import Path
 from time import sleep
 
 from device import main as device
+from dhcp import cleanup_dnsmasq_dhcp_server
 from network import set_client_wifi
 from rich import print
 
 DNSMASQ_PID_PATH = Path('/tmp/tethering_dnsmasq.pid')
-
-
-def cleanup_dnsmasq_dhcp_server() -> None:
-    path = DNSMASQ_PID_PATH
-    if path.is_file():
-        pid = path.read_text().strip()
-        if pid:
-            sh.run(['sudo', 'kill', pid], stdout=sh.DEVNULL, stderr=sh.DEVNULL)
-        path.unlink()
-        print('[green]Done clean up any ad-hoc spawn dnsmasq DHCP process[/]')
 
 
 def main() -> None:

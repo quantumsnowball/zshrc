@@ -60,3 +60,14 @@ def setup_client_ip(*, iface: str = 'usb0', wait: int = 10) -> bool:
         print('[red]Failed to make Android client request an IP address via DHCP[/]')
         sleep(wait)
         return False
+
+
+def cleanup_dnsmasq_dhcp_server() -> None:
+    path = DNSMASQ_PID_PATH
+    if path.is_file():
+        print('[yellow]Cleaning up any ad-hoc spawn dnsmasq DHCP process ...[/]')
+        pid = path.read_text().strip()
+        if pid:
+            sh.run(['sudo', 'kill', pid], stdout=sh.DEVNULL, stderr=sh.DEVNULL)
+        path.unlink()
+        print('[green]Done clean up any ad-hoc spawn dnsmasq DHCP process[/]')
