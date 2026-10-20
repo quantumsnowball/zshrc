@@ -20,7 +20,14 @@ app = typer.Typer(help='tethering connect')
 def quest2() -> None:
     # special thanks to this tutorial:
     # <https://blog.ronbachmann.dev/posts/quest3-usb-ncm-sunshine>
-    pass
+
+    # get root permission first
+    if not touch_sudo():
+        return
+
+    # ensure only one device connected
+    if not device():
+        return
 
 
 def s7() -> None:
