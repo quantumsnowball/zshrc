@@ -79,6 +79,10 @@ def quest2() -> None:
     sleep(1)
     cleanup_dnsmasq_dhcp_server()
 
+    # make sure adb reverse is off so only tethering is active
+    sleep(1)
+    remove_all_adb_reverse_channels()
+
 
 def s7() -> None:
     # get root permission first
