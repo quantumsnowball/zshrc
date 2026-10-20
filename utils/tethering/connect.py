@@ -26,11 +26,13 @@ def s7() -> None:
 
     # toggle on the android native tethering button
     sleep(1)
-    enable_android_native_tethering()
+    if not enable_android_native_tethering():
+        return
 
     # extract host new usb interface name
     sleep(1)
-    host_iface = detect_host_interface(name_starts_with='enp0')
+    if not (host_iface := detect_host_interface(name_starts_with='enp0')):
+        return
 
 
 @app.command()
