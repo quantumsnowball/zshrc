@@ -3,7 +3,7 @@ from typing import Annotated, Literal
 
 import typer
 from device import main as device
-from network import enable_android_native_tethering
+from network import detect_host_interface, enable_android_native_tethering
 from rich import print
 
 from utils import touch_sudo
@@ -27,6 +27,10 @@ def s7() -> None:
     # toggle on the android native tethering button
     sleep(1)
     enable_android_native_tethering()
+
+    # extract host new usb interface name
+    sleep(1)
+    host_iface = detect_host_interface(name_starts_with='enp0')
 
 
 @app.command()
