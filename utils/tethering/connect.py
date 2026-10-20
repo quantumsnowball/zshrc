@@ -3,6 +3,7 @@ from typing import Annotated, Literal
 
 import typer
 from device import main as device
+from firewall import firewall_allow_interface
 from network import detect_host_interface, enable_android_native_tethering
 from rich import print
 
@@ -33,6 +34,10 @@ def s7() -> None:
     sleep(1)
     if not (host_iface := detect_host_interface(name_starts_with='enp0')):
         return
+
+    # ensure ufw allow all incoming network traffics for this interface
+    sleep(1)
+    firewall_allow_interface(host_iface)
 
 
 @app.command()
