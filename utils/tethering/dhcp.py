@@ -2,9 +2,9 @@ import subprocess as sh
 from pathlib import Path
 from time import sleep
 
-from disconnect import DNSMASQ_PID_PATH
 from rich import print
 
+DNSMASQ_PID_PATH = Path('/tmp/tethering_dnsmasq.pid')
 DNSMASQ_LEASEFILE_PATH = Path('/tmp/tethering_dnsmasq.leases')
 
 

@@ -1,13 +1,10 @@
 import subprocess as sh
-from pathlib import Path
 from time import sleep
 
 from device import main as device
 from dhcp import cleanup_dnsmasq_dhcp_server
 from network import set_client_wifi
 from rich import print
-
-DNSMASQ_PID_PATH = Path('/tmp/tethering_dnsmasq.pid')
 
 
 def main() -> None:
