@@ -9,3 +9,7 @@ def touch_sudo() -> bool:
         print('[red]Failed to get root permission[/]')
         return False
     return True
+
+
+def usb_connection_ready() -> None:
+    print('[green]Your USB network is ready![/]')

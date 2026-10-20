@@ -14,9 +14,8 @@ from network import (
     setup_host_ip,
 )
 from ping import ping_from_client_to, ping_from_host
-from rich import print
 
-from utils import touch_sudo
+from utils import touch_sudo, usb_connection_ready
 
 app = typer.Typer(help='tethering connect')
 
@@ -83,6 +82,10 @@ def quest2() -> None:
     sleep(1)
     remove_all_adb_reverse_channels()
 
+    # ready
+    sleep(1)
+    usb_connection_ready()
+
 
 def s7() -> None:
     # get root permission first
@@ -115,9 +118,9 @@ def s7() -> None:
     sleep(1)
     remove_all_adb_reverse_channels()
 
-    #
+    # ready
     sleep(1)
-    print('[green]Your USB network is ready![/]')
+    usb_connection_ready()
 
 
 @app.command()
