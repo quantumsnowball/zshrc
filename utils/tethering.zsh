@@ -56,7 +56,7 @@ tethering.connect-quest2() {
     # ensure ufw allow all incoming network traffics for this interface
     sleep 1
     echo "${YELLOW}Setting up firewall rules ...${RESET}"
-    sudo ufw allow in on "$host_iface" comment "android usb-ncm" &&
+    sudo ufw allow in on "$host_iface" comment "tethering-quest2" &&
     echo "${GREEN}Allowed $host_iface in firewall rules${RESET}" ||
     echo "${RED}Failed to allowed $host_iface in firewall rules${RESET}"
 
@@ -171,7 +171,7 @@ tethering.connect-s7()  {
     # ensure ufw allow all incoming network traffics for this interface
     sleep 1
     echo "${YELLOW}Setting up firewall rules ...${RESET}"
-    sudo ufw allow in on "$host_iface" comment "android usb-ncm" &&
+    sudo ufw allow in on "$host_iface" comment "tethering-s7" &&
     echo "${GREEN}Allowed $host_iface in firewall rules${RESET}" ||
     echo "${RED}Failed to allowed $host_iface in firewall rules${RESET}"
 
