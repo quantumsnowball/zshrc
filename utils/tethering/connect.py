@@ -3,6 +3,7 @@ from typing import Annotated, Literal
 
 import typer
 from device import main as device
+from dhcp import start_dnsmasq_server
 from firewall import firewall_allow_interface
 from network import (
     detect_host_interface,
@@ -48,6 +49,10 @@ def quest2() -> None:
     # assign an ip address to the server side
     sleep(1)
     setup_host_ip(host_iface)
+
+    # start a dhcp server on the host and let
+    sleep(1)
+    start_dnsmasq_server(host_iface)
 
 
 def s7() -> None:
