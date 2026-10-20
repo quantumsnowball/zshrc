@@ -13,7 +13,7 @@ from network import (
     set_client_wifi,
     setup_host_ip,
 )
-from ping import ping_from_client_to
+from ping import ping_from_client_to, ping_from_host
 from rich import print
 
 from utils import touch_sudo
@@ -66,6 +66,10 @@ def quest2() -> None:
     # test the usb connection from client side
     sleep(1)
     ping_from_client_to(host_ip)
+
+    # test the usb connection from host side
+    sleep(1)
+    ping_from_host(host_iface)
 
 
 def s7() -> None:
