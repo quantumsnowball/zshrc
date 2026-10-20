@@ -18,7 +18,9 @@ app = typer.Typer(help='tethering connect')
 
 
 def quest2() -> None:
-    print('[green]connect quest2[/]')
+    # special thanks to this tutorial:
+    # <https://blog.ronbachmann.dev/posts/quest3-usb-ncm-sunshine>
+    pass
 
 
 def s7() -> None:
