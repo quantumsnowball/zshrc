@@ -1,4 +1,5 @@
 import subprocess as sh
+import threading
 from pathlib import Path
 from time import sleep
 
@@ -39,7 +40,13 @@ def start_dnsmasq_server(
 
     try:
         # Popen runs the process asynchronously in the background
-        process = sh.Popen(cmd)
+        process = sh.Popen(cmd, stdout=sh.PIPE, stderr=sh.STDOUT, text=True, bufsize=1)
+
+        def stream_logs() -> None:
+            if process.stdout:
+                for line in process.stdout:
+                    print(f'[dim cyan]{line.strip()}[/]')
+        threading.Thread(target=stream_logs, daemon=True).start()
         DNSMASQ_PID_PATH.write_text(str(process.pid))
         print(f'\n[green]Started temporary dnsmasq DHCP server (PID: {process.pid})[/]')
         return True
