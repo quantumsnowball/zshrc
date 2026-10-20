@@ -46,13 +46,17 @@ def quest2() -> None:
     sleep(1)
     firewall_allow_interface(host_iface, comment='tethering-quest2')
 
+    # network prefix
+    network_prefix = '10.77.0'
+    host_ip = f'{network_prefix}.1'
+
     # assign an ip address to the server side
     sleep(1)
-    setup_host_ip(host_iface)
+    setup_host_ip(host_iface, network_prefix)
 
     # start a dhcp server on the host and let
     sleep(1)
-    start_dnsmasq_server(host_iface)
+    start_dnsmasq_server(host_iface, network_prefix)
 
     # make the android client request an ip through dhcp
     sleep(1)

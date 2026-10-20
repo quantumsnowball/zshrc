@@ -58,7 +58,7 @@ def detect_host_interface(*, name_starts_with: str) -> str | None:
         return None
 
 
-def setup_host_ip(host_iface: str, *, network_prefix: str = '10.77.0') -> bool:
+def setup_host_ip(host_iface: str, network_prefix: str = '10.77.0') -> bool:
     print('[yellow]Setting up host IP address ...[/]')
     host_ip = f'{network_prefix}.1'
     host_addr = f'{host_ip}/24'

@@ -10,8 +10,8 @@ DNSMASQ_LEASEFILE_PATH = Path('/tmp/tethering_dnsmasq.leases')
 
 def start_dnsmasq_server(
     host_iface: str,
-    *,
     network_prefix: str = '10.77.0',
+    *,
     leasetime: str = '24h',
 ) -> bool:
     # note: ip addr through rtnetlink gives permissio error, so impossible to set fixed ip here
