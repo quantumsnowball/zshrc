@@ -3,6 +3,14 @@ import subprocess as sh
 from rich import print
 
 
+def touch_sudo() -> bool:
+    res = sh.run(['sudo', '-v'])
+    if res.returncode != 0:
+        print('[red]Failed to get root permission[/]')
+        return False
+    return True
+
+
 def set_client_wifi(*, enable: bool) -> None:
     result = sh.run(['adb', 'shell', 'svc', 'wifi', 'enable' if enable else 'disable'])
     if result.returncode == 0:
