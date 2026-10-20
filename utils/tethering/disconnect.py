@@ -1,4 +1,4 @@
-import subprocess
+import subprocess as sh
 from pathlib import Path
 from time import sleep
 
@@ -19,8 +19,8 @@ def main() -> None:
 
     # reset usb functions on android side
     sleep(1)
-    subprocess.run(['adb', 'shell', 'svc', 'usb', 'setFunctions', 'mtp'])
-    link_res = subprocess.run(
+    sh.run(['adb', 'shell', 'svc', 'usb', 'setFunctions', 'mtp'])
+    link_res = sh.run(
         ['adb', 'shell', 'ip', '-br', 'link'], capture_output=True, text=True
     )
     link_output = link_res.stdout
@@ -36,7 +36,7 @@ def main() -> None:
     if dnsmasq_pid_path.is_file():
         pid = dnsmasq_pid_path.read_text().strip()
         if pid:
-            subprocess.run(['sudo', 'kill', pid], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            sh.run(['sudo', 'kill', pid], stdout=sh.DEVNULL, stderr=sh.DEVNULL)
         dnsmasq_pid_path.unlink()
         print('[green]Done clean up any ad-hoc spawn dnsmasq DHCP process[/]')
 
