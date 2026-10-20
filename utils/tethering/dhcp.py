@@ -1,5 +1,6 @@
 import subprocess as sh
 from pathlib import Path
+from time import sleep
 
 from disconnect import DNSMASQ_PID_PATH
 from rich import print
@@ -44,4 +45,18 @@ def start_dnsmasq_server(
         return True
     except Exception as e:
         print(f'[red]Failed to start dnsmasq DHCP server: {e}[/]')
+        return False
+
+
+def setup_client_ip(*, iface: str = 'usb0', wait: int = 10) -> bool:
+    print('[yellow]Setting up client IP address ...[/]')
+
+    result = sh.run(['adb', 'shell', 'cmd', 'ethernet', 'set-ip-configuration', iface, 'dhcp'])
+    if result.returncode == 0:
+        print('[green]Made Android client request an IP address via DHCP[/]')
+        sleep(wait)
+        return True
+    else:
+        print('[red]Failed to make Android client request an IP address via DHCP[/]')
+        sleep(wait)
         return False
