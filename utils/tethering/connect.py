@@ -7,6 +7,7 @@ from firewall import firewall_allow_interface
 from network import (
     detect_host_interface,
     enable_android_native_tethering,
+    remove_all_adb_reverse_channels,
     set_client_wifi,
 )
 from rich import print
@@ -46,6 +47,10 @@ def s7() -> None:
     # disable the client's WiFi
     sleep(1)
     set_client_wifi(enable=False)
+
+    # make sure adb reverse is off so only tethering is active
+    sleep(1)
+    remove_all_adb_reverse_channels()
 
 
 @app.command()
