@@ -2,6 +2,9 @@ ensure adb || return
 
 
 tethering.device() {
+    uv run --no-active "$XDG_CONFIG_HOME/zshrc/utils/tethering/device.py" "$@"
+}
+tethering.device_() {
     adb kill-server
 
     local dev_list=($(adb devices | grep -w "device"))
@@ -38,7 +41,7 @@ tethering.connect-quest2() {
     sudo -v || { echo "${RED}Failed to get root permission${RESET}"; return 1; }
 
     # ensure only one device connected
-    tethering.device || return 1
+    tethering.device_ || return 1
 
     # enable the usb link layer device
     sleep 1
@@ -153,7 +156,7 @@ tethering.connect-s7()  {
     sudo -v || { echo "${RED}Failed to get root permission${RESET}"; return 1; }
 
     # ensure only one device connected
-    tethering.device || return 1
+    tethering.device_ || return 1
 
     # toggle on the android native tethering button
     sleep 1
@@ -205,7 +208,7 @@ tethering.disconnect() {
 
 tethering.disconnect_() {
     # ensure only one device connected
-    tethering.device || return 1
+    tethering.device_ || return 1
 
     # toggle back on client's WiFi
     sleep 1
