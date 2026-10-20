@@ -58,6 +58,25 @@ def detect_host_interface(*, name_starts_with: str) -> str | None:
         return None
 
 
+def setup_host_ip(host_iface: str, *, network_prefix: str = '10.77.0') -> bool:
+    print('[yellow]Setting up host IP address ...[/]')
+    host_ip = f'{network_prefix}.1'
+    host_addr = f'{host_ip}/24'
+
+    # Flush, add address, and bring interface up
+    flush_result = sh.run(['sudo', 'ip', 'addr', 'flush', 'dev', host_iface])
+    add_result = sh.run(['sudo', 'ip', 'addr', 'add', host_addr, 'dev', host_iface])
+    up_result = sh.run(['sudo', 'ip', 'link', 'set', host_iface, 'up'])
+
+    if flush_result.returncode == 0 and add_result.returncode == 0 and up_result.returncode == 0:
+        print(f'[green]Added IP address {host_addr} to interface {host_iface}[/]')
+        sh.run(['ip', '-4', 'addr', 'show', 'dev', host_iface])
+        return True
+    else:
+        print(f'[red]Failed to add IP address {host_addr} to interface {host_iface}[/]')
+        return False
+
+
 def remove_all_adb_reverse_channels() -> None:
     print('[yellow]Removing all adb reverse channels ...[/]')
     result = sh.run(['adb', 'reverse', '--remove-all'])

@@ -10,6 +10,7 @@ from network import (
     enable_usb0_link_layer_device,
     remove_all_adb_reverse_channels,
     set_client_wifi,
+    setup_host_ip,
 )
 from rich import print
 
@@ -43,6 +44,10 @@ def quest2() -> None:
     # ensure ufw allow all incoming network traffics for this interface
     sleep(1)
     firewall_allow_interface(host_iface, comment='tethering-quest2')
+
+    # assign an ip address to the server side
+    sleep(1)
+    setup_host_ip(host_iface)
 
 
 def s7() -> None:
