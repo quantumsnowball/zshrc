@@ -35,6 +35,11 @@ def quest2() -> None:
     if not enable_usb0_link_layer_device():
         return
 
+    # extract host new usb interface name
+    sleep(1)
+    if not (host_iface := detect_host_interface(name_starts_with='enp0')):
+        return
+
 
 def s7() -> None:
     # get root permission first
