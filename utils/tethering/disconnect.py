@@ -7,6 +7,18 @@ from rich import print
 
 from utils import set_client_wifi
 
+DNSMASQ_PID_PATH = Path('/tmp/tethering_dnsmasq.pid')
+
+
+def cleanup_dnsmasq_dhcp_server() -> None:
+    path = DNSMASQ_PID_PATH
+    if path.is_file():
+        pid = path.read_text().strip()
+        if pid:
+            sh.run(['sudo', 'kill', pid], stdout=sh.DEVNULL, stderr=sh.DEVNULL)
+        path.unlink()
+        print('[green]Done clean up any ad-hoc spawn dnsmasq DHCP process[/]')
+
 
 def main() -> None:
     # ensure only one device connected
@@ -31,14 +43,8 @@ def main() -> None:
         print('[red]Failed to reset USB functions on android side[/]')
 
     # clean up any ad-hoc spawn dnsmasq dhcp leftover
-    dnsmasq_pid_path = Path('/tmp/tethering_dnsmasq.pid')
     sleep(1)
-    if dnsmasq_pid_path.is_file():
-        pid = dnsmasq_pid_path.read_text().strip()
-        if pid:
-            sh.run(['sudo', 'kill', pid], stdout=sh.DEVNULL, stderr=sh.DEVNULL)
-        dnsmasq_pid_path.unlink()
-        print('[green]Done clean up any ad-hoc spawn dnsmasq DHCP process[/]')
+    cleanup_dnsmasq_dhcp_server()
 
 
 if __name__ == '__main__':
