@@ -1,9 +1,11 @@
 import subprocess
-import time
 from pathlib import Path
+from time import sleep
 
 from device import main as device
 from rich import print
+
+from utils import set_client_wifi
 
 
 def main() -> None:
@@ -12,15 +14,11 @@ def main() -> None:
         return
 
     # toggle back on client's WiFi
-    time.sleep(1)
-    res = subprocess.run(['adb', 'shell', 'svc', 'wifi', 'enable'])
-    if res.returncode == 0:
-        print("[green]Toggled back on client's WiFi[/]")
-    else:
-        print("[red]Failed to toggle back on client's WiFi[/]")
+    sleep(1)
+    set_client_wifi(enable=True)
 
     # reset usb functions on android side
-    time.sleep(1)
+    sleep(1)
     subprocess.run(['adb', 'shell', 'svc', 'usb', 'setFunctions', 'mtp'])
     link_res = subprocess.run(
         ['adb', 'shell', 'ip', '-br', 'link'], capture_output=True, text=True
@@ -34,7 +32,7 @@ def main() -> None:
 
     # clean up any ad-hoc spawn dnsmasq dhcp leftover
     dnsmasq_pid_path = Path('/tmp/tethering_dnsmasq.pid')
-    time.sleep(1)
+    sleep(1)
     if dnsmasq_pid_path.is_file():
         pid = dnsmasq_pid_path.read_text().strip()
         if pid:
