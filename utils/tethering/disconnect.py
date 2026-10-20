@@ -1,8 +1,46 @@
+import subprocess
+import time
+from pathlib import Path
+
+from device import main as device
 from rich import print
 
 
 def main() -> None:
-    print('[red]run disconnect()[/]')
+    # ensure only one device connected
+    if not device():
+        return
+
+    # toggle back on client's WiFi
+    time.sleep(1)
+    res = subprocess.run(['adb', 'shell', 'svc', 'wifi', 'enable'])
+    if res.returncode == 0:
+        print("[green]Toggled back on client's WiFi[/]")
+    else:
+        print("[red]Failed to toggle back on client's WiFi[/]")
+
+    # reset usb functions on android side
+    time.sleep(1)
+    subprocess.run(['adb', 'shell', 'svc', 'usb', 'setFunctions', 'mtp'])
+    link_res = subprocess.run(
+        ['adb', 'shell', 'ip', '-br', 'link'], capture_output=True, text=True
+    )
+    link_output = link_res.stdout
+    link_active = 'rndis0' in link_output or 'usb0' in link_output
+    if not link_active:
+        print('[green]Reset USB functions on android side[/]')
+    else:
+        print('[red]Failed to reset USB functions on android side[/]')
+
+    # clean up any ad-hoc spawn dnsmasq dhcp leftover
+    dnsmasq_pid_path = Path('/tmp/tethering_dnsmasq.pid')
+    time.sleep(1)
+    if dnsmasq_pid_path.is_file():
+        pid = dnsmasq_pid_path.read_text().strip()
+        if pid:
+            subprocess.run(['sudo', 'kill', pid], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        dnsmasq_pid_path.unlink()
+        print('[green]Done clean up any ad-hoc spawn dnsmasq DHCP process[/]')
 
 
 if __name__ == '__main__':
