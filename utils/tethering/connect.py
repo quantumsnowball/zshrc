@@ -1,7 +1,9 @@
+from time import sleep
 from typing import Annotated, Literal
 
 import typer
 from device import main as device
+from network import enable_android_native_tethering
 from rich import print
 
 from utils import touch_sudo
@@ -22,6 +24,9 @@ def s7() -> None:
     if not device():
         return
 
+    # toggle on the android native tethering button
+    sleep(1)
+    enable_android_native_tethering()
 
 
 @app.command()
