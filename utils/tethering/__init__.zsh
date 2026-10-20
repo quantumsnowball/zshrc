@@ -200,6 +200,10 @@ tethering.connect-s7()  {
 }
 
 tethering.disconnect() {
+    uv run --no-active "$XDG_CONFIG_HOME/zshrc/utils/tethering/disconnect.py" "$@"
+}
+
+tethering.disconnect_() {
     # ensure only one device connected
     tethering.device || return 1
 
