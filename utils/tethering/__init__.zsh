@@ -21,6 +21,9 @@ tethering.device_() {
 }
 
 tethering.info() {
+    uv run --no-active "$XDG_CONFIG_HOME/zshrc/utils/tethering/info.py" "$@"
+}
+tethering.info_() {
     echo "Host IP address status:"
     ip -4 addr show
 
