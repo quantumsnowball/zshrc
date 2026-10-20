@@ -23,14 +23,6 @@ tethering.device_() {
 tethering.info() {
     uv run --no-active "$XDG_CONFIG_HOME/zshrc/utils/tethering/info.py" "$@"
 }
-tethering.info_() {
-    echo "Host IP address status:"
-    ip -4 addr show
-
-    echo "\nClient IP address status:"
-    adb shell ip -4 addr show dev usb0 ||
-    adb shell ip -4 addr show dev rndis0
-}
 
 tethering.connect() {
     uv run --no-active "$XDG_CONFIG_HOME/zshrc/utils/tethering/connect.py" "$@"
@@ -207,31 +199,4 @@ tethering.connect-s7()  {
 
 tethering.disconnect() {
     uv run --no-active "$XDG_CONFIG_HOME/zshrc/utils/tethering/disconnect.py" "$@"
-}
-
-tethering.disconnect_() {
-    # ensure only one device connected
-    tethering.device_ || return 1
-
-    # toggle back on client's WiFi
-    sleep 1
-    adb shell svc wifi enable &&
-    echo "${GREEN}Toggled back on client's WiFi${RESET}" ||
-    echo "${RED}Failed to toggle back on client's WiFi${RESET}"
-
-    # reset usb functions on android side
-    sleep 1
-    adb shell svc usb setFunctions mtp
-    ! adb shell ip -br link | grep -qE 'rndis0|usb0' &&
-    echo "${GREEN}Reset USB functions on android side${RESET}" ||
-    echo "${RED}Failed to reset USB functions on android side${RESET}"
-
-    # clean up any ad-hoc spawn dnsmasq dhcp leftover
-    local dnsmasq_pid_path="/tmp/tethering_dnsmasq.pid"
-    sleep 1
-    if [[ -f "$dnsmasq_pid_path" ]]; then
-        sudo kill "$(cat "$dnsmasq_pid_path")" 2>/dev/null
-        rm -f "$dnsmasq_pid_path"
-        echo "${GREEN}Done clean up any ad-hoc spawn dnsmasq DHCP process${RESET}"
-    fi
 }
