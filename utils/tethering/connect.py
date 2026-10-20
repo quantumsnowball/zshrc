@@ -4,7 +4,11 @@ from typing import Annotated, Literal
 import typer
 from device import main as device
 from firewall import firewall_allow_interface
-from network import detect_host_interface, enable_android_native_tethering
+from network import (
+    detect_host_interface,
+    enable_android_native_tethering,
+    set_client_wifi,
+)
 from rich import print
 
 from utils import touch_sudo
@@ -38,6 +42,10 @@ def s7() -> None:
     # ensure ufw allow all incoming network traffics for this interface
     sleep(1)
     firewall_allow_interface(host_iface)
+
+    # disable the client's WiFi
+    sleep(1)
+    set_client_wifi(enable=False)
 
 
 @app.command()
