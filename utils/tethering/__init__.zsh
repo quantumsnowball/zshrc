@@ -26,6 +26,10 @@ tethering.info() {
     adb shell ip -4 addr show dev rndis0
 }
 
+tethering.connect() {
+    uv run --no-active "$XDG_CONFIG_HOME/zshrc/utils/tethering/connect.py" "$@"
+}
+
 tethering.connect-quest2() {
     # special thanks to this tutorial:
     # <https://blog.ronbachmann.dev/posts/quest3-usb-ncm-sunshine>

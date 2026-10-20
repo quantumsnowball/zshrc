@@ -1,0 +1,13 @@
+[project]
+name = "tethering"
+version = "0.1.0"
+description = "Tethering Meta Quest 2 or Android Tablet S7FE"
+requires-python = ">=3.14"
+dependencies = [
+    "rich",
+    "typer",
+]
+
+[tool.pyright]
+venvPath = "./"
+venv = ".venv"
