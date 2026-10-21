@@ -1,14 +1,16 @@
 from typing import Annotated, Literal
 
 import typer
+from adb import (
+    enable_android_native_tethering,
+    enable_usb0_link_layer_device,
+    remove_all_adb_reverse_channels,
+)
 from device import main as device
 from dhcp import cleanup_dnsmasq_dhcp_server, setup_client_ip, start_dnsmasq_server
 from firewall import firewall_allow_interface
 from network import (
     detect_host_interface,
-    enable_android_native_tethering,
-    enable_usb0_link_layer_device,
-    remove_all_adb_reverse_channels,
     set_client_wifi,
     setup_host_ip,
 )

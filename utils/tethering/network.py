@@ -1,5 +1,4 @@
 import subprocess as sh
-from time import sleep
 
 from rich import print
 
@@ -11,32 +10,6 @@ def set_client_wifi(*, enable: bool) -> None:
         print(f"[green]Turned {state} client's WiFi[/]")
     else:
         print(f"[red]Failed to turn {state} client's WiFi[/]")
-
-
-def enable_usb0_link_layer_device(*, check_delay: int = 3) -> bool:
-    print('[yellow]Setting up usb0 link layer device ...[/]')
-    sh.run(['adb', 'shell', 'svc', 'usb', 'setFunctions', 'ncm'])
-    sleep(check_delay)
-    result = sh.run(['adb', 'shell', 'ip', '-br', 'link'], capture_output=True, text=True)
-    if 'usb0' in result.stdout:
-        print('[green]Enabled the usb0 link layer device[/]')
-        return True
-    else:
-        print('[red]Failed to enable the usb0 link layer device[/]')
-        raise RuntimeError
-
-
-def enable_android_native_tethering(*, check_delay: int = 1) -> bool:
-    print('[yellow]Turning on Android native tethering ...[/]')
-    sh.run(['adb', 'shell', 'svc', 'usb', 'setFunctions', 'rndis'])
-    sleep(check_delay)
-    result = sh.run(['adb', 'shell', 'ip', '-br', 'link'], capture_output=True, text=True)
-    if 'rndis0' in result.stdout:
-        print('[green]Turned on Android native tethering[/]')
-        return True
-    else:
-        print('[red]Failed to turn on Android native tethering[/]')
-        raise RuntimeError
 
 
 def detect_host_interface(*, name_starts_with: str) -> str:
@@ -75,12 +48,3 @@ def setup_host_ip(host_iface: str, network_prefix: str = '10.77.0') -> bool:
     else:
         print(f'[red]Failed to add IP address {host_addr} to interface {host_iface}[/]')
         raise RuntimeError
-
-
-def remove_all_adb_reverse_channels() -> None:
-    print('[yellow]Removing all adb reverse channels ...[/]')
-    result = sh.run(['adb', 'reverse', '--remove-all'])
-    if result.returncode == 0:
-        print('[green]Removed all adb reverse channels[/]')
-    else:
-        print('[red]Failed to remove all adb reverse channels[/]')
