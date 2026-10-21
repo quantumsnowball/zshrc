@@ -33,8 +33,7 @@ def quest2() -> None:
 
     # enable the usb link layer device
     sleep(1)
-    if not enable_usb0_link_layer_device():
-        return
+    enable_usb0_link_layer_device()
 
     # extract host new usb interface name
     sleep(1)

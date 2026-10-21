@@ -23,7 +23,7 @@ def enable_usb0_link_layer_device(*, check_delay: int = 3) -> bool:
         return True
     else:
         print('[red]Failed to enable the usb0 link layer device[/]')
-        return False
+        raise RuntimeError
 
 
 def enable_android_native_tethering(*, check_delay: int = 1) -> bool:
