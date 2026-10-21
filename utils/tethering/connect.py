@@ -8,7 +8,7 @@ import network
 import ping
 import typer
 
-from utils import exit_on_runtime_error, touch_sudo, usb_connection_ready
+import utils
 
 app = typer.Typer(help='tethering connect')
 
@@ -18,7 +18,7 @@ def quest2() -> None:
     # <https://blog.ronbachmann.dev/posts/quest3-usb-ncm-sunshine>
 
     # get root permission first
-    touch_sudo()
+    utils.acquire_sudo()
     # ensure only one device connected
     device.ensure_single_connection()
     # enable the usb link layer device
@@ -48,12 +48,12 @@ def quest2() -> None:
     # make sure adb reverse is off so only tethering is active
     adb.remove_all_reverse_channels()
     # ready
-    usb_connection_ready()
+    utils.tethering_connection_ready()
 
 
 def s7() -> None:
     # get root permission first
-    touch_sudo()
+    utils.acquire_sudo()
     # ensure only one device connected
     device.ensure_single_connection()
     # toggle on the android native tethering button
@@ -73,11 +73,11 @@ def s7() -> None:
     # make sure adb reverse is off so only tethering is active
     adb.remove_all_reverse_channels()
     # ready
-    usb_connection_ready()
+    utils.tethering_connection_ready()
 
 
 @app.command()
-@exit_on_runtime_error
+@utils.exit_on_runtime_error
 def main(
     target: Annotated[Literal['quest2', 's7'], typer.Argument(help='The target device to connect to')],
 ) -> None:

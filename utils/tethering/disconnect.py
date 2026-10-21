@@ -3,10 +3,10 @@ import device
 import dhcp
 import network
 
-from utils import exit_on_runtime_error
+import utils
 
 
-@exit_on_runtime_error
+@utils.exit_on_runtime_error
 def main() -> None:
     # ensure only one device connected
     device.ensure_single_connection()

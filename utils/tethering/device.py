@@ -2,7 +2,7 @@ import subprocess
 
 from rich import print
 
-from utils import exit_on_runtime_error
+import utils
 
 
 def ensure_single_connection() -> str:
@@ -30,7 +30,7 @@ def ensure_single_connection() -> str:
     return devices[0]
 
 
-@exit_on_runtime_error
+@utils.exit_on_runtime_error
 def main() -> None:
     ensure_single_connection()
 
