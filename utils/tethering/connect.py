@@ -62,18 +62,18 @@ def s7() -> None:
     host_iface = network.detect_host_iface(name_starts_with='enp0')
     # ensure ufw allow all incoming network traffics for this interface
     firewall.allow(host_iface, comment='tethering-s7')
-    # test the usb connection from client side
-    host_ip = network.detect_host_ip(host_iface)
-    ping.from_client_to_host_ip(host_ip)
-    # test the usb connection from host side
-    client_ip = adb.detect_client_ip()
-    ping.from_host_to_client_ip(client_ip, host_iface)
     # disable the client's WiFi
     network.set_client_wifi(enable=False)
     # make sure adb reverse is off so only tethering is active
     adb.remove_all_reverse_channels()
     # prevent the tethering network frorm hijacking the Internet route of the host
     network.remove_host_iface_default_route(host_iface)
+    # test the usb connection from client side
+    host_ip = network.detect_host_ip(host_iface)
+    ping.from_client_to_host_ip(host_ip)
+    # test the usb connection from host side
+    client_ip = adb.detect_client_ip()
+    ping.from_host_to_client_ip(client_ip, host_iface)
     # ready
     utils.tethering_connection_ready()
 
