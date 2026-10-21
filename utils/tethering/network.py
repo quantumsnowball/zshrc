@@ -2,7 +2,7 @@ import subprocess as sh
 from time import sleep
 
 from rich import print
-from task import exec, task
+from task import now, task
 
 
 def set_client_wifi(*, enable: bool) -> None:
@@ -72,7 +72,7 @@ def assign_host_ip(host_iface: str, network_prefix: str = '10.77.0') -> bool:
 
 
 def remove_host_iface_default_route(host_iface: str) -> None:
-    @exec
+    @now
     @task(f'remove default route for {host_iface}', halt=True)
     def _() -> None:
         result = sh.run(['sudo', 'ip', 'route', 'del', 'default', 'dev', host_iface], stderr=sh.DEVNULL)

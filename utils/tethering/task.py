@@ -6,7 +6,7 @@ from rich import print
 
 
 # iif decorator
-def exec[T](task: Callable[[], T]) -> T:
+def now[T](task: Callable[[], T]) -> T:
     return task()
 
 
