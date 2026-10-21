@@ -54,10 +54,8 @@ def disable_android_usb_device() -> None:
 
 
 def remove_all_reverse_channels() -> None:
-    print('[yellow]Removing all adb reverse channels ...[/]')
-    result = sh.run(['adb', 'reverse', '--remove-all'])
-    if result.returncode == 0:
-        print('[green]Removed all adb reverse channels[/]')
-        return
-
-    print('[red]Failed to remove all adb reverse channels[/]')
+    @now
+    @task('remove all adb reverse channels')
+    def _() -> None:
+        if sh.run(['adb', 'reverse', '--remove-all']).returncode != 0:
+            raise RuntimeError
