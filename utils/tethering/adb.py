@@ -2,6 +2,7 @@ import subprocess as sh
 from time import sleep
 
 from rich import print
+from task import now, task
 
 
 def detect_client_ip(client_iface: str = 'rndis0') -> str:
@@ -16,17 +17,16 @@ def detect_client_ip(client_iface: str = 'rndis0') -> str:
     raise RuntimeError
 
 
-def enable_usb0_link_layer_device(*, check_delay: int = 3) -> bool:
-    print('[yellow]Setting up usb0 link layer device ...[/]')
-    sh.run(['adb', 'shell', 'svc', 'usb', 'setFunctions', 'ncm'])
-    sleep(check_delay)
-    result = sh.run(['adb', 'shell', 'ip', '-br', 'link'], capture_output=True, text=True)
-    if 'usb0' in result.stdout:
-        print('[green]Enabled the usb0 link layer device[/]')
-        return True
-
-    print('[red]Failed to enable the usb0 link layer device[/]')
-    raise RuntimeError
+def enable_usb0_link_layer_device(*, check_delay: int = 3) -> None:
+    @now
+    @task('setup usb0 link layer device', halt=True)
+    def _() -> None:
+        sh.run(['adb', 'shell', 'svc', 'usb', 'setFunctions', 'ncm'])
+        sleep(check_delay)
+        result = sh.run(['adb', 'shell', 'ip', '-br', 'link'], capture_output=True, text=True)
+        if 'usb0' in result.stdout:
+            return
+        raise RuntimeError
 
 
 def enable_android_native_tethering(*, check_delay: int = 1) -> bool:
