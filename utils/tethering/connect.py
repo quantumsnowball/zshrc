@@ -1,5 +1,6 @@
 from typing import Annotated, Literal
 
+import dhcp
 import firewall
 import ping
 import typer
@@ -10,7 +11,6 @@ from adb import (
     remove_all_adb_reverse_channels,
 )
 from device import main as device
-from dhcp import cleanup_dnsmasq_dhcp_server, setup_client_ip, start_dnsmasq_server
 from network import (
     detect_host_interface,
     detect_host_rndis_ip,
@@ -43,9 +43,9 @@ def quest2() -> None:
     # assign an ip address to the server side
     setup_host_ip(host_iface, network_prefix)
     # start a dhcp server on the host and let
-    start_dnsmasq_server(host_iface, network_prefix)
+    dhcp.start_server(host_iface, network_prefix)
     # make the android client request an ip through dhcp
-    setup_client_ip()
+    dhcp.assign_client_ip()
     # test the usb connection from client side
     client_iface = 'usb0'
     ping.from_client_to_host_ip(host_ip, client_iface)
@@ -54,7 +54,7 @@ def quest2() -> None:
     # disable the client's WiFi
     set_client_wifi(enable=False)
     # safely kill the dhcp server
-    cleanup_dnsmasq_dhcp_server()
+    dhcp.kill_server()
     # make sure adb reverse is off so only tethering is active
     remove_all_adb_reverse_channels()
     # ready

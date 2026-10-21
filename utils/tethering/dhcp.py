@@ -9,7 +9,7 @@ DNSMASQ_PID_PATH = Path('/tmp/tethering_dnsmasq.pid')
 DNSMASQ_LEASEFILE_PATH = Path('/tmp/tethering_dnsmasq.leases')
 
 
-def start_dnsmasq_server(
+def start_server(
     host_iface: str,
     network_prefix: str = '10.77.0',
     *,
@@ -55,7 +55,7 @@ def start_dnsmasq_server(
         raise RuntimeError
 
 
-def setup_client_ip(*, iface: str = 'usb0', wait: int = 10) -> bool:
+def assign_client_ip(*, iface: str = 'usb0', wait: int = 10) -> bool:
     print('[yellow]Setting up client IP address ...[/]')
 
     result = sh.run(['adb', 'shell', 'cmd', 'ethernet', 'set-ip-configuration', iface, 'dhcp'])
@@ -69,7 +69,7 @@ def setup_client_ip(*, iface: str = 'usb0', wait: int = 10) -> bool:
         raise RuntimeError
 
 
-def cleanup_dnsmasq_dhcp_server() -> None:
+def kill_server() -> None:
     path = DNSMASQ_PID_PATH
     if path.is_file():
         print('[yellow]Cleaning up any ad-hoc spawn dnsmasq DHCP process ...[/]')
