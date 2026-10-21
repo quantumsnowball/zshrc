@@ -24,9 +24,8 @@ def enable_usb0_link_layer_device(*, check_delay: int = 3) -> None:
         sh.run(['adb', 'shell', 'svc', 'usb', 'setFunctions', 'ncm'])
         sleep(check_delay)
         result = sh.run(['adb', 'shell', 'ip', '-br', 'link'], capture_output=True, text=True)
-        if 'usb0' in result.stdout:
-            return
-        raise RuntimeError
+        if not 'usb0' in result.stdout:
+            raise RuntimeError
 
 
 def enable_android_native_tethering(*, check_delay: int = 1) -> None:
@@ -36,9 +35,8 @@ def enable_android_native_tethering(*, check_delay: int = 1) -> None:
         sh.run(['adb', 'shell', 'svc', 'usb', 'setFunctions', 'rndis'])
         sleep(check_delay)
         result = sh.run(['adb', 'shell', 'ip', '-br', 'link'], capture_output=True, text=True)
-        if 'rndis0' in result.stdout:
-            return
-        raise RuntimeError
+        if not 'rndis0' in result.stdout:
+            raise RuntimeError
 
 
 def disable_android_usb_device() -> None:
