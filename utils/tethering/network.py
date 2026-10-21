@@ -13,7 +13,7 @@ def set_client_wifi(*, enable: bool) -> None:
         print(f"[red]Failed to turn {state} client's WiFi[/]")
 
 
-def detect_host_interface(*, name_starts_with: str) -> str:
+def detect_host_iface(*, name_starts_with: str) -> str:
     print('[yellow]Detecting host USB interface ...[/]')
     result = sh.run(['ip', '-br', 'link', 'show'], capture_output=True, text=True)
 
@@ -32,7 +32,7 @@ def detect_host_interface(*, name_starts_with: str) -> str:
         raise RuntimeError
 
 
-def detect_host_rndis_ip(host_iface: str) -> str:
+def detect_host_ip(host_iface: str) -> str:
     # Try a few times with a brief delay in case the IP is still being assigned
     for _ in range(5):
         res = sh.run(['ip', '-4', 'addr', 'show', 'dev', host_iface], capture_output=True, text=True)
@@ -50,7 +50,7 @@ def detect_host_rndis_ip(host_iface: str) -> str:
     raise RuntimeError(f'Could not find IP for interface {host_iface}')
 
 
-def setup_host_ip(host_iface: str, network_prefix: str = '10.77.0') -> bool:
+def assign_host_ip(host_iface: str, network_prefix: str = '10.77.0') -> bool:
     print('[yellow]Setting up host IP address ...[/]')
     host_ip = f'{network_prefix}.1'
     host_addr = f'{host_ip}/24'

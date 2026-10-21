@@ -2,8 +2,10 @@ import subprocess
 
 from rich import print
 
+import utils
 
-def main() -> str:
+
+def ensure_single_connection() -> str:
     # kill adb server
     subprocess.run(['adb', 'kill-server'])
 
@@ -26,6 +28,11 @@ def main() -> str:
     # valid result
     print(f'[green]Active connected device: {devices[0]}[/]')
     return devices[0]
+
+
+@utils.exit_on_runtime_error
+def main() -> None:
+    ensure_single_connection()
 
 
 if __name__ == '__main__':

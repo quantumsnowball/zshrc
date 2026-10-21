@@ -18,7 +18,7 @@ def exit_on_runtime_error(wrapped: Wrapped) -> Wrapped:
     return wrapper  # type: ignore
 
 
-def touch_sudo() -> bool:
+def acquire_sudo() -> bool:
     res = sh.run(['sudo', '-v'])
     if res.returncode != 0:
         print('[red]Failed to get root permission[/]')
@@ -26,5 +26,5 @@ def touch_sudo() -> bool:
     return True
 
 
-def usb_connection_ready() -> None:
+def tethering_connection_ready() -> None:
     print('[green]Your USB network is ready![/]')

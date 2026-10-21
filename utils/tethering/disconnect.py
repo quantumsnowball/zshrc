@@ -1,21 +1,21 @@
-from adb import disable_android_usb_device
-from device import main as device
-from dhcp import cleanup_dnsmasq_dhcp_server
-from network import set_client_wifi
+import adb
+import device
+import dhcp
+import network
 
-from utils import exit_on_runtime_error
+import utils
 
 
-@exit_on_runtime_error
+@utils.exit_on_runtime_error
 def main() -> None:
     # ensure only one device connected
-    device()
+    device.ensure_single_connection()
     # toggle back on client's WiFi
-    set_client_wifi(enable=True)
+    network.set_client_wifi(enable=True)
     # reset usb functions on android side
-    disable_android_usb_device()
+    adb.disable_android_usb_device()
     # clean up any ad-hoc spawn dnsmasq dhcp leftover
-    cleanup_dnsmasq_dhcp_server()
+    dhcp.kill_server()
 
 
 if __name__ == '__main__':
