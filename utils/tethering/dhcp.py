@@ -4,6 +4,7 @@ from pathlib import Path
 from time import sleep
 
 from rich import print
+from task import now, task
 
 DNSMASQ_PID_PATH = Path('/tmp/tethering_dnsmasq.pid')
 DNSMASQ_LEASEFILE_PATH = Path('/tmp/tethering_dnsmasq.leases')
@@ -55,18 +56,14 @@ def start_server(
         raise RuntimeError
 
 
-def assign_client_ip(*, iface: str = 'usb0', wait: int = 10) -> bool:
-    print('[yellow]Setting up client IP address ...[/]')
-
-    result = sh.run(['adb', 'shell', 'cmd', 'ethernet', 'set-ip-configuration', iface, 'dhcp'])
-    if result.returncode == 0:
-        print('[green]Made Android client request an IP address via DHCP[/]')
+def assign_client_ip(*, iface: str = 'usb0', wait: int = 10) -> None:
+    @now
+    @task('ask client to request an IP address via DHCP', halt=True)
+    def _() -> None:
+        result = sh.run(['adb', 'shell', 'cmd', 'ethernet', 'set-ip-configuration', iface, 'dhcp'])
         sleep(wait)
-        return True
-
-    print('[red]Failed to make Android client request an IP address via DHCP[/]')
-    sleep(wait)
-    raise RuntimeError
+        if result.returncode != 0:
+            raise RuntimeError
 
 
 def kill_server() -> None:
