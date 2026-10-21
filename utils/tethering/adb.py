@@ -2,44 +2,47 @@ import subprocess as sh
 from time import sleep
 
 from rich import print
+from task import now, task
 
 
 def detect_client_ip(client_iface: str = 'rndis0') -> str:
-    res = sh.run(['adb', 'shell', 'ip', '-4', 'addr', 'show', 'dev', client_iface], capture_output=True, text=True)
-    for line in res.stdout.splitlines():
-        if 'inet ' in line:
-            parts = line.strip().split()
-            for part in parts:
-                if '/' in part:
-                    return part.split('/')[0]
-    print(f'[red]Failed to detect Android client IP on {client_iface}[/]')
-    raise RuntimeError
+    @task(f'detect client IP on {client_iface}', halt=True)
+    def f() -> str:
+        result = sh.run(['adb', 'shell', 'ip', '-4', 'addr', 'show', 'dev', client_iface], capture_output=True, text=True)
+        for line in result.stdout.splitlines():
+            if 'inet ' in line:
+                parts = line.strip().split()
+                for part in parts:
+                    if '/' in part:
+                        ip_addr = part.split('/')[0]
+                        print(f'[green]Detected IP [cyan]{ip_addr}[/] on interface {client_iface}[/]')
+                        return ip_addr
+        #
+        raise RuntimeError
+    #
+    return f()
 
 
-def enable_usb0_link_layer_device(*, check_delay: int = 3) -> bool:
-    print('[yellow]Setting up usb0 link layer device ...[/]')
-    sh.run(['adb', 'shell', 'svc', 'usb', 'setFunctions', 'ncm'])
-    sleep(check_delay)
-    result = sh.run(['adb', 'shell', 'ip', '-br', 'link'], capture_output=True, text=True)
-    if 'usb0' in result.stdout:
-        print('[green]Enabled the usb0 link layer device[/]')
-        return True
-
-    print('[red]Failed to enable the usb0 link layer device[/]')
-    raise RuntimeError
+def enable_usb0_link_layer_device(*, check_delay: int = 3) -> None:
+    @now
+    @task('setup usb0 link layer device', halt=True)
+    def _() -> None:
+        sh.run(['adb', 'shell', 'svc', 'usb', 'setFunctions', 'ncm'])
+        sleep(check_delay)
+        result = sh.run(['adb', 'shell', 'ip', '-br', 'link'], capture_output=True, text=True)
+        if not 'usb0' in result.stdout:
+            raise RuntimeError
 
 
-def enable_android_native_tethering(*, check_delay: int = 1) -> bool:
-    print('[yellow]Turning on Android native tethering ...[/]')
-    sh.run(['adb', 'shell', 'svc', 'usb', 'setFunctions', 'rndis'])
-    sleep(check_delay)
-    result = sh.run(['adb', 'shell', 'ip', '-br', 'link'], capture_output=True, text=True)
-    if 'rndis0' in result.stdout:
-        print('[green]Turned on Android native tethering[/]')
-        return True
-
-    print('[red]Failed to turn on Android native tethering[/]')
-    raise RuntimeError
+def enable_android_native_tethering(*, check_delay: int = 1) -> None:
+    @now
+    @task('turn on Android native tethering', halt=True)
+    def _() -> None:
+        sh.run(['adb', 'shell', 'svc', 'usb', 'setFunctions', 'rndis'])
+        sleep(check_delay)
+        result = sh.run(['adb', 'shell', 'ip', '-br', 'link'], capture_output=True, text=True)
+        if not 'rndis0' in result.stdout:
+            raise RuntimeError
 
 
 def disable_android_usb_device() -> None:
@@ -57,10 +60,8 @@ def disable_android_usb_device() -> None:
 
 
 def remove_all_reverse_channels() -> None:
-    print('[yellow]Removing all adb reverse channels ...[/]')
-    result = sh.run(['adb', 'reverse', '--remove-all'])
-    if result.returncode == 0:
-        print('[green]Removed all adb reverse channels[/]')
-        return
-
-    print('[red]Failed to remove all adb reverse channels[/]')
+    @now
+    @task('remove all adb reverse channels')
+    def _() -> None:
+        if sh.run(['adb', 'reverse', '--remove-all']).returncode != 0:
+            raise RuntimeError

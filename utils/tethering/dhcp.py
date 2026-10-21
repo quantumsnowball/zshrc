@@ -4,6 +4,7 @@ from pathlib import Path
 from time import sleep
 
 from rich import print
+from task import now, task
 
 DNSMASQ_PID_PATH = Path('/tmp/tethering_dnsmasq.pid')
 DNSMASQ_LEASEFILE_PATH = Path('/tmp/tethering_dnsmasq.leases')
@@ -55,26 +56,23 @@ def start_server(
         raise RuntimeError
 
 
-def assign_client_ip(*, iface: str = 'usb0', wait: int = 10) -> bool:
-    print('[yellow]Setting up client IP address ...[/]')
-
-    result = sh.run(['adb', 'shell', 'cmd', 'ethernet', 'set-ip-configuration', iface, 'dhcp'])
-    if result.returncode == 0:
-        print('[green]Made Android client request an IP address via DHCP[/]')
+def assign_client_ip(*, iface: str = 'usb0', wait: int = 10) -> None:
+    @now
+    @task('ask client to request an IP address via DHCP', halt=True)
+    def _() -> None:
+        result = sh.run(['adb', 'shell', 'cmd', 'ethernet', 'set-ip-configuration', iface, 'dhcp'])
         sleep(wait)
-        return True
-
-    print('[red]Failed to make Android client request an IP address via DHCP[/]')
-    sleep(wait)
-    raise RuntimeError
+        if result.returncode != 0:
+            raise RuntimeError
 
 
 def kill_server() -> None:
     path = DNSMASQ_PID_PATH
     if path.is_file():
-        print('[yellow]Cleaning up any ad-hoc spawn dnsmasq DHCP process ...[/]')
-        pid = path.read_text().strip()
-        if pid:
-            sh.run(['sudo', 'kill', pid], stdout=sh.DEVNULL, stderr=sh.DEVNULL)
-        path.unlink()
-        print('[green]Done clean up any ad-hoc spawn dnsmasq DHCP process[/]')
+        @now
+        @task('clean up any ad-hoc spawn dnsmasq DHCP process')
+        def _() -> None:
+            pid = path.read_text().strip()
+            if pid:
+                sh.run(['sudo', 'kill', pid], stdout=sh.DEVNULL, stderr=sh.DEVNULL)
+            path.unlink()
