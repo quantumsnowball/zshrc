@@ -2,6 +2,7 @@ from typing import Annotated, Literal
 
 import dhcp
 import firewall
+import network
 import ping
 import typer
 from adb import (
@@ -11,12 +12,6 @@ from adb import (
     remove_all_adb_reverse_channels,
 )
 from device import main as device
-from network import (
-    detect_host_interface,
-    detect_host_rndis_ip,
-    set_client_wifi,
-    setup_host_ip,
-)
 
 from utils import exit_on_runtime_error, touch_sudo, usb_connection_ready
 
@@ -34,14 +29,14 @@ def quest2() -> None:
     # enable the usb link layer device
     enable_usb0_link_layer_device()
     # extract host new usb interface name
-    host_iface = detect_host_interface(name_starts_with='enp0')
+    host_iface = network.detect_host_iface(name_starts_with='enp0')
     # ensure ufw allow all incoming network traffics for this interface
     firewall.allow(host_iface, comment='tethering-quest2')
     # network prefix
     network_prefix = '10.77.0'
     host_ip = f'{network_prefix}.1'
     # assign an ip address to the server side
-    setup_host_ip(host_iface, network_prefix)
+    network.assign_host_ip(host_iface, network_prefix)
     # start a dhcp server on the host and let
     dhcp.start_server(host_iface, network_prefix)
     # make the android client request an ip through dhcp
@@ -52,7 +47,7 @@ def quest2() -> None:
     # test the usb connection from host side
     ping.from_host(host_iface)
     # disable the client's WiFi
-    set_client_wifi(enable=False)
+    network.set_client_wifi(enable=False)
     # safely kill the dhcp server
     dhcp.kill_server()
     # make sure adb reverse is off so only tethering is active
@@ -69,17 +64,17 @@ def s7() -> None:
     # toggle on the android native tethering button
     enable_android_native_tethering()
     # extract host new usb interface name
-    host_iface = detect_host_interface(name_starts_with='enp0')
+    host_iface = network.detect_host_iface(name_starts_with='enp0')
     # ensure ufw allow all incoming network traffics for this interface
     firewall.allow(host_iface, comment='tethering-s7')
     # test the usb connection from client side
-    host_ip = detect_host_rndis_ip(host_iface)
+    host_ip = network.detect_host_ip(host_iface)
     ping.from_client_to_host_ip(host_ip)
     # test the usb connection from host side
     client_ip = detect_client_rndis_ip()
     ping.from_host_to_client_ip(client_ip, host_iface)
     # disable the client's WiFi
-    set_client_wifi(enable=False)
+    network.set_client_wifi(enable=False)
     # make sure adb reverse is off so only tethering is active
     remove_all_adb_reverse_channels()
     # ready
