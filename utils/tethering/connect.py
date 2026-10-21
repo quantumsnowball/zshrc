@@ -1,5 +1,6 @@
 from typing import Annotated, Literal
 
+import ping
 import typer
 from adb import (
     detect_client_rndis_ip,
@@ -16,7 +17,6 @@ from network import (
     set_client_wifi,
     setup_host_ip,
 )
-from ping import ping_from_client_to, ping_from_host, ping_from_host_to
 
 from utils import exit_on_runtime_error, touch_sudo, usb_connection_ready
 
@@ -48,9 +48,9 @@ def quest2() -> None:
     setup_client_ip()
     # test the usb connection from client side
     client_iface = 'usb0'
-    ping_from_client_to(host_ip, client_iface)
+    ping.from_client_to_host_ip(host_ip, client_iface)
     # test the usb connection from host side
-    ping_from_host(host_iface)
+    ping.from_host(host_iface)
     # disable the client's WiFi
     set_client_wifi(enable=False)
     # safely kill the dhcp server
@@ -74,10 +74,10 @@ def s7() -> None:
     firewall_allow_interface(host_iface, comment='tethering-s7')
     # test the usb connection from client side
     host_ip = detect_host_rndis_ip(host_iface)
-    ping_from_client_to(host_ip)
+    ping.from_client_to_host_ip(host_ip)
     # test the usb connection from host side
     client_ip = detect_client_rndis_ip()
-    ping_from_host_to(client_ip, host_iface)
+    ping.from_host_to_client_ip(client_ip, host_iface)
     # disable the client's WiFi
     set_client_wifi(enable=False)
     # make sure adb reverse is off so only tethering is active
