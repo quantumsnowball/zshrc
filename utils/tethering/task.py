@@ -1,6 +1,6 @@
 import functools
 from time import sleep
-from typing import Any, Callable, cast
+from typing import Any, Callable, Literal, cast
 
 from rich import print
 
@@ -14,7 +14,7 @@ def now[T](task: Callable[[], T]) -> T:
 def task[F: Callable[..., Any]](
     desc: str,
     *,
-    retry: int = 5,
+    retry: int | Literal[False] = 5,
     halt: bool = False,
     delay: float = 1.0,
 ) -> Callable[[F], F]:
@@ -27,7 +27,8 @@ def task[F: Callable[..., Any]](
             print(f'[yellow]Task: {desc} ...[/]')
 
             # retry loop
-            for i in range(1, retry + 1):
+            N = 1 if retry is False else retry
+            for n in range(1, N+1):
                 try:
                     # main logic here
                     # to fail and retry, raise any exception
@@ -40,7 +41,7 @@ def task[F: Callable[..., Any]](
                 # on fail, will auto retry
                 except Exception as e:
                     # max attempt reached, breaking retry loop
-                    if i >= retry:
+                    if n >= N:
                         # fail message
                         print(f'[red]Fail: {desc}[/]')
                         # halt is turn on, fail will cause the main program to be terminated
@@ -50,7 +51,7 @@ def task[F: Callable[..., Any]](
                         break
 
                     # show retry status
-                    print(f'[yellow]Task: attempt {i}/{retry} failed, retrying ...[/]')
+                    print(f'[yellow]Task: attempt {n}/{N} failed, retrying ...[/]')
 
                     # delay before retry again
                     sleep(delay)
