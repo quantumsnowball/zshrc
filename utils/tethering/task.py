@@ -35,7 +35,7 @@ def task[F: Callable[..., Any]](
                     result = f(*args, **kwargs)
 
                     # if no exception, succeed and break
-                    print(f'[green]Success: {desc}[/]')
+                    print(f'[green]Done: {desc}[/]')
                     return result
 
                 # on fail, will auto retry
