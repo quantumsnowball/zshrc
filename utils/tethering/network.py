@@ -2,6 +2,7 @@ import subprocess as sh
 from time import sleep
 
 from rich import print
+from task import exec, task
 
 
 def set_client_wifi(*, enable: bool) -> None:
@@ -70,15 +71,10 @@ def assign_host_ip(host_iface: str, network_prefix: str = '10.77.0') -> bool:
     raise RuntimeError
 
 
-def remove_host_iface_default_route(host_iface: str, *, retry: int = 5) -> None:
-    print(f'[yellow]Removing default route for {host_iface}...[/]')
-    for i in range(retry):
+def remove_host_iface_default_route(host_iface: str) -> None:
+    @exec
+    @task(f'remove default route for {host_iface}', halt=True)
+    def _() -> None:
         result = sh.run(['sudo', 'ip', 'route', 'del', 'default', 'dev', host_iface], stderr=sh.DEVNULL)
-        if result.returncode == 0:
-            print(f'[green]Removed default route for {host_iface}[/]')
-            return
-        print(f'[yellow]Attempt {i+1}/{retry} failed, retrying ...[/]')
-        sleep(1)
-
-    print(f'[red]Failed to removed default route for {host_iface}[/]')
-    raise RuntimeError
+        if result.returncode != 0:
+            raise RuntimeError
