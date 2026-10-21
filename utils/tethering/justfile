@@ -1,0 +1,2 @@
+check-types:
+    uv run --no-active mypy .

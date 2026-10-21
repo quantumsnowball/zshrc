@@ -8,6 +8,11 @@ dependencies = [
     "typer",
 ]
 
+[dependency-groups]
+dev = [
+    "mypy",
+]
+
 [tool.pyright]
 venvPath = "./"
 venv = ".venv"
