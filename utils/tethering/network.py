@@ -23,7 +23,7 @@ def enable_usb0_link_layer_device(*, check_delay: int = 3) -> bool:
         return True
     else:
         print('[red]Failed to enable the usb0 link layer device[/]')
-        return False
+        raise RuntimeError
 
 
 def enable_android_native_tethering(*, check_delay: int = 1) -> bool:
@@ -36,10 +36,10 @@ def enable_android_native_tethering(*, check_delay: int = 1) -> bool:
         return True
     else:
         print('[red]Failed to turn on Android native tethering[/]')
-        return False
+        raise RuntimeError
 
 
-def detect_host_interface(*, name_starts_with: str) -> str | None:
+def detect_host_interface(*, name_starts_with: str) -> str:
     print('[yellow]Detecting host USB interface ...[/]')
     result = sh.run(['ip', '-br', 'link', 'show'], capture_output=True, text=True)
 
@@ -55,7 +55,7 @@ def detect_host_interface(*, name_starts_with: str) -> str | None:
         return host_iface
     else:
         print('[red]Failed to detect host USB interface[/]')
-        return None
+        raise RuntimeError
 
 
 def setup_host_ip(host_iface: str, network_prefix: str = '10.77.0') -> bool:
@@ -74,7 +74,7 @@ def setup_host_ip(host_iface: str, network_prefix: str = '10.77.0') -> bool:
         return True
     else:
         print(f'[red]Failed to add IP address {host_addr} to interface {host_iface}[/]')
-        return False
+        raise RuntimeError
 
 
 def remove_all_adb_reverse_channels() -> None:

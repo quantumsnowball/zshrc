@@ -11,4 +11,4 @@ def firewall_allow_interface(host_iface: str, *, comment: str) -> bool:
         return True
     else:
         print(f'[red]Failed to allow {host_iface} in firewall rules[/]')
-        return False
+        raise RuntimeError
