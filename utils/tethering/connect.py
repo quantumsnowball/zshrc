@@ -93,8 +93,7 @@ def s7() -> None:
 
     # toggle on the android native tethering button
     sleep(1)
-    if not enable_android_native_tethering():
-        return
+    enable_android_native_tethering()
 
     # extract host new usb interface name
     sleep(1)

@@ -36,7 +36,7 @@ def enable_android_native_tethering(*, check_delay: int = 1) -> bool:
         return True
     else:
         print('[red]Failed to turn on Android native tethering[/]')
-        return False
+        raise RuntimeError
 
 
 def detect_host_interface(*, name_starts_with: str) -> str:
