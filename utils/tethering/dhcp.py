@@ -66,7 +66,7 @@ def setup_client_ip(*, iface: str = 'usb0', wait: int = 10) -> bool:
     else:
         print('[red]Failed to make Android client request an IP address via DHCP[/]')
         sleep(wait)
-        return False
+        raise RuntimeError
 
 
 def cleanup_dnsmasq_dhcp_server() -> None:
