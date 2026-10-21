@@ -17,14 +17,12 @@ def from_client_to_host_ip(host_ip: str, client_iface: str | None = None, *, cou
             raise RuntimeError
 
 
-def from_host_to_client_ip(client_ip: str, host_iface: str, *, count: int = 5) -> bool:
-    result = sh.run(['ping', '-c', str(count), '-I', host_iface, client_ip])
-    if result.returncode == 0:
-        print('[green]Host passed the ping test[/]')
-        return True
-
-    print('[red]Host failed the ping test[/]')
-    return False
+def from_host_to_client_ip(client_ip: str, host_iface: str, *, count: int = 5) -> None:
+    @now
+    @task(f'ping from host to client ip {client_ip}', retry=False)
+    def _() -> None:
+        if sh.run(['ping', '-c', str(count), '-I', host_iface, client_ip]).returncode != 0:
+            raise RuntimeError
 
 
 def from_host(host_iface: str, *, count: int = 5) -> bool:
