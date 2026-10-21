@@ -6,15 +6,21 @@ from task import now, task
 
 
 def detect_client_ip(client_iface: str = 'rndis0') -> str:
-    res = sh.run(['adb', 'shell', 'ip', '-4', 'addr', 'show', 'dev', client_iface], capture_output=True, text=True)
-    for line in res.stdout.splitlines():
-        if 'inet ' in line:
-            parts = line.strip().split()
-            for part in parts:
-                if '/' in part:
-                    return part.split('/')[0]
-    print(f'[red]Failed to detect Android client IP on {client_iface}[/]')
-    raise RuntimeError
+    @task(f'detect client IP on {client_iface}', halt=True)
+    def f() -> str:
+        result = sh.run(['adb', 'shell', 'ip', '-4', 'addr', 'show', 'dev', client_iface], capture_output=True, text=True)
+        for line in result.stdout.splitlines():
+            if 'inet ' in line:
+                parts = line.strip().split()
+                for part in parts:
+                    if '/' in part:
+                        ip_addr = part.split('/')[0]
+                        print(f'[green]Detected IP [cyan]{ip_addr}[/] on interface {client_iface}[/]')
+                        return ip_addr
+        #
+        raise RuntimeError
+    #
+    return f()
 
 
 def enable_usb0_link_layer_device(*, check_delay: int = 3) -> None:
