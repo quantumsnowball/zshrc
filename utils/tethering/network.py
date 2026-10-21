@@ -6,13 +6,13 @@ from task import now, task
 
 
 def set_client_wifi(*, enable: bool) -> None:
-    result = sh.run(['adb', 'shell', 'svc', 'wifi', 'enable' if enable else 'disable'])
     state = 'on' if enable else 'off'
-    if result.returncode == 0:
-        print(f"[green]Turned {state} client's WiFi[/]")
-        return
 
-    print(f"[red]Failed to turn {state} client's WiFi[/]")
+    @now
+    @task(f"turn {state} client's WiFi")
+    def _() -> None:
+        if sh.run(['adb', 'shell', 'svc', 'wifi', 'enable' if enable else 'disable']).returncode != 0:
+            raise RuntimeError
 
 
 def detect_host_iface(*, name_starts_with: str) -> str:
