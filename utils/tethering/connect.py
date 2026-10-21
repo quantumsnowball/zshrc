@@ -13,9 +13,8 @@ from network import (
     setup_host_ip,
 )
 from ping import ping_from_client_to, ping_from_host
-from rich import print
 
-from utils import touch_sudo, usb_connection_ready
+from utils import exit_on_runtime_error, touch_sudo, usb_connection_ready
 
 app = typer.Typer(help='tethering connect')
 
@@ -77,17 +76,15 @@ def s7() -> None:
 
 
 @app.command()
+@exit_on_runtime_error
 def main(
     target: Annotated[Literal['quest2', 's7'], typer.Argument(help='The target device to connect to')],
 ) -> None:
-    try:
-        match target:
-            case 'quest2':
-                quest2()
-            case 's7':
-                s7()
-    except RuntimeError:
-        print('[red]RuntimeError, stopped[/]')
+    match target:
+        case 'quest2':
+            quest2()
+        case 's7':
+            s7()
 
 
 if __name__ == '__main__':

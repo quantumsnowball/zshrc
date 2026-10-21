@@ -3,7 +3,10 @@ from device import main as device
 from dhcp import cleanup_dnsmasq_dhcp_server
 from network import set_client_wifi
 
+from utils import exit_on_runtime_error
 
+
+@exit_on_runtime_error
 def main() -> None:
     # ensure only one device connected
     if not device():

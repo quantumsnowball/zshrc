@@ -2,7 +2,10 @@ import subprocess
 
 from rich import print
 
+from utils import exit_on_runtime_error
 
+
+@exit_on_runtime_error
 def main() -> None:
     print('[bold cyan]Host IP address status:[/]')
     subprocess.run(['ip', '-4', 'addr', 'show'])
