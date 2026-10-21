@@ -3,7 +3,7 @@ import subprocess as sh
 from rich import print
 
 
-def firewall_allow_interface(host_iface: str, *, comment: str) -> bool:
+def allow(host_iface: str, *, comment: str) -> bool:
     print('[yellow]Setting up firewall rules ...[/]')
     result = sh.run(['sudo', 'ufw', 'allow', 'in', 'on', host_iface, 'comment', comment])
     if result.returncode == 0:

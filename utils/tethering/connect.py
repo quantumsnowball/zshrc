@@ -1,5 +1,6 @@
 from typing import Annotated, Literal
 
+import firewall
 import ping
 import typer
 from adb import (
@@ -10,7 +11,6 @@ from adb import (
 )
 from device import main as device
 from dhcp import cleanup_dnsmasq_dhcp_server, setup_client_ip, start_dnsmasq_server
-from firewall import firewall_allow_interface
 from network import (
     detect_host_interface,
     detect_host_rndis_ip,
@@ -36,7 +36,7 @@ def quest2() -> None:
     # extract host new usb interface name
     host_iface = detect_host_interface(name_starts_with='enp0')
     # ensure ufw allow all incoming network traffics for this interface
-    firewall_allow_interface(host_iface, comment='tethering-quest2')
+    firewall.allow(host_iface, comment='tethering-quest2')
     # network prefix
     network_prefix = '10.77.0'
     host_ip = f'{network_prefix}.1'
@@ -71,7 +71,7 @@ def s7() -> None:
     # extract host new usb interface name
     host_iface = detect_host_interface(name_starts_with='enp0')
     # ensure ufw allow all incoming network traffics for this interface
-    firewall_allow_interface(host_iface, comment='tethering-s7')
+    firewall.allow(host_iface, comment='tethering-s7')
     # test the usb connection from client side
     host_ip = detect_host_rndis_ip(host_iface)
     ping.from_client_to_host_ip(host_ip)
