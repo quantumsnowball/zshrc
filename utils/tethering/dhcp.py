@@ -69,9 +69,10 @@ def assign_client_ip(*, iface: str = 'usb0', wait: int = 10) -> None:
 def kill_server() -> None:
     path = DNSMASQ_PID_PATH
     if path.is_file():
-        print('[yellow]Cleaning up any ad-hoc spawn dnsmasq DHCP process ...[/]')
-        pid = path.read_text().strip()
-        if pid:
-            sh.run(['sudo', 'kill', pid], stdout=sh.DEVNULL, stderr=sh.DEVNULL)
-        path.unlink()
-        print('[green]Done clean up any ad-hoc spawn dnsmasq DHCP process[/]')
+        @now
+        @task('clean up any ad-hoc spawn dnsmasq DHCP process')
+        def _() -> None:
+            pid = path.read_text().strip()
+            if pid:
+                sh.run(['sudo', 'kill', pid], stdout=sh.DEVNULL, stderr=sh.DEVNULL)
+            path.unlink()
