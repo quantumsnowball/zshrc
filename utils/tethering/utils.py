@@ -3,6 +3,7 @@ from functools import wraps
 from typing import Any, Callable, TypeVar
 
 from rich import print
+from task import now, task
 
 Wrapped = TypeVar('Wrapped', bound=Callable[..., Any])
 
@@ -18,12 +19,12 @@ def exit_on_runtime_error(wrapped: Wrapped) -> Wrapped:
     return wrapper  # type: ignore
 
 
-def acquire_sudo() -> bool:
-    res = sh.run(['sudo', '-v'])
-    if res.returncode != 0:
-        print('[red]Failed to get root permission[/]')
-        raise RuntimeError
-    return True
+def acquire_sudo() -> None:
+    @now
+    @task('acquire root permission', retry=False, halt=True)
+    def _() -> None:
+        if sh.run(['sudo', '-v']).returncode != 0:
+            raise RuntimeError
 
 
 def tethering_connection_ready() -> None:
