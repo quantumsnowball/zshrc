@@ -29,8 +29,7 @@ def quest2() -> None:
     touch_sudo()
 
     # ensure only one device connected
-    if not device():
-        return
+    device()
 
     # enable the usb link layer device
     sleep(1)
@@ -92,8 +91,7 @@ def s7() -> None:
     touch_sudo()
 
     # ensure only one device connected
-    if not device():
-        return
+    device()
 
     # toggle on the android native tethering button
     sleep(1)
