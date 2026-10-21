@@ -1,12 +1,12 @@
 from typing import Annotated, Literal
 
 import adb
+import device
 import dhcp
 import firewall
 import network
 import ping
 import typer
-from device import main as device
 
 from utils import exit_on_runtime_error, touch_sudo, usb_connection_ready
 
@@ -20,7 +20,7 @@ def quest2() -> None:
     # get root permission first
     touch_sudo()
     # ensure only one device connected
-    device()
+    device.ensure_single_connection()
     # enable the usb link layer device
     adb.enable_usb0_link_layer_device()
     # extract host new usb interface name
@@ -55,7 +55,7 @@ def s7() -> None:
     # get root permission first
     touch_sudo()
     # ensure only one device connected
-    device()
+    device.ensure_single_connection()
     # toggle on the android native tethering button
     adb.enable_android_native_tethering()
     # extract host new usb interface name

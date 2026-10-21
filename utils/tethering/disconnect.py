@@ -1,7 +1,7 @@
 import adb
+import device
 import dhcp
 import network
-from device import main as device
 
 from utils import exit_on_runtime_error
 
@@ -9,7 +9,7 @@ from utils import exit_on_runtime_error
 @exit_on_runtime_error
 def main() -> None:
     # ensure only one device connected
-    device()
+    device.ensure_single_connection()
     # toggle back on client's WiFi
     network.set_client_wifi(enable=True)
     # reset usb functions on android side
