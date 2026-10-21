@@ -2,21 +2,19 @@ import subprocess as sh
 
 from dhcp import DNSMASQ_LEASEFILE_PATH
 from rich import print
+from task import now, task
 
 
-def from_client_to_host_ip(host_ip: str, client_iface: str | None = None, *, count: int = 5) -> bool:
-    print('[yellow]Testing network connectivity from client side ...[/]')
-    cmd = ['adb', 'shell', 'ping', '-c', str(count)]
-    if client_iface is not None:
-        cmd += ['-I', client_iface, ]
-    cmd += [host_ip, ]
-    result = sh.run(cmd)
-    if result.returncode == 0:
-        print('[green]Client passed the ping test[/]')
-        return True
-
-    print('[red]Client failed the ping test[/]')
-    return False
+def from_client_to_host_ip(host_ip: str, client_iface: str | None = None, *, count: int = 5) -> None:
+    @now
+    @task(f'ping from client to host ip {host_ip}', retry=False)
+    def _() -> None:
+        cmd = ['adb', 'shell', 'ping', '-c', str(count)]
+        if client_iface is not None:
+            cmd += ['-I', client_iface, ]
+        cmd += [host_ip, ]
+        if sh.run(cmd).returncode != 0:
+            raise RuntimeError
 
 
 def from_host_to_client_ip(client_ip: str, host_iface: str, *, count: int = 5) -> bool:
