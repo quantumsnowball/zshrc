@@ -72,6 +72,8 @@ def s7() -> None:
     network.set_client_wifi(enable=False)
     # make sure adb reverse is off so only tethering is active
     adb.remove_all_reverse_channels()
+    # prevent the tethering network frorm hijacking the Internet route of the host
+    network.remove_host_iface_default_route(host_iface)
     # ready
     utils.tethering_connection_ready()
 

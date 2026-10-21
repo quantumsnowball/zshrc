@@ -67,3 +67,13 @@ def assign_host_ip(host_iface: str, network_prefix: str = '10.77.0') -> bool:
     else:
         print(f'[red]Failed to add IP address {host_addr} to interface {host_iface}[/]')
         raise RuntimeError
+
+
+def remove_host_iface_default_route(host_iface: str) -> None:
+    print(f'[yellow]Removing default route for {host_iface}...[/]')
+    result = sh.run(['sudo', 'ip', 'route', 'del', 'default', 'dev', host_iface], stderr=sh.DEVNULL)
+    if result.returncode == 0:
+        print(f'[green]Removed default route for {host_iface}[/]')
+    else:
+        print(f'[red]Failed to removed default route for {host_iface}[/]')
+        raise RuntimeError
