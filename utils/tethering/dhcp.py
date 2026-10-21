@@ -52,7 +52,7 @@ def start_dnsmasq_server(
         return True
     except Exception as e:
         print(f'[red]Failed to start dnsmasq DHCP server: {e}[/]')
-        return False
+        raise RuntimeError
 
 
 def setup_client_ip(*, iface: str = 'usb0', wait: int = 10) -> bool:
