@@ -1,5 +1,4 @@
 import subprocess as sh
-from time import sleep
 
 from rich import print
 from task import now, task
@@ -31,21 +30,23 @@ def detect_host_iface(*, name_starts_with: str) -> str:
 
 
 def detect_host_ip(host_iface: str) -> str:
-    # Try a few times with a brief delay in case the IP is still being assigned
-    for _ in range(5):
-        res = sh.run(['ip', '-4', 'addr', 'show', 'dev', host_iface], capture_output=True, text=True)
-        for line in res.stdout.splitlines():
+    @task(f'detect host IP on interface {host_iface}', halt=True)
+    def f() -> str:
+        result = sh.run(['ip', '-4', 'addr', 'show', 'dev', host_iface], capture_output=True, text=True)
+        for line in result.stdout.splitlines():
             line = line.strip()
             if line.startswith('inet '):
                 # Example line: "inet 192.168.42.129/24 brd 192.168.42.255 scope global rndis0"
                 parts = line.split()
                 if len(parts) >= 2:
                     ip_cidr = parts[1]
-                    return ip_cidr.split('/')[0]
-        sleep(0.5)
-
-    print(f'[red]Failed to detect host IP on interface {host_iface}[/]')
-    raise RuntimeError(f'Could not find IP for interface {host_iface}')
+                    ip_addr = ip_cidr.split('/')[0]
+                    print(f'[green]Detected IP [cyan]{ip_addr}[/] on interface {host_iface}[/]')
+                    return ip_addr
+        #
+        raise RuntimeError
+    #
+    return f()
 
 
 def assign_host_ip(host_iface: str, network_prefix: str = '10.77.0') -> bool:
