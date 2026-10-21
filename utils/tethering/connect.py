@@ -37,8 +37,7 @@ def quest2() -> None:
 
     # extract host new usb interface name
     sleep(1)
-    if not (host_iface := detect_host_interface(name_starts_with='enp0')):
-        return
+    host_iface = detect_host_interface(name_starts_with='enp0')
 
     # ensure ufw allow all incoming network traffics for this interface
     sleep(1)
@@ -99,8 +98,7 @@ def s7() -> None:
 
     # extract host new usb interface name
     sleep(1)
-    if not (host_iface := detect_host_interface(name_starts_with='enp0')):
-        return
+    host_iface = detect_host_interface(name_starts_with='enp0')
 
     # ensure ufw allow all incoming network traffics for this interface
     sleep(1)

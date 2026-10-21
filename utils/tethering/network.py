@@ -39,7 +39,7 @@ def enable_android_native_tethering(*, check_delay: int = 1) -> bool:
         return False
 
 
-def detect_host_interface(*, name_starts_with: str) -> str | None:
+def detect_host_interface(*, name_starts_with: str) -> str:
     print('[yellow]Detecting host USB interface ...[/]')
     result = sh.run(['ip', '-br', 'link', 'show'], capture_output=True, text=True)
 
@@ -55,7 +55,7 @@ def detect_host_interface(*, name_starts_with: str) -> str | None:
         return host_iface
     else:
         print('[red]Failed to detect host USB interface[/]')
-        return None
+        raise RuntimeError
 
 
 def setup_host_ip(host_iface: str, network_prefix: str = '10.77.0') -> bool:
