@@ -9,8 +9,9 @@ def set_client_wifi(*, enable: bool) -> None:
     state = 'on' if enable else 'off'
     if result.returncode == 0:
         print(f"[green]Turned {state} client's WiFi[/]")
-    else:
-        print(f"[red]Failed to turn {state} client's WiFi[/]")
+        return
+
+    print(f"[red]Failed to turn {state} client's WiFi[/]")
 
 
 def detect_host_iface(*, name_starts_with: str) -> str:
@@ -27,9 +28,9 @@ def detect_host_iface(*, name_starts_with: str) -> str:
         host_iface = interfaces[-1]
         print(f'[green]Detected host USB interface: {host_iface}[/]')
         return host_iface
-    else:
-        print('[red]Failed to detect host USB interface[/]')
-        raise RuntimeError
+
+    print('[red]Failed to detect host USB interface[/]')
+    raise RuntimeError
 
 
 def detect_host_ip(host_iface: str) -> str:
@@ -64,9 +65,9 @@ def assign_host_ip(host_iface: str, network_prefix: str = '10.77.0') -> bool:
         print(f'[green]Added IP address {host_addr} to interface {host_iface}[/]')
         sh.run(['ip', '-4', 'addr', 'show', 'dev', host_iface])
         return True
-    else:
-        print(f'[red]Failed to add IP address {host_addr} to interface {host_iface}[/]')
-        raise RuntimeError
+
+    print(f'[red]Failed to add IP address {host_addr} to interface {host_iface}[/]')
+    raise RuntimeError
 
 
 def remove_host_iface_default_route(host_iface: str, *, retry: int = 5) -> None:
@@ -78,5 +79,6 @@ def remove_host_iface_default_route(host_iface: str, *, retry: int = 5) -> None:
             return
         print(f'[yellow]Attempt {i+1}/{retry} failed, retrying ...[/]')
         sleep(1)
+
     print(f'[red]Failed to removed default route for {host_iface}[/]')
     raise RuntimeError

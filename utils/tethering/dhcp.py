@@ -63,10 +63,10 @@ def assign_client_ip(*, iface: str = 'usb0', wait: int = 10) -> bool:
         print('[green]Made Android client request an IP address via DHCP[/]')
         sleep(wait)
         return True
-    else:
-        print('[red]Failed to make Android client request an IP address via DHCP[/]')
-        sleep(wait)
-        raise RuntimeError
+
+    print('[red]Failed to make Android client request an IP address via DHCP[/]')
+    sleep(wait)
+    raise RuntimeError
 
 
 def kill_server() -> None:

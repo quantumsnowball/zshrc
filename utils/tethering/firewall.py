@@ -9,6 +9,6 @@ def allow(host_iface: str, *, comment: str) -> bool:
     if result.returncode == 0:
         print(f'[green]Allowed {host_iface} in firewall rules[/]')
         return True
-    else:
-        print(f'[red]Failed to allow {host_iface} in firewall rules[/]')
-        raise RuntimeError
+
+    print(f'[red]Failed to allow {host_iface} in firewall rules[/]')
+    raise RuntimeError

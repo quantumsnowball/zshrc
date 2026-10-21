@@ -24,9 +24,9 @@ def enable_usb0_link_layer_device(*, check_delay: int = 3) -> bool:
     if 'usb0' in result.stdout:
         print('[green]Enabled the usb0 link layer device[/]')
         return True
-    else:
-        print('[red]Failed to enable the usb0 link layer device[/]')
-        raise RuntimeError
+
+    print('[red]Failed to enable the usb0 link layer device[/]')
+    raise RuntimeError
 
 
 def enable_android_native_tethering(*, check_delay: int = 1) -> bool:
@@ -37,9 +37,9 @@ def enable_android_native_tethering(*, check_delay: int = 1) -> bool:
     if 'rndis0' in result.stdout:
         print('[green]Turned on Android native tethering[/]')
         return True
-    else:
-        print('[red]Failed to turn on Android native tethering[/]')
-        raise RuntimeError
+
+    print('[red]Failed to turn on Android native tethering[/]')
+    raise RuntimeError
 
 
 def disable_android_usb_device() -> None:
@@ -51,8 +51,9 @@ def disable_android_usb_device() -> None:
     link_active = 'rndis0' in link_output or 'usb0' in link_output
     if not link_active:
         print('[green]Reset USB functions on android side[/]')
-    else:
-        print('[red]Failed to reset USB functions on android side[/]')
+        return
+
+    print('[red]Failed to reset USB functions on android side[/]')
 
 
 def remove_all_reverse_channels() -> None:
@@ -60,5 +61,6 @@ def remove_all_reverse_channels() -> None:
     result = sh.run(['adb', 'reverse', '--remove-all'])
     if result.returncode == 0:
         print('[green]Removed all adb reverse channels[/]')
-    else:
-        print('[red]Failed to remove all adb reverse channels[/]')
+        return
+
+    print('[red]Failed to remove all adb reverse channels[/]')

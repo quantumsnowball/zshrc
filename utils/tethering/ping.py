@@ -14,9 +14,9 @@ def from_client_to_host_ip(host_ip: str, client_iface: str | None = None, *, cou
     if result.returncode == 0:
         print('[green]Client passed the ping test[/]')
         return True
-    else:
-        print('[red]Client failed the ping test[/]')
-        return False
+
+    print('[red]Client failed the ping test[/]')
+    return False
 
 
 def from_host_to_client_ip(client_ip: str, host_iface: str, *, count: int = 5) -> bool:
@@ -24,9 +24,9 @@ def from_host_to_client_ip(client_ip: str, host_iface: str, *, count: int = 5) -
     if result.returncode == 0:
         print('[green]Host passed the ping test[/]')
         return True
-    else:
-        print('[red]Host failed the ping test[/]')
-        return False
+
+    print('[red]Host failed the ping test[/]')
+    return False
 
 
 def from_host(host_iface: str, *, count: int = 5) -> bool:
