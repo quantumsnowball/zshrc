@@ -16,22 +16,18 @@ def set_client_wifi(*, enable: bool) -> None:
 
 
 def detect_host_iface(*, name_starts_with: str) -> str:
-    print('[yellow]Detecting host USB interface ...[/]')
-    result = sh.run(['ip', '-br', 'link', 'show'], capture_output=True, text=True)
-
-    interfaces = [
-        line.split()[0]
-        for line in result.stdout.splitlines()
-        if line.strip() and line.split()[0].startswith(name_starts_with)
-    ]
-
-    if interfaces:
-        host_iface = interfaces[-1]
-        print(f'[green]Detected host USB interface: {host_iface}[/]')
+    @task('detect host USB interface', halt=True)
+    def f() -> str:
+        result = sh.run(['ip', '-br', 'link', 'show'], capture_output=True, text=True)
+        host_iface = [
+            line.split()[0]
+            for line in result.stdout.splitlines()
+            if line.strip() and line.split()[0].startswith(name_starts_with)
+        ][-1]
+        print(f'[green]Detected host USB interface: [cyan]{host_iface}[/]')
         return host_iface
-
-    print('[red]Failed to detect host USB interface[/]')
-    raise RuntimeError
+    #
+    return f()
 
 
 def detect_host_ip(host_iface: str) -> str:
