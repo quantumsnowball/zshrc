@@ -74,7 +74,7 @@ def setup_host_ip(host_iface: str, network_prefix: str = '10.77.0') -> bool:
         return True
     else:
         print(f'[red]Failed to add IP address {host_addr} to interface {host_iface}[/]')
-        return False
+        raise RuntimeError
 
 
 def remove_all_adb_reverse_channels() -> None:
