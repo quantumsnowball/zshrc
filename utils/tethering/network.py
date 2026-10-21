@@ -69,11 +69,14 @@ def assign_host_ip(host_iface: str, network_prefix: str = '10.77.0') -> bool:
         raise RuntimeError
 
 
-def remove_host_iface_default_route(host_iface: str) -> None:
+def remove_host_iface_default_route(host_iface: str, *, retry: int = 5) -> None:
     print(f'[yellow]Removing default route for {host_iface}...[/]')
-    result = sh.run(['sudo', 'ip', 'route', 'del', 'default', 'dev', host_iface], stderr=sh.DEVNULL)
-    if result.returncode == 0:
-        print(f'[green]Removed default route for {host_iface}[/]')
-    else:
-        print(f'[red]Failed to removed default route for {host_iface}[/]')
-        raise RuntimeError
+    for i in range(retry):
+        result = sh.run(['sudo', 'ip', 'route', 'del', 'default', 'dev', host_iface], stderr=sh.DEVNULL)
+        if result.returncode == 0:
+            print(f'[green]Removed default route for {host_iface}[/]')
+            return
+        print(f'[yellow]Attempt {i+1}/{retry} failed, retrying ...[/]')
+        sleep(1)
+    print(f'[red]Failed to removed default route for {host_iface}[/]')
+    raise RuntimeError
