@@ -1,16 +1,11 @@
 from typing import Annotated, Literal
 
+import adb
 import dhcp
 import firewall
 import network
 import ping
 import typer
-from adb import (
-    detect_client_rndis_ip,
-    enable_android_native_tethering,
-    enable_usb0_link_layer_device,
-    remove_all_adb_reverse_channels,
-)
 from device import main as device
 
 from utils import exit_on_runtime_error, touch_sudo, usb_connection_ready
@@ -27,7 +22,7 @@ def quest2() -> None:
     # ensure only one device connected
     device()
     # enable the usb link layer device
-    enable_usb0_link_layer_device()
+    adb.enable_usb0_link_layer_device()
     # extract host new usb interface name
     host_iface = network.detect_host_iface(name_starts_with='enp0')
     # ensure ufw allow all incoming network traffics for this interface
@@ -51,7 +46,7 @@ def quest2() -> None:
     # safely kill the dhcp server
     dhcp.kill_server()
     # make sure adb reverse is off so only tethering is active
-    remove_all_adb_reverse_channels()
+    adb.remove_all_reverse_channels()
     # ready
     usb_connection_ready()
 
@@ -62,7 +57,7 @@ def s7() -> None:
     # ensure only one device connected
     device()
     # toggle on the android native tethering button
-    enable_android_native_tethering()
+    adb.enable_android_native_tethering()
     # extract host new usb interface name
     host_iface = network.detect_host_iface(name_starts_with='enp0')
     # ensure ufw allow all incoming network traffics for this interface
@@ -71,12 +66,12 @@ def s7() -> None:
     host_ip = network.detect_host_ip(host_iface)
     ping.from_client_to_host_ip(host_ip)
     # test the usb connection from host side
-    client_ip = detect_client_rndis_ip()
+    client_ip = adb.detect_client_ip()
     ping.from_host_to_client_ip(client_ip, host_iface)
     # disable the client's WiFi
     network.set_client_wifi(enable=False)
     # make sure adb reverse is off so only tethering is active
-    remove_all_adb_reverse_channels()
+    adb.remove_all_reverse_channels()
     # ready
     usb_connection_ready()
 
