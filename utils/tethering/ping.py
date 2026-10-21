@@ -4,14 +4,28 @@ from dhcp import DNSMASQ_LEASEFILE_PATH
 from rich import print
 
 
-def ping_from_client_to(host_ip: str, *, count: int = 5) -> bool:
+def ping_from_client_to(host_ip: str, client_iface: str | None = None, *, count: int = 5) -> bool:
     print('[yellow]Testing network connectivity from client side ...[/]')
-    result = sh.run(['adb', 'shell', 'ping', '-c', str(count), '-I', 'usb0', host_ip])
+    cmd = ['adb', 'shell', 'ping', '-c', str(count)]
+    if client_iface is not None:
+        cmd += ['-I', client_iface, ]
+    cmd += [host_ip, ]
+    result = sh.run(cmd)
     if result.returncode == 0:
         print('[green]Client passed the ping test[/]')
         return True
     else:
         print('[red]Client failed the ping test[/]')
+        return False
+
+
+def ping_from_host_to(client_ip: str, host_iface: str, *, count: int = 5) -> bool:
+    result = sh.run(['ping', '-c', str(count), '-I', host_iface, client_ip])
+    if result.returncode == 0:
+        print('[green]Host passed the ping test[/]')
+        return True
+    else:
+        print('[red]Host failed the ping test[/]')
         return False
 
 
@@ -31,10 +45,5 @@ def ping_from_host(host_iface: str, *, count: int = 5) -> bool:
         print('[red]Failed to find client IP from dnsmasq lease file[/]')
         return False
 
-    res = sh.run(['ping', '-c', str(count), '-I', host_iface, client_ip])
-    if res.returncode == 0:
-        print('[green]Host passed the ping test[/]')
-        return True
-    else:
-        print('[red]Host failed the ping test[/]')
-        return False
+    result = ping_from_host_to(client_ip, host_iface, count=count)
+    return result

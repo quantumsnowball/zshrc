@@ -1,4 +1,5 @@
 import subprocess as sh
+from time import sleep
 
 from rich import print
 
@@ -29,6 +30,24 @@ def detect_host_interface(*, name_starts_with: str) -> str:
     else:
         print('[red]Failed to detect host USB interface[/]')
         raise RuntimeError
+
+
+def detect_host_rndis_ip(host_iface: str) -> str:
+    # Try a few times with a brief delay in case the IP is still being assigned
+    for _ in range(5):
+        res = sh.run(['ip', '-4', 'addr', 'show', 'dev', host_iface], capture_output=True, text=True)
+        for line in res.stdout.splitlines():
+            line = line.strip()
+            if line.startswith('inet '):
+                # Example line: "inet 192.168.42.129/24 brd 192.168.42.255 scope global rndis0"
+                parts = line.split()
+                if len(parts) >= 2:
+                    ip_cidr = parts[1]
+                    return ip_cidr.split('/')[0]
+        sleep(0.5)
+
+    print(f'[red]Failed to detect host IP on interface {host_iface}[/]')
+    raise RuntimeError(f'Could not find IP for interface {host_iface}')
 
 
 def setup_host_ip(host_iface: str, network_prefix: str = '10.77.0') -> bool:

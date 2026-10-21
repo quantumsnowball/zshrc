@@ -4,6 +4,18 @@ from time import sleep
 from rich import print
 
 
+def detect_client_rndis_ip() -> str:
+    res = sh.run(['adb', 'shell', 'ip', '-4', 'addr', 'show', 'dev', 'rndis0'], capture_output=True, text=True)
+    for line in res.stdout.splitlines():
+        if 'inet ' in line:
+            parts = line.strip().split()
+            for part in parts:
+                if '/' in part:
+                    return part.split('/')[0]
+    print('[red]Failed to detect Android client IP on rndis0[/]')
+    raise RuntimeError
+
+
 def enable_usb0_link_layer_device(*, check_delay: int = 3) -> bool:
     print('[yellow]Setting up usb0 link layer device ...[/]')
     sh.run(['adb', 'shell', 'svc', 'usb', 'setFunctions', 'ncm'])
