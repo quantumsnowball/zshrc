@@ -1,5 +1,4 @@
 import subprocess as sh
-from time import sleep
 
 from device import main as device
 from dhcp import cleanup_dnsmasq_dhcp_server
@@ -13,11 +12,9 @@ def main() -> None:
         return
 
     # toggle back on client's WiFi
-    sleep(1)
     set_client_wifi(enable=True)
 
     # reset usb functions on android side
-    sleep(1)
     sh.run(['adb', 'shell', 'svc', 'usb', 'setFunctions', 'mtp'])
     link_res = sh.run(
         ['adb', 'shell', 'ip', '-br', 'link'], capture_output=True, text=True
@@ -30,7 +27,6 @@ def main() -> None:
         print('[red]Failed to reset USB functions on android side[/]')
 
     # clean up any ad-hoc spawn dnsmasq dhcp leftover
-    sleep(1)
     cleanup_dnsmasq_dhcp_server()
 
 

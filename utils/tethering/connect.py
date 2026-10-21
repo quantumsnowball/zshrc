@@ -1,4 +1,3 @@
-from time import sleep
 from typing import Annotated, Literal
 
 import typer
@@ -30,43 +29,31 @@ def quest2() -> None:
     # ensure only one device connected
     device()
     # enable the usb link layer device
-    sleep(1)
     enable_usb0_link_layer_device()
     # extract host new usb interface name
-    sleep(1)
     host_iface = detect_host_interface(name_starts_with='enp0')
     # ensure ufw allow all incoming network traffics for this interface
-    sleep(1)
     firewall_allow_interface(host_iface, comment='tethering-quest2')
     # network prefix
     network_prefix = '10.77.0'
     host_ip = f'{network_prefix}.1'
     # assign an ip address to the server side
-    sleep(1)
     setup_host_ip(host_iface, network_prefix)
     # start a dhcp server on the host and let
-    sleep(1)
     start_dnsmasq_server(host_iface, network_prefix)
     # make the android client request an ip through dhcp
-    sleep(1)
     setup_client_ip()
     # test the usb connection from client side
-    sleep(1)
     ping_from_client_to(host_ip)
     # test the usb connection from host side
-    sleep(1)
     ping_from_host(host_iface)
     # disable the client's WiFi
-    sleep(1)
     set_client_wifi(enable=False)
     # safely kill the dhcp server
-    sleep(1)
     cleanup_dnsmasq_dhcp_server()
     # make sure adb reverse is off so only tethering is active
-    sleep(1)
     remove_all_adb_reverse_channels()
     # ready
-    sleep(1)
     usb_connection_ready()
 
 
@@ -76,22 +63,16 @@ def s7() -> None:
     # ensure only one device connected
     device()
     # toggle on the android native tethering button
-    sleep(1)
     enable_android_native_tethering()
     # extract host new usb interface name
-    sleep(1)
     host_iface = detect_host_interface(name_starts_with='enp0')
     # ensure ufw allow all incoming network traffics for this interface
-    sleep(1)
     firewall_allow_interface(host_iface, comment='tethering-s7')
     # disable the client's WiFi
-    sleep(1)
     set_client_wifi(enable=False)
     # make sure adb reverse is off so only tethering is active
-    sleep(1)
     remove_all_adb_reverse_channels()
     # ready
-    sleep(1)
     usb_connection_ready()
 
 
