@@ -27,6 +27,8 @@ def enable_usb0_link_layer_device(*, check_delay: int = 3) -> None:
     @now
     @task('setup usb0 link layer device', halt=True)
     def _() -> None:
+        # NCM (Network Control Model)
+        # activates USB Ethernet Tethering using the modern CDC-NCM protocol (Android 12 or later)
         sh.run(['adb', 'shell', 'svc', 'usb', 'setFunctions', 'ncm'])
         sleep(check_delay)
         result = sh.run(['adb', 'shell', 'ip', '-br', 'link'], capture_output=True, text=True)
@@ -38,6 +40,8 @@ def enable_android_native_tethering(*, check_delay: int = 1) -> None:
     @now
     @task('turn on Android native tethering', halt=True)
     def _() -> None:
+        # RNDIS (Remote Network Driver Interface Specification)
+        # ask service manager to change USB device into tethering network protocol (Android 11 or earlier)
         sh.run(['adb', 'shell', 'svc', 'usb', 'setFunctions', 'rndis'])
         sleep(check_delay)
         result = sh.run(['adb', 'shell', 'ip', '-br', 'link'], capture_output=True, text=True)
@@ -49,6 +53,8 @@ def disable_android_usb_device() -> None:
     @now
     @task('reset USB device on android side')
     def _() -> None:
+        # MTP (Media Transfer Protocol)
+        # turning on this mode disable any tethering network device
         sh.run(['adb', 'shell', 'svc', 'usb', 'setFunctions', 'mtp'])
         link_res = sh.run(
             ['adb', 'shell', 'ip', '-br', 'link'], capture_output=True, text=True
