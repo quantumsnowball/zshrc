@@ -46,17 +46,17 @@ def enable_android_native_tethering(*, check_delay: int = 1) -> None:
 
 
 def disable_android_usb_device() -> None:
-    sh.run(['adb', 'shell', 'svc', 'usb', 'setFunctions', 'mtp'])
-    link_res = sh.run(
-        ['adb', 'shell', 'ip', '-br', 'link'], capture_output=True, text=True
-    )
-    link_output = link_res.stdout
-    link_active = 'rndis0' in link_output or 'usb0' in link_output
-    if not link_active:
-        print('[green]Reset USB functions on android side[/]')
-        return
-
-    print('[red]Failed to reset USB functions on android side[/]')
+    @now
+    @task('reset USB device on android side')
+    def _() -> None:
+        sh.run(['adb', 'shell', 'svc', 'usb', 'setFunctions', 'mtp'])
+        link_res = sh.run(
+            ['adb', 'shell', 'ip', '-br', 'link'], capture_output=True, text=True
+        )
+        link_output = link_res.stdout
+        link_active = 'rndis0' in link_output or 'usb0' in link_output
+        if link_active:
+            raise RuntimeError
 
 
 def remove_all_reverse_channels() -> None:
