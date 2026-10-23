@@ -12,7 +12,17 @@
 import re
 from pathlib import Path
 
-Game = tuple[str, str]
+from zsh.ui import LiveTable
+
+
+class Game:
+    class AppId:
+        def __init__(self, text: str) -> None:
+            self.text = text
+
+    def __init__(self, name: str, app_id: str) -> None:
+        self.name = name
+        self.app_id = self.AppId(str(app_id))
 
 
 def scan_for_games(steam_dirs: list[Path]) -> list[Game]:
@@ -40,13 +50,13 @@ def scan_for_games(steam_dirs: list[Path]) -> list[Game]:
                 name_match = name_pattern.search(content)
                 if name_match:
                     name: str = name_match.group(1)
-                    games.append((name, appid))
+                    games.append(Game(name, appid))
                     seen_appids.add(appid)
             except Exception:
                 continue
 
     # sort case-insensitively by game name
-    games.sort(key=lambda x: x[0].lower())
+    games.sort(key=lambda game: game.name.lower())
 
     return games
 
@@ -61,9 +71,14 @@ def main():
 
     games = scan_for_games(steam_dirs)
 
-    # print formatted output
-    for name, appid in games:
-        print(f'{name:<50} | {appid}')
+    # print LiveTable
+    with LiveTable(
+        [[g.app_id,] for g in games],
+        stubs=[g.name for g in games],
+        stub_header='Game',
+        cell_headers=['id',]
+    ) as table:
+        table.update()
 
 
 if __name__ == '__main__':
