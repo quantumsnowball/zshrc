@@ -67,13 +67,13 @@ def load_launch_options(steam_dirs: list[Path]) -> dict[str, str]:
 
 def scan_for_games(steam_dirs: list[Path]) -> list[Game]:
     games: list[Game] = []
-    seen_appids: set[str] = set()
+    seen_app_ids: set[str] = set()
 
     # load launch options from steam userdata config
     launch_options_map = load_launch_options(steam_dirs)
 
     # compile regex for appid and name extraction
-    appid_pattern = re.compile(r'appmanifest_(\d+)\.acf')
+    app_id_pattern = re.compile(r'appmanifest_(\d+)\.acf')
     name_pattern = re.compile(r'"name"\s+"([^"]+)"')
 
     for steam_dir in steam_dirs:
@@ -82,20 +82,20 @@ def scan_for_games(steam_dirs: list[Path]) -> list[Game]:
         # iterate over all acf manifest files
         for manifest in steam_dir.glob('appmanifest_*.acf'):
             # extract appid from filename
-            match = appid_pattern.search(manifest.name)
+            match = app_id_pattern.search(manifest.name)
             if not match:
                 continue
-            appid: str = match.group(1)
-            if appid in seen_appids:
+            app_id: str = match.group(1)
+            if app_id in seen_app_ids:
                 continue
             try:
                 content = manifest.read_text(encoding='utf-8', errors='ignore')
                 name_match = name_pattern.search(content)
                 if name_match:
                     name: str = name_match.group(1)
-                    opt = launch_options_map.get(appid, '')
-                    games.append(Game.create(name, appid, opt))
-                    seen_appids.add(appid)
+                    launch_options = launch_options_map.get(app_id, '')
+                    games.append(Game.create(name, app_id, launch_options))
+                    seen_app_ids.add(app_id)
             except Exception:
                 continue
 
@@ -117,8 +117,8 @@ def main() -> None:
 
     # print LiveTable
     with LiveTable(
-        [[g.app_id, g.launch_options] for g in games],
-        stubs=[g.name for g in games],
+        [[game.app_id, game.launch_options] for game in games],
+        stubs=[game.name for game in games],
         stub_header='[bold magenta]Game[/]',
         stub_column_kwargs=dict(style='bold white',),
         cell_headers=['App Id', 'Launch Options'],
