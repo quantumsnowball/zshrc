@@ -10,6 +10,9 @@ alias steam.reset.assetto-corsa='steam.reset && pkill -e -f "acs"'
 
 # Update your .zshrc with this version
 steam.linux.installed-games() {
+    uv run $XDG_CONFIG_HOME/zshrc/utils/steam/linux.installed-games.py;
+}
+steam.linux.installed-games_() {
     local steam_dirs=(
         "$HOME/.local/share/Steam/steamapps"
         # "$HOME/.steam/steam/steamapps"
@@ -20,12 +23,12 @@ steam.linux.installed-games() {
     (
         for dir in $steam_dirs; do
             [[ -d "$dir" ]] || continue
-            
+
             for manifest in "$dir"/appmanifest_*.acf(N); do
                 local appid=${${manifest##*/appmanifest_}%.acf}
                 # Extract name, removing potential trailing whitespace
                 local name=$(grep -Po '"name"\s+"\K[^"]+' "$manifest")
-                
+
                 # Output Name followed by AppID, separated by a unique delimiter for sorting
                 printf "%s|%s\n" "$name" "$appid"
             done
