@@ -1,8 +1,8 @@
 #!/usr/bin/env -S uv run
 # /// script
 # dependencies = [
-#   "zsh",
-#   "rich",
+#     "zsh",
+#     "rich",
 # ]
 #
 # [tool.uv.sources]
@@ -20,14 +20,55 @@ class Game:
         def __init__(self, text: str) -> None:
             self.text = text
 
-    def __init__(self, name: str, app_id: str) -> None:
+    class LaunchOptions:
+        def __init__(self, text: str) -> None:
+            self.text = text
+
+    def __init__(self, name: str, app_id: str, launch_options: str = '') -> None:
         self.name = name
         self.app_id = self.AppId(str(app_id))
+        self.launch_options = self.LaunchOptions(str(launch_options))
+
+
+def load_launch_options(steam_dirs: list[Path]) -> dict[str, str]:
+    launch_options = {}
+    app_id_pattern = re.compile(r'^\s*"(\d+)"\s*(?:\{)?\s*$')
+    launch_opt_pattern = re.compile(r'^\s*"LaunchOptions"\s+"(.*?)"\s*$')
+
+    for steam_dir in steam_dirs:
+        steam_root = steam_dir.parent
+        userdata_dir = steam_root / 'userdata'
+        if not userdata_dir.is_dir():
+            continue
+
+        for user_dir in userdata_dir.iterdir():
+            localconfig = user_dir / 'config' / 'localconfig.vdf'
+            if not localconfig.is_file():
+                continue
+            try:
+                content = localconfig.read_text(encoding='utf-8', errors='ignore')
+                last_seen_id = None
+                for line in content.splitlines():
+                    stripped = line.strip()
+                    app_match = app_id_pattern.match(stripped)
+                    if app_match:
+                        last_seen_id = app_match.group(1)
+                        continue
+
+                    opt_match = launch_opt_pattern.match(stripped)
+                    if opt_match and last_seen_id:
+                        launch_options[last_seen_id] = opt_match.group(1)
+            except Exception:
+                continue
+    return launch_options
 
 
 def scan_for_games(steam_dirs: list[Path]) -> list[Game]:
     games: list[Game] = []
     seen_appids: set[str] = set()
+
+    # load launch options from steam userdata config
+    launch_options_map = load_launch_options(steam_dirs)
 
     # compile regex for appid and name extraction
     appid_pattern = re.compile(r'appmanifest_(\d+)\.acf')
@@ -50,7 +91,8 @@ def scan_for_games(steam_dirs: list[Path]) -> list[Game]:
                 name_match = name_pattern.search(content)
                 if name_match:
                     name: str = name_match.group(1)
-                    games.append(Game(name, appid))
+                    opt = launch_options_map.get(appid, '')
+                    games.append(Game(name, appid, opt))
                     seen_appids.add(appid)
             except Exception:
                 continue
@@ -61,7 +103,7 @@ def scan_for_games(steam_dirs: list[Path]) -> list[Game]:
     return games
 
 
-def main():
+def main() -> None:
     # define potential steam installation paths
     steam_dirs = [
         Path.home() / '.local/share/Steam/steamapps',
@@ -73,14 +115,13 @@ def main():
 
     # print LiveTable
     with LiveTable(
-        [[g.app_id,] for g in games],
+        [[g.app_id, g.launch_options] for g in games],
         stubs=[g.name for g in games],
         stub_header='[bold magenta]Game[/]',
         stub_column_kwargs=dict(style='bold white',),
-        cell_headers=['id',],
+        cell_headers=['App Id', 'Launch Options'],
         cell_column_kwargs=dict(
             header_style='bold magenta',
-            justify='right',
         ),
     ) as table:
         table.update()
