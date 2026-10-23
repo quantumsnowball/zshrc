@@ -75,8 +75,13 @@ def main():
     with LiveTable(
         [[g.app_id,] for g in games],
         stubs=[g.name for g in games],
-        stub_header='Game',
-        cell_headers=['id',]
+        stub_header='[bold magenta]Game[/]',
+        stub_column_kwargs=dict(style='bold white',),
+        cell_headers=['id',],
+        cell_column_kwargs=dict(
+            header_style='bold magenta',
+            justify='right',
+        ),
     ) as table:
         table.update()
 
