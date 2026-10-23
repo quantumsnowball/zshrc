@@ -10,24 +10,26 @@
 # ///
 
 import re
+from dataclasses import dataclass
 from pathlib import Path
+from typing import Self
 
 from zsh.ui import LiveTable
 
 
+@dataclass
 class Game:
-    class AppId:
-        def __init__(self, text: str) -> None:
-            self.text = text
+    @dataclass
+    class Cell:
+        text: str
 
-    class LaunchOptions:
-        def __init__(self, text: str) -> None:
-            self.text = text
+    name: str
+    app_id: Cell
+    launch_options: Cell
 
-    def __init__(self, name: str, app_id: str, launch_options: str = '') -> None:
-        self.name = name
-        self.app_id = self.AppId(str(app_id))
-        self.launch_options = self.LaunchOptions(str(launch_options))
+    @classmethod
+    def create(cls, name: str, app_id: str, launch_options: str = '') -> Self:
+        return cls(name, cls.Cell(app_id), cls.Cell(launch_options))
 
 
 def load_launch_options(steam_dirs: list[Path]) -> dict[str, str]:
@@ -92,7 +94,7 @@ def scan_for_games(steam_dirs: list[Path]) -> list[Game]:
                 if name_match:
                     name: str = name_match.group(1)
                     opt = launch_options_map.get(appid, '')
-                    games.append(Game(name, appid, opt))
+                    games.append(Game.create(name, appid, opt))
                     seen_appids.add(appid)
             except Exception:
                 continue
