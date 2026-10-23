@@ -20,16 +20,16 @@ from zsh.ui import LiveTable
 @dataclass
 class Game:
     @dataclass
-    class Cell:
+    class Info:
         text: str
 
     name: str
-    app_id: Cell
-    launch_options: Cell
+    app_id: Info
+    launch_options: Info
 
     @classmethod
     def create(cls, name: str, app_id: str, launch_options: str = '') -> Self:
-        return cls(name, cls.Cell(app_id), cls.Cell(launch_options))
+        return cls(name, cls.Info(app_id), cls.Info(launch_options))
 
 
 def load_launch_options(steam_dirs: list[Path]) -> dict[str, str]:
