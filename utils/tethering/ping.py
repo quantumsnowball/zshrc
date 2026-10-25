@@ -28,6 +28,7 @@ def from_host_to_client_ip(client_ip: str, host_iface: str, *, count: int = 5) -
             raise RuntimeError
 
 
+# deprecated function
 def from_host(host_iface: str, *, count: int = 5) -> None:
     @task('find client IP from dnsmasq lease file')
     def f() -> str:
