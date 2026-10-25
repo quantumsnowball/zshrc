@@ -14,6 +14,7 @@ tethering.ping-test() {
 }
 
 tethering.connect() {
+    sudo.now
     uv run --no-active "$XDG_CONFIG_HOME/zshrc/utils/tethering/connect.py" "$@"
 }
 
