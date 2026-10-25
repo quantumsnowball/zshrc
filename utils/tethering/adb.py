@@ -1,11 +1,21 @@
 import subprocess as sh
+from enum import Enum
 from time import sleep
 
 from rich import print
 from task import now, task
 
 
-def detect_client_ip(client_iface: str = 'rndis0') -> str:
+class ClientIface(str, Enum):
+    RNDIS0 = 'rndis0'
+    USB0 = 'usb0'
+
+
+rndis0 = ClientIface.RNDIS0
+usb0 = ClientIface.USB0
+
+
+def detect_client_ip(client_iface: ClientIface) -> str:
     @task(f'detect client IP on {client_iface}', halt=True)
     def f() -> str:
         result = sh.run(['adb', 'shell', 'ip', '-4', 'addr', 'show', 'dev', client_iface], capture_output=True, text=True)

@@ -9,6 +9,10 @@ tethering.info() {
     uv run --no-active "$XDG_CONFIG_HOME/zshrc/utils/tethering/info.py" "$@"
 }
 
+tethering.ping-test() {
+    uv run --no-active "$XDG_CONFIG_HOME/zshrc/utils/tethering/ping.py" "$@"
+}
+
 tethering.connect() {
     uv run --no-active "$XDG_CONFIG_HOME/zshrc/utils/tethering/connect.py" "$@"
 }

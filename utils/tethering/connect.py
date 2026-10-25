@@ -50,10 +50,11 @@ def quest2() -> None:
 
     # -- testing --
     # test the usb connection from client side
-    client_iface = 'usb0'
-    ping.from_client_to_host_ip(host_ip, client_iface)
+    host_ip = network.detect_host_ip(host_iface)
+    ping.from_client_to_host_ip(host_ip)
     # test the usb connection from host side
-    ping.from_host(host_iface)
+    client_ip = adb.detect_client_ip(adb.usb0)
+    ping.from_host_to_client_ip(client_ip, host_iface)
 
     # -- done --
     # ready
@@ -88,7 +89,7 @@ def s7() -> None:
     host_ip = network.detect_host_ip(host_iface)
     ping.from_client_to_host_ip(host_ip)
     # test the usb connection from host side
-    client_ip = adb.detect_client_ip()
+    client_ip = adb.detect_client_ip(adb.rndis0)
     ping.from_host_to_client_ip(client_ip, host_iface)
 
     # -- done --
