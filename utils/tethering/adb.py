@@ -1,11 +1,12 @@
 import subprocess as sh
 from time import sleep
+from typing import Literal
 
 from rich import print
 from task import now, task
 
 
-def detect_client_ip(client_iface: str = 'rndis0') -> str:
+def detect_client_ip(client_iface: Literal['usb0', 'rndis0'] = 'rndis0') -> str:
     @task(f'detect client IP on {client_iface}', halt=True)
     def f() -> str:
         result = sh.run(['adb', 'shell', 'ip', '-4', 'addr', 'show', 'dev', client_iface], capture_output=True, text=True)
