@@ -1,7 +1,11 @@
 import subprocess as sh
 
+import adb
+import network
 from dhcp import DNSMASQ_LEASEFILE_PATH
 from task import now, task
+
+import utils
 
 
 def from_client_to_host_ip(host_ip: str, client_iface: str | None = None, *, count: int = 5) -> None:
@@ -40,3 +44,18 @@ def from_host(host_iface: str, *, count: int = 5) -> None:
     #
     client_ip = f()
     from_host_to_client_ip(client_ip, host_iface, count=count)
+
+
+@utils.exit_on_runtime_error
+def main() -> None:
+    host_iface = network.detect_host_iface(name_starts_with='enp0')
+    # test the usb connection from client side
+    host_ip = network.detect_host_ip(host_iface)
+    from_client_to_host_ip(host_ip)
+    # test the usb connection from host side
+    client_ip = adb.detect_client_ip()
+    from_host_to_client_ip(client_ip, host_iface)
+
+
+if __name__ == '__main__':
+    main()
