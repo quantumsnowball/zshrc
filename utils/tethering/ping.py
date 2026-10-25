@@ -53,7 +53,8 @@ def main() -> None:
     host_ip = network.detect_host_ip(host_iface)
     from_client_to_host_ip(host_ip)
     # test the usb connection from host side
-    client_ip = adb.detect_client_ip()
+    client_iface = 'rndis0' if host_ip.startswith('192.168') else 'usb0'
+    client_ip = adb.detect_client_ip(client_iface)
     from_host_to_client_ip(client_ip, host_iface)
 
 
