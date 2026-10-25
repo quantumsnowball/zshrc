@@ -88,7 +88,7 @@ def s7() -> None:
     host_ip = network.detect_host_ip(host_iface)
     ping.from_client_to_host_ip(host_ip)
     # test the usb connection from host side
-    client_ip = adb.detect_client_ip()
+    client_ip = adb.detect_client_ip(adb.rndis0)
     ping.from_host_to_client_ip(client_ip, host_iface)
 
     # -- done --
