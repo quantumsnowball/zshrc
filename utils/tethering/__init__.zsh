@@ -2,22 +2,22 @@ ensure adb || return
 
 
 tethering.device() {
-    uv run --no-active "$XDG_CONFIG_HOME/zshrc/utils/tethering/device.py" "$@"
+    uv run "$XDG_CONFIG_HOME/zshrc/utils/tethering/device.py" "$@"
 }
 
 tethering.info() {
-    uv run --no-active "$XDG_CONFIG_HOME/zshrc/utils/tethering/info.py" "$@"
+    uv run "$XDG_CONFIG_HOME/zshrc/utils/tethering/info.py" "$@"
 }
 
 tethering.ping-test() {
-    uv run --no-active "$XDG_CONFIG_HOME/zshrc/utils/tethering/ping.py" "$@"
+    uv run "$XDG_CONFIG_HOME/zshrc/utils/tethering/ping.py" "$@"
 }
 
 tethering.connect() {
     sudo.now
-    uv run --no-active "$XDG_CONFIG_HOME/zshrc/utils/tethering/connect.py" "$@"
+    uv run "$XDG_CONFIG_HOME/zshrc/utils/tethering/connect.py" "$@"
 }
 
 tethering.disconnect() {
-    uv run --no-active "$XDG_CONFIG_HOME/zshrc/utils/tethering/disconnect.py" "$@"
+    uv run "$XDG_CONFIG_HOME/zshrc/utils/tethering/disconnect.py" "$@"
 }

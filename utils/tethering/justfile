@@ -1,2 +1,2 @@
 check-types:
-    uv run --no-active mypy .
+    uv run mypy .
