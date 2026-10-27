@@ -50,7 +50,7 @@ alias uv.venv.ls='uv.venv-info'
 alias uv.cache.prune='uv cache prune'
 alias uvprune=uv.cache.prune
 uv.venv-info () {
-    uv run $HOME/.config/zshrc/utils/uv/lib/venv-info.py
+    uv run $XDG_CONFIG_HOME/zshrc/utils/uv/venv-info.py
 }
 alias uv.disk-usage=uv.venv-info
 uv.trace-hardlink() {
@@ -83,7 +83,7 @@ uv.cache.list-entries() {
         local tag=$(grep -m1 '^Tag:' "$wheel[1]" | cut -d' ' -f2-)
         # print
         printf '%-40s %-40s %s\n' "$pkg" "$tag" "${dir:t}"
-    done | 
+    done |
         sort -f -k1 |  # sort by pkg name
         less -c -S -R
 }
