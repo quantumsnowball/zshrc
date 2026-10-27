@@ -29,6 +29,11 @@ alias zsh.reset-completion-cache='rm ~/.zcompdump*'
 # exit
 alias x=exit
 alias q=exit
+# press any key to exit
+zsh.press-any-key-to-exit() {
+    echo "${YELLOW}Press any key to exit ... ${RESET}"
+    read -k1 -s
+}
 # process
 alias jobs='jobs -l'
 # profiling
