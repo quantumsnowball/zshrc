@@ -20,3 +20,15 @@ uv.venv() {
         return 1
     fi
 }
+
+uv.py() {
+    local default_venv_name="python3"
+    local venv_name="${1:-$default_venv_name}"
+    # activate venv
+    uv.venv $venv_name && {
+        # start interactive python shell in the venv
+        python
+        # then deactivate clean up
+        command -v deactivate &>/dev/null && deactivate
+    }
+}
