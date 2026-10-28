@@ -51,10 +51,12 @@ class Icon:
                 app_data = data.get('data', {}).get(str(self.app_id), {})
                 common_data = app_data.get('common', {})
                 return common_data.get('clienticon')
-            except Exception as err:
-                typer.echo(f'  [warn] failed to query steamcmd api for icon: {err}')
+            except Exception:
                 return None
         icon_hash = _icon_hash()
+        if not icon_hash:
+            typer.echo('  [fail] failed to query steamcmd api for icon hash, cancelled download')
+            return
 
         # download
         asset = Asset(f'{self.shortcut_id}_icon.png', f'https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/{self.app_id}/{icon_hash}.ico')
