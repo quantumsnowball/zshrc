@@ -5,7 +5,6 @@
 # ]
 # ///
 
-import sys
 from pathlib import Path
 
 import httpx
@@ -18,24 +17,26 @@ def get_default_grid_dir() -> Path:
     steam_base = Path.home() / '.local/share/Steam/userdata'
     if not steam_base.exists():
         typer.echo(f'error: steam userdata directory not found at {steam_base}', err=True)
-        raise sys.exit(1)
+        raise typer.Exit(1)
 
     # locate the first user folder (numerical directory)
     user_dirs = [d for d in steam_base.iterdir() if d.is_dir() and d.name.isdigit()]
     if not user_dirs:
         typer.echo(f'error: no user directories found inside {steam_base}', err=True)
-        raise sys.exit(1)
+        raise typer.Exit(1)
 
     # sort to guarantee predictable fallback
     selected_user = sorted(user_dirs)[0]
     return selected_user / 'config/grid'
 
 
-@app.command()
+@app.command(
+    no_args_is_help=True,
+)
 def fetch(
-    app_id: int = typer.Option(..., '--app-id', '-a', help='official steam app id (e.g., 620980)'),
-    shortcut_id: str = typer.Option(..., '--shortcut-id', '-s', help='non-steam shortcut id (e.g., 2209058095)'),
-    user_id: str = typer.Option(None, '--user-id', '-u', help='override default steam user id'),
+    app_id: int = typer.Option(..., '--app-id', '-a', help='official steam app id'),
+    shortcut_id: int = typer.Option(..., '--shortcut-id', '-s', help='non-steam shortcut id'),
+    user_id: int = typer.Option(None, '--user-id', '-u', help='override default steam user id'),
 ):
     '''
     download official store assets into steam grid config directory
