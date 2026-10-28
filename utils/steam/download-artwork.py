@@ -14,7 +14,7 @@ import typer
 app = typer.Typer(help='fetch official steam library assets for non-steam shortcuts')
 
 
-@dataclass
+@dataclass(kw_only=True)
 class Asset:
     save_name: str
     url: str
@@ -59,7 +59,10 @@ class Icon:
             return
 
         # download
-        asset = Asset(f'{self.shortcut_id}_icon.png', f'https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/{self.app_id}/{icon_hash}.ico')
+        asset = Asset(
+            save_name=f'{self.shortcut_id}_icon.png',
+            url=f'https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/{self.app_id}/{icon_hash}.ico',
+        )
         asset.download(client, save_dir=save_dir)
 
 
@@ -91,10 +94,23 @@ class Artwork:
 
         # create assets
         steamstatic_url = 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps'
-        self.cover = Asset(f'{self.shortcut_id}p.jpg', f'{steamstatic_url}/{self.app_id}/library_600x900.jpg')
-        self.background = Asset(f'{self.shortcut_id}_hero.jpg', f'{steamstatic_url}/{self.app_id}/library_hero.jpg')
-        self.logo = Asset(f'{self.shortcut_id}_logo.png', f'{steamstatic_url}/{self.app_id}/logo.png')
-        self.wide_cover = Asset(f'{self.shortcut_id}.jpg', f'{steamstatic_url}/{self.app_id}/header.jpg')
+        base_path = f'{steamstatic_url}/{self.app_id}'
+        self.cover = Asset(
+            save_name=f'{self.shortcut_id}p.jpg',
+            url=f'{base_path}/library_600x900.jpg',
+        )
+        self.background = Asset(
+            save_name=f'{self.shortcut_id}_hero.jpg',
+            url=f'{base_path}/library_hero.jpg',
+        )
+        self.logo = Asset(
+            save_name=f'{self.shortcut_id}_logo.png',
+            url=f'{base_path}/logo.png',
+        )
+        self.wide_cover = Asset(
+            save_name=f'{self.shortcut_id}.jpg',
+            url=f'{base_path}/header.jpg',
+        )
         self.assets = (self.cover, self.background, self.logo, self.wide_cover)
 
     def download(self, client: httpx.Client) -> None:
