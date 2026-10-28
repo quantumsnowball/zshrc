@@ -70,3 +70,7 @@ def fetch(
                 typer.echo(f'  [fail] {filename} ({err})')
 
     typer.echo('done')
+
+
+if __name__ == '__main__':
+    app()
