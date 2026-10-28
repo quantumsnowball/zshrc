@@ -33,6 +33,32 @@ class Asset:
 
 
 @dataclass
+class Icon:
+    app_id: int
+    shortcut_id: int
+
+    def download(self, client: httpx.Client, save_dir: Path = Path.home()/'Downloads') -> None:
+        def _icon_hash() -> str | None:
+            # query steamcmd public mirror for exact appinfo metadata
+            url = f'https://api.steamcmd.net/v1/info/{self.app_id}'
+            try:
+                response = client.get(url)
+                response.raise_for_status()
+                data = response.json()
+
+                # traverse appinfo JSON tree: data -> <app_id> -> common -> clienticon
+                app_data = data.get('data', {}).get(str(self.app_id), {})
+                common_data = app_data.get('common', {})
+                return common_data.get('clienticon')
+            except Exception as err:
+                typer.echo(f'  [warn] failed to query steamcmd api for icon: {err}')
+                return None
+        icon_hash = _icon_hash()
+        asset = Asset(f'{self.shortcut_id}_icon.png', f'https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/{self.app_id}/{icon_hash}.ico')
+        asset.download(client, save_dir=save_dir)
+
+
+@dataclass
 class Artwork:
     app_id: int
     shortcut_id: int
@@ -71,23 +97,6 @@ class Artwork:
             asset.download(client, save_dir=self.grid_dir)
 
 
-def fetch_client_icon_hash(client: httpx.Client, app_id: int) -> str | None:
-    # query steamcmd public mirror for exact appinfo metadata
-    url = f'https://api.steamcmd.net/v1/info/{app_id}'
-    try:
-        response = client.get(url)
-        response.raise_for_status()
-        data = response.json()
-
-        # traverse appinfo JSON tree: data -> <app_id> -> common -> clienticon
-        app_data = data.get('data', {}).get(str(app_id), {})
-        common_data = app_data.get('common', {})
-        return common_data.get('clienticon')
-    except Exception as err:
-        typer.echo(f'  [warn] failed to query steamcmd api for icon: {err}')
-        return None
-
-
 @app.command(
     no_args_is_help=True,
 )
@@ -102,9 +111,8 @@ def fetch(
     # download
     with httpx.Client(follow_redirects=True) as client:
         # download icon
-        icon_hash = fetch_client_icon_hash(client, app_id)
-        icon = Asset(f'{shortcut_id}_icon.png', f'https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/{app_id}/{icon_hash}.ico')
-        icon.download(client, save_dir=Path.home()/'Downloads')
+        icon = Icon(app_id, shortcut_id)
+        icon.download(client)
         # download artwork
         artwork = Artwork(app_id, shortcut_id, user_id)
         artwork.download(client)
