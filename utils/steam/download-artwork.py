@@ -1,5 +1,6 @@
 # /// script
 # dependencies = [
+#     "rich",
 #     "typer",
 #     "httpx",
 # ]
@@ -10,6 +11,7 @@ from pathlib import Path
 
 import httpx
 import typer
+from rich import print
 
 app = typer.Typer(help='fetch official steam library assets for non-steam shortcuts')
 
@@ -25,11 +27,11 @@ class Asset:
             response = client.get(self.url)
             response.raise_for_status()
             save_path.write_bytes(response.content)
-            typer.echo(f'  [ok] saved {save_path}')
+            print(f'[green]saved {save_path}[/]')
         except httpx.HTTPStatusError as err:
-            typer.echo(f'  [fail] {save_path} (http {err.response.status_code})')
+            print(f'[red]{save_path} (http {err.response.status_code})[/]')
         except Exception as err:
-            typer.echo(f'  [fail] {save_path} ({err})')
+            print(f'[red]{save_path} ({err})[/]')
 
 
 @dataclass
@@ -55,7 +57,7 @@ class Icon:
                 return None
         icon_hash = _icon_hash()
         if not icon_hash:
-            typer.echo('  [fail] failed to query steamcmd api for icon hash, cancelled download')
+            print('[red]failed to query steamcmd api for icon hash, cancelled download[/]')
             return
 
         # download
@@ -77,13 +79,13 @@ class Artwork:
         def _default_grid_dir() -> Path:
             steam_base = Path.home() / '.local/share/Steam/userdata'
             if not steam_base.exists():
-                typer.echo(f'error: steam userdata directory not found at {steam_base}', err=True)
+                print(f'[red]steam userdata directory not found at {steam_base}[/]')
                 raise typer.Exit(1)
 
             # locate the first user folder (numerical directory)
             user_dirs = [d for d in steam_base.iterdir() if d.is_dir() and d.name.isdigit()]
             if not user_dirs:
-                typer.echo(f'error: no user directories found inside {steam_base}', err=True)
+                print(f'[red]no user directories found inside {steam_base}[/]')
                 raise typer.Exit(1)
 
             # sort to guarantee predictable fallback
