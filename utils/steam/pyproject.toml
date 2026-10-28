@@ -7,6 +7,7 @@ dependencies = [
     "rich",
     "typer",
     "httpx",
+    "vdf",
 ]
 
 [tool.pyright]
