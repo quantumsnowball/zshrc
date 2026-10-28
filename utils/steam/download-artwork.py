@@ -36,8 +36,29 @@ class Asset:
 class Artwork:
     app_id: int
     shortcut_id: int
+    user_id: int | None
 
     def __post_init__(self) -> None:
+        # grid_dir
+        def _default_grid_dir() -> Path:
+            steam_base = Path.home() / '.local/share/Steam/userdata'
+            if not steam_base.exists():
+                typer.echo(f'error: steam userdata directory not found at {steam_base}', err=True)
+                raise typer.Exit(1)
+
+            # locate the first user folder (numerical directory)
+            user_dirs = [d for d in steam_base.iterdir() if d.is_dir() and d.name.isdigit()]
+            if not user_dirs:
+                typer.echo(f'error: no user directories found inside {steam_base}', err=True)
+                raise typer.Exit(1)
+
+            # sort to guarantee predictable fallback
+            selected_user = sorted(user_dirs)[0]
+            return selected_user / 'config/grid'
+        self.grid_dir = Path.home() / f'.local/share/Steam/userdata/{self.user_id}/config/grid' if self.user_id else _default_grid_dir()
+        self.grid_dir.mkdir(parents=True, exist_ok=True)
+
+        # create assets
         steamstatic_url = 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps'
         self.cover = Asset(f'{self.shortcut_id}p.jpg', f'{steamstatic_url}/{self.app_id}/library_600x900.jpg')
         self.background = Asset(f'{self.shortcut_id}_hero.jpg', f'{steamstatic_url}/{self.app_id}/library_hero.jpg')
@@ -45,26 +66,9 @@ class Artwork:
         self.wide_cover = Asset(f'{self.shortcut_id}.jpg', f'{steamstatic_url}/{self.app_id}/header.jpg')
         self.assets = (self.cover, self.background, self.logo, self.wide_cover)
 
-    def download(self, client: httpx.Client, grid_dir: Path) -> None:
+    def download(self, client: httpx.Client) -> None:
         for asset in self.assets:
-            asset.download(client, save_dir=grid_dir)
-
-
-def get_default_grid_dir() -> Path:
-    steam_base = Path.home() / '.local/share/Steam/userdata'
-    if not steam_base.exists():
-        typer.echo(f'error: steam userdata directory not found at {steam_base}', err=True)
-        raise typer.Exit(1)
-
-    # locate the first user folder (numerical directory)
-    user_dirs = [d for d in steam_base.iterdir() if d.is_dir() and d.name.isdigit()]
-    if not user_dirs:
-        typer.echo(f'error: no user directories found inside {steam_base}', err=True)
-        raise typer.Exit(1)
-
-    # sort to guarantee predictable fallback
-    selected_user = sorted(user_dirs)[0]
-    return selected_user / 'config/grid'
+            asset.download(client, save_dir=self.grid_dir)
 
 
 def fetch_client_icon_hash(client: httpx.Client, app_id: int) -> str | None:
@@ -95,10 +99,6 @@ def fetch(
     '''
     download official store assets into steam grid config directory
     '''
-    grid_dir = Path.home() / f'.local/share/Steam/userdata/{user_id}/config/grid' if user_id else get_default_grid_dir()
-    grid_dir.mkdir(parents=True, exist_ok=True)
-    typer.echo(f'target directory: {grid_dir}')
-
     # download
     with httpx.Client(follow_redirects=True) as client:
         # download icon
@@ -106,8 +106,8 @@ def fetch(
         icon = Asset(f'{shortcut_id}_icon.png', f'https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/{app_id}/{icon_hash}.ico')
         icon.download(client, save_dir=Path.home()/'Downloads')
         # download artwork
-        artwork = Artwork(app_id, shortcut_id)
-        artwork.download(client, grid_dir)
+        artwork = Artwork(app_id, shortcut_id, user_id)
+        artwork.download(client)
 
 
 if __name__ == '__main__':
