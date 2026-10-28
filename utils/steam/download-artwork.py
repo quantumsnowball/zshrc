@@ -38,6 +38,7 @@ class Icon:
     shortcut_id: int
 
     def download(self, client: httpx.Client, save_dir: Path = Path.home()/'Downloads') -> None:
+        # icon hash
         def _icon_hash() -> str | None:
             # query steamcmd public mirror for exact appinfo metadata
             url = f'https://api.steamcmd.net/v1/info/{self.app_id}'
@@ -54,6 +55,8 @@ class Icon:
                 typer.echo(f'  [warn] failed to query steamcmd api for icon: {err}')
                 return None
         icon_hash = _icon_hash()
+
+        # download
         asset = Asset(f'{self.shortcut_id}_icon.png', f'https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/{self.app_id}/{icon_hash}.ico')
         asset.download(client, save_dir=save_dir)
 
@@ -65,7 +68,7 @@ class Artwork:
     user_id: int | None
 
     def __post_init__(self) -> None:
-        # grid_dir
+        # grid dir
         def _default_grid_dir() -> Path:
             steam_base = Path.home() / '.local/share/Steam/userdata'
             if not steam_base.exists():
@@ -100,10 +103,10 @@ class Artwork:
 @app.command(
     no_args_is_help=True,
 )
-def fetch(
-    app_id: int = typer.Option(..., '--app-id', '-a', help='official steam app id'),
-    shortcut_id: int = typer.Option(..., '--shortcut-id', '-s', help='non-steam shortcut id'),
-    user_id: int | None = typer.Option(None, '--user-id', '-u', help='override default steam user id'),
+def main(
+    app_id: int = typer.Option(..., '--app-id', help='official steam app id'),
+    shortcut_id: int = typer.Option(..., '--shortcut-id', help='non-steam shortcut id'),
+    user_id: int | None = typer.Option(None, '--user-id', help='override default steam user id'),
 ):
     '''
     download official store assets into steam grid config directory
