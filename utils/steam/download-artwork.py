@@ -39,14 +39,14 @@ class Artwork:
 
     def __post_init__(self) -> None:
         steamstatic_url = 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps'
-        # self.icon = Asset()
         self.cover = Asset(f'{self.shortcut_id}p.jpg', f'{steamstatic_url}/{self.app_id}/library_600x900.jpg')
         self.background = Asset(f'{self.shortcut_id}_hero.jpg', f'{steamstatic_url}/{self.app_id}/library_hero.jpg')
         self.logo = Asset(f'{self.shortcut_id}_logo.png', f'{steamstatic_url}/{self.app_id}/logo.png')
         self.wide_cover = Asset(f'{self.shortcut_id}.jpg', f'{steamstatic_url}/{self.app_id}/header.jpg')
+        self.assets = (self.cover, self.background, self.logo, self.wide_cover)
 
     def download(self, client: httpx.Client, grid_dir: Path) -> None:
-        for asset in (self.cover, self.background, self.logo, self.wide_cover):
+        for asset in self.assets:
             asset.download(client, save_dir=grid_dir)
 
 
@@ -95,26 +95,19 @@ def fetch(
     '''
     download official store assets into steam grid config directory
     '''
-    if user_id:
-        grid_dir = Path.home() / f'.local/share/Steam/userdata/{user_id}/config/grid'
-    else:
-        grid_dir = get_default_grid_dir()
-
+    grid_dir = Path.home() / f'.local/share/Steam/userdata/{user_id}/config/grid' if user_id else get_default_grid_dir()
     grid_dir.mkdir(parents=True, exist_ok=True)
     typer.echo(f'target directory: {grid_dir}')
 
     # download
     with httpx.Client(follow_redirects=True) as client:
-        # download artwork
-        artwork = Artwork(app_id, shortcut_id)
-        artwork.download(client, grid_dir)
-
         # download icon
         icon_hash = fetch_client_icon_hash(client, app_id)
         icon = Asset(f'{shortcut_id}_icon.png', f'https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/{app_id}/{icon_hash}.ico')
         icon.download(client, save_dir=Path.home()/'Downloads')
-
-    typer.echo('done')
+        # download artwork
+        artwork = Artwork(app_id, shortcut_id)
+        artwork.download(client, grid_dir)
 
 
 if __name__ == '__main__':
