@@ -53,7 +53,7 @@ def fetch_client_icon_hash(client: httpx.Client, app_id: int) -> str | None:
 def fetch(
     app_id: int = typer.Option(..., '--app-id', '-a', help='official steam app id'),
     shortcut_id: int = typer.Option(..., '--shortcut-id', '-s', help='non-steam shortcut id'),
-    user_id: int = typer.Option(None, '--user-id', '-u', help='override default steam user id'),
+    user_id: int | None = typer.Option(None, '--user-id', '-u', help='override default steam user id'),
 ):
     '''
     download official store assets into steam grid config directory
