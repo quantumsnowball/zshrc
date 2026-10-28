@@ -3,6 +3,7 @@
 # dependencies = [
 #     "zsh",
 #     "rich",
+#     "vdf",
 # ]
 #
 # [tool.uv.sources]
@@ -14,6 +15,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Self
 
+import vdf
 from zsh.ui import LiveTable
 
 
@@ -65,6 +67,39 @@ def load_launch_options(steam_dirs: list[Path]) -> dict[str, str]:
     return launch_options
 
 
+def load_non_steam_games(steam_dirs: list[Path]) -> list[Game]:
+    games: list[Game] = []
+    seen_app_ids: set[str] = set()
+
+    for steam_dir in steam_dirs:
+        steam_root = steam_dir.parent
+        userdata_dir = steam_root / 'userdata'
+        if not userdata_dir.is_dir():
+            continue
+
+        for user_dir in userdata_dir.iterdir():
+            shortcuts_file = user_dir / 'config' / 'shortcuts.vdf'
+            if not shortcuts_file.is_file():
+                continue
+            try:
+                with open(shortcuts_file, 'rb') as f:
+                    content = vdf.binary_load(f)
+                    shortcuts = content.get('shortcuts', {})
+                    for shortcut in shortcuts.values():
+                        if not isinstance(shortcut, dict):
+                            continue
+                        name = shortcut.get('appname') or shortcut.get('AppName', '')
+                        app_id = str(shortcut.get('appid') or shortcut.get('AppID', ''))
+                        launch_options = shortcut.get('launchoptions') or shortcut.get('LaunchOptions', '')
+
+                        if name and app_id not in seen_app_ids:
+                            games.append(Game.create(name, app_id, launch_options))
+                            seen_app_ids.add(app_id)
+            except Exception:
+                continue
+    return games
+
+
 def scan_for_games(steam_dirs: list[Path]) -> list[Game]:
     games: list[Game] = []
     seen_app_ids: set[str] = set()
@@ -99,6 +134,13 @@ def scan_for_games(steam_dirs: list[Path]) -> list[Game]:
             except Exception:
                 continue
 
+    # include non-steam games from shortcuts vdf
+    non_steam_games = load_non_steam_games(steam_dirs)
+    for game in non_steam_games:
+        if game.app_id.text not in seen_app_ids:
+            games.append(game)
+            seen_app_ids.add(game.app_id.text)
+
     # sort case-insensitively by game name
     games.sort(key=lambda game: game.name.lower())
 
@@ -115,7 +157,7 @@ def main() -> None:
 
     games = scan_for_games(steam_dirs)
 
-    # print LiveTable
+    # print live table
     with LiveTable(
         [[game.app_id, game.launch_options] for game in games],
         stubs=[game.name for game in games],
