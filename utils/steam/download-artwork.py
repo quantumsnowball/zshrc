@@ -33,8 +33,8 @@ def get_default_grid_dir() -> Path:
 
 @app.command()
 def fetch(
-    app_id: int = typer.Argument(..., help='official steam app id (e.g., 620980)'),
-    shortcut_id: str = typer.Argument(..., help='non-steam shortcut id (e.g., 2209058095)'),
+    app_id: int = typer.Option(..., '--app-id', '-a', help='official steam app id (e.g., 620980)'),
+    shortcut_id: str = typer.Option(..., '--shortcut-id', '-s', help='non-steam shortcut id (e.g., 2209058095)'),
     user_id: str = typer.Option(None, '--user-id', '-u', help='override default steam user id'),
 ):
     '''
