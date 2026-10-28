@@ -5,12 +5,49 @@
 # ]
 # ///
 
+from dataclasses import dataclass
 from pathlib import Path
 
 import httpx
 import typer
 
 app = typer.Typer(help='fetch official steam library assets for non-steam shortcuts')
+
+
+@dataclass
+class Asset:
+    save_name: str
+    url: str
+
+    def download(self, client: httpx.Client, *, save_dir: Path) -> None:
+        save_path = save_dir / self.save_name
+        try:
+            response = client.get(self.url)
+            response.raise_for_status()
+            save_path.write_bytes(response.content)
+            typer.echo(f'  [ok] saved {save_path}')
+        except httpx.HTTPStatusError as err:
+            typer.echo(f'  [fail] {save_path} (http {err.response.status_code})')
+        except Exception as err:
+            typer.echo(f'  [fail] {save_path} ({err})')
+
+
+@dataclass
+class Artwork:
+    app_id: int
+    shortcut_id: int
+
+    def __post_init__(self) -> None:
+        steamstatic_url = 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps'
+        # self.icon = Asset()
+        self.cover = Asset(f'{self.shortcut_id}p.jpg', f'{steamstatic_url}/{self.app_id}/library_600x900.jpg')
+        self.background = Asset(f'{self.shortcut_id}_hero.jpg', f'{steamstatic_url}/{self.app_id}/library_hero.jpg')
+        self.logo = Asset(f'{self.shortcut_id}_logo.png', f'{steamstatic_url}/{self.app_id}/logo.png')
+        self.wide_cover = Asset(f'{self.shortcut_id}.jpg', f'{steamstatic_url}/{self.app_id}/header.jpg')
+
+    def download(self, client: httpx.Client, grid_dir: Path) -> None:
+        for asset in (self.cover, self.background, self.logo, self.wide_cover):
+            asset.download(client, save_dir=grid_dir)
 
 
 def get_default_grid_dir() -> Path:
@@ -66,36 +103,16 @@ def fetch(
     grid_dir.mkdir(parents=True, exist_ok=True)
     typer.echo(f'target directory: {grid_dir}')
 
-    # base artwork assets: (output_filename, cdn_url)
-    assets = [
-        (f'{shortcut_id}p.jpg', f'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/{app_id}/library_600x900.jpg'),
-        (f'{shortcut_id}_hero.jpg', f'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/{app_id}/library_hero.jpg'),
-        (f'{shortcut_id}_logo.png', f'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/{app_id}/logo.png'),
-        (f'{shortcut_id}.jpg', f'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/{app_id}/header.jpg'),
-    ]
-
+    # download
     with httpx.Client(follow_redirects=True) as client:
-        # resolve icon hash dynamically via steamcmd metadata
-        icon_hash = fetch_client_icon_hash(client, app_id)
-        if icon_hash:
-            # fetch both .ico and .png variants from steam cdn
-            icon_url_ico = f'https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/{app_id}/{icon_hash}.ico'
-            # save the ico file as png
-            assets.append((f'{shortcut_id}_icon.png', icon_url_ico))
-        else:
-            typer.echo('  [warn] clienticon hash not found in appinfo')
+        # download artwork
+        artwork = Artwork(app_id, shortcut_id)
+        artwork.download(client, grid_dir)
 
-        for filename, url in assets:
-            dest_path = grid_dir / filename
-            try:
-                response = client.get(url)
-                response.raise_for_status()
-                dest_path.write_bytes(response.content)
-                typer.echo(f'  [ok] saved {filename}')
-            except httpx.HTTPStatusError as err:
-                typer.echo(f'  [fail] {filename} (http {err.response.status_code})')
-            except Exception as err:
-                typer.echo(f'  [fail] {filename} ({err})')
+        # download icon
+        icon_hash = fetch_client_icon_hash(client, app_id)
+        icon = Asset(f'{shortcut_id}_icon.png', f'https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/{app_id}/{icon_hash}.ico')
+        icon.download(client, save_dir=Path.home()/'Downloads')
 
     typer.echo('done')
 
