@@ -6,6 +6,7 @@
 # ]
 # ///
 
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -35,7 +36,7 @@ class Asset:
 
 
 @dataclass
-class Downloader:
+class Downloader(ABC):
     app_id: int
     shortcut_id: int
     user_id: int | None
@@ -59,6 +60,10 @@ class Downloader:
             return selected_user / 'config/grid'
         self.grid_dir = Path.home() / f'.local/share/Steam/userdata/{self.user_id}/config/grid' if self.user_id else _default_grid_dir()
         self.grid_dir.mkdir(parents=True, exist_ok=True)
+
+    @abstractmethod
+    def download(self, client: httpx.Client) -> None:
+        ...
 
 
 @dataclass
