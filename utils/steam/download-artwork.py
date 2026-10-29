@@ -6,6 +6,7 @@
 # ]
 # ///
 
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -35,11 +36,39 @@ class Asset:
 
 
 @dataclass
-class Icon:
+class Downloader(ABC):
     app_id: int
     shortcut_id: int
+    user_id: int | None
 
-    def download(self, client: httpx.Client, save_dir: Path = Path.home()/'Downloads') -> None:
+    def __post_init__(self) -> None:
+        # grid dir
+        def _default_grid_dir() -> Path:
+            steam_base = Path.home() / '.local/share/Steam/userdata'
+            if not steam_base.exists():
+                print(f'[red]steam userdata directory not found at {steam_base}[/]')
+                raise typer.Exit(1)
+
+            # locate the first user folder (numerical directory)
+            user_dirs = [d for d in steam_base.iterdir() if d.is_dir() and d.name.isdigit()]
+            if not user_dirs:
+                print(f'[red]no user directories found inside {steam_base}[/]')
+                raise typer.Exit(1)
+
+            # sort to guarantee predictable fallback
+            selected_user = sorted(user_dirs)[0]
+            return selected_user / 'config/grid'
+        self.grid_dir = Path.home() / f'.local/share/Steam/userdata/{self.user_id}/config/grid' if self.user_id else _default_grid_dir()
+        self.grid_dir.mkdir(parents=True, exist_ok=True)
+
+    @abstractmethod
+    def download(self, client: httpx.Client) -> None:
+        ...
+
+
+@dataclass
+class Icon(Downloader):
+    def download(self, client: httpx.Client) -> None:
         # icon hash
         def _icon_hash() -> str | None:
             # query steamcmd public mirror for exact appinfo metadata
@@ -65,34 +94,13 @@ class Icon:
             save_name=f'{self.shortcut_id}_icon.png',
             url=f'https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/{self.app_id}/{icon_hash}.ico',
         )
-        asset.download(client, save_dir=save_dir)
+        asset.download(client, save_dir=self.grid_dir)
 
 
 @dataclass
-class Artwork:
-    app_id: int
-    shortcut_id: int
-    user_id: int | None
-
+class Artwork(Downloader):
     def __post_init__(self) -> None:
-        # grid dir
-        def _default_grid_dir() -> Path:
-            steam_base = Path.home() / '.local/share/Steam/userdata'
-            if not steam_base.exists():
-                print(f'[red]steam userdata directory not found at {steam_base}[/]')
-                raise typer.Exit(1)
-
-            # locate the first user folder (numerical directory)
-            user_dirs = [d for d in steam_base.iterdir() if d.is_dir() and d.name.isdigit()]
-            if not user_dirs:
-                print(f'[red]no user directories found inside {steam_base}[/]')
-                raise typer.Exit(1)
-
-            # sort to guarantee predictable fallback
-            selected_user = sorted(user_dirs)[0]
-            return selected_user / 'config/grid'
-        self.grid_dir = Path.home() / f'.local/share/Steam/userdata/{self.user_id}/config/grid' if self.user_id else _default_grid_dir()
-        self.grid_dir.mkdir(parents=True, exist_ok=True)
+        super().__post_init__()
 
         # create assets
         steamstatic_url = 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps'
@@ -134,7 +142,7 @@ def main(
     # download
     with httpx.Client(follow_redirects=True) as client:
         # download icon
-        icon = Icon(app_id, shortcut_id)
+        icon = Icon(app_id, shortcut_id, user_id)
         icon.download(client)
         # download artwork
         artwork = Artwork(app_id, shortcut_id, user_id)
