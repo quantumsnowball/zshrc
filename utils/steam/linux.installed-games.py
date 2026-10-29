@@ -162,7 +162,7 @@ def main() -> None:
         stubs=[game.name for game in non_steam_games],
         stub_header='[bold magenta]Non-Steam Game[/]',
         stub_column_kwargs=dict(style='bold white'),
-        cell_headers=['App Id', 'Launch Options'],
+        cell_headers=['Shortcut Id', 'Launch Options'],
         cell_column_kwargs=dict(header_style='bold magenta'),
     ) as table:
         table.update()
