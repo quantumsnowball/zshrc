@@ -22,9 +22,15 @@ class Asset:
     save_name: str
     url: str
 
-    def download(self, client: httpx.Client, *, save_dir: Path) -> None:
+    def download(self, client: httpx.Client, *, save_dir: Path, force: bool = False) -> None:
         save_dir.mkdir(parents=True, exist_ok=True)
         save_path = save_dir / self.save_name
+
+        # check if asset exists and skip if force is false
+        if save_path.exists() and not force:
+            print(f'[yellow]skipped {save_path} (already exists)[/]')
+            return
+
         try:
             response = client.get(self.url)
             response.raise_for_status()
@@ -62,13 +68,21 @@ class Downloader(ABC):
         self.grid_dir = Path.home() / f'.local/share/Steam/userdata/{self.user_id}/config/grid' if self.user_id else _default_grid_dir()
 
     @abstractmethod
-    def download(self, client: httpx.Client) -> None:
+    def download(self, client: httpx.Client, *, force: bool) -> None:
         ...
 
 
 @dataclass
 class Icon(Downloader):
-    def download(self, client: httpx.Client) -> None:
+    def download(self, client: httpx.Client, *, force: bool) -> None:
+        save_dir = self.grid_dir / 'icons'
+        save_path = save_dir / f'{self.shortcut_id}_icon.png'
+
+        # check if target icon exists before querying API
+        if save_path.exists() and not force:
+            print(f'[yellow]skipped {save_path} (already exists)[/]')
+            return
+
         # icon hash
         def _icon_hash() -> str | None:
             # query steamcmd public mirror for exact appinfo metadata
@@ -84,6 +98,7 @@ class Icon(Downloader):
                 return common_data.get('clienticon')
             except Exception:
                 return None
+
         icon_hash = _icon_hash()
         if not icon_hash:
             print('[red]failed to query steamcmd api for icon hash, cancelled download[/]')
@@ -94,7 +109,7 @@ class Icon(Downloader):
             save_name=f'{self.shortcut_id}_icon.png',
             url=f'https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/{self.app_id}/{icon_hash}.ico',
         )
-        asset.download(client, save_dir=self.grid_dir/'icons')
+        asset.download(client, save_dir=save_dir, force=force)
 
 
 @dataclass
@@ -123,9 +138,9 @@ class Artwork(Downloader):
         )
         self.assets = (self.cover, self.background, self.logo, self.wide_cover)
 
-    def download(self, client: httpx.Client) -> None:
+    def download(self, client: httpx.Client, *, force: bool) -> None:
         for asset in self.assets:
-            asset.download(client, save_dir=self.grid_dir)
+            asset.download(client, save_dir=self.grid_dir, force=force)
 
 
 @app.command(
@@ -135,6 +150,7 @@ def main(
     app_id: int = typer.Option(..., '--app-id', help='official steam app id'),
     shortcut_id: int = typer.Option(..., '--shortcut-id', help='non-steam shortcut id'),
     user_id: int | None = typer.Option(None, '--user-id', help='override default steam user id'),
+    force: bool = typer.Option(False, '--force', help='overwrite artwork and icon if they already exist'),
 ):
     '''
     download official store assets into steam grid config directory
@@ -143,10 +159,10 @@ def main(
     with httpx.Client(follow_redirects=True) as client:
         # download icon
         icon = Icon(app_id, shortcut_id, user_id)
-        icon.download(client)
+        icon.download(client, force=force)
         # download artwork
         artwork = Artwork(app_id, shortcut_id, user_id)
-        artwork.download(client)
+        artwork.download(client, force=force)
 
 
 if __name__ == '__main__':
