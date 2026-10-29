@@ -94,7 +94,7 @@ class Icon(Downloader):
             save_name=f'{self.shortcut_id}_icon.png',
             url=f'https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/{self.app_id}/{icon_hash}.ico',
         )
-        asset.download(client, save_dir=self.grid_dir)
+        asset.download(client, save_dir=self.grid_dir/'icons')
 
 
 @dataclass
