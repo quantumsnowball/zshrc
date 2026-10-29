@@ -89,7 +89,9 @@ def load_non_steam_games(steam_dirs: list[Path]) -> list[Game]:
                         if not isinstance(shortcut, dict):
                             continue
                         name = shortcut.get('appname') or shortcut.get('AppName', '')
-                        app_id = str(shortcut.get('appid') or shortcut.get('AppID', ''))
+                        raw_app_id = shortcut.get('appid') or shortcut.get('AppID', '')
+                        # convert to unsigned 32 bit int
+                        app_id = str(int(raw_app_id) & 0xFFFFFFFF)
                         launch_options = shortcut.get('launchoptions') or shortcut.get('LaunchOptions', '')
 
                         if name and app_id not in seen_app_ids:
