@@ -23,6 +23,7 @@ class Asset:
     url: str
 
     def download(self, client: httpx.Client, *, save_dir: Path) -> None:
+        save_dir.mkdir(parents=True, exist_ok=True)
         save_path = save_dir / self.save_name
         try:
             response = client.get(self.url)
@@ -59,7 +60,6 @@ class Downloader(ABC):
             selected_user = sorted(user_dirs)[0]
             return selected_user / 'config/grid'
         self.grid_dir = Path.home() / f'.local/share/Steam/userdata/{self.user_id}/config/grid' if self.user_id else _default_grid_dir()
-        self.grid_dir.mkdir(parents=True, exist_ok=True)
 
     @abstractmethod
     def download(self, client: httpx.Client) -> None:
@@ -94,7 +94,7 @@ class Icon(Downloader):
             save_name=f'{self.shortcut_id}_icon.png',
             url=f'https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/{self.app_id}/{icon_hash}.ico',
         )
-        asset.download(client, save_dir=self.grid_dir)
+        asset.download(client, save_dir=self.grid_dir/'icons')
 
 
 @dataclass
