@@ -5,6 +5,8 @@ installed pacman || return
 alias pacman.install='sudo pacman -S'
 alias pacman.search='pacman -Ss'
 alias pacman.ls='pacman -Q'
+alias pacman.ls-native='pacman -Qen'
+alias pacman.ls-aur='pacman -Qm'
 alias pacman.remove='sudo pacman -Rsu'
 alias pacman.update='sudo pacman -Sy && pacman -Qu'
 alias pacman.upgrade='sudo pacman -Syu'

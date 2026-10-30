@@ -5,6 +5,8 @@ ensure paru || return
 alias paru.install='paru -S'
 alias paru.search='paru -Ss'
 alias paru.ls='paru -Q'
+alias paru.ls-native='paru -Qen'
+alias paru.ls-aur='paru -Qm'
 alias paru.remove='paru -Rsu'
 alias paru.update='paru -Sy && paru -Qu'
 alias paru.upgrade='paru -Syu'
