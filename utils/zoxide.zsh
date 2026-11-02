@@ -6,6 +6,9 @@ ensure zoxide || return
 alias zz="__zoxide_zi"
 alias zl="z -"
 
+# database
+alias zoxide.modify-database='zoxide edit'
+
 # helper
 z.win() {
     z "$(wslpath $1)"
