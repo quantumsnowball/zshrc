@@ -7,6 +7,7 @@ alias zz="__zoxide_zi"
 alias zl="z -"
 
 # database
+alias zoxide.add='zoxide add'
 alias zoxide.modify-database='zoxide edit'
 
 # helper
