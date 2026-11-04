@@ -2,6 +2,7 @@ ensure paru || return
 
 
 # common
+alias paru.view-pkgbuild='paru -Gp'
 alias paru.install='paru -S'
 alias paru.search='paru -Ss'
 alias paru.ls='paru -Q'
