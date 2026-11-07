@@ -16,7 +16,7 @@ cpu.use-cores() {
     [[ -z "$pids" ]] && { echo "no process found matching: $proc_name" >&2; return 1; }
 
     # set cpu affinity for each pid found
-    for pid in $pids; do
+    for pid in ${=pids}; do
         taskset -cp "$cores" "$pid"
     done
 }
