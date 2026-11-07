@@ -21,3 +21,11 @@ cpu.use-cores() {
     done
 }
 
+cpu.use-p-cores() {
+    [[ "$#" -ne 1 ]] && { echo "usage: cpu.use-p-cores <process_name>" >&2; return 1; }
+    cpu.use-cores 0-15 "$1"
+}
+cpu.use-e-cores() {
+    [[ "$#" -ne 1 ]] && { echo "usage: cpu.use-e-cores <process_name>" >&2; return 1; }
+    cpu.use-cores 16-27 "$1"
+}
