@@ -3,48 +3,74 @@ installed taskset || return
 
 cpu.list-use-cores() {
     # guard args
-    [[ "$#" -ne 1 ]] && { echo "usage: cpu.list-cores <process_name>" >&2; return 1; }
+    [[ "$#" -lt 1 ]] && { echo "usage: cpu.list-use-cores <process_name1> [process_name2 ...]" >&2; return 1; }
 
-    local proc_name="$1"
+    local proc_name
+    local pids
 
-    # search for pids matching the process string
-    pids=$(pgrep -f "$proc_name")
+    # iterate through all specified process search targets
+    for proc_name in "$@"; do
+        echo "\n${YELLOW}=== target: $proc_name ===${RESET}"
 
-    # display cpu affinity for each pid found
-    for pid in ${=pids}; do
-        taskset -p "$pid"
+        # search for pids matching the process string
+        pids=$(pgrep -f "$proc_name")
+
+        # guard non empty pid list
+        if [[ -z "$pids" ]]; then
+            echo "no process found matching: $proc_name" >&2
+            continue
+        fi
+
+        # display cpu affinity for each pid found
+        for pid in ${=pids}; do
+            taskset -p "$pid"
+        done
     done
+    echo ""
 }
 
 cpu.use-cores() {
     # guard args
-    [[ "$#" -ne 2 ]] && { echo "usage: cpu.use-cpu-cores <cores> <process_name>" >&2; return 1; }
+    [[ "$#" -lt 2 ]] && { echo "usage: cpu.use-cores <cores> <process_name1> [process_name2 ...]" >&2; return 1; }
 
     local cores="$1"
-    local proc_name="$2"
+    shift
+
+    local proc_name
     local pids
 
-    # search for pids matching the process string
-    pids=$(pgrep -f "$proc_name")
+    # iterate through all specified process search targets
+    for proc_name in "$@"; do
+        echo "\n${YELLOW}=== target: $proc_name ===${RESET}"
 
-    # guard non empty pid list
-    [[ -z "$pids" ]] && { echo "no process found matching: $proc_name" >&2; return 1; }
+        # search for pids matching the process string
+        pids=$(pgrep -f "$proc_name")
 
-    # set cpu affinity for each pid found
-    for pid in ${=pids}; do
-        taskset -cp "$cores" "$pid"
+        # guard non empty pid list
+        if [[ -z "$pids" ]]; then
+            echo "no process found matching: $proc_name" >&2
+            continue
+        fi
+
+        # set cpu affinity for each pid found
+        for pid in ${=pids}; do
+            taskset -cp "$cores" "$pid"
+        done
     done
+    echo ""
 }
 
 cpu.use-p-cores() {
-    [[ "$#" -ne 1 ]] && { echo "usage: cpu.use-p-cores <process_name>" >&2; return 1; }
-    cpu.use-cores 0-15 "$1"
+    [[ "$#" -lt 1 ]] && { echo "usage: cpu.use-p-cores <process_name1> [process_name2 ...]" >&2; return 1; }
+    cpu.use-cores 0-15 "$@"
 }
+
 cpu.use-e-cores() {
-    [[ "$#" -ne 1 ]] && { echo "usage: cpu.use-e-cores <process_name>" >&2; return 1; }
-    cpu.use-cores 16-27 "$1"
+    [[ "$#" -lt 1 ]] && { echo "usage: cpu.use-e-cores <process_name1> [process_name2 ...]" >&2; return 1; }
+    cpu.use-cores 16-27 "$@"
 }
+
 cpu.use-all-cores() {
-    [[ "$#" -ne 1 ]] && { echo "usage: cpu.use-all-cores <process_name>" >&2; return 1; }
-    cpu.use-cores 0-27 "$1"
+    [[ "$#" -lt 1 ]] && { echo "usage: cpu.use-all-cores <process_name1> [process_name2 ...]" >&2; return 1; }
+    cpu.use-cores 0-27 "$@"
 }
