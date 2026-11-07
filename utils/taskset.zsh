@@ -1,6 +1,21 @@
 installed taskset || return
 
 
+cpu.list-use-cores() {
+    # guard args
+    [[ "$#" -ne 1 ]] && { echo "usage: cpu.list-cores <process_name>" >&2; return 1; }
+
+    local proc_name="$1"
+
+    # search for pids matching the process string
+    pids=$(pgrep -f "$proc_name")
+
+    # display cpu affinity for each pid found
+    for pid in ${=pids}; do
+        taskset -p "$pid"
+    done
+}
+
 cpu.use-cores() {
     # guard args
     [[ "$#" -ne 2 ]] && { echo "usage: cpu.use-cpu-cores <cores> <process_name>" >&2; return 1; }
