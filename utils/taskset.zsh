@@ -44,3 +44,7 @@ cpu.use-e-cores() {
     [[ "$#" -ne 1 ]] && { echo "usage: cpu.use-e-cores <process_name>" >&2; return 1; }
     cpu.use-cores 16-27 "$1"
 }
+cpu.use-all-cores() {
+    [[ "$#" -ne 1 ]] && { echo "usage: cpu.use-all-cores <process_name>" >&2; return 1; }
+    cpu.use-cores 0-27 "$1"
+}
