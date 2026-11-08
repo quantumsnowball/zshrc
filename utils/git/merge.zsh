@@ -11,8 +11,12 @@ git.merge-branch-into() {
     git worktree add "$worktree" "$target" || return 1
 
     # create a merge commit
-    git -C "$worktree" merge --no-ff $source -m "Merge $source into $target" || return 1
+    git -C "$worktree" merge --no-ff $source -m "Merge $source into $target"
+    local merge_status=$?
 
-    # clean up temporary worktree
-    git worktree remove "$worktree" || return 1
+    # clean up temporary worktree anyways
+    git worktree remove --force "$worktree"
+
+    # report back the merge status
+    return $merge_status
 }
