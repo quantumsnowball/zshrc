@@ -65,6 +65,16 @@ cpu.use-p-cores() {
     cpu.use-cores 0-15 "$@"
 }
 
+cpu.use-p0-cores() {
+    [[ "$#" -lt 1 ]] && { echo "usage: cpu.use-p0-cores <process_name1> [process_name2 ...]" >&2; return 1; }
+    cpu.use-cores 0,2,4,6,8,10,12,14 "$@"
+}
+
+cpu.use-p1-cores() {
+    [[ "$#" -lt 1 ]] && { echo "usage: cpu.use-p1-cores <process_name1> [process_name2 ...]" >&2; return 1; }
+    cpu.use-cores 1,3,5,7,9,11,13,15 "$@"
+}
+
 cpu.use-e-cores() {
     [[ "$#" -lt 1 ]] && { echo "usage: cpu.use-e-cores <process_name1> [process_name2 ...]" >&2; return 1; }
     cpu.use-cores 16-27 "$@"
