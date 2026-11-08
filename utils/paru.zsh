@@ -19,3 +19,6 @@ alias prls=paru.ls
 alias prrm=paru.remove
 alias pru=paru.update
 alias prup=paru.upgrade
+
+# helper
+alias paru.who-depends-on='pacman.who-depends-on'

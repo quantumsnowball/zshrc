@@ -19,6 +19,10 @@ alias pmrm=pacman.remove
 alias pmu=pacman.update
 alias pmup=pacman.upgrade
 
+# helper
+pacman.who-depends-on() {
+    pactree "$@" | less
+}
 
 # update mirror list
 ensure reflector || return
