@@ -1,6 +1,33 @@
 # use vi-mode in zsh
 bindkey -v
 
+# visual selection yank to system clipboard
+zle-vimode-yank() {
+    # normal vimode yank
+    zle vi-yank
+
+    # check if running inside an ssh session
+    if [[ -n "$SSH_CLIENT" || -n "$SSH_TTY" ]]; then
+        # encode cutbuffer to base64 without line breaks
+        local b64_text
+        b64_text=$(echo -n "$CUTBUFFER" | base64 | tr -d '\r\n')
+        # send osc 52 escape sequence to local terminal
+        if [[ -n "$TMUX" ]]; then
+            # wrap sequence for tmux passthrough
+            printf "\033Ptmux;\033\033]52;c;%s\007\033\\" "$b64_text" > /dev/tty
+        else
+            printf "\033]52;c;%s\007" "$b64_text" > /dev/tty
+        fi
+    # otherwise copy to local clipboard manger
+    elif installed wl-copy; then
+        echo -n "$CUTBUFFER" | wl-copy
+    elif installed termux-clipboard-set; then
+        echo -n "$CUTBUFFER" | termux-clipboard-set
+    fi
+}
+zle -N zle-vimode-yank
+bindkey -M visual 'y' zle-vimode-yank
+
 # less delay
 KEYTIMEOUT=1
 
