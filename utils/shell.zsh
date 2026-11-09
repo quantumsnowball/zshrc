@@ -49,8 +49,12 @@ zsh.completion.toggle_dotfiles_visibility() {
         echo "zsh globdots: ${CYAN}ENABLED${YELLOW} (dotfiles will be shown)${RESET}"
     fi
 }
+
 # update system
 up() {
+    # sudo now
+    installed sudo.now && sudo.now
+
     # termux environment check
     if [ -n "$TERMUX_VERSION" ]; then
         # refresh and relink only if missing or older than 5 days
@@ -119,6 +123,8 @@ up() {
     fi
 }
 u() { up; }
+
+# sync config
 u.sync-sequencial() {
     # do a update on this remote list
     local remotes=(s7 a9 a56 quest2 vpn proxy)
@@ -147,5 +153,6 @@ u.sync() {
     fi
 }
 alias ua='u.sync'
+
 # fix enter key not working print ^M
 alias zsh.fix_enter_key='stty sane'
