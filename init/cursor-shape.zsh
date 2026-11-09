@@ -4,7 +4,11 @@ bindkey -v
 # visual selection yank to system clipboard
 zle-vimode-yank() {
     zle vi-yank
-    echo -n "$CUTBUFFER" | wl-copy
+    if installed wl-copy; then
+        echo -n "$CUTBUFFER" | wl-copy
+    elif installed termux-clipboard-set; then
+        echo -n "$CUTBUFFER" | termux-clipboard-set
+    fi
 }
 zle -N zle-vimode-yank
 bindkey -M visual 'y' zle-vimode-yank
