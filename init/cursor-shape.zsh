@@ -1,6 +1,14 @@
 # use vi-mode in zsh
 bindkey -v
 
+# visual selection yank to system clipboard
+zle-vimode-yank() {
+    zle vi-yank
+    echo -n "$CUTBUFFER" | wl-copy
+}
+zle -N zle-vimode-yank
+bindkey -M visual 'y' zle-vimode-yank
+
 # less delay
 KEYTIMEOUT=1
 
