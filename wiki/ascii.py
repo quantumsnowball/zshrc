@@ -1,3 +1,9 @@
+#!/usr/bin/env -S uv run
+# /// script
+# dependencies = [
+#     "rich",
+# ]
+# ///
 import curses.ascii
 import unicodedata
 
