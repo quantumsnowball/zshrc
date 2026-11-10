@@ -19,18 +19,24 @@ class Row:
         self.dec = f'{i:3d}'
         self.hex_val = f'{i:02X}'
         self.bin_val = f'{i:09_b}'
+
         # handle unprintable control chars vs printable chars
-        is_char127 = i == 127
+        is_del = i == 127
         is_ctrl = curses.ascii.isctrl(i)
         is_space = curses.ascii.isspace(i)
+        self.ctrl_variant = (
+            f'^{chr(i + 64)}' if is_ctrl else
+            '^?' if is_del else
+            ''
+        )
         self.char_repr = (
-            'DEL' if is_char127 else
+            'DEL' if is_del else
             str(curses.ascii.controlnames[i]) if is_ctrl else
             repr(chr(i)) if is_space else
             chr(i)
         )
         self.char_name = (
-            'DELETE' if is_char127 else
+            'DELETE' if is_del else
             unicodedata.name(chr(i), 'CONTROL CHARACTER') if is_ctrl else
             unicodedata.name(chr(i), 'SPACE') if is_space else
             unicodedata.name(chr(i), '')
@@ -40,6 +46,7 @@ class Row:
         yield self.dec
         yield self.hex_val
         yield self.bin_val
+        yield self.ctrl_variant
         yield self.char_repr
         yield self.char_name
 
@@ -55,6 +62,7 @@ class Table:
         table.add_column('DEC', justify='right', style='bright_green')
         table.add_column('HEX', justify='right', style='bright_yellow')
         table.add_column('BINARY', justify='center', style='bright_red')
+        table.add_column('CTRL', justify='center', style='bold magenta')
         table.add_column('REPR', justify='left', style='bold cyan')
         table.add_column('NAME', justify='left', style='dim white')
 
