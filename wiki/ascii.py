@@ -7,7 +7,7 @@
 # ///
 import curses.ascii
 import unicodedata
-from typing import Annotated, Iterator
+from typing import Iterator
 
 import typer
 from rich.console import Console as RichConsole
@@ -91,10 +91,10 @@ class Row:
 
 
 class Table:
-    def __init__(self, rows: int) -> None:
+    def __init__(self, start: int, end: int) -> None:
         # header
         self.table = table = RichTable(
-            title=f'ASCII Character Table (0-{rows})',
+            title=f'ASCII Character Table ({start}-{end})',
             header_style='bold bright_blue',
             show_lines=False,
         )
@@ -106,21 +106,31 @@ class Table:
         table.add_column('CTRL', justify='center', style='bold magenta')
 
         # body
-        for i in range(rows):
+        for i in range(start, end):
             row = Row(i)
             table.add_row(*row)
 
+
+class Grid:
+    def __init__(self, *tables: Table) -> None:
+        self.grid = RichTable.grid()
+        self.grid.add_row(*[t.table for t in tables])
+
     def render(self) -> None:
-        # render table to console
         console = RichConsole()
-        console.print(self.table)
+        console.print(self.grid)
 
 
 def main(
-    rows: Annotated[int, typer.Argument(max=256, help='ASCII characters to display')] = 128,
+    # rows: Annotated[int, typer.Argument(max=256, help='ASCII characters to display')] = 128,
 ) -> None:
-    table = Table(rows)
-    table.render()
+    grid = Grid(
+        Table(0, 32),
+        Table(32, 64),
+        Table(64, 96),
+        Table(96, 128),
+    )
+    grid.render()
 
 
 if __name__ == '__main__':
