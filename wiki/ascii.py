@@ -1,13 +1,15 @@
 #!/usr/bin/env -S uv run
 # /// script
 # dependencies = [
+#     "typer",
 #     "rich",
 # ]
 # ///
 import curses.ascii
 import unicodedata
-from typing import Iterator
+from typing import Annotated, Iterator
 
+import typer
 from rich.console import Console as RichConsole
 from rich.table import Table as RichTable
 
@@ -42,7 +44,7 @@ class Row:
 
 
 class Table:
-    def __init__(self, *, rows: int) -> None:
+    def __init__(self, rows: int) -> None:
         # header
         self.table = table = RichTable(
             title='ASCII Character Table (0-127)',
@@ -67,10 +69,12 @@ class Table:
         console.print(self.table)
 
 
-def main() -> None:
-    table = Table(rows=128)
+def main(
+    rows: Annotated[int, typer.Argument(max=256, help='ASCII characters to display')] = 128,
+) -> None:
+    table = Table(rows)
     table.render()
 
 
 if __name__ == '__main__':
-    main()
+    typer.run(main)
