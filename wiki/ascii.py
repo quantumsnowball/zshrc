@@ -24,8 +24,23 @@ class Row:
         return curses.ascii.isctrl(i)
 
     @staticmethod
+    def _is_cntrl(i: int) -> bool:
+        return curses.ascii.iscntrl(i)
+
+    @staticmethod
     def _is_space(i: int) -> bool:
         return curses.ascii.isspace(i)
+
+    @classmethod
+    def _ctrl_variant(cls, i: int) -> str:
+        i_xor6 = 0x40 ^ i
+        char_xor6 = cls._char(i_xor6)
+        if cls._is_cntrl(i):
+            return f'^{char_xor6}'
+        elif cls._is_cntrl(i_xor6):
+            return '*'
+        else:
+            return ''
 
     @classmethod
     def _char(cls, i: int) -> str:
@@ -49,6 +64,7 @@ class Row:
         self.dec = f'{i:3d}'
         self.hex = f'{i:02X}'
         self.bin = f'{i:09_b}'
+        self.ctrl_variant = self._ctrl_variant(i)
         self.char = self._char(i)
         self.char_name = self._char_name(i)
 
@@ -56,6 +72,7 @@ class Row:
         yield self.dec
         yield self.hex
         yield self.bin
+        yield self.ctrl_variant
         yield self.char
         yield self.char_name
 
@@ -71,6 +88,7 @@ class Table:
         table.add_column('DEC', justify='right', style='bright_green')
         table.add_column('HEX', justify='right', style='bright_yellow')
         table.add_column('BINARY', justify='center', style='bright_red')
+        table.add_column('CTRL', justify='center', style='bold magenta')
         table.add_column('CHAR', justify='left', style='bold cyan')
         table.add_column('NAME', justify='left', style='dim white')
 
