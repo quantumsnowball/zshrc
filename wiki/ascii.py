@@ -34,11 +34,15 @@ class Row:
     @classmethod
     def _ctrl_variant(cls, i: int) -> str:
         i_xor6 = 0x40 ^ i
-        char_xor6 = cls._char(i_xor6)
+        i_xor65 = 0x60 ^ i
         if cls._is_cntrl(i):
-            return f'^{char_xor6}'
+            char_xor6 = cls._char(i_xor6)
+            char_xor65 = cls._char(i_xor65) if not cls._is_cntrl(i_xor65) else None
+            return f'^{char_xor6} ^{char_xor65}' if char_xor65 else f'^{char_xor6}'
         elif cls._is_cntrl(i_xor6):
             return '*'
+        elif cls._is_cntrl(i_xor65):
+            return '**'
         else:
             return ''
 
