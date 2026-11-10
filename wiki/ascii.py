@@ -17,8 +17,8 @@ from rich.table import Table as RichTable
 class Row:
     def __init__(self, i: int) -> None:
         self.dec = f'{i:3d}'
-        self.hex_val = f'{i:02X}'
-        self.bin_val = f'{i:09_b}'
+        self.hex = f'{i:02X}'
+        self.bin = f'{i:09_b}'
 
         # handle unprintable control chars vs printable chars
         is_del = i == 127
@@ -29,7 +29,7 @@ class Row:
             '^?' if is_del else
             ''
         )
-        self.char_repr = (
+        self.char = (
             'DEL' if is_del else
             str(curses.ascii.controlnames[i]) if is_ctrl else
             repr(chr(i)) if is_space else
@@ -44,10 +44,10 @@ class Row:
 
     def __iter__(self) -> Iterator[str]:
         yield self.dec
-        yield self.hex_val
-        yield self.bin_val
+        yield self.hex
+        yield self.bin
         yield self.ctrl_variant
-        yield self.char_repr
+        yield self.char
         yield self.char_name
 
 
@@ -55,7 +55,7 @@ class Table:
     def __init__(self, rows: int) -> None:
         # header
         self.table = table = RichTable(
-            title='ASCII Character Table (0-127)',
+            title=f'ASCII Character Table (0-{rows})',
             header_style='bold bright_blue',
             show_lines=False,
         )
@@ -63,7 +63,7 @@ class Table:
         table.add_column('HEX', justify='right', style='bright_yellow')
         table.add_column('BINARY', justify='center', style='bright_red')
         table.add_column('CTRL', justify='center', style='bold magenta')
-        table.add_column('REPR', justify='left', style='bold cyan')
+        table.add_column('CHAR', justify='left', style='bold cyan')
         table.add_column('NAME', justify='left', style='dim white')
 
         # body
