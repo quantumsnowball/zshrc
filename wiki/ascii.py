@@ -7,7 +7,8 @@
 # ///
 import curses.ascii
 import unicodedata
-from typing import Iterator
+from enum import StrEnum, auto
+from typing import Annotated, Iterator
 
 import typer
 from rich.console import Console as RichConsole
@@ -121,15 +122,28 @@ class Grid:
         console.print(self.grid)
 
 
+class Mode(StrEnum):
+    summary = auto()
+    long = auto()
+
+
 def main(
-    # rows: Annotated[int, typer.Argument(max=256, help='ASCII characters to display')] = 128,
+    mode: Annotated[Mode, typer.Argument(help='ASCII Table display mode')] = Mode.summary,
+    *,
+    n_row: Annotated[int, typer.Option('-m', '--max', min=1, max=256, help='ASCII characters to display')] = 128,
 ) -> None:
-    grid = Grid(
-        Table(0, 32),
-        Table(32, 64),
-        Table(64, 96),
-        Table(96, 128),
-    )
+    match (mode):
+        case Mode.summary:
+            grid = Grid(
+                Table(0, 32),
+                Table(32, 64),
+                Table(64, 96),
+                Table(96, 128),
+            )
+        case Mode.long:
+            grid = Grid(Table(0, n_row))
+
+    #
     grid.render()
 
 
