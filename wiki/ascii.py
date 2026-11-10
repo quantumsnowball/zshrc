@@ -46,6 +46,19 @@ class Row:
         return curses.ascii.isspace(i)
 
     @classmethod
+    def _char_name(cls, i: int) -> str:
+        return unicodedata.name(chr(i), EXTRA_NAMES.get(i, ''))
+
+    @classmethod
+    def _char(cls, i: int) -> str:
+        return (
+            'DEL' if cls._is_del(i) else
+            str(curses.ascii.controlnames[i]) if cls._is_ctrl(i) else
+            repr(chr(i)) if cls._is_space(i) else
+            chr(i)
+        )
+
+    @classmethod
     def _ctrl_variant(cls, i: int) -> str:
         i_xor6 = 0x40 ^ i
         i_xor65 = 0x60 ^ i
@@ -60,19 +73,6 @@ class Row:
         else:
             return ''
 
-    @classmethod
-    def _char(cls, i: int) -> str:
-        return (
-            'DEL' if cls._is_del(i) else
-            str(curses.ascii.controlnames[i]) if cls._is_ctrl(i) else
-            repr(chr(i)) if cls._is_space(i) else
-            chr(i)
-        )
-
-    @classmethod
-    def _char_name(cls, i: int) -> str:
-        return unicodedata.name(chr(i), EXTRA_NAMES.get(i, ''))
-
     def __init__(self, i: int) -> None:
         self.dec = f'{i:3d}'
         self.hex = f'{i:02X}'
@@ -85,9 +85,9 @@ class Row:
         yield self.dec
         yield self.hex
         yield self.bin
-        yield self.ctrl_variant
-        yield self.char
         yield self.char_name
+        yield self.char
+        yield self.ctrl_variant
 
 
 class Table:
@@ -101,9 +101,9 @@ class Table:
         table.add_column('DEC', justify='right', style='bright_green')
         table.add_column('HEX', justify='right', style='bright_yellow')
         table.add_column('BINARY', justify='center', style='bright_red')
-        table.add_column('CTRL', justify='center', style='bold magenta')
-        table.add_column('CHAR', justify='left', style='bold cyan')
         table.add_column('NAME', justify='left', style='dim white')
+        table.add_column('CHAR', justify='left', style='bold cyan')
+        table.add_column('CTRL', justify='center', style='bold magenta')
 
         # body
         for i in range(rows):
