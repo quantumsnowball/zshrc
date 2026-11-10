@@ -20,18 +20,21 @@ class Row:
         self.hex_val = f'{i:02X}'
         self.bin_val = f'{i:09_b}'
         # handle unprintable control chars vs printable chars
-        if i == 127:
-            self.char_repr = 'DEL'
-            self.char_name = 'DELETE'
-        elif curses.ascii.isctrl(i):
-            self.char_repr = str(curses.ascii.controlnames[i])
-            self.char_name = unicodedata.name(chr(i), 'CONTROL CHARACTER')
-        elif curses.ascii.isspace(i):
-            self.char_repr = repr(chr(i))
-            self.char_name = unicodedata.name(chr(i), 'SPACE')
-        else:
-            self.char_repr = chr(i)
-            self.char_name = unicodedata.name(chr(i), '')
+        is_char127 = i == 127
+        is_ctrl = curses.ascii.isctrl(i)
+        is_space = curses.ascii.isspace(i)
+        self.char_repr = (
+            'DEL' if is_char127 else
+            str(curses.ascii.controlnames[i]) if is_ctrl else
+            repr(chr(i)) if is_space else
+            chr(i)
+        )
+        self.char_name = (
+            'DELETE' if is_char127 else
+            unicodedata.name(chr(i), 'CONTROL CHARACTER') if is_ctrl else
+            unicodedata.name(chr(i), 'SPACE') if is_space else
+            unicodedata.name(chr(i), '')
+        )
 
     def __iter__(self) -> Iterator[str]:
         yield self.dec
