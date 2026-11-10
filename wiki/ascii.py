@@ -1,9 +1,25 @@
 import curses.ascii
 import unicodedata
 
-# header
-print(f"{'DEC':>3}  {'HEX':>3}  {'OCT':>3}  {'BINARY':>8}  {'REPR':<8}  {'NAME'}")
-print('-' * 55)
+from rich.console import Console
+from rich.table import Table
+
+console = Console()
+
+# initialize rich table
+table = Table(
+    title='ASCII Character Table (0-127)',
+    header_style='bold cyan',
+    show_lines=False,
+)
+
+# add columns with alignment and custom styling
+table.add_column('DEC', justify='right', style='bright_white')
+table.add_column('HEX', justify='center', style='yellow')
+table.add_column('OCT', justify='center', style='magenta')
+table.add_column('BINARY', justify='center', style='green')
+table.add_column('REPR', justify='left', style='bold green')
+table.add_column('NAME', justify='left', style='dim white')
 
 # body
 for i in range(128):
@@ -26,4 +42,7 @@ for i in range(128):
         char_repr = chr(i)
         char_name = unicodedata.name(chr(i), '')
 
-    print(f'{dec}  {hex_val}  {oct_val}  {bin_val}  {char_repr:<8}  {char_name}')
+    table.add_row(dec, hex_val, oct_val, bin_val, str(char_repr), char_name)
+
+# render table to console
+console.print(table)
