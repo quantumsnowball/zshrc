@@ -15,38 +15,47 @@ from rich.table import Table as RichTable
 
 
 class Row:
+    @staticmethod
+    def _is_del(i: int) -> bool:
+        return i == 127
+
+    @staticmethod
+    def _is_ctrl(i: int) -> bool:
+        return curses.ascii.isctrl(i)
+
+    @staticmethod
+    def _is_space(i: int) -> bool:
+        return curses.ascii.isspace(i)
+
+    @classmethod
+    def _char(cls, i: int) -> str:
+        return (
+            'DEL' if cls._is_del(i) else
+            str(curses.ascii.controlnames[i]) if cls._is_ctrl(i) else
+            repr(chr(i)) if cls._is_space(i) else
+            chr(i)
+        )
+
+    @classmethod
+    def _char_name(cls, i: int) -> str:
+        return (
+            'DELETE' if cls._is_del(i) else
+            unicodedata.name(chr(i), 'CONTROL CHARACTER') if cls._is_ctrl(i) else
+            unicodedata.name(chr(i), 'SPACE') if cls._is_space(i) else
+            unicodedata.name(chr(i), '')
+        )
+
     def __init__(self, i: int) -> None:
         self.dec = f'{i:3d}'
         self.hex = f'{i:02X}'
         self.bin = f'{i:09_b}'
-
-        # handle unprintable control chars vs printable chars
-        is_del = i == 127
-        is_ctrl = curses.ascii.isctrl(i)
-        is_space = curses.ascii.isspace(i)
-        self.ctrl_variant = (
-            f'^{chr(i + 64)}' if is_ctrl else
-            '^?' if is_del else
-            ''
-        )
-        self.char = (
-            'DEL' if is_del else
-            str(curses.ascii.controlnames[i]) if is_ctrl else
-            repr(chr(i)) if is_space else
-            chr(i)
-        )
-        self.char_name = (
-            'DELETE' if is_del else
-            unicodedata.name(chr(i), 'CONTROL CHARACTER') if is_ctrl else
-            unicodedata.name(chr(i), 'SPACE') if is_space else
-            unicodedata.name(chr(i), '')
-        )
+        self.char = self._char(i)
+        self.char_name = self._char_name(i)
 
     def __iter__(self) -> Iterator[str]:
         yield self.dec
         yield self.hex
         yield self.bin
-        yield self.ctrl_variant
         yield self.char
         yield self.char_name
 
@@ -62,7 +71,6 @@ class Table:
         table.add_column('DEC', justify='right', style='bright_green')
         table.add_column('HEX', justify='right', style='bright_yellow')
         table.add_column('BINARY', justify='center', style='bright_red')
-        table.add_column('CTRL', justify='center', style='bold magenta')
         table.add_column('CHAR', justify='left', style='bold cyan')
         table.add_column('NAME', justify='left', style='dim white')
 
