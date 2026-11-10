@@ -74,41 +74,50 @@ class Row:
         else:
             return ''
 
-    def __init__(self, i: int) -> None:
+    def __init__(self, i: int, *, detail: bool = False) -> None:
+        self._detail = detail
         self.dec = f'{i:3d}'
         self.hex = f'{i:02X}'
-        self.bin = f'{i:09_b}'
-        self.ctrl_variant = self._ctrl_variant(i)
+        if detail:
+            self.bin = f'{i:09_b}'
+            self.char_name = self._char_name(i)
         self.char = self._char(i)
-        self.char_name = self._char_name(i)
+        self.ctrl_variant = self._ctrl_variant(i)
 
     def __iter__(self) -> Iterator[str]:
         yield self.dec
         yield self.hex
-        yield self.bin
-        yield self.char_name
+        if self._detail:
+            yield self.bin
+            yield self.char_name
         yield self.char
         yield self.ctrl_variant
 
 
 class Table:
-    def __init__(self, start: int, end: int) -> None:
+    def __init__(
+        self,
+        start: int,
+        end: int,
+        *,
+        detail: bool = False,
+    ) -> None:
         # header
         self.table = table = RichTable(
-            title=f'ASCII Character Table ({start}-{end})',
             header_style='bold bright_blue',
             show_lines=False,
         )
         table.add_column('DEC', justify='right', style='bright_green')
         table.add_column('HEX', justify='right', style='bright_yellow')
-        table.add_column('BINARY', justify='center', style='bright_red')
-        table.add_column('NAME', justify='left', style='dim white')
+        if detail:
+            table.add_column('BINARY', justify='center', style='bright_red')
+            table.add_column('NAME', justify='left', style='dim white')
         table.add_column('CHAR', justify='left', style='bold cyan')
         table.add_column('CTRL', justify='center', style='bold magenta')
 
         # body
         for i in range(start, end):
-            row = Row(i)
+            row = Row(i, detail=detail)
             table.add_row(*row)
 
 
@@ -135,13 +144,13 @@ def main(
     match (mode):
         case Mode.summary:
             grid = Grid(
-                Table(0, 32),
+                Table(0, 32, detail=True),
                 Table(32, 64),
                 Table(64, 96),
                 Table(96, 128),
             )
         case Mode.long:
-            grid = Grid(Table(0, n_row))
+            grid = Grid(Table(0, n_row, detail=True))
 
     #
     grid.render()
