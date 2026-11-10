@@ -8,8 +8,8 @@ import curses.ascii
 import unicodedata
 from typing import Iterator
 
-from rich.console import Console
-from rich.table import Table
+from rich.console import Console as RichConsole
+from rich.table import Table as RichTable
 
 
 class Row:
@@ -41,27 +41,36 @@ class Row:
         yield self.char_name
 
 
-console = Console()
+class Table:
+    def __init__(self, *, rows: int) -> None:
+        # header
+        self.table = table = RichTable(
+            title='ASCII Character Table (0-127)',
+            header_style='bold cyan',
+            show_lines=False,
+        )
+        table.add_column('DEC', justify='right', style='bright_white')
+        table.add_column('HEX', justify='center', style='yellow')
+        table.add_column('OCT', justify='center', style='magenta')
+        table.add_column('BINARY', justify='center', style='green')
+        table.add_column('REPR', justify='left', style='bold green')
+        table.add_column('NAME', justify='left', style='dim white')
 
-# initialize rich table
-table = Table(
-    title='ASCII Character Table (0-127)',
-    header_style='bold cyan',
-    show_lines=False,
-)
+        # body
+        for i in range(rows):
+            row = Row(i)
+            table.add_row(*row)
 
-# add columns with alignment and custom styling
-table.add_column('DEC', justify='right', style='bright_white')
-table.add_column('HEX', justify='center', style='yellow')
-table.add_column('OCT', justify='center', style='magenta')
-table.add_column('BINARY', justify='center', style='green')
-table.add_column('REPR', justify='left', style='bold green')
-table.add_column('NAME', justify='left', style='dim white')
+    def render(self) -> None:
+        # render table to console
+        console = RichConsole()
+        console.print(self.table)
 
-# body
-for i in range(128):
-    row = Row(i)
-    table.add_row(*row)
 
-# render table to console
-console.print(table)
+def main() -> None:
+    table = Table(rows=128)
+    table.render()
+
+
+if __name__ == '__main__':
+    main()
