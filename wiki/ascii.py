@@ -13,6 +13,20 @@ import typer
 from rich.console import Console as RichConsole
 from rich.table import Table as RichTable
 
+EXTRA_NAMES = {
+    **{i: name for i, name in enumerate([
+        'NULL', 'START OF HEADING', 'START OF TEXT', 'END OF TEXT',
+        'END OF TRANSMISSION', 'ENQUIRY', 'ACKNOWLEDGE', 'BELL',
+        'BACKSPACE', 'HORIZONTAL TABULATION', 'LINE FEED', 'VERTICAL TABULATION',
+        'FORM FEED', 'CARRIAGE RETURN', 'SHIFT OUT', 'SHIFT IN',
+        'DATA LINK ESCAPE', 'DEVICE CONTROL 1', 'DEVICE CONTROL 2', 'DEVICE CONTROL 3',
+        'DEVICE CONTROL 4', 'NEGATIVE ACKNOWLEDGE', 'SYNCHRONOUS IDLE',
+        'END OF TRANSMISSION BLOCK', 'CANCEL', 'END OF MEDIUM', 'SUBSTITUTE', 'ESCAPE',
+        'FILE SEPARATOR', 'GROUP SEPARATOR', 'RECORD SEPARATOR', 'UNIT SEPARATOR',
+    ])},
+    0b0111_1111: 'DELETE'
+}
+
 
 class Row:
     @staticmethod
@@ -57,12 +71,7 @@ class Row:
 
     @classmethod
     def _char_name(cls, i: int) -> str:
-        return (
-            'DELETE' if cls._is_del(i) else
-            unicodedata.name(chr(i), 'CONTROL CHARACTER') if cls._is_ctrl(i) else
-            unicodedata.name(chr(i), 'SPACE') if cls._is_space(i) else
-            unicodedata.name(chr(i), '')
-        )
+        return unicodedata.name(chr(i), EXTRA_NAMES.get(i, ''))
 
     def __init__(self, i: int) -> None:
         self.dec = f'{i:3d}'
