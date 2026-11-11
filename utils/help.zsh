@@ -3,6 +3,9 @@ wtf() {
     echo -e "\n>_ ${GREEN}command -v${RESET} ${BLUE}$1${RESET}"
     command -v $1
 
+    echo -e "\n>_ ${GREEN}which -a${RESET} ${BLUE}$1${RESET}"
+    which -a $1
+
     echo -e "\n>_ ${GREEN}type -a${RESET} ${BLUE}$1${RESET}"
     type -a $1
 
