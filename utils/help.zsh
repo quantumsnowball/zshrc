@@ -9,6 +9,9 @@ wtf() {
     echo -e "\n>_ ${GREEN}type -a${RESET} ${BLUE}$1${RESET}"
     type -a $1
 
+    echo -e "\n>_ ${GREEN}where${RESET} ${BLUE}$1${RESET}"
+    where $1
+
     echo -e "\n>_ ${GREEN}whereis${RESET} ${BLUE}$1${RESET}"
     whereis $1
 
