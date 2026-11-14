@@ -38,6 +38,23 @@ def create_auto_netowrk_manager_profile(host_iface: str, name: str) -> None:
             raise RuntimeError
 
 
+def create_manual_netowrk_manager_profile(host_iface: str, name: str, host_addr: str) -> None:
+    @now
+    @task(f'create network manager profile for {host_iface}', halt=True)
+    def _() -> None:
+        if sh.run([
+            'nmcli', 'connection', 'add',
+            'type', 'ethernet',
+            'save', 'no',
+            'con-name', name,
+            'ifname', host_iface,
+            'ipv4.method', 'manual',
+            'ipv4.addresses', host_addr,
+            'ipv6.method', 'ignore',
+        ], check=True).returncode != 0:
+            raise RuntimeError
+
+
 def connect_to_network_manager_profile(name: str) -> None:
     @now
     @task(f'connect network manager profile {name}', halt=True)
