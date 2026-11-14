@@ -28,6 +28,8 @@ def quest2() -> None:
     adb.enable_usb0_link_layer_device()
     # extract host new usb interface name
     host_iface = network.detect_host_iface(name_starts_with='enp0')
+    # prevent networkmanager from hijacking or wiping ip the interface
+    network.unmanage_host_iface(host_iface)
     # ensure ufw allow all incoming network traffics for this interface
     firewall.allow(host_iface, comment='tethering-quest2')
     # network prefix
