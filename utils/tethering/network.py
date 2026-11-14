@@ -33,16 +33,20 @@ def create_auto_netowrk_manager_profile(host_iface: str, name: str) -> None:
     @now
     @task(f'create network manager profile for {host_iface}', halt=True)
     def _() -> None:
-        result = sh.run(['nmcli', 'connection', 'add', 'type', 'ethernet', 'save', 'no', 'con-name', name, 'ifname', host_iface], check=True)
-        if result.returncode != 0:
-            raise RuntimeError
+        sh.run([
+            'nmcli', 'connection', 'add',
+            'type', 'ethernet',
+            'save', 'no',
+            'con-name', name,
+            'ifname', host_iface
+        ], check=True)
 
 
 def create_manual_netowrk_manager_profile(host_iface: str, name: str, host_addr: str) -> None:
     @now
     @task(f'create network manager profile for {host_iface}', halt=True)
     def _() -> None:
-        if sh.run([
+        sh.run([
             'nmcli', 'connection', 'add',
             'type', 'ethernet',
             'save', 'no',
@@ -51,17 +55,16 @@ def create_manual_netowrk_manager_profile(host_iface: str, name: str, host_addr:
             'ipv4.method', 'manual',
             'ipv4.addresses', host_addr,
             'ipv6.method', 'ignore',
-        ], check=True).returncode != 0:
-            raise RuntimeError
+        ], check=True)
 
 
 def connect_to_network_manager_profile(name: str) -> None:
     @now
     @task(f'connect network manager profile {name}', halt=True)
     def _() -> None:
-        result = sh.run(['nmcli', 'connection', 'up', name], check=True)
-        if result.returncode != 0:
-            raise RuntimeError
+        sh.run([
+            'nmcli', 'connection', 'up', name,
+        ], check=True)
 
 
 def remove_network_manager_profile(*names: str) -> None:
