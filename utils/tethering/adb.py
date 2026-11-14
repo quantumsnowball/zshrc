@@ -79,5 +79,6 @@ def remove_all_reverse_channels() -> None:
     @now
     @task('remove all adb reverse channels')
     def _() -> None:
-        if sh.run(['adb', 'reverse', '--remove-all']).returncode != 0:
-            raise RuntimeError
+        sh.run([
+            'adb', 'reverse', '--remove-all',
+        ], check=True)

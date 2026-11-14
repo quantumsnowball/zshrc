@@ -60,10 +60,10 @@ def assign_client_ip(*, iface: str = 'usb0', wait: int = 10) -> None:
     @now
     @task('ask client to request an IP address via DHCP', halt=True)
     def _() -> None:
-        result = sh.run(['adb', 'shell', 'cmd', 'ethernet', 'set-ip-configuration', iface, 'dhcp'])
+        sh.run([
+            'adb', 'shell', 'cmd', 'ethernet', 'set-ip-configuration', iface, 'dhcp',
+        ], check=True)
         sleep(wait)
-        if result.returncode != 0:
-            raise RuntimeError
 
 
 def kill_server() -> None:
