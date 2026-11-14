@@ -29,3 +29,7 @@ def acquire_sudo() -> None:
 
 def tethering_connection_ready() -> None:
     print('[green]Your USB network is ready![/]')
+
+
+def tethering_connection_aborted() -> None:
+    print('[green]Your USB network is aborted![/]')

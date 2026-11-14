@@ -16,6 +16,8 @@ def main() -> None:
     adb.disable_android_usb_device()
     # clean up any ad-hoc spawn dnsmasq dhcp leftover
     dhcp.kill_server()
+    # done
+    utils.tethering_connection_aborted()
 
 
 if __name__ == '__main__':
