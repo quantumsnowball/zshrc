@@ -29,7 +29,7 @@ def detect_host_iface(*, name_starts_with: str) -> str:
     return f()
 
 
-def create_netowrk_manager_profile(host_iface: str, name: str) -> None:
+def create_auto_netowrk_manager_profile(host_iface: str, name: str) -> None:
     @now
     @task(f'create network manager profile for {host_iface}', halt=True)
     def _() -> None:
