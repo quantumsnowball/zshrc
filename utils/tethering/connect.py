@@ -75,6 +75,9 @@ def s7() -> None:
     adb.enable_android_native_tethering()
     # extract host new usb interface name
     host_iface = network.detect_host_iface(name_starts_with='enp0')
+    # create network manager profile
+    profile_name = 'tethering-s7'
+    network.create_netowrk_manager_profile(host_iface, profile_name)
     # ensure ufw allow all incoming network traffics for this interface
     firewall.allow(host_iface, comment='tethering-s7')
 

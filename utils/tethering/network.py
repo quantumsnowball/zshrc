@@ -29,6 +29,15 @@ def detect_host_iface(*, name_starts_with: str) -> str:
     return f()
 
 
+def create_netowrk_manager_profile(host_iface: str, name: str) -> None:
+    @now
+    @task(f'create network manager profile for {host_iface}', halt=True)
+    def _() -> None:
+        result = sh.run(['nmcli', 'connection', 'add', 'type', 'ethernet', 'save', 'no', 'con-name', name, 'ifname', host_iface], check=True)
+        if result.returncode != 0:
+            raise RuntimeError
+
+
 def detect_host_ip(host_iface: str) -> str:
     @task(f'detect host IP on interface {host_iface}', halt=True)
     def f() -> str:
