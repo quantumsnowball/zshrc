@@ -15,16 +15,16 @@ def from_client_to_host_ip(host_ip: str, client_iface: str | None = None, *, cou
         if client_iface is not None:
             cmd += ['-I', client_iface, ]
         cmd += [host_ip, ]
-        if sh.run(cmd).returncode != 0:
-            raise RuntimeError
+        sh.run(cmd, check=True)
 
 
 def from_host_to_client_ip(client_ip: str, host_iface: str, *, count: int = 5) -> None:
     @now
     @task(f'ping from host to client ip {client_ip}', retry=False)
     def _() -> None:
-        if sh.run(['ping', '-c', str(count), '-I', host_iface, client_ip]).returncode != 0:
-            raise RuntimeError
+        sh.run([
+            'ping', '-c', str(count), '-I', host_iface, client_ip,
+        ], check=True)
 
 
 @utils.exit_on_runtime_error

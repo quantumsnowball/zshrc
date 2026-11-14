@@ -28,11 +28,19 @@ def quest2() -> None:
     adb.enable_usb0_link_layer_device()
     # extract host new usb interface name
     host_iface = network.detect_host_iface(name_starts_with='enp0')
-    # ensure ufw allow all incoming network traffics for this interface
-    firewall.allow(host_iface, comment='tethering-quest2')
     # network prefix
     network_prefix = '10.77.0'
     host_ip = f'{network_prefix}.1'
+    host_addr = f'{host_ip}/24'
+    # cleanup network manager profile
+    profile_name = 'tethering-quest2'
+    network.remove_network_manager_profile(profile_name)
+    # create network manager profile
+    network.create_manual_netowrk_manager_profile(host_iface, profile_name, host_addr)
+    # connect to network manager profile
+    network.connect_to_network_manager_profile(profile_name)
+    # ensure ufw allow all incoming network traffics for this interface
+    firewall.allow(host_iface, comment='tethering-quest2')
     # assign an ip address to the server side
     network.assign_host_ip(host_iface, network_prefix)
     # start a dhcp server on the host and let
@@ -73,8 +81,15 @@ def s7() -> None:
     adb.enable_android_native_tethering()
     # extract host new usb interface name
     host_iface = network.detect_host_iface(name_starts_with='enp0')
+    # cleanup network manager profile
+    profile_name = 'tethering-s7'
+    network.remove_network_manager_profile(profile_name)
+    # create network manager profile
+    network.create_auto_netowrk_manager_profile(host_iface, profile_name)
+    # connect to network manager profile
+    network.connect_to_network_manager_profile(profile_name)
     # ensure ufw allow all incoming network traffics for this interface
-    firewall.allow(host_iface, comment='tethering-s7')
+    firewall.allow(host_iface, comment=f'{profile_name}')
 
     # -- cleanup --
     # disable the client's WiFi

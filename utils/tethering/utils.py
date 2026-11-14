@@ -23,9 +23,12 @@ def acquire_sudo() -> None:
     @now
     @task('acquire root permission', retry=False, halt=True)
     def _() -> None:
-        if sh.run(['sudo', '-v']).returncode != 0:
-            raise RuntimeError
+        sh.run(['sudo', '-v'], check=True)
 
 
 def tethering_connection_ready() -> None:
     print('[green]Your USB network is ready![/]')
+
+
+def tethering_connection_aborted() -> None:
+    print('[green]Your USB network is aborted![/]')

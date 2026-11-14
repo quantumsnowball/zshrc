@@ -10,8 +10,9 @@ def set_client_wifi(*, enable: bool) -> None:
     @now
     @task(f"turn {state} client's WiFi")
     def _() -> None:
-        if sh.run(['adb', 'shell', 'svc', 'wifi', 'enable' if enable else 'disable']).returncode != 0:
-            raise RuntimeError
+        sh.run([
+            'adb', 'shell', 'svc', 'wifi', 'enable' if enable else 'disable',
+        ], check=True)
 
 
 def detect_host_iface(*, name_starts_with: str) -> str:
@@ -27,6 +28,53 @@ def detect_host_iface(*, name_starts_with: str) -> str:
         return host_iface
     #
     return f()
+
+
+def create_auto_netowrk_manager_profile(host_iface: str, name: str) -> None:
+    @now
+    @task(f'create network manager profile for {host_iface}', halt=True)
+    def _() -> None:
+        sh.run([
+            'nmcli', 'connection', 'add',
+            'type', 'ethernet',
+            'save', 'no',
+            'con-name', name,
+            'ifname', host_iface
+        ], check=True)
+
+
+def create_manual_netowrk_manager_profile(host_iface: str, name: str, host_addr: str) -> None:
+    @now
+    @task(f'create network manager profile for {host_iface}', halt=True)
+    def _() -> None:
+        sh.run([
+            'nmcli', 'connection', 'add',
+            'type', 'ethernet',
+            'save', 'no',
+            'con-name', name,
+            'ifname', host_iface,
+            'ipv4.method', 'manual',
+            'ipv4.addresses', host_addr,
+            'ipv6.method', 'ignore',
+        ], check=True)
+
+
+def connect_to_network_manager_profile(name: str) -> None:
+    @now
+    @task(f'connect network manager profile {name}', halt=True)
+    def _() -> None:
+        sh.run([
+            'nmcli', 'connection', 'up', name,
+        ], check=True)
+
+
+def remove_network_manager_profile(*names: str) -> None:
+    @now
+    @task(f'cleaer network manager profile {', '.join(names)}', retry=False)
+    def _() -> None:
+        sh.run([
+            'nmcli', 'connection', 'delete', *names,
+        ], stderr=sh.DEVNULL)
 
 
 def detect_host_ip(host_iface: str) -> str:
@@ -71,6 +119,15 @@ def remove_host_iface_default_route(host_iface: str) -> None:
     @now
     @task(f'remove default route for {host_iface}', halt=True)
     def _() -> None:
-        result = sh.run(['sudo', 'ip', 'route', 'del', 'default', 'dev', host_iface], stderr=sh.DEVNULL)
-        if result.returncode != 0:
-            raise RuntimeError
+        sh.run([
+            'sudo', 'ip', 'route', 'del', 'default', 'dev', host_iface,
+        ], check=True, stderr=sh.DEVNULL)
+
+
+def unmanage_host_iface(host_iface: str) -> None:
+    @now
+    @task(f'tell networkmanager to un-manage interface {host_iface} for current session', halt=True)
+    def _() -> None:
+        sh.run([
+            'sudo', 'nmcli', 'device', 'set', host_iface, 'managed', 'no',
+        ], check=True)
