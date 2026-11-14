@@ -38,6 +38,15 @@ def create_netowrk_manager_profile(host_iface: str, name: str) -> None:
             raise RuntimeError
 
 
+def connect_to_network_manager_profile(name: str) -> None:
+    @now
+    @task(f'connect network manager profile {name}', halt=True)
+    def _() -> None:
+        result = sh.run(['nmcli', 'connection', 'up', name], check=True)
+        if result.returncode != 0:
+            raise RuntimeError
+
+
 def detect_host_ip(host_iface: str) -> str:
     @task(f'detect host IP on interface {host_iface}', halt=True)
     def f() -> str:

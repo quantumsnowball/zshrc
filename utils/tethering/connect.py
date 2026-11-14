@@ -78,6 +78,8 @@ def s7() -> None:
     # create network manager profile
     profile_name = 'tethering-s7'
     network.create_netowrk_manager_profile(host_iface, profile_name)
+    # connect to network manager profile
+    network.connect_to_network_manager_profile(profile_name)
     # ensure ufw allow all incoming network traffics for this interface
     firewall.allow(host_iface, comment='tethering-s7')
 
