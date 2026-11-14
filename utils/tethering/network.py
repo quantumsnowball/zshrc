@@ -74,3 +74,12 @@ def remove_host_iface_default_route(host_iface: str) -> None:
         result = sh.run(['sudo', 'ip', 'route', 'del', 'default', 'dev', host_iface], stderr=sh.DEVNULL)
         if result.returncode != 0:
             raise RuntimeError
+
+
+def unmanage_host_iface(host_iface: str) -> None:
+    @now
+    @task(f'tell networkmanager to un-manage interface {host_iface} for current session', halt=True)
+    def _() -> None:
+        result = sh.run(['sudo', 'nmcli', 'device', 'set', host_iface, 'managed', 'no'])
+        if result.returncode != 0:
+            raise RuntimeError
