@@ -8,6 +8,8 @@ import utils
 
 @utils.exit_on_runtime_error
 def main() -> None:
+    # clear all network manager profile
+    network.remove_network_manager_profile('tethering-quest2', 'tethering-s7')
     # ensure only one device connected
     device.ensure_single_connection()
     # toggle back on client's WiFi
