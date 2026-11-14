@@ -64,6 +64,15 @@ def connect_to_network_manager_profile(name: str) -> None:
             raise RuntimeError
 
 
+def remove_network_manager_profile(*names: str) -> None:
+    @now
+    @task(f'cleaer network manager profile {', '.join(names)}', retry=False)
+    def _() -> None:
+        sh.run([
+            'nmcli', 'connection', 'delete', *names,
+        ], stderr=sh.DEVNULL)
+
+
 def detect_host_ip(host_iface: str) -> str:
     @task(f'detect host IP on interface {host_iface}', halt=True)
     def f() -> str:
