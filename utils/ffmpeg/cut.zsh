@@ -49,9 +49,9 @@ ffmpeg.cut()
   # -ss after -i will need to decode whole video up before seekign up to -ss, but guaratee start with keyframe
   ffmpeg \
     -v warning \
-    -i $input \
     -ss $ss \
     -to $to \
+    -i $input \
     -vcodec copy \
     -acodec copy \
     $output && \
