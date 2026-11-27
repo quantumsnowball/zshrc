@@ -107,6 +107,15 @@ luks.remove-keyfile() {
     sudo cryptsetup luksRemoveKey "$target" "$keyfile" && echo "Removed keyfile $keyfile from $target" &&
     sudo rm "$keyfile"
 }
+luks.enable-trim() {
+    local target; target="$(luks.resolve-label "${1}")" || { echo "Usage: $0 <valid block device path or partlabel>" >&2; return 1; }
+    local mapper=$(lsblk -no NAME "${target}" | tail -n 1 | tr -d '─└├ ')
+    if [[ -z "${mapper}" || ! -e "/dev/mapper/${mapper}" ]]; then
+        echo "error: ${target} is not currently unlocked" >&2
+        return 1
+    fi
+    sudo cryptsetup --allow-discards --persistent refresh "${mapper}"
+}
 luks.trim-status() {
     local target; target="$(luks.resolve-label "${1}")" || { echo "Usage: $0 <valid block device path or partlabel>" >&2; return 1; }
     sudo cryptsetup status "$target" | grep -i "flags:"
