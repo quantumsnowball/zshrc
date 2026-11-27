@@ -107,6 +107,10 @@ luks.remove-keyfile() {
     sudo cryptsetup luksRemoveKey "$target" "$keyfile" && echo "Removed keyfile $keyfile from $target" &&
     sudo rm "$keyfile"
 }
+luks.trim-status() {
+    local target; target="$(luks.resolve-label "${1}")" || { echo "Usage: $0 <valid block device path or partlabel>" >&2; return 1; }
+    sudo cryptsetup status "$target" | grep -i "flags:"
+}
 luks.mount() {
     local label="${1}"
     local target; target="$(luks.resolve-label "$label")" || { echo "Usage: $0 <partlabel>" >&2; return 1; }
